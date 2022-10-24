@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <algorithm>
 
 enum CONFIG_ELEM{
     PORT,
@@ -75,8 +76,28 @@ public:
         (void)hostStr;
     }
 
+    std::string toString() const {
+        return 
+            toString_(b1_) + "." +
+            toString_(b2_) + "." +
+            toString_(b3_) + "." +
+            toString_(b4_);
+    }
+
 private:
     VALUE_TYPE b1_, b2_, b3_, b4_;
+
+    std::string toString_(VALUE_TYPE val) const {
+        std::string result = "";
+
+        while (val > 0){
+            result += val % 10;
+            val /= 10;
+        }
+
+        std::reverse(result.begin(), result.end());
+        return result;
+    }
 
 };
 
@@ -97,13 +118,13 @@ public:
         (void)methods;
     }
     METHODS_CONTAINER_TYPE& getMethods() const{
-        return METHODS_CONTAINER_TYPE();
+        return *methods_;
     }
     void setMethod(const METHOD_TYPE& method, SIZE_TYPE position){
         (void)method; (void)position;
     }
     METHOD_TYPE& getMethod(SIZE_TYPE position) const{
-        return METHOD_TYPE();
+        return methods_->at(position);
     }
     SIZE_TYPE getMethodsCount() const{
         return 0;
@@ -113,14 +134,14 @@ public:
         (void)redirection;
     }
     PATH_TYPE& getRedirection() const{
-        return PATH_TYPE();
+        return *redirection_;
     }
 
     void setDirectory(const PATH_TYPE& directory){
         (void)directory;
     }
     PATH_TYPE& getDirectory() const{
-        return PATH_TYPE();
+        return *directory_;
     }
 
     void setDirectoryListening(bool directoryListening){
@@ -134,21 +155,21 @@ public:
         (void)default_if_directory_response_path;
     }
     PATH_TYPE& getDefaultIfDirectoryResponse() const{
-        return PATH_TYPE();
+        return *default_if_directory_response_path_;
     }
 
     void setCgiScriptPath(const PATH_TYPE& cgi_script_path){
         (void)cgi_script_path;
     }
     PATH_TYPE& getCgiScriptPath() const{
-        return PATH_TYPE();
+        return *cgi_script_path_;
     }
 
     void setCgiBinPath(const PATH_TYPE& cgi_bin_path){
         (void)cgi_bin_path;
     }
     PATH_TYPE& getCgiBinPath() const{
-        return PATH_TYPE();
+        return *cgi_bin_path_;
     }
 
     bool isDone() const{

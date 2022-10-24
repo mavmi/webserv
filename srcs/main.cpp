@@ -1,4 +1,5 @@
 #include "../include/utils.hpp"
+#include "../include/configuration.hpp"
 
 #include <algorithm>
 #include <iterator>
@@ -7,19 +8,10 @@
 #include <vector>
 #include <string>
 
+void TEST_CONFIGURATION_HOST(){
+    // Configu
+}
+
 int main(int argc, char** argv){
-    (void)argv;
-
-    utilsCheckArgsCount(argc);
-    
-    std::stringstream stream;
-    std::ifstream fileStream(std::string("ConfigFileExample.txt").c_str(), std::ios::in);
-
-    std::string line;
-    std::string content;
-    while (fileStream >> line){
-        content += line;
-    }
-
-    std::cout << content << std::endl;
+    (void)argc; (void)argv;
 }
