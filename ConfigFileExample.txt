@@ -1,0 +1,18 @@
+{
+    port:            80;                 [1](0-65535)
+    host:            127.0.0.1;          [1](4 блока 0-255)
+    server_name:     SERVER_NAME;        [0-1]
+    error_pages:     path1,path2;        [1-n](пути к файлам)
+    body_size:       10000000;           [1](число > 0)
+    
+    [
+        methods:             GET,POST,DELETE;    [1-n](GET POST DELETE)
+        redir:               path1;              [0-1](путь к файлу)
+        dir:                 path1;              [1](путь к папке с файлом)
+        dir_listening:       on/off;             [1](off по умолчанию)
+        def_if_dir:          path1;              [0-1](путь к файлу, если запрос к директории)
+        cgi_script:          path1;              [0-1]
+        cgi_bin:             path;               [0-1]
+    ]
+}
+
