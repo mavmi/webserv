@@ -58,45 +58,107 @@ private:
 
 };
 
+// This class contains IP address
 class ConfigurationHost{
 public:
     typedef unsigned char   VALUE_TYPE;
+    typedef size_t          SIZE_TYPE;
 
-    ConfigurationHost(VALUE_TYPE b1, VALUE_TYPE b2, VALUE_TYPE b3, VALUE_TYPE b4)
-        : b1_(b1), b2_(b2), b3_(b3), b4_(b4){
-
+    ConfigurationHost(VALUE_TYPE b1, VALUE_TYPE b2, VALUE_TYPE b3, VALUE_TYPE b4){
+        ip_[0] = b1;
+        ip_[1] = b2;
+        ip_[2] = b3;
+        ip_[3] = b4;
     }
     ConfigurationHost(const ConfigurationHost& other){
-        b1_ = other.b1_;
-        b2_ = other.b2_;
-        b3_ = other.b3_;
-        b4_ = other.b4_;
+        for (SIZE_TYPE i = 0; i < maxSize_; i++) ip_[i] = other.ip_[i];
     }
     ConfigurationHost(const std::string& hostStr){
-        (void)hostStr;
+        const std::string errorStr = "Invalid host string";
+        SIZE_TYPE counter = 0;
+        VALUE_TYPE numbers[maxSize_];
+
+        std::string::const_iterator begin = hostStr.begin();
+        while (counter < maxSize_){
+            std::string::const_iterator end = std::find(begin, hostStr.end(), '.');
+            std::string substr = hostStr.substr(
+                std::distance(hostStr.begin(), begin),  // position of substring beginning
+                std::distance(begin, end)               // substring length
+            );
+
+            numbers[counter++] = toNum_(substr);
+            if ((counter == maxSize_ && end != hostStr.end()) || 
+                    (counter != maxSize_ && end == hostStr.end())){
+                throw ConfigurationException(errorStr);
+            }
+
+            begin = ++end;
+        }
+
+        if (counter != maxSize_) throw ConfigurationException(errorStr);
+        for (SIZE_TYPE i = 0; i < maxSize_; i++) ip_[i] = numbers[i];
     }
 
+    // Return string representation of IP address.
     std::string toString() const {
-        return 
-            toString_(b1_) + "." +
-            toString_(b2_) + "." +
-            toString_(b3_) + "." +
-            toString_(b4_);
+        std::string str = "";
+
+        for (SIZE_TYPE i = 0; i < maxSize_; i++){
+            str += toString_(ip_[i]);
+            if (i + 1 != maxSize_){
+                str += '.';
+            }
+        }
+
+        return str;
+    }
+    // Get number from IP at specified position.
+    // May throw an exception on error.
+    VALUE_TYPE at(SIZE_TYPE position) const {
+        if (position > maxSize_) throw ConfigurationException("Bad IP position");
+        return ip_[position];
+    }
+
+    // Set IP number to specified position.
+    void set(VALUE_TYPE value, SIZE_TYPE position){
+        if (position > maxSize_) throw ConfigurationException("Bad IP position");
+        ip_[position] = value;  
     }
 
 private:
-    VALUE_TYPE b1_, b2_, b3_, b4_;
+    const static SIZE_TYPE maxSize_ = 4;
+    VALUE_TYPE ip_[maxSize_];
 
+    // Convert VALUE_TYPE to string.
     std::string toString_(VALUE_TYPE val) const {
+        if (val == 0) return "0";
+        
         std::string result = "";
 
         while (val > 0){
-            result += val % 10;
+            result += '0' + val % 10;
             val /= 10;
         }
 
         std::reverse(result.begin(), result.end());
         return result;
+    }
+
+    // Convert string number to VALUE_TYPE.
+    // May throw exception.
+    VALUE_TYPE toNum_(const std::string& str) const {
+        const std::string errorStr = "Invalid host value";
+        if (!str.size()) throw ConfigurationException(errorStr);
+
+        int res = 0;
+        for (SIZE_TYPE i = 0; i < str.size(); i++){
+            char c = str.at(i);
+            if (c < '0' || c > '9') throw ConfigurationException(errorStr);
+            res = res * 10 + (str.at(i) - '0');
+        }
+
+        if (res < 0 || res > 255) throw ConfigurationException(errorStr);
+        return static_cast<VALUE_TYPE>(res);
     }
 
 };
