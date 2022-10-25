@@ -71,9 +71,17 @@ public:
         ip_[3] = b4;
     }
     ConfigurationHost(const ConfigurationHost& other){
-        for (SIZE_TYPE i = 0; i < maxSize_; i++) ip_[i] = other.ip_[i];
+        operator=(other);
     }
     ConfigurationHost(const std::string& hostStr){
+        operator=(hostStr);
+    }
+
+    ConfigurationHost& operator=(const ConfigurationHost& other){
+        for (SIZE_TYPE i = 0; i < maxSize_; i++) ip_[i] = other.ip_[i];
+        return *this;
+    }
+    ConfigurationHost& operator=(const std::string& hostStr){
         const std::string errorStr = "Invalid host string";
         SIZE_TYPE counter = 0;
         VALUE_TYPE numbers[maxSize_];
@@ -97,6 +105,7 @@ public:
 
         if (counter != maxSize_) throw ConfigurationException(errorStr);
         for (SIZE_TYPE i = 0; i < maxSize_; i++) ip_[i] = numbers[i];
+        return *this;
     }
 
     // Return string representation of IP address.
@@ -170,72 +179,123 @@ public:
     typedef std::vector<METHOD_TYPE>    METHODS_CONTAINER_TYPE;
     typedef std::string                 PATH_TYPE;
 
-    RouteConfiguration();
-    RouteConfiguration(const RouteConfiguration& other);
-    ~RouteConfiguration();
+    RouteConfiguration(){
+        isDone_ = false;
+        methods_ = NULL;
+        redirection_ = NULL;
+        directory_ = NULL;
+        directory_listening_ = false;
+        default_if_directory_response_path_ = NULL;
+        cgi_script_path_ = NULL;
+        cgi_bin_path_ = NULL;
+    }
+    RouteConfiguration(const RouteConfiguration& other){
+        isDone_ = other.isDone_;
+        methods_ = (other.methods_) ? new METHODS_CONTAINER_TYPE(*other.methods_) : NULL;
+        redirection_ = (other.redirection_) ? new PATH_TYPE(*other.redirection_) : NULL;
+        directory_ = (other.directory_) ? new PATH_TYPE(*other.directory_) : NULL;
+        directory_listening_ = other.directory_listening_;
+        default_if_directory_response_path_ = (other.default_if_directory_response_path_) ? new PATH_TYPE(*other.default_if_directory_response_path_) : NULL;
+        cgi_script_path_ = (other.cgi_script_path_) ? new PATH_TYPE(*other.cgi_script_path_) : NULL;
+        cgi_bin_path_ = (other.cgi_bin_path_) ? new PATH_TYPE(*other.cgi_bin_path_) : NULL;
+    }
+    ~RouteConfiguration(){
+        deleteData_();
+    }
 
-    RouteConfiguration& operator=(const RouteConfiguration& other);
+    RouteConfiguration& operator=(const RouteConfiguration& other){
+        deleteData_();
+
+        isDone_ = other.isDone_;
+        methods_ = (other.methods_) ? new METHODS_CONTAINER_TYPE(*other.methods_) : NULL;
+        redirection_ = (other.redirection_) ? new PATH_TYPE(*other.redirection_) : NULL;
+        directory_ = (other.directory_) ? new PATH_TYPE(*other.directory_) : NULL;
+        directory_listening_ = other.directory_listening_;
+        default_if_directory_response_path_ = (other.default_if_directory_response_path_) ? new PATH_TYPE(*other.default_if_directory_response_path_) : NULL;
+        cgi_script_path_ = (other.cgi_script_path_) ? new PATH_TYPE(*other.cgi_script_path_) : NULL;
+        cgi_bin_path_ = (other.cgi_bin_path_) ? new PATH_TYPE(*other.cgi_bin_path_) : NULL;
+
+        return *this;        
+    }
 
     void setMethods(const METHODS_CONTAINER_TYPE& methods){
-        (void)methods;
+        if (!methods_) methods_ = new METHODS_CONTAINER_TYPE(methods);
+        else *methods_ = methods; 
     }
     METHODS_CONTAINER_TYPE& getMethods() const{
-        return *methods_;
+        if (methods_) return *methods_;
+        throw ConfigurationException("Methods are not defined");
     }
     void setMethod(const METHOD_TYPE& method, SIZE_TYPE position){
-        (void)method; (void)position;
+        if (methods_) methods_->at(position) = method;
+        else throw ConfigurationException("Methods are not defined");
     }
     METHOD_TYPE& getMethod(SIZE_TYPE position) const{
-        return methods_->at(position);
+        if (methods_) return methods_->at(position);
+        else throw ConfigurationException("Methods are not defined");
     }
     SIZE_TYPE getMethodsCount() const{
-        return 0;
+        if (methods_) return methods_->size();
+        else throw ConfigurationException("Methods are not defined");
     }
 
     void setRedirection(const PATH_TYPE& redirection){
-        (void)redirection;
+        if (!redirection_) redirection_ = new PATH_TYPE(redirection);
+        else *redirection_ = redirection;
     }
     PATH_TYPE& getRedirection() const{
-        return *redirection_;
+        if (redirection_) return *redirection_;
+        throw ConfigurationException("Redirection is not defined");
     }
 
     void setDirectory(const PATH_TYPE& directory){
-        (void)directory;
+        if (!directory_) directory_ = new PATH_TYPE(directory);
+        else *directory_ = directory;
     }
     PATH_TYPE& getDirectory() const{
-        return *directory_;
+        if (directory_) return *directory_;
+        throw ConfigurationException("Directory is not defined");
     }
 
     void setDirectoryListening(bool directoryListening){
-        (void)directoryListening;
+        directory_listening_ = directoryListening;
     }
     bool getDirectoryListening() const{
-        return true;
+        return directory_listening_;
     }
 
     void setDefaultIfDirectoryResponse(const PATH_TYPE& default_if_directory_response_path){
-        (void)default_if_directory_response_path;
+        if (!default_if_directory_response_path_) default_if_directory_response_path_ = new PATH_TYPE(default_if_directory_response_path);
+        else *default_if_directory_response_path_ = default_if_directory_response_path;
     }
     PATH_TYPE& getDefaultIfDirectoryResponse() const{
-        return *default_if_directory_response_path_;
+        if (default_if_directory_response_path_) return *default_if_directory_response_path_;
+        throw ConfigurationException("Default directory is not defined");
     }
 
     void setCgiScriptPath(const PATH_TYPE& cgi_script_path){
-        (void)cgi_script_path;
+        if (!cgi_script_path_) cgi_script_path_ = new PATH_TYPE(cgi_script_path);
+        else *cgi_script_path_ = cgi_script_path;
     }
     PATH_TYPE& getCgiScriptPath() const{
-        return *cgi_script_path_;
+        if (cgi_script_path_) return *cgi_script_path_;
+        throw ConfigurationException("CGI script path is not defined");
     }
 
     void setCgiBinPath(const PATH_TYPE& cgi_bin_path){
-        (void)cgi_bin_path;
+        if (!cgi_bin_path_) cgi_bin_path_ = new PATH_TYPE(cgi_bin_path);
+        else *cgi_bin_path_ = cgi_bin_path;
     }
     PATH_TYPE& getCgiBinPath() const{
-        return *cgi_bin_path_;
+        if (cgi_bin_path_) return *cgi_bin_path_;
+        else ConfigurationException("CGI bin path is not defined");
     }
 
     bool isDone() const{
         return isDone_;
+    }
+    void done(){
+        isDone_ = true;
     }
 
 private:
@@ -247,6 +307,24 @@ private:
     PATH_TYPE* default_if_directory_response_path_;
     PATH_TYPE* cgi_script_path_;
     PATH_TYPE* cgi_bin_path_;
+
+    void deleteData_(){
+        delete methods_;
+        delete redirection_;
+        delete directory_;
+        delete default_if_directory_response_path_;
+        delete cgi_script_path_;
+        delete cgi_bin_path_;
+
+        isDone_ = false;
+        methods_ = NULL;
+        redirection_ = NULL;
+        directory_ = NULL;
+        directory_listening_ = false;
+        default_if_directory_response_path_ = NULL;
+        cgi_script_path_ = NULL;
+        cgi_bin_path_ = NULL;
+    }
 
 };
 
@@ -376,6 +454,9 @@ public:
 
     bool isDone() const{
         return isDone_;
+    }
+    void done(){
+        isDone_ = true;
     }
 
 private:
