@@ -523,14 +523,31 @@ public:
             while (iter != line.end()){
                 char c = *iter;
 
-                if (c == '{'){          // start server
-                    if (servers_.size() && !servers_.back().isDone()) throw ConfigurationException(errorMsg);
+                if (c == '{'){          // Start server
+                    if (servers_.size() && !servers_.back().isDone()) {         // Check if the very last server is not already finished
+                        throw ConfigurationException(errorMsg);
+                    }
+
                     iter++;
-                } else if (c == '}'){   // end server
+                } else if (c == '}'){   // Finish server
+                    if (servers_.size() && servers_.back().isDone()) {          // Check if the very last server is already finished
+                        throw ConfigurationException(errorMsg);
+                    }
+
                     iter++;
-                } else if (c == '['){   // start route for last server
+                } else if (c == '['){   // Start route for last server
+                    if (servers_.size() && servers_.back().getRoutes().size()   // Check if the very last route is not already finished
+                            && !servers_.back().getRoutes().back().isDone()){
+                        throw ConfigurationException(errorMsg);
+                    }
+
                     iter++;
-                } else if (c == ']'){   // end route for last server
+                } else if (c == ']'){   // Finish route for last server
+                    if (servers_.size() && servers_.back().getRoutes().size()   // Check if the very last route is already finished
+                            && servers_.back().getRoutes().back().isDone()){
+                        throw ConfigurationException(errorMsg);
+                    }
+
                     iter++;
                 } else {                // value string
                     Iterator begin = iter;
