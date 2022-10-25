@@ -11,8 +11,16 @@
 #include <vector>
 #include <string>
 
+// не забыть удалить
+void runTestConfigFile(int argc, char** argv){
+    utilsCheckArgsCount(argc);
+    Configuration config;
+    config.parseFile(argv[1]);
+}
+
 int main(int argc, char** argv){
     (void)argc; (void)argv;
 
-    RUN_ALL_TESTS();
+    // RUN_ALL_TESTS();
+    runTestConfigFile(argc, argv);
 }

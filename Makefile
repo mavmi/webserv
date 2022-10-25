@@ -15,7 +15,7 @@ OBJS		=	$(SRCS:.cpp=.o)
 DEPEN		=	$(SRCS:.cpp=.d)
 
 CC			=	g++
-GCC			=	$(CC) -Wall -Wextra -Werror -std=c++98 -MMD -g
+GCC			=	$(CC) -Wall -Wextra -Werror -std=c++98 -MMD -g -fsanitize=undefined -fsanitize=address
 
 %.o:		%.cpp $(HDRS)
 			$(GCC) -c -o $@ $<

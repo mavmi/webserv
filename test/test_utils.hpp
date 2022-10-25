@@ -25,19 +25,15 @@ std::string getColor(COLOR color){
 
 class TestHeader{
 public:
-    TestHeader(const std::string& title)
-        : prefix_("==> ") {
+    TestHeader(const std::string& title){
 
         std::cout
             << test_utils::getColor(test_utils::GREEN)
-            << prefix_
+            << "==> "
             << title
             << test_utils::getColor(test_utils::DEFAULT)
             << std::endl;
     }
     ~TestHeader(){}
-
-private:
-    const std::string prefix_;
 
 };

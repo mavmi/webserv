@@ -5,7 +5,7 @@
 namespace test{
 
 void TEST_CONFIGURATION_HOST(){
-    TestHeader t(__FUNCTION__);
+    TestHeader(__FUNCTION__);
 
     {
         ConfigurationHost host(127, 0, 0, 1);

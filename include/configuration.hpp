@@ -21,7 +21,7 @@ enum CONFIG_ELEM{
     CGI_BIN
 };
 
-enum METHOD{
+enum HTTP_METHOD{
     GET,
     POST,
     DELETE
@@ -490,31 +490,66 @@ private:
 // configuration file
 class Configuration{
 public:
-    Configuration();
-    Configuration(const Configuration& other);
-    ~Configuration();
+    Configuration(){
+
+    }
+    Configuration(const Configuration& other){
+        operator=(other);
+    }
+    ~Configuration(){
+
+    }
 
     Configuration& operator=(const Configuration& other){
-        (void)other;
+        servers_ = other.servers_;
         return *this;
     }
 
     // Parse configuration file.
-    // May throw exception on error
+    // May throw exception on error.
     void parseFile(const std::string& inputFile){
+        typedef std::string::iterator Iterator;
+
+        const std::string errorMsg = "Configuration file parsing error";
         std::ifstream inputFileStream(inputFile.c_str(), std::ios::in);
-        if (!inputFileStream.is_open()) throw ConfigurationException("unable to open input file: " + inputFile);
+        if (!inputFileStream.is_open()) throw ConfigurationException("Unable to open input file: " + inputFile);
 
         std::string line;
-        while(inputFileStream >> line){
+        while(std::getline(inputFileStream, line)){         // it does not have whitespaces here anymore    
             if (isLineEmpty_(line)) continue;
+            line.resize(std::distance(line.begin(), std::remove_if(line.begin(), line.end(), isspace)));    // Remove whitespaces from line
 
+            Iterator iter = line.begin();
+            while (iter != line.end()){
+                char c = *iter;
 
+                if (c == '{'){          // start server
+                    if (servers_.size() && !servers_.back().isDone()) throw ConfigurationException(errorMsg);
+                    iter++;
+                } else if (c == '}'){   // end server
+                    iter++;
+                } else if (c == '['){   // start route for last server
+                    iter++;
+                } else if (c == ']'){   // end route for last server
+                    iter++;
+                } else {                // value string
+                    Iterator begin = iter;
+                    Iterator end = std::find(begin, line.end(), ';');
+                    if (end == line.end()) throw ConfigurationException(errorMsg);  // Did not find ';' == very bad
+                    
+                    std::string substring = line.substr(
+                        std::distance(line.begin(), begin),
+                        std::distance(begin, end)
+                    );
+
+                    if (end == line.end()) break;
+                    iter = ++end;
+                }
+            }
         }
-    }
 
-    Configuration& serverStart();
-    Configuration& serverDone();
+        inputFileStream.close();
+    }
 
 private:
     std::vector<ServerConfiguration> servers_;
