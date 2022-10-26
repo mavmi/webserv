@@ -27,33 +27,64 @@ enum HTTP_METHOD{
     DELETE
 };
 
-class ConfigurationException : public std::exception {
+class Exception {
 public:
-    ConfigurationException(const char* msg)
-        : msg_(createMsg_(msg)) {
+    Exception(const char* msg)
+        : msg_(std::string(msg)) {
 
     }
-    ConfigurationException(const std::string& msg)
-        : msg_(createMsg_(msg)) {
+    Exception(const std::string& msg)
+        : msg_(msg) {
 
     }
-    ~ConfigurationException() throw(){
+    ~Exception() throw(){
 
     }
 
     virtual const char* what() const throw(){
-        return msg_.c_str();
+        return output_().c_str();
     }
 
 protected:
     const std::string msg_;
 
-private:
-    const std::string createMsg_(const std::string& msg) const{
-        return "CONFIGURATION ERROR: " + msg;
+    virtual std::string output_() const {
+        return "EXCEPTION: " + msg_;
     }
-    const std::string createMsg_(const char* msg) const{
-        return createMsg_(std::string(msg));
+};
+
+class ConfigurationException : public Exception {
+public:
+    ConfigurationException(const char* msg) : Exception(msg){}
+    ConfigurationException(const std::string& msg) : Exception(msg) {}
+
+protected:
+    virtual std::string output_() const {
+        return "CONFIGURATION_EXCEPTION: " + msg_;
+    }
+
+};
+
+class ServerException : public Exception {
+public:
+    ServerException(const char* msg) : Exception(msg) {}
+    ServerException(const std::string& msg) : Exception(msg) {}
+
+protected:
+    std::string output_() const {
+        return "SERVER_EXCEPTION: " + msg_;
+    }
+
+};
+
+class RouteException : public Exception {
+public:
+    RouteException(const char* msg) : Exception(msg) {}
+    RouteException(const std::string& msg) : Exception(msg) {}
+
+protected:
+    std::string output_() const {
+        return "ROUTE_EXCEPTION: " + msg_;
     }
 
 };
@@ -224,19 +255,23 @@ public:
     }
     METHODS_CONTAINER_TYPE& getMethods() const{
         if (methods_) return *methods_;
-        throw ConfigurationException("Methods are not defined");
+        throw RouteException("Methods are not defined");
     }
     void setMethod(const METHOD_TYPE& method, SIZE_TYPE position){
         if (methods_) methods_->at(position) = method;
-        else throw ConfigurationException("Methods are not defined");
+        else throw RouteException("Methods are not defined");
     }
     METHOD_TYPE& getMethod(SIZE_TYPE position) const{
         if (methods_) return methods_->at(position);
-        else throw ConfigurationException("Methods are not defined");
+        else throw RouteException("Methods are not defined");
+    }
+    void addMethod(const METHOD_TYPE& method){
+        if (!methods_) methods_ = new METHODS_CONTAINER_TYPE();
+        methods_->push_back(method);
     }
     SIZE_TYPE getMethodsCount() const{
         if (methods_) return methods_->size();
-        else throw ConfigurationException("Methods are not defined");
+        else throw RouteException("Methods are not defined");
     }
 
     void setRedirection(const PATH_TYPE& redirection){
@@ -245,7 +280,7 @@ public:
     }
     PATH_TYPE& getRedirection() const{
         if (redirection_) return *redirection_;
-        throw ConfigurationException("Redirection is not defined");
+        throw RouteException("Redirection is not defined");
     }
 
     void setDirectory(const PATH_TYPE& directory){
@@ -254,7 +289,7 @@ public:
     }
     PATH_TYPE& getDirectory() const{
         if (directory_) return *directory_;
-        throw ConfigurationException("Directory is not defined");
+        throw RouteException("Directory is not defined");
     }
 
     void setDirectoryListening(bool directoryListening){
@@ -270,7 +305,7 @@ public:
     }
     PATH_TYPE& getDefaultIfDirectoryResponse() const{
         if (default_if_directory_response_path_) return *default_if_directory_response_path_;
-        throw ConfigurationException("Default directory is not defined");
+        throw RouteException("Default directory is not defined");
     }
 
     void setCgiScriptPath(const PATH_TYPE& cgi_script_path){
@@ -279,7 +314,7 @@ public:
     }
     PATH_TYPE& getCgiScriptPath() const{
         if (cgi_script_path_) return *cgi_script_path_;
-        throw ConfigurationException("CGI script path is not defined");
+        throw RouteException("CGI script path is not defined");
     }
 
     void setCgiBinPath(const PATH_TYPE& cgi_bin_path){
@@ -288,7 +323,7 @@ public:
     }
     PATH_TYPE& getCgiBinPath() const{
         if (cgi_bin_path_) return *cgi_bin_path_;
-        else ConfigurationException("CGI bin path is not defined");
+        else RouteException("CGI bin path is not defined");
     }
 
     bool isDone() const{
@@ -382,7 +417,7 @@ public:
     }
     PORT_TYPE getPort() const{
         if (port_) return *port_;
-        throw ConfigurationException("Port is not defined");
+        throw ServerException("Port is not defined");
     }
 
     void setHost(const HOST_TYPE& host){
@@ -391,7 +426,7 @@ public:
     }
     HOST_TYPE& getHost() const{
         if (host_) return *host_;
-        throw ConfigurationException("Host is not defined");
+        throw ServerException("Host is not defined");
     }
 
     void setServerName(const SERVER_NAME_TYPE& serverName){
@@ -400,7 +435,7 @@ public:
     }
     SERVER_NAME_TYPE& getServerName() const{
         if (serverName_) return *serverName_;
-        throw ConfigurationException("Server name is not defined");
+        throw ServerException("Server name is not defined");
     }
 
     void setErrorPages(const ERROR_PAGES_CONTAINER_TYPE& errorPages){
@@ -409,19 +444,23 @@ public:
     }
     ERROR_PAGES_CONTAINER_TYPE& getErrorPages() const{
         if (errorPages_) return *errorPages_;
-        throw ConfigurationException("Error pages are not defined");
+        throw ServerException("Error pages are not defined");
     }
     void setErrorPage(const ERROR_PAGE_TYPE& errorPage, SIZE_TYPE position){
         if (errorPages_) errorPages_->at(position) = errorPage;
-        else throw ConfigurationException("Error pages are not defined");
+        else throw ServerException("Error pages are not defined");
     }
     ERROR_PAGE_TYPE& getErrorPage(SIZE_TYPE position){
         if (errorPages_) return errorPages_->at(position);
-        else throw ConfigurationException("Error pages are not defined");
+        else throw ServerException("Error pages are not defined");
+    }
+    void addErrorPage(const ERROR_PAGE_TYPE& errorPage){
+        if (!errorPages_) errorPages_ = new  ERROR_PAGES_CONTAINER_TYPE();
+        errorPages_->push_back(errorPage);        
     }
     SIZE_TYPE getErrorPagesCount() const{
         if (errorPages_) return errorPages_->size();
-        else throw ConfigurationException("Error pages are not defined");
+        else throw ServerException("Error pages are not defined");
     }
 
     void setBodySize(BODY_SIZE_TYPE bodySize){
@@ -437,19 +476,23 @@ public:
     }
     ROUTES_CONTAINER_TYPE& getRoutes() const{
         if (routes_) return *routes_;
-        throw ConfigurationException("Routes are not defined");
+        throw ServerException("Routes are not defined");
     }
     void setRoute(const ROUTE_TYPE& route, SIZE_TYPE position){
         if (routes_) routes_->at(position) = route;
-        throw ConfigurationException("Routes are not defined");
+        throw ServerException("Routes are not defined");
     }
     ROUTE_TYPE& getRoute(SIZE_TYPE position) const{
         if (routes_) return routes_->at(position);
-        throw ConfigurationException("Routes are not defined");
+        throw ServerException("Routes are not defined");
+    }
+    void addRoute(const ROUTE_TYPE& route){
+        if (!routes_) routes_ = new ROUTES_CONTAINER_TYPE();
+        routes_->push_back(route);
     }
     SIZE_TYPE getRoutesCount() const{
         if (routes_) return routes_->size();
-        throw ConfigurationException("Routes are not defined");
+        throw ServerException("Routes are not defined");
     }
 
     bool isDone() const{
@@ -490,6 +533,8 @@ private:
 // configuration file
 class Configuration{
 public:
+    typedef ServerConfiguration SERVER_TYPE;
+
     Configuration(){
 
     }
@@ -515,41 +560,74 @@ public:
         if (!inputFileStream.is_open()) throw ConfigurationException("Unable to open input file: " + inputFile);
 
         std::string line;
-        while(std::getline(inputFileStream, line)){         // it does not have whitespaces here anymore    
+        while(std::getline(inputFileStream, line)){     // it does not have whitespaces here anymore    
             if (isLineEmpty_(line)) continue;
             line.resize(std::distance(line.begin(), std::remove_if(line.begin(), line.end(), isspace)));    // Remove whitespaces from line
 
+            std::cout << " => " << line << std::endl;
             Iterator iter = line.begin();
             while (iter != line.end()){
                 char c = *iter;
 
                 if (c == '{'){          // Start server
-                    if (servers_.size() && !servers_.back().isDone()) {         // Check if the very last server is not already finished
-                        throw ConfigurationException(errorMsg);
+
+                    try {
+                        SERVER_TYPE& lastServer = getLastServer();
+                        if (!lastServer.isDone()) throw Exception(errorMsg);
+                        servers_.push_back(SERVER_TYPE());
+                    } catch (ConfigurationException&){
+                        servers_.push_back(SERVER_TYPE());
+                    } catch (Exception&){
+                        throw;
                     }
 
-                    iter++;
                 } else if (c == '}'){   // Finish server
-                    if (servers_.size() && servers_.back().isDone()) {          // Check if the very last server is already finished
-                        throw ConfigurationException(errorMsg);
+
+                    try {
+                        SERVER_TYPE& lastServer = getLastServer();
+                        if (lastServer.isDone()) throw Exception(errorMsg);
+                        if (!getLastRoute().isDone()) throw Exception(errorMsg);
+                        lastServer.done();
+                    } catch (ServerException&){
+                        getLastServer().done();
+                    } catch (ConfigurationException&){
+                        throw;
+                    } catch (Exception&){
+                        throw;
                     }
 
-                    iter++;
                 } else if (c == '['){   // Start route for last server
-                    if (servers_.size() && servers_.back().getRoutes().size()   // Check if the very last route is not already finished
-                            && !servers_.back().getRoutes().back().isDone()){
-                        throw ConfigurationException(errorMsg);
+
+                    try {
+                        SERVER_TYPE& lastServer = getLastServer();
+                        if (lastServer.isDone()) throw Exception(errorMsg);
+                        if (!getLastRoute().isDone()) throw Exception(errorMsg);
+                        lastServer.addRoute(SERVER_TYPE::ROUTE_TYPE());
+                    } catch (ServerException&){
+                        getLastServer().addRoute(SERVER_TYPE::ROUTE_TYPE());
+                    } catch (ConfigurationException&){
+                        throw;
+                    } catch (Exception&){
+                        throw;
                     }
 
-                    iter++;
                 } else if (c == ']'){   // Finish route for last server
-                    if (servers_.size() && servers_.back().getRoutes().size()   // Check if the very last route is already finished
-                            && servers_.back().getRoutes().back().isDone()){
-                        throw ConfigurationException(errorMsg);
+
+                    try {
+                        SERVER_TYPE& lastServer = getLastServer();
+                        if (lastServer.isDone()) throw Exception(errorMsg);
+                        if (getLastRoute().isDone()) throw Exception(errorMsg);
+                        getLastRoute().done();
+                    } catch (ServerException&){
+                        throw;
+                    } catch (ConfigurationException&){
+                        throw;
+                    } catch (Exception&){
+                        throw;
                     }
 
-                    iter++;
                 } else {                // value string
+
                     Iterator begin = iter;
                     Iterator end = std::find(begin, line.end(), ';');
                     if (end == line.end()) throw ConfigurationException(errorMsg);  // Did not find ';' == very bad
@@ -561,7 +639,11 @@ public:
 
                     if (end == line.end()) break;
                     iter = ++end;
+                    continue;
+
                 }
+
+                iter++;
             }
         }
 
@@ -569,14 +651,23 @@ public:
     }
 
 private:
-    std::vector<ServerConfiguration> servers_;
+    std::vector<SERVER_TYPE> servers_;
 
+    // Check if string contains only whitespaces
     bool isLineEmpty_(const std::string& line) const{
         if (!line.size()) return true;
         for (size_t i = 0; i < line.size(); i++){
             if (!std::isspace(line[i])) return false;
         }
         return true;
+    }
+
+    SERVER_TYPE& getLastServer(){
+        if (!servers_.size()) throw ConfigurationException("Servers are not defined");
+        return servers_.back();
+    }
+    SERVER_TYPE::ROUTE_TYPE& getLastRoute(){
+        return getLastServer().getRoutes().back();
     }
 
 };
