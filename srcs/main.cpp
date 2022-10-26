@@ -1,5 +1,5 @@
 #include "../include/utils.hpp"
-#include "../include/configuration.hpp"
+#include "../include/configurations/configuration.hpp"
 
 #include "../test/test.hpp"
 
@@ -22,5 +22,9 @@ int main(int argc, char** argv){
     (void)argc; (void)argv;
 
     // RUN_ALL_TESTS();
-    runTestConfigFile(argc, argv);
+    try {
+        runTestConfigFile(argc, argv);
+    } catch (Exception& e){
+        std::cout << e.what() << std::endl;
+    }
 }

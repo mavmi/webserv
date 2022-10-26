@@ -35,3 +35,39 @@ void utilsCheckArgsCount(int argc){
         exit(1);
     }
 }
+
+int utilsStringToInt(const std::string& str){
+    if (!str.size()) return 0;
+    
+    bool positive = true;
+    int res = 0;
+
+    size_t i = 0;
+    if (str[0] == '-') {
+        i++;
+        positive = false;
+    }
+
+    while (i < str.size()){
+        char c = str.at(i);
+        if (c < '0' || c > '9') return 0;
+        res = res * 10 + (c - '0');
+        i++;
+    }
+
+    if (!positive) res *= -1;
+    return res;
+}
+
+std::string utilsIntToString(int num){
+    if (num == 0) return "0";
+    
+    std::string result;
+    while (num > 0){
+        result += '0' + num % 10;
+        num /= 10;
+    }
+
+    std::reverse(result.begin(), result.end());
+    return result;
+}

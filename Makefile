@@ -1,15 +1,18 @@
 NAME		=	webserv
 
-SRCS_DIR	=	srcs
-UTILS_DIR	=	$(SRCS_DIR)/utils
-CONFIG_DIR	=	$(SRCS_DIR)/configurations
-HDRS_DIR	=	include
-TEST_DIR	=	test
+HDRS_DIR		=	include
+HDRS_CONFIG_DIR	=	$(HDRS_DIR)/configurations
+
+SRCS_DIR		=	srcs
+SRCS_UTILS_DIR	=	$(SRCS_DIR)/utils
+SRCS_CONFIG_DIR	=	$(SRCS_DIR)/configurations
+TEST_DIR		=	test
 
 SRCS		=	$(addprefix $(SRCS_DIR)/, main.cpp)\
-					$(addprefix $(UTILS_DIR)/, utils_1.cpp)\
-					$(addprefix $(CONFIG_DIR)/, configuration_1.cpp)
-HDRS		=	$(addprefix $(HDRS_DIR)/, utils.hpp configuration.hpp)\
+					$(addprefix $(SRCS_UTILS_DIR)/, utils_1.cpp)\
+					$(addprefix $(SRCS_CONFIG_DIR)/, configuration_1.cpp configuration.cpp configuration_host.cpp exceptions.cpp route_configuration.cpp server_configuration.cpp utils.cpp)
+HDRS		=	$(addprefix $(HDRS_DIR)/, utils.hpp)\
+					$(addprefix $(HDRS_CONFIG_DIR)/, configuration_host.hpp	configuration.hpp exceptions.hpp route_configuration.hpp server_configuration.hpp utils.hpp)\
 					$(addprefix $(TEST_DIR)/, test.hpp test_configuration.hpp)
 OBJS		=	$(SRCS:.cpp=.o)
 DEPEN		=	$(SRCS:.cpp=.d)
