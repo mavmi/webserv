@@ -564,7 +564,6 @@ public:
             if (isLineEmpty_(line)) continue;
             line.resize(std::distance(line.begin(), std::remove_if(line.begin(), line.end(), isspace)));    // Remove whitespaces from line
 
-            std::cout << " => " << line << std::endl;
             Iterator iter = line.begin();
             while (iter != line.end()){
                 char c = *iter;
