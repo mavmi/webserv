@@ -1,9 +1,12 @@
 #pragma once
 
+#include <set>
 #include <cctype>
 #include <string>
 #include <vector>
+#include <limits>
 #include <fstream>
+#include <utility>
 #include <algorithm>
 
 enum CONFIG_ELEM{
@@ -323,7 +326,7 @@ public:
     }
     PATH_TYPE& getCgiBinPath() const{
         if (cgi_bin_path_) return *cgi_bin_path_;
-        else RouteException("CGI bin path is not defined");
+        throw RouteException("CGI bin path is not defined");
     }
 
     bool isDone() const{
@@ -571,7 +574,7 @@ public:
                 if (c == '{'){          // Start server
 
                     try {
-                        SERVER_TYPE& lastServer = getLastServer();
+                        SERVER_TYPE& lastServer = getLastServer_();
                         if (!lastServer.isDone()) throw Exception(errorMsg);
                         servers_.push_back(SERVER_TYPE());
                     } catch (ConfigurationException&){
@@ -583,12 +586,12 @@ public:
                 } else if (c == '}'){   // Finish server
 
                     try {
-                        SERVER_TYPE& lastServer = getLastServer();
+                        SERVER_TYPE& lastServer = getLastServer_();
                         if (lastServer.isDone()) throw Exception(errorMsg);
-                        if (!getLastRoute().isDone()) throw Exception(errorMsg);
+                        if (!getLastRoute_().isDone()) throw Exception(errorMsg);
                         lastServer.done();
                     } catch (ServerException&){
-                        getLastServer().done();
+                        getLastServer_().done();
                     } catch (ConfigurationException&){
                         throw;
                     } catch (Exception&){
@@ -598,12 +601,12 @@ public:
                 } else if (c == '['){   // Start route for last server
 
                     try {
-                        SERVER_TYPE& lastServer = getLastServer();
+                        SERVER_TYPE& lastServer = getLastServer_();
                         if (lastServer.isDone()) throw Exception(errorMsg);
-                        if (!getLastRoute().isDone()) throw Exception(errorMsg);
+                        if (!getLastRoute_().isDone()) throw Exception(errorMsg);
                         lastServer.addRoute(SERVER_TYPE::ROUTE_TYPE());
                     } catch (ServerException&){
-                        getLastServer().addRoute(SERVER_TYPE::ROUTE_TYPE());
+                        getLastServer_().addRoute(SERVER_TYPE::ROUTE_TYPE());
                     } catch (ConfigurationException&){
                         throw;
                     } catch (Exception&){
@@ -613,10 +616,10 @@ public:
                 } else if (c == ']'){   // Finish route for last server
 
                     try {
-                        SERVER_TYPE& lastServer = getLastServer();
+                        SERVER_TYPE& lastServer = getLastServer_();
                         if (lastServer.isDone()) throw Exception(errorMsg);
-                        if (getLastRoute().isDone()) throw Exception(errorMsg);
-                        getLastRoute().done();
+                        if (getLastRoute_().isDone()) throw Exception(errorMsg);
+                        getLastRoute_().done();
                     } catch (ServerException&){
                         throw;
                     } catch (ConfigurationException&){
@@ -635,6 +638,8 @@ public:
                         std::distance(line.begin(), begin),
                         std::distance(begin, end)
                     );
+
+                    parseValueString_(substring);
 
                     if (end == line.end()) break;
                     iter = ++end;
@@ -661,12 +666,140 @@ private:
         return true;
     }
 
-    SERVER_TYPE& getLastServer(){
+    SERVER_TYPE& getLastServer_(){
         if (!servers_.size()) throw ConfigurationException("Servers are not defined");
         return servers_.back();
     }
-    SERVER_TYPE::ROUTE_TYPE& getLastRoute(){
-        return getLastServer().getRoutes().back();
+    SERVER_TYPE::ROUTE_TYPE& getLastRoute_(){
+        return getLastServer_().getRoutes().back();
+    }
+
+    HTTP_METHOD stringToHttpMethod(const std::string& str){
+        if (str == "GET") return GET;
+        else if (str == "POST") return POST;
+        else if (str == "DELETE") return DELETE;
+        throw ConfigurationException("Invalid HTTP method");
+    }
+    std::set<std::string> stringToArray(const std::string& str){
+        typedef std::string::const_iterator Iterator;
+        
+        std::set<std::string> result;
+
+        Iterator begin = str.begin();
+        Iterator end = str.begin();
+        while (end != str.end()) {
+            end = std::find(begin, str.end(), ',');
+            std::string substring = str.substr(
+                std::distance(str.begin(), begin),
+                std::distance(begin, end)
+            );
+            result.insert(substring);
+            begin = end + 1;
+        }
+
+        return result;
+    }
+    bool stringToBool(const std::string& str) const {
+        if (str == "true") return true;
+        else if (str == "false") return false;
+        throw ConfigurationException("Invalid boolean value");
+    }
+    template <typename ReturnType>
+    ReturnType stringToNumber(const std::string& str) const {
+        std::string errorMsg = "Bad number string";
+        if (!str.size()) throw ConfigurationException(errorMsg);
+
+        ReturnType prev = 0, res = 0;
+        for (size_t i = 0; i < str.size(); i++){
+            char c = str.at(i);
+
+            if (c < '0' || c > '9') throw ConfigurationException(errorMsg);
+            res = res * 10 + (c - '0');
+            if (res < prev) throw ConfigurationException("Numeric value too long");
+            prev = res;
+        }
+
+        return static_cast<ReturnType>(res);
+    }
+    std::pair<std::string, std::string> split_(const std::string& str) const {
+        typedef std::string::const_iterator Iterator;
+        const std::string errorMsg = "Invalid key-value line";
+
+        Iterator splitPoint = std::find(str.begin(), str.end(), ':');
+        if (splitPoint == str.end()) throw ConfigurationException(errorMsg);
+        if (std::find(splitPoint + 1, str.end(), ':') != str.end()) throw ConfigurationException(errorMsg);
+
+        std::string key = str.substr(0, std::distance(str.begin(), splitPoint));
+        std::string value = str.substr(
+            std::distance(str.begin(), splitPoint + 1),
+            std::distance(splitPoint + 1, str.end())
+        );
+
+        return std::make_pair(key, value);
+    }
+    void parseValueString_(const std::string& str){
+        const std::pair<std::string, std::string> key_value = split_(str);
+        const std::string& key = key_value.first;
+        const std::string& value = key_value.second;
+
+        // Server configs parsing
+        SERVER_TYPE& lastServer = getLastServer_();
+        if (lastServer.isDone()) throw ConfigurationException("Server finished unexpectedly");
+        {
+            if (key == "port"){
+                lastServer.setPort(stringToNumber<SERVER_TYPE::PORT_TYPE>(value));
+                return;
+            } else if (key == "host"){
+                lastServer.setHost(value);
+                return;
+            } else if (key == "server_name"){
+                lastServer.setServerName(value);
+                return;
+            } else if (key == "error_pages"){
+                std::set<std::string> arr = stringToArray(value);
+                for (std::set<std::string>::const_iterator iter = arr.begin(); iter != arr.end(); iter++){
+                    lastServer.addErrorPage(*iter);
+                }
+                return;
+            } else if (key == "body_size"){
+                lastServer.setBodySize(stringToNumber<SERVER_TYPE::BODY_SIZE_TYPE>(value));
+                return;
+            }
+        }
+        
+        // Route configs parsin
+        SERVER_TYPE::ROUTE_TYPE& lastRoute = getLastRoute_();
+        if (lastRoute.isDone()) throw ConfigurationException("Route finished unexpectedly");
+        {
+            if (key == "methods"){
+                std::set<std::string> arr = stringToArray(value);
+                for (std::set<std::string>::const_iterator iter = arr.begin(); iter != arr.end(); iter++){
+                    lastRoute.addMethod(stringToHttpMethod(*iter));
+                }
+                return;
+            } else if (key == "redir"){
+                lastRoute.setRedirection(value);
+                return;
+            } else if (key == "dir"){
+                lastRoute.setDirectory(value);
+                return;
+            } else if (key == "dir_listening"){
+                lastRoute.setDirectoryListening(stringToBool(value));
+                return;
+            } else if (key == "def_if_dir"){
+                lastRoute.setDefaultIfDirectoryResponse(value);
+                return;
+            } else if (key == "cgi_script"){
+                lastRoute.setCgiScriptPath(value);
+                return;
+            } else if (key == "cgi_bin"){
+                lastRoute.setCgiBinPath(value);
+                return;
+            }
+        }
+
+        // Throw an exception on error
+        throw ConfigurationException("Invalid key");
     }
 
 };

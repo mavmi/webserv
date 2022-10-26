@@ -1,5 +1,5 @@
 {
-    port: 80;host: 127.0.0.1;
+    port: 80;        host: 127.0.0.1;
     server_name:     SERVER_NAME;
     error_pages:     path1,path2;
     body_size:       10000000;
@@ -8,7 +8,7 @@
         methods:             GET,POST,DELETE;
         redir:               path1;
         dir:                 path1;
-        dir_listening:       on/off;
+        dir_listening:       true;
         def_if_dir:          path1;
         cgi_script:          path1;
         cgi_bin:             path;
