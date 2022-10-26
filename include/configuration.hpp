@@ -9,6 +9,11 @@
 #include <utility>
 #include <algorithm>
 
+// TO DO:
+// - comments and messages
+// - config elem getter from main config class
+// - tests with different files
+
 enum CONFIG_ELEM{
     PORT,
     HOST,
@@ -767,7 +772,7 @@ private:
             }
         }
         
-        // Route configs parsin
+        // Route configs parsing
         SERVER_TYPE::ROUTE_TYPE& lastRoute = getLastRoute_();
         if (lastRoute.isDone()) throw ConfigurationException("Route finished unexpectedly");
         {
