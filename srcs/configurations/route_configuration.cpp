@@ -11,14 +11,7 @@ RouteConfiguration::RouteConfiguration(){
     cgi_bin_path_ = NULL;
 }
 RouteConfiguration::RouteConfiguration(const RouteConfiguration& other){
-    isDone_ = other.isDone_;
-    methods_ = (other.methods_) ? new METHODS_CONTAINER_TYPE(*other.methods_) : NULL;
-    redirection_ = (other.redirection_) ? new PATH_TYPE(*other.redirection_) : NULL;
-    directory_ = (other.directory_) ? new PATH_TYPE(*other.directory_) : NULL;
-    directory_listening_ = other.directory_listening_;
-    default_if_directory_response_path_ = (other.default_if_directory_response_path_) ? new PATH_TYPE(*other.default_if_directory_response_path_) : NULL;
-    cgi_script_path_ = (other.cgi_script_path_) ? new PATH_TYPE(*other.cgi_script_path_) : NULL;
-    cgi_bin_path_ = (other.cgi_bin_path_) ? new PATH_TYPE(*other.cgi_bin_path_) : NULL;
+    copyData_(other);
 }
 RouteConfiguration::~RouteConfiguration(){
     deleteData_();
@@ -26,16 +19,7 @@ RouteConfiguration::~RouteConfiguration(){
 
 RouteConfiguration& RouteConfiguration::operator=(const RouteConfiguration& other){
     deleteData_();
-
-    isDone_ = other.isDone_;
-    methods_ = (other.methods_) ? new METHODS_CONTAINER_TYPE(*other.methods_) : NULL;
-    redirection_ = (other.redirection_) ? new PATH_TYPE(*other.redirection_) : NULL;
-    directory_ = (other.directory_) ? new PATH_TYPE(*other.directory_) : NULL;
-    directory_listening_ = other.directory_listening_;
-    default_if_directory_response_path_ = (other.default_if_directory_response_path_) ? new PATH_TYPE(*other.default_if_directory_response_path_) : NULL;
-    cgi_script_path_ = (other.cgi_script_path_) ? new PATH_TYPE(*other.cgi_script_path_) : NULL;
-    cgi_bin_path_ = (other.cgi_bin_path_) ? new PATH_TYPE(*other.cgi_bin_path_) : NULL;
-
+    copyData_(other);
     return *this;        
 }
 
@@ -140,3 +124,14 @@ void RouteConfiguration::deleteData_(){
     cgi_script_path_ = NULL;
     cgi_bin_path_ = NULL;
 }
+void RouteConfiguration::copyData_(const RouteConfiguration& other){
+    isDone_ = other.isDone_;
+    methods_ = (other.methods_) ? new METHODS_CONTAINER_TYPE(*other.methods_) : NULL;
+    redirection_ = (other.redirection_) ? new PATH_TYPE(*other.redirection_) : NULL;
+    directory_ = (other.directory_) ? new PATH_TYPE(*other.directory_) : NULL;
+    directory_listening_ = other.directory_listening_;
+    default_if_directory_response_path_ = (other.default_if_directory_response_path_) ? new PATH_TYPE(*other.default_if_directory_response_path_) : NULL;
+    cgi_script_path_ = (other.cgi_script_path_) ? new PATH_TYPE(*other.cgi_script_path_) : NULL;
+    cgi_bin_path_ = (other.cgi_bin_path_) ? new PATH_TYPE(*other.cgi_bin_path_) : NULL;
+}
+

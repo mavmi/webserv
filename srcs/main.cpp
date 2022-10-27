@@ -1,16 +1,6 @@
 #include "../include/utils.hpp"
 #include "../include/configurations/configuration.hpp"
 
-#include "../test/test.hpp"
-
-#include <algorithm>
-#include <iterator>
-#include <assert.h>
-#include <sstream>
-#include <fstream>
-#include <vector>
-#include <string>
-
 // не забыть удалить
 void runTestConfigFile(int argc, char** argv){
     utilsCheckArgsCount(argc);
@@ -21,7 +11,7 @@ void runTestConfigFile(int argc, char** argv){
 int main(int argc, char** argv){
     (void)argc; (void)argv;
 
-    // RUN_ALL_TESTS();
+    std::cout << " == MAIN ONE == " << std::endl;
     try {
         runTestConfigFile(argc, argv);
     } catch (Exception& e){

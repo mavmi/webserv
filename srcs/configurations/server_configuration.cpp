@@ -11,13 +11,7 @@ ServerConfiguration::ServerConfiguration(){
     routes_ = NULL;
 }
 ServerConfiguration::ServerConfiguration(const ServerConfiguration& other){
-    isDone_ = other.isDone_;
-    port_ = (other.port_) ? new PORT_TYPE(*other.port_) : NULL;
-    host_ = (other.host_) ? new HOST_TYPE(*other.host_) : NULL;
-    serverName_ = (other.serverName_) ? new SERVER_NAME_TYPE(*other.serverName_) : NULL;
-    errorPages_ = (other.errorPages_) ? new ERROR_PAGES_CONTAINER_TYPE(*other.errorPages_) : NULL;
-    bodySize_ = other.bodySize_;
-    routes_ = (other.routes_) ? new ROUTES_CONTAINER_TYPE(*other.routes_) : NULL;
+    copyData_(other);
 }
 ServerConfiguration::~ServerConfiguration(){
     deleteData_();
@@ -25,15 +19,7 @@ ServerConfiguration::~ServerConfiguration(){
 
 ServerConfiguration& ServerConfiguration::operator=(const ServerConfiguration& other){
     deleteData_();
-
-    isDone_ = other.isDone_;
-    port_ = (other.port_) ? new PORT_TYPE(*other.port_) : NULL;
-    host_ = (other.host_) ? new HOST_TYPE(*other.host_) : NULL;
-    serverName_ = (other.serverName_) ? new SERVER_NAME_TYPE(*other.serverName_) : NULL;
-    errorPages_ = (other.errorPages_) ? new ERROR_PAGES_CONTAINER_TYPE(*other.errorPages_) : NULL;
-    bodySize_ = other.bodySize_;
-    routes_ = (other.routes_) ? new ROUTES_CONTAINER_TYPE(*other.routes_) : NULL;
-
+    copyData_(other);
     return *this;
 }
 
@@ -142,4 +128,13 @@ void ServerConfiguration::deleteData_(){
     errorPages_ = NULL;
     bodySize_  = 0;
     routes_ = NULL;
+}
+void ServerConfiguration::copyData_(const ServerConfiguration& other){
+    isDone_ = other.isDone_;
+    port_ = (other.port_) ? new PORT_TYPE(*other.port_) : NULL;
+    host_ = (other.host_) ? new HOST_TYPE(*other.host_) : NULL;
+    serverName_ = (other.serverName_) ? new SERVER_NAME_TYPE(*other.serverName_) : NULL;
+    errorPages_ = (other.errorPages_) ? new ERROR_PAGES_CONTAINER_TYPE(*other.errorPages_) : NULL;
+    bodySize_ = other.bodySize_;
+    routes_ = (other.routes_) ? new ROUTES_CONTAINER_TYPE(*other.routes_) : NULL;
 }

@@ -66,5 +66,6 @@ private:
     ROUTES_CONTAINER_TYPE* routes_;
 
     void deleteData_();
+    void copyData_(const ServerConfiguration& other);
 
 };

@@ -1,11 +1,7 @@
-#pragma once
+#include "../include/test.hpp"
 
-#include "test_utils.hpp"
-
-namespace test{
-
-void TEST_CONFIGURATION_HOST(){
-    TestHeader(__FUNCTION__);
+void test::CONFIGURATION_HOST_TESTS(){
+    ___HEADER___
 
     {
         ConfigurationHost host(127, 0, 0, 1);
@@ -114,8 +110,46 @@ void TEST_CONFIGURATION_HOST(){
     }
 }
 
-void RUN_CONFIGURATION_TESTS(){
-    test::TEST_CONFIGURATION_HOST();
+void test::FILES_TESTS(){
+    ___HEADER___
+
+    // Valid files
+    {
+        try {
+            Configuration configuration;
+            configuration.parseFile("ConfigFiles/valid/1.txt");
+        } catch (Exception& e){
+            std::cerr << e.what() << std::endl;
+            assert(false);
+        } 
+
+        // to do asserts
+    }
+    {
+        try {
+            Configuration configuration;
+            configuration.parseFile("ConfigFiles/valid/2.txt");
+        } catch (Exception& e){
+            std::cerr << e.what() << std::endl;
+            assert(false);
+        } 
+
+        // to do asserts
+    }
+    {
+        try {
+            Configuration configuration;
+            configuration.parseFile("ConfigFiles/valid/3.txt");
+        } catch (Exception& e){
+            std::cerr << e.what() << std::endl;
+            assert(false);
+        } 
+
+        // to do asserts
+    }
 }
 
+void RUN_ALL_TESTS(){
+    test::CONFIGURATION_HOST_TESTS();
+    test::FILES_TESTS();
 }

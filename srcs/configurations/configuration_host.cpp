@@ -72,6 +72,7 @@ std::string ConfigurationHost::toString_(VALUE_TYPE val) const {
 
 ConfigurationHost::VALUE_TYPE ConfigurationHost::stringToNumber_(const std::string& str) const {
     try {
+        if (str.size() > 3) throw UtilsException("Numeric value too long");
         return utilsStringToNum<VALUE_TYPE>(str);
     } catch (UtilsException& e) {
         throw ConfigurationHostException(e.what(), __FILE__, __FUNCTION__, __LINE__);

@@ -59,5 +59,6 @@ private:
     PATH_TYPE* cgi_bin_path_;
 
     void deleteData_();
+    void copyData_(const RouteConfiguration& other);
 
 };

@@ -5,5 +5,6 @@
 *.out
 *.exe
 webserv
+webserv_test
 
 !.gitignore
