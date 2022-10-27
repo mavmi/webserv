@@ -44,7 +44,6 @@ ConfigurationHost& ConfigurationHost::operator=(const std::string& hostStr){
     return *this;
 }
 
-// Return string representation of IP address.
 std::string ConfigurationHost::toString() const {
     std::string str = "";
 
@@ -57,20 +56,16 @@ std::string ConfigurationHost::toString() const {
 
     return str;
 }
-// Get number from IP at specified position.
-// May throw an exception on error.
 ConfigurationHost::VALUE_TYPE ConfigurationHost::at(SIZE_TYPE position) const {
     if (position > maxSize_) throw ConfigurationHostException("Bad IP position", __FILE__, __FUNCTION__, __LINE__);
     return ip_[position];
 }
 
-// Set IP number to specified position.
 void ConfigurationHost::set(VALUE_TYPE value, SIZE_TYPE position){
     if (position > maxSize_) throw ConfigurationHostException("Bad IP position", __FILE__, __FUNCTION__, __LINE__);
     ip_[position] = value;  
 }
 
-// Convert VALUE_TYPE to string.
 std::string ConfigurationHost::toString_(VALUE_TYPE val) const {
     if (val == 0) return "0";
     
@@ -85,19 +80,16 @@ std::string ConfigurationHost::toString_(VALUE_TYPE val) const {
     return result;
 }
 
-// Convert string number to VALUE_TYPE.
-// May throw exception.
 ConfigurationHost::VALUE_TYPE ConfigurationHost::toNum_(const std::string& str) const {
-    const std::string errorStr = "Invalid host value";
-    if (!str.size()) throw ConfigurationHostException(errorStr, __FILE__, __FUNCTION__, __LINE__);
+    if (!str.size()) throw ConfigurationHostException("Empty num string", __FILE__, __FUNCTION__, __LINE__);
 
     int res = 0;
     for (SIZE_TYPE i = 0; i < str.size(); i++){
         char c = str.at(i);
-        if (c < '0' || c > '9') throw ConfigurationHostException(errorStr, __FILE__, __FUNCTION__, __LINE__);
+        if (c < '0' || c > '9') throw ConfigurationHostException("Invalid num string", __FILE__, __FUNCTION__, __LINE__);
         res = res * 10 + (str.at(i) - '0');
     }
 
-    if (res < 0 || res > 255) throw ConfigurationHostException(errorStr, __FILE__, __FUNCTION__, __LINE__);
+    if (res < 0 || res > 255) throw ConfigurationHostException("Num string value too big", __FILE__, __FUNCTION__, __LINE__);
     return static_cast<VALUE_TYPE>(res);
 }

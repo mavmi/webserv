@@ -32,9 +32,17 @@ private:
     // Check if string contains only whitespaces
     bool isLineEmpty_(const std::string& line) const;
 
+    // Return reference to the last server in the list of servers.
+    // Throw an exception if there are no servers.
     SERVER_TYPE& getLastServer_();
+    // Return reference to the last route of last server.
+    // May throw exception too.
     SERVER_TYPE::ROUTE_TYPE& getLastRoute_();
 
+    /*
+        All these methods below are about parsing different types
+        of strings from an input file.
+    */
     HTTP_METHOD stringToHttpMethod(const std::string& str);
     std::set<std::string> stringToArray(const std::string& str);
     bool stringToBool(const std::string& str) const;

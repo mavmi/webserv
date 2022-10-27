@@ -16,12 +16,9 @@ Configuration& Configuration::operator=(const Configuration& other){
     return *this;
 }
 
-// Parse configuration file.
-// May throw exception on error.
 void Configuration::parseFile(const std::string& inputFile){
     typedef std::string::iterator Iterator;
 
-    const std::string errorMsg = "Configuration file parsing error";
     std::ifstream inputFileStream(inputFile.c_str(), std::ios::in);
     if (!inputFileStream.is_open()) throw ConfigurationException("Unable to open input file: " + inputFile, __FILE__, __FUNCTION__, __LINE__);
 
@@ -38,7 +35,7 @@ void Configuration::parseFile(const std::string& inputFile){
 
                 try {
                     SERVER_TYPE& lastServer = getLastServer_();
-                    if (!lastServer.isDone()) throw Exception(errorMsg, __FILE__, __FUNCTION__, __LINE__);
+                    if (!lastServer.isDone()) throw Exception("Unable to start server: the previous one is not done", __FILE__, __FUNCTION__, __LINE__);
                     servers_.push_back(SERVER_TYPE());
                 } catch (ConfigurationException&){
                     servers_.push_back(SERVER_TYPE());
@@ -50,8 +47,8 @@ void Configuration::parseFile(const std::string& inputFile){
 
                 try {
                     SERVER_TYPE& lastServer = getLastServer_();
-                    if (lastServer.isDone()) throw Exception(errorMsg, __FILE__, __FUNCTION__, __LINE__);
-                    if (!getLastRoute_().isDone()) throw Exception(errorMsg, __FILE__, __FUNCTION__, __LINE__);
+                    if (lastServer.isDone()) throw Exception("Unable to finish server: it is already finished", __FILE__, __FUNCTION__, __LINE__);
+                    if (!getLastRoute_().isDone()) throw Exception("Unable to finish server: it contains unfinished route", __FILE__, __FUNCTION__, __LINE__);
                     lastServer.done();
                 } catch (ServerException&){
                     getLastServer_().done();
@@ -65,8 +62,8 @@ void Configuration::parseFile(const std::string& inputFile){
 
                 try {
                     SERVER_TYPE& lastServer = getLastServer_();
-                    if (lastServer.isDone()) throw Exception(errorMsg, __FILE__, __FUNCTION__, __LINE__);
-                    if (!getLastRoute_().isDone()) throw Exception(errorMsg, __FILE__, __FUNCTION__, __LINE__);
+                    if (lastServer.isDone()) throw Exception("Unable to start route: there are no unfinished servers to contain one", __FILE__, __FUNCTION__, __LINE__);
+                    if (!getLastRoute_().isDone()) throw Exception("Unable to start route: there is unfinished one", __FILE__, __FUNCTION__, __LINE__);
                     lastServer.addRoute(SERVER_TYPE::ROUTE_TYPE());
                 } catch (ServerException&){
                     getLastServer_().addRoute(SERVER_TYPE::ROUTE_TYPE());
@@ -80,8 +77,8 @@ void Configuration::parseFile(const std::string& inputFile){
 
                 try {
                     SERVER_TYPE& lastServer = getLastServer_();
-                    if (lastServer.isDone()) throw Exception(errorMsg, __FILE__, __FUNCTION__, __LINE__);
-                    if (getLastRoute_().isDone()) throw Exception(errorMsg, __FILE__, __FUNCTION__, __LINE__);
+                    if (lastServer.isDone()) throw Exception("Unable to finish route: there are no unfinished servers to contain one", __FILE__, __FUNCTION__, __LINE__);
+                    if (getLastRoute_().isDone()) throw Exception("Unable to finish route: there are no non-finished routes", __FILE__, __FUNCTION__, __LINE__);
                     getLastRoute_().done();
                 } catch (ServerException&){
                     throw;
@@ -95,7 +92,7 @@ void Configuration::parseFile(const std::string& inputFile){
 
                 Iterator begin = iter;
                 Iterator end = std::find(begin, line.end(), ';');
-                if (end == line.end()) throw ConfigurationException(errorMsg, __FILE__, __FUNCTION__, __LINE__);  // Did not find ';' == very bad
+                if (end == line.end()) throw ConfigurationException("Invalid key-value line", __FILE__, __FUNCTION__, __LINE__);  // Did not find ';' == very bad
                 
                 std::string substring = line.substr(
                     std::distance(line.begin(), begin),
@@ -117,7 +114,6 @@ void Configuration::parseFile(const std::string& inputFile){
     inputFileStream.close();
 }
 
-// Check if string contains only whitespaces
 bool Configuration::isLineEmpty_(const std::string& line) const{
     if (!line.size()) return true;
     for (size_t i = 0; i < line.size(); i++){
@@ -188,7 +184,7 @@ void Configuration::parseValueString_(const std::string& str){
 
     // Server configs parsing
     SERVER_TYPE& lastServer = getLastServer_();
-    if (lastServer.isDone()) throw ConfigurationException("Server finished unexpectedly", __FILE__, __FUNCTION__, __LINE__);
+    if (lastServer.isDone()) throw ConfigurationException("Trying to update already finished server", __FILE__, __FUNCTION__, __LINE__);
     {
         if (key == "port"){
             lastServer.setPort(stringToNumber<SERVER_TYPE::PORT_TYPE>(value));
@@ -213,7 +209,7 @@ void Configuration::parseValueString_(const std::string& str){
     
     // Route configs parsing
     SERVER_TYPE::ROUTE_TYPE& lastRoute = getLastRoute_();
-    if (lastRoute.isDone()) throw ConfigurationException("Route finished unexpectedly", __FILE__, __FUNCTION__, __LINE__);
+    if (lastRoute.isDone()) throw ConfigurationException("Trying to update already finished route", __FILE__, __FUNCTION__, __LINE__);
     {
         if (key == "methods"){
             std::set<std::string> arr = stringToArray(value);

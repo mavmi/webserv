@@ -5,6 +5,10 @@
 #include "configuration_host.hpp"
 #include "route_configuration.hpp"
 
+// Contains information about server.
+// Any getter may throw ServerException if it's value is not set.
+// Use methods [isDone()] to check if the server is finished or not.
+// Method [done()] marks the server as finished.
 class ServerConfiguration{
 public:
     typedef size_t                          SIZE_TYPE;

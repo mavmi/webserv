@@ -2,6 +2,10 @@
 
 #include "utils.hpp"
 
+/*
+    A bunch of exceptions for configuration classes.
+*/
+
 class Exception {
 public:
     Exception(const char* msg);

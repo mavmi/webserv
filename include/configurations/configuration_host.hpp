@@ -3,7 +3,8 @@
 #include "utils.hpp"
 #include "exceptions.hpp"
 
-// This class contains IP address
+// This class contains IP address.
+// Some of it's methods may throw ConfigurationHostException on error.
 class ConfigurationHost{
 public:
     typedef unsigned char   VALUE_TYPE;
@@ -19,10 +20,11 @@ public:
     // Return string representation of IP address.
     std::string toString() const;
     // Get number from IP at specified position.
-    // May throw an exception on error.
+    // May throw an exception on if position is invalid.
     VALUE_TYPE at(SIZE_TYPE position) const;
 
     // Set IP number to specified position.
+    // May throw an exception on if position is invalid.
     void set(VALUE_TYPE value, SIZE_TYPE position);
 
 private:

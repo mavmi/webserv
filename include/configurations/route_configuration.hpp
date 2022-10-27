@@ -3,6 +3,10 @@
 #include "utils.hpp"
 #include "exceptions.hpp"
 
+// Contains information about server's route.
+// Any getter may throw RouteException if it's value is not set.
+// Use methods [isDone()] to check if the route is finished or not.
+// Method [done()] marks the route as finished.
 class RouteConfiguration{
 public:
     typedef size_t                      SIZE_TYPE;
