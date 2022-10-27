@@ -1,6 +1,7 @@
 #pragma once
 
 #include "utils.hpp"
+#include "container.hpp"
 #include "exceptions.hpp"
 #include "configuration_host.hpp"
 #include "route_configuration.hpp"
@@ -16,10 +17,10 @@ public:
     typedef ConfigurationHost               HOST_TYPE;
     typedef std::string                     SERVER_NAME_TYPE;
     typedef std::string                     ERROR_PAGE_TYPE;
-    typedef std::vector<ERROR_PAGE_TYPE>    ERROR_PAGES_CONTAINER_TYPE;
+    typedef Container<ERROR_PAGE_TYPE>      ERROR_PAGES_CONTAINER_TYPE;
     typedef SIZE_TYPE                       BODY_SIZE_TYPE;
     typedef RouteConfiguration              ROUTE_TYPE;
-    typedef std::vector<ROUTE_TYPE>         ROUTES_CONTAINER_TYPE;
+    typedef Container<ROUTE_TYPE>           ROUTES_CONTAINER_TYPE;
 
     ServerConfiguration();
     ServerConfiguration(const ServerConfiguration& other);
@@ -44,7 +45,7 @@ public:
     SIZE_TYPE getErrorPagesCount() const;
 
     void setBodySize(BODY_SIZE_TYPE bodySize);
-    BODY_SIZE_TYPE getBodySizse() const;
+    BODY_SIZE_TYPE getBodySize() const;
 
     void setRoutes(const ROUTES_CONTAINER_TYPE& routes);
     ROUTES_CONTAINER_TYPE& getRoutes() const;

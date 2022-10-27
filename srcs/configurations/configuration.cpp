@@ -114,6 +114,10 @@ void Configuration::parseFile(const std::string& inputFile){
     inputFileStream.close();
 }
 
+Configuration::SERVERS_CONTAINER_TYPE& Configuration::getServers() {
+    return servers_;
+}
+
 bool Configuration::isLineEmpty_(const std::string& line) const{
     if (!line.size()) return true;
     for (size_t i = 0; i < line.size(); i++){

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "utils.hpp"
+#include "container.hpp"
 #include "exceptions.hpp"
 
 // Contains information about server's route.
@@ -11,7 +12,7 @@ class RouteConfiguration{
 public:
     typedef size_t                      SIZE_TYPE;
     typedef int                         METHOD_TYPE;
-    typedef std::vector<METHOD_TYPE>    METHODS_CONTAINER_TYPE;
+    typedef Container<METHOD_TYPE>      METHODS_CONTAINER_TYPE;
     typedef std::string                 PATH_TYPE;
 
     RouteConfiguration();

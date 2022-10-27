@@ -1,6 +1,7 @@
 #pragma once
 
 #include "utils.hpp"
+#include "container.hpp"
 #include "exceptions.hpp"
 #include "server_configuration.hpp"
 
@@ -8,7 +9,8 @@
 // configuration file
 class Configuration{
 public:
-    typedef ServerConfiguration SERVER_TYPE;
+    typedef ServerConfiguration     SERVER_TYPE;
+    typedef Container<SERVER_TYPE>  SERVERS_CONTAINER_TYPE;
 
     Configuration();
     Configuration(const Configuration& other);
@@ -19,9 +21,10 @@ public:
     // Parse configuration file.
     // May throw exception on error.
     void parseFile(const std::string& inputFile);
+    SERVERS_CONTAINER_TYPE& getServers();
 
 private:
-    std::vector<SERVER_TYPE> servers_;
+    SERVERS_CONTAINER_TYPE servers_;
 
     // Check if string contains only whitespaces
     bool isLineEmpty_(const std::string& line) const;

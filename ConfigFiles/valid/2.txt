@@ -1,22 +1,22 @@
 {
-    port: 80;        host: 127.0.0.1;
+    port: 8080;        host: 127.0.0.1;
     server_name:     SERVER_NAME;
-    error_pages:     path1,path2;
-    body_size:       123456789;
+    error_pages:     path1,path2,   path3;
+    body_size:       1223334444;
     
     [
         methods:             GET,POST,DELETE;
-        redir:               path1;
-        dir:                 path1;
+        redir:               PATH1;
+        dir:                 PATH22;
     ]
 
     [
         dir_listening:       true;
-        def_if_dir:          path1;
-        cgi_script:          path1;
+        def_if_dir:          PATH333;
+        cgi_script:          PATH4444;
     ]
 
     [
-        cgi_bin:             path;
+        cgi_bin:             PATH55555;
     ]
 }

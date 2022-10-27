@@ -3,7 +3,7 @@
     host:            127.0.0.1;          [1](4 блока 0-255)
     server_name:     SERVER_NAME;        [0-1]
     error_pages:     path1,path2;        [1-n](пути к файлам)
-    body_size:       10000000;           [1](число > 0)
+    body_size:       10000000;           [1](число > 0; по умолчанию 0)
     
     [
         methods:             GET,POST,DELETE;    [1-n](GET POST DELETE)

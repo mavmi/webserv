@@ -78,7 +78,7 @@ ServerConfiguration::SIZE_TYPE ServerConfiguration::getErrorPagesCount() const{
 void ServerConfiguration::setBodySize(BODY_SIZE_TYPE bodySize){
     bodySize_ = bodySize;
 }
-ServerConfiguration::BODY_SIZE_TYPE ServerConfiguration::getBodySizse() const{
+ServerConfiguration::BODY_SIZE_TYPE ServerConfiguration::getBodySize() const{
     return bodySize_;
 }
 
