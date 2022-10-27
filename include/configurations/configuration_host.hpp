@@ -36,6 +36,6 @@ private:
 
     // Convert string number to VALUE_TYPE.
     // May throw exception.
-    VALUE_TYPE toNum_(const std::string& str) const;
+    VALUE_TYPE stringToNumber_(const std::string& str) const;
 
 };

@@ -1,5 +1,20 @@
 #include "../../include/utils.hpp"
 
+
+UtilsException::UtilsException(const char* msg) 
+    : msg_(std::string(msg)){}
+UtilsException::UtilsException(const std::string& msg)
+    : msg_(msg){}
+UtilsException::~UtilsException() throw(){}
+const std::string UtilsException::what() const throw(){
+    return output_();
+}
+std::string UtilsException::output_() const {
+    return "UTILS_EXCEPTION: " + msg_;
+}
+
+
+
 // Print message with specified message type
 void utilsPrintMsg(const std::string& msg, MSG_TYPE msgType = INFO){
     std::string msgPrefix;
@@ -34,40 +49,4 @@ void utilsCheckArgsCount(int argc){
         utilsPrintMsg("configuration file required", ERROR);
         exit(1);
     }
-}
-
-int utilsStringToInt(const std::string& str){
-    if (!str.size()) return 0;
-    
-    bool positive = true;
-    int res = 0;
-
-    size_t i = 0;
-    if (str[0] == '-') {
-        i++;
-        positive = false;
-    }
-
-    while (i < str.size()){
-        char c = str.at(i);
-        if (c < '0' || c > '9') return 0;
-        res = res * 10 + (c - '0');
-        i++;
-    }
-
-    if (!positive) res *= -1;
-    return res;
-}
-
-std::string utilsIntToString(int num){
-    if (num == 0) return "0";
-    
-    std::string result;
-    while (num > 0){
-        result += '0' + num % 10;
-        num /= 10;
-    }
-
-    std::reverse(result.begin(), result.end());
-    return result;
 }

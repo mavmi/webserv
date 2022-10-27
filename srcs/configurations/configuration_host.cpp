@@ -30,7 +30,7 @@ ConfigurationHost& ConfigurationHost::operator=(const std::string& hostStr){
             std::distance(begin, end)               // substring length
         );
 
-        numbers[counter++] = toNum_(substr);
+        numbers[counter++] = stringToNumber_(substr);
         if ((counter == maxSize_ && end != hostStr.end()) || 
                 (counter != maxSize_ && end == hostStr.end())){
             throw ConfigurationHostException(errorStr, __FILE__, __FUNCTION__, __LINE__);
@@ -67,29 +67,13 @@ void ConfigurationHost::set(VALUE_TYPE value, SIZE_TYPE position){
 }
 
 std::string ConfigurationHost::toString_(VALUE_TYPE val) const {
-    if (val == 0) return "0";
-    
-    std::string result = "";
-
-    while (val > 0){
-        result += '0' + val % 10;
-        val /= 10;
-    }
-
-    std::reverse(result.begin(), result.end());
-    return result;
+    return utilsNumToString<VALUE_TYPE>(val);
 }
 
-ConfigurationHost::VALUE_TYPE ConfigurationHost::toNum_(const std::string& str) const {
-    if (!str.size()) throw ConfigurationHostException("Empty num string", __FILE__, __FUNCTION__, __LINE__);
-
-    int res = 0;
-    for (SIZE_TYPE i = 0; i < str.size(); i++){
-        char c = str.at(i);
-        if (c < '0' || c > '9') throw ConfigurationHostException("Invalid num string", __FILE__, __FUNCTION__, __LINE__);
-        res = res * 10 + (str.at(i) - '0');
+ConfigurationHost::VALUE_TYPE ConfigurationHost::stringToNumber_(const std::string& str) const {
+    try {
+        return utilsStringToNum<VALUE_TYPE>(str);
+    } catch (UtilsException& e) {
+        throw ConfigurationHostException(e.what(), __FILE__, __FUNCTION__, __LINE__);
     }
-
-    if (res < 0 || res > 255) throw ConfigurationHostException("Num string value too big", __FILE__, __FUNCTION__, __LINE__);
-    return static_cast<VALUE_TYPE>(res);
 }

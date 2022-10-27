@@ -130,13 +130,13 @@ Configuration::SERVER_TYPE::ROUTE_TYPE& Configuration::getLastRoute_(){
     return getLastServer_().getRoutes().back();
 }
 
-HTTP_METHOD Configuration::stringToHttpMethod(const std::string& str){
+HTTP_METHOD Configuration::stringToHttpMethod_(const std::string& str){
     if (str == "GET") return GET;
     else if (str == "POST") return POST;
     else if (str == "DELETE") return DELETE;
     throw ConfigurationException("Invalid HTTP method", __FILE__, __FUNCTION__, __LINE__);
 }
-std::set<std::string> Configuration::stringToArray(const std::string& str){
+std::set<std::string> Configuration::stringToArray_(const std::string& str){
     typedef std::string::const_iterator Iterator;
     
     std::set<std::string> result;
@@ -155,7 +155,7 @@ std::set<std::string> Configuration::stringToArray(const std::string& str){
 
     return result;
 }
-bool Configuration::stringToBool(const std::string& str) const {
+bool Configuration::stringToBool_(const std::string& str) const {
     if (str == "true") return true;
     else if (str == "false") return false;
     throw ConfigurationException("Invalid boolean value", __FILE__, __FUNCTION__, __LINE__);
@@ -187,7 +187,7 @@ void Configuration::parseValueString_(const std::string& str){
     if (lastServer.isDone()) throw ConfigurationException("Trying to update already finished server", __FILE__, __FUNCTION__, __LINE__);
     {
         if (key == "port"){
-            lastServer.setPort(stringToNumber<SERVER_TYPE::PORT_TYPE>(value));
+            lastServer.setPort(stringToNumber_<SERVER_TYPE::PORT_TYPE>(value));
             return;
         } else if (key == "host"){
             lastServer.setHost(value);
@@ -196,13 +196,13 @@ void Configuration::parseValueString_(const std::string& str){
             lastServer.setServerName(value);
             return;
         } else if (key == "error_pages"){
-            std::set<std::string> arr = stringToArray(value);
+            std::set<std::string> arr = stringToArray_(value);
             for (std::set<std::string>::const_iterator iter = arr.begin(); iter != arr.end(); iter++){
                 lastServer.addErrorPage(*iter);
             }
             return;
         } else if (key == "body_size"){
-            lastServer.setBodySize(stringToNumber<SERVER_TYPE::BODY_SIZE_TYPE>(value));
+            lastServer.setBodySize(stringToNumber_<SERVER_TYPE::BODY_SIZE_TYPE>(value));
             return;
         }
     }
@@ -212,9 +212,9 @@ void Configuration::parseValueString_(const std::string& str){
     if (lastRoute.isDone()) throw ConfigurationException("Trying to update already finished route", __FILE__, __FUNCTION__, __LINE__);
     {
         if (key == "methods"){
-            std::set<std::string> arr = stringToArray(value);
+            std::set<std::string> arr = stringToArray_(value);
             for (std::set<std::string>::const_iterator iter = arr.begin(); iter != arr.end(); iter++){
-                lastRoute.addMethod(stringToHttpMethod(*iter));
+                lastRoute.addMethod(stringToHttpMethod_(*iter));
             }
             return;
         } else if (key == "redir"){
@@ -224,7 +224,7 @@ void Configuration::parseValueString_(const std::string& str){
             lastRoute.setDirectory(value);
             return;
         } else if (key == "dir_listening"){
-            lastRoute.setDirectoryListening(stringToBool(value));
+            lastRoute.setDirectoryListening(stringToBool_(value));
             return;
         } else if (key == "def_if_dir"){
             lastRoute.setDefaultIfDirectoryResponse(value);

@@ -17,7 +17,7 @@ const std::string Exception::what() const throw(){
         ", " +
         _function_ +
         ", " +
-        utilsIntToString(_line_) +
+        utilsNumToString<int>(_line_) +
         ") " + 
         output_();
 }
