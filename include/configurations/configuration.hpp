@@ -5,6 +5,8 @@
 #include "exceptions.hpp"
 #include "server_configuration.hpp"
 
+namespace configuration {
+
 // This class contains all info from
 // configuration file
 class Configuration{
@@ -55,3 +57,5 @@ private:
     void parseValueString_(const std::string& str);
 
 };
+
+}

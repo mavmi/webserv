@@ -1,5 +1,6 @@
 #include "../../include/configurations/server_configuration.hpp"
 
+namespace configuration {
 
 ServerConfiguration::ServerConfiguration(){
     isDone_ = false;
@@ -137,4 +138,6 @@ void ServerConfiguration::copyData_(const ServerConfiguration& other){
     errorPages_ = (other.errorPages_) ? new ERROR_PAGES_CONTAINER_TYPE(*other.errorPages_) : NULL;
     bodySize_ = other.bodySize_;
     routes_ = (other.routes_) ? new ROUTES_CONTAINER_TYPE(*other.routes_) : NULL;
+}
+
 }

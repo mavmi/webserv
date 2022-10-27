@@ -3,6 +3,8 @@
 #include "utils.hpp"
 #include "exceptions.hpp"
 
+namespace configuration {
+
 // This class contains IP address.
 // Some of it's methods may throw ConfigurationHostException on error.
 class ConfigurationHost{
@@ -39,3 +41,5 @@ private:
     VALUE_TYPE stringToNumber_(const std::string& str) const;
 
 };
+
+}

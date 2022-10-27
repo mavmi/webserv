@@ -1,5 +1,6 @@
 #include "../../include/configurations/configuration.hpp"
 
+namespace configuration {
 
 Configuration::Configuration(){
 
@@ -14,6 +15,9 @@ Configuration::~Configuration(){
 Configuration& Configuration::operator=(const Configuration& other){
     servers_ = other.servers_;
     return *this;
+}
+Configuration::SERVERS_CONTAINER_TYPE& Configuration::getServers(){
+    return servers_;
 }
 
 void Configuration::parseFile(const std::string& inputFile){
@@ -112,10 +116,6 @@ void Configuration::parseFile(const std::string& inputFile){
     }
 
     inputFileStream.close();
-}
-
-Configuration::SERVERS_CONTAINER_TYPE& Configuration::getServers() {
-    return servers_;
 }
 
 bool Configuration::isLineEmpty_(const std::string& line) const{
@@ -244,4 +244,6 @@ void Configuration::parseValueString_(const std::string& str){
 
     // Throw an exception on error
     throw ConfigurationException("Invalid key", __FILE__, __FUNCTION__, __LINE__);
+}
+
 }

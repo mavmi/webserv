@@ -1,5 +1,7 @@
 #include "../../include/configurations/route_configuration.hpp"
 
+namespace configuration {
+
 RouteConfiguration::RouteConfiguration(){
     isDone_ = false;
     methods_ = NULL;
@@ -135,3 +137,4 @@ void RouteConfiguration::copyData_(const RouteConfiguration& other){
     cgi_bin_path_ = (other.cgi_bin_path_) ? new PATH_TYPE(*other.cgi_bin_path_) : NULL;
 }
 
+}

@@ -6,6 +6,8 @@
     A bunch of exceptions for configuration classes.
 */
 
+namespace configuration {
+
 class Exception {
 public:
     Exception(const char* msg);
@@ -78,3 +80,4 @@ protected:
 
 };
 
+}

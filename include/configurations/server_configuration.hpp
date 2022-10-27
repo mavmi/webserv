@@ -6,6 +6,8 @@
 #include "configuration_host.hpp"
 #include "route_configuration.hpp"
 
+namespace configuration {
+
 // Contains information about server.
 // Any getter may throw ServerException if it's value is not set.
 // Use methods [isDone()] to check if the server is finished or not.
@@ -70,3 +72,5 @@ private:
     void copyData_(const ServerConfiguration& other);
 
 };
+
+}

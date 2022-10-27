@@ -1,5 +1,7 @@
 #include "../../include/configurations/configuration_host.hpp"
 
+namespace configuration {
+
 ConfigurationHost::ConfigurationHost(VALUE_TYPE b1, VALUE_TYPE b2, VALUE_TYPE b3, VALUE_TYPE b4){
     ip_[0] = b1;
     ip_[1] = b2;
@@ -78,3 +80,5 @@ ConfigurationHost::VALUE_TYPE ConfigurationHost::stringToNumber_(const std::stri
         throw ConfigurationHostException(e.what(), __FILE__, __FUNCTION__, __LINE__);
     }
 }
+
+} 

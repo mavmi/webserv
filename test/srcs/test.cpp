@@ -4,50 +4,50 @@ void test::CONFIGURATION_HOST_TESTS(){
     ___HEADER___
 
     {
-        ConfigurationHost host(127, 0, 0, 1);
+        configuration::ConfigurationHost host(127, 0, 0, 1);
         assert(host.toString() == "127.0.0.1");
     }
     {
-        ConfigurationHost host(192, 168, 0, 123);
+        configuration::ConfigurationHost host(192, 168, 0, 123);
         assert(host.toString() == "192.168.0.123");
     }
     {
-        ConfigurationHost host(0, 1, 2, 3);
+        configuration::ConfigurationHost host(0, 1, 2, 3);
         assert(host.toString() == "0.1.2.3");
     }
     {
-        ConfigurationHost host(0, 0, 0, 0);
+        configuration::ConfigurationHost host(0, 0, 0, 0);
         assert(host.toString() == "0.0.0.0");
     }
     {
-        ConfigurationHost host(255, 255, 255, 255);
+        configuration::ConfigurationHost host(255, 255, 255, 255);
         assert(host.toString() == "255.255.255.255");
     }
 
 
     {
         std::string str = "0.0.0.0";
-        ConfigurationHost host(str);
+        configuration::ConfigurationHost host(str);
         assert(host.toString() == str);
     }
     {
         std::string str = "255.255.255.255";
-        ConfigurationHost host(str);
+        configuration::ConfigurationHost host(str);
         assert(host.toString() == str);
     }
     {
         std::string str = "0.1.2.3";
-        ConfigurationHost host(str);
+        configuration::ConfigurationHost host(str);
         assert(host.toString() == str);
     }
     {
         std::string str = "127.0.0.1";
-        ConfigurationHost host(str);
+        configuration::ConfigurationHost host(str);
         assert(host.toString() == str);
     }
     {
         std::string str = "192.168.12.34";
-        ConfigurationHost host(str);
+        configuration::ConfigurationHost host(str);
         assert(host.toString() == str);
     }   
 
@@ -55,56 +55,56 @@ void test::CONFIGURATION_HOST_TESTS(){
     {
         std::string str = "127.0.0.1.";
         try{
-            ConfigurationHost host(str);
+            configuration::ConfigurationHost host(str);
             assert(false);
         } catch (...) {}
     }
     {
         std::string str = "127.0..0.1";
         try{
-            ConfigurationHost host(str);
+            configuration::ConfigurationHost host(str);
             assert(false);
         } catch (...) {}
     }
     {
         std::string str = ".127.0.0.1";
         try{
-            ConfigurationHost host(str);
+            configuration::ConfigurationHost host(str);
             assert(false);
         } catch (...) {}
     }
     {
         std::string str = "a.b.c.d";
         try{
-            ConfigurationHost host(str);
+            configuration::ConfigurationHost host(str);
             assert(false);
         } catch (...) {}
     }
     {
         std::string str = "";
         try{
-            ConfigurationHost host(str);
+            configuration::ConfigurationHost host(str);
             assert(false);
         } catch (...) {}
     }
     {
         std::string str = "...";
         try{
-            ConfigurationHost host(str);
+            configuration::ConfigurationHost host(str);
             assert(false);
         } catch (...) {}
     }
     {
         std::string str = "1.2.3.256";
         try{
-            ConfigurationHost host(str);
+            configuration::ConfigurationHost host(str);
             assert(false);
         } catch (...) {}
     }
     {
         std::string str = "1000.1000.1000.1000";
         try{
-            ConfigurationHost host(str);
+            configuration::ConfigurationHost host(str);
             assert(false);
         } catch (...) {}
     }
@@ -113,22 +113,22 @@ void test::CONFIGURATION_HOST_TESTS(){
 void test::FILES_TESTS(){
     ___HEADER___
 
-    typedef Configuration::SERVER_TYPE                                      SERVER;
-    typedef Configuration::SERVER_TYPE::ROUTE_TYPE                          ROUTE;
-    typedef Configuration::SERVER_TYPE::ERROR_PAGE_TYPE                     ERROR_PAGE;
-    typedef Configuration::SERVER_TYPE::ROUTE_TYPE::METHOD_TYPE             METHOD;
+    typedef configuration::Configuration::SERVER_TYPE                                      SERVER;
+    typedef configuration::Configuration::SERVER_TYPE::ROUTE_TYPE                          ROUTE;
+    typedef configuration::Configuration::SERVER_TYPE::ERROR_PAGE_TYPE                     ERROR_PAGE;
+    typedef configuration::Configuration::SERVER_TYPE::ROUTE_TYPE::METHOD_TYPE             METHOD;
 
     // Valid files
     {
-        Configuration configuration;
+        configuration::Configuration configuration;
         try {
             configuration.parseFile("ConfigFiles/valid/1.txt");
-        } catch (Exception& e){
+        } catch (configuration::Exception& e){
             std::cerr << e.what() << std::endl;
             assert(false);
         }
 
-        Container<SERVER>& servers = configuration.getServers();
+        configuration::Container<SERVER>& servers = configuration.getServers();
         assert(servers.size() == 1);
 
         SERVER& server = servers.back();
@@ -136,9 +136,9 @@ void test::FILES_TESTS(){
         assert(server.getHost().toString() == "127.0.0.1");
         assert(server.getServerName() == "SERVER_NAME");
 
-        Container<ERROR_PAGE>& errorPages = server.getErrorPages();
+        configuration::Container<ERROR_PAGE>& errorPages = server.getErrorPages();
         assert(errorPages.size() == 2);
-        for (Container<ERROR_PAGE>::SIZE_TYPE i = 0; i < errorPages.size(); i++){
+        for (configuration::Container<ERROR_PAGE>::SIZE_TYPE i = 0; i < errorPages.size(); i++){
             assert(errorPages.at(i) == server.getErrorPage(i));
         }
         assert(errorPages.at(0) == "path1");
@@ -150,12 +150,12 @@ void test::FILES_TESTS(){
 
         assert(server.getBodySize() == 123456789);
 
-        Container<ROUTE>& routes = server.getRoutes();
+        configuration::Container<ROUTE>& routes = server.getRoutes();
         assert(routes.size() == server.getRoutesCount());
         assert(routes.size() == 1);
 
         ROUTE& route = routes.back();
-        Container<METHOD> methods = route.getMethods();
+        configuration::Container<METHOD> methods = route.getMethods();
         assert(methods.size() == route.getMethodsCount());
         assert(methods.size() == 3);
 
@@ -167,15 +167,15 @@ void test::FILES_TESTS(){
         assert(route.getCgiBinPath() == "path7");
     }
     {
-        Configuration configuration;
+        configuration::Configuration configuration;
         try {
             configuration.parseFile("ConfigFiles/valid/2.txt");
-        } catch (Exception& e){
+        } catch (configuration::Exception& e){
             std::cerr << e.what() << std::endl;
             assert(false);
         } 
 
-        Container<SERVER> servers = configuration.getServers();
+        configuration::Container<SERVER> servers = configuration.getServers();
         assert(servers.size() == 1);
 
         SERVER& server = servers.back();
@@ -183,7 +183,7 @@ void test::FILES_TESTS(){
         assert(server.getHost().toString() == "127.0.0.1");
         assert(server.getServerName() == "SERVER_NAME");
 
-        Container<ERROR_PAGE> errorPages = server.getErrorPages();
+        configuration::Container<ERROR_PAGE> errorPages = server.getErrorPages();
         assert(errorPages.size() == server.getErrorPagesCount());
         assert(errorPages.size() == 3);
         assert(errorPages.at(0) == "path1");
@@ -192,13 +192,13 @@ void test::FILES_TESTS(){
 
         assert(server.getBodySize() == 1223334444);
 
-        Container<ROUTE>& routes = server.getRoutes();
+        configuration::Container<ROUTE>& routes = server.getRoutes();
         assert(routes.size() == 3);
 
         // route 1
         {
             ROUTE& route1 = routes.at(0);
-            Container<METHOD> methods = route1.getMethods();
+            configuration::Container<METHOD> methods = route1.getMethods();
             assert(methods.size() == 3);
             assert(route1.getRedirection() == "PATH1");
             assert(route1.getDirectory() == "PATH22");
@@ -269,14 +269,14 @@ void test::FILES_TESTS(){
         }
     }
     {
-        Configuration configuration;
+        configuration::Configuration configuration;
         try {
             configuration.parseFile("ConfigFiles/valid/3.txt");
-        } catch (Exception& e){
+        } catch (configuration::Exception& e){
             std::cerr << e.what() << std::endl;
             assert(false);
         }
-        Container<SERVER> servers = configuration.getServers();
+        configuration::Container<SERVER> servers = configuration.getServers();
         assert(servers.size() == 3);
 
         // server 1 
@@ -286,7 +286,7 @@ void test::FILES_TESTS(){
             assert(server1.getHost().toString() == "192.168.10.1");
             assert(server1.getServerName() == "SERVER_NAME");
 
-            Container<ERROR_PAGE> errorPages = server1.getErrorPages();
+            configuration::Container<ERROR_PAGE> errorPages = server1.getErrorPages();
             assert(errorPages.size() == server1.getErrorPagesCount());
             assert(errorPages.size() == 3);
             assert(errorPages.at(0) == "path1");
@@ -295,13 +295,13 @@ void test::FILES_TESTS(){
 
             assert(server1.getBodySize() == 1223334444);
 
-            Container<ROUTE>& routes = server1.getRoutes();
+            configuration::Container<ROUTE>& routes = server1.getRoutes();
             assert(routes.size() == 3);
         
             // route 1
             {
                 ROUTE& route1 = routes.at(0);
-                Container<METHOD> methods = route1.getMethods();
+                configuration::Container<METHOD> methods = route1.getMethods();
                 assert(methods.size() == 3);
                 assert(route1.getRedirection() == "PATH1");
                 assert(route1.getDirectory() == "PATH22");
@@ -379,7 +379,7 @@ void test::FILES_TESTS(){
             assert(server2.getHost().toString() == "127.0.0.1");
             assert(server2.getServerName() == "SERVER_NAME");
 
-            Container<ERROR_PAGE> errorPages = server2.getErrorPages();
+            configuration::Container<ERROR_PAGE> errorPages = server2.getErrorPages();
             assert(errorPages.size() == server2.getErrorPagesCount());
             assert(errorPages.size() == 3);
             assert(errorPages.at(0) == "path1");
@@ -388,13 +388,13 @@ void test::FILES_TESTS(){
 
             assert(server2.getBodySize() == 1223335444);
 
-            Container<ROUTE>& routes = server2.getRoutes();
+            configuration::Container<ROUTE>& routes = server2.getRoutes();
             assert(routes.size() == 3);
         
             // route 1
             {
                 ROUTE& route1 = routes.at(0);
-                Container<METHOD> methods = route1.getMethods();
+                configuration::Container<METHOD> methods = route1.getMethods();
                 assert(methods.size() == 3);
                 assert(route1.getRedirection() == "PATH1");
                 assert(route1.getDirectory() == "PATH22");

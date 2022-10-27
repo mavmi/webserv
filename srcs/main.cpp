@@ -4,7 +4,7 @@
 // не забыть удалить
 void runTestConfigFile(int argc, char** argv){
     utilsCheckArgsCount(argc);
-    Configuration config;
+    configuration::Configuration config;
     config.parseFile(argv[1]);
 }
 
@@ -14,7 +14,7 @@ int main(int argc, char** argv){
     std::cout << " == MAIN ONE == " << std::endl;
     try {
         runTestConfigFile(argc, argv);
-    } catch (Exception& e){
+    } catch (configuration::Exception& e){
         std::cout << e.what() << std::endl;
     }
 }

@@ -11,6 +11,8 @@
 
 #include "../utils.hpp"
 
+namespace configuration {
+
 enum CONFIG_ELEM{
     PORT,
     HOST,
@@ -31,3 +33,5 @@ enum HTTP_METHOD{
     POST,
     DELETE
 };
+
+}

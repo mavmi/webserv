@@ -2,6 +2,8 @@
 
 #include "utils.hpp"
 
+namespace configuration {
+
 // It is wrapper class for configuration classes's container.
 template <typename T>
 class Container {
@@ -61,3 +63,5 @@ private:
     INNER_CONTAINER_TYPE innerContainer_;
 
 };
+
+}

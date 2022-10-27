@@ -1,5 +1,7 @@
 #include "../../include/configurations/exceptions.hpp"
 
+namespace configuration {
+
 Exception::Exception(const char* msg) 
     : msg_(std::string(msg)), _file_(""), _function_(""), _line_(0){}
 Exception::Exception(const std::string& msg)
@@ -68,4 +70,6 @@ RouteException::RouteException(const char* msg) : Exception(msg){}
 RouteException::RouteException(const std::string& msg) : Exception(msg){}
 std::string RouteException::output_() const {
     return "ROUTE_EXCEPTION: " + msg_;
+}
+
 }
