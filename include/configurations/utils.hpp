@@ -7,6 +7,7 @@
 #include <limits>
 #include <fstream>
 #include <utility>
+#include <stdint.h>
 #include <algorithm>
 
 #include "../utils.hpp"

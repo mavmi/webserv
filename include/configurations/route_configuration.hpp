@@ -9,13 +9,14 @@ namespace configuration {
 // Contains information about server's route.
 // Any getter may throw RouteException if it's value is not set.
 // Use methods [isDone()] to check if the route is finished or not.
-// Method [done()] marks the route as finished.
+// Method [done()] marks the route as finished. May throw an exception.
 class RouteConfiguration{
 public:
-    typedef size_t                      SIZE_TYPE;
-    typedef int                         METHOD_TYPE;
-    typedef Container<METHOD_TYPE>      METHODS_CONTAINER_TYPE;
-    typedef std::string                 PATH_TYPE;
+    typedef size_t                      SizeType;
+    typedef int                         MethodType;
+    typedef Container<MethodType>       MethodsContainerType;
+    typedef std::string                 PathType;
+    typedef RouteException              ExceptionType;
 
     RouteConfiguration();
     RouteConfiguration(const RouteConfiguration& other);
@@ -23,46 +24,48 @@ public:
 
     RouteConfiguration& operator=(const RouteConfiguration& other);
 
-    void setMethods(const METHODS_CONTAINER_TYPE& methods);
-    METHODS_CONTAINER_TYPE& getMethods() const;
-    void setMethod(const METHOD_TYPE& method, SIZE_TYPE position);
-    METHOD_TYPE& getMethod(SIZE_TYPE position) const;
-    void addMethod(const METHOD_TYPE& method);
-    SIZE_TYPE getMethodsCount() const;
+    void setMethods(const MethodsContainerType& methods);
+    MethodsContainerType& getMethods() const;
+    void setMethod(const MethodType& method, SizeType position);
+    MethodType& getMethod(SizeType position) const;
+    void addMethod(const MethodType& method);
+    SizeType getMethodsCount() const;
 
-    void setRedirection(const PATH_TYPE& redirection);
-    PATH_TYPE& getRedirection() const;
+    void setRedirection(const PathType& redirection);
+    PathType& getRedirection() const;
 
-    void setDirectory(const PATH_TYPE& directory);
-    PATH_TYPE& getDirectory() const;
+    void setDirectory(const PathType& directory);
+    PathType& getDirectory() const;
 
     void setDirectoryListening(bool directoryListening);
     bool getDirectoryListening() const;
 
-    void setDefaultIfDirectoryResponse(const PATH_TYPE& default_if_directory_response_path);
-    PATH_TYPE& getDefaultIfDirectoryResponse() const;
+    void setDefaultIfDirectoryResponse(const PathType& default_if_directory_response_path);
+    PathType& getDefaultIfDirectoryResponse() const;
 
-    void setCgiScriptPath(const PATH_TYPE& cgi_script_path);
-    PATH_TYPE& getCgiScriptPath() const;
+    void setCgiScriptPath(const PathType& cgi_script_path);
+    PathType& getCgiScriptPath() const;
 
-    void setCgiBinPath(const PATH_TYPE& cgi_bin_path);
-    PATH_TYPE& getCgiBinPath() const;
+    void setCgiBinPath(const PathType& cgi_bin_path);
+    PathType& getCgiBinPath() const;
 
     bool isDone() const;
     void done();
 
 private:
     bool isDone_;
-    METHODS_CONTAINER_TYPE* methods_;
-    PATH_TYPE* redirection_;
-    PATH_TYPE* directory_;
+    MethodsContainerType* methods_;
+    PathType* redirection_;
+    PathType* directory_;
     bool directory_listening_;
-    PATH_TYPE* default_if_directory_response_path_;
-    PATH_TYPE* cgi_script_path_;
-    PATH_TYPE* cgi_bin_path_;
+    PathType* default_if_directory_response_path_;
+    PathType* cgi_script_path_;
+    PathType* cgi_bin_path_;
 
     void deleteData_();
     void copyData_(const RouteConfiguration& other);
+    void checkValidity_() const;
+    void throwOnDone() const;
 
 };
 

@@ -9,10 +9,10 @@ namespace configuration {
 // Some of it's methods may throw ConfigurationHostException on error.
 class ConfigurationHost{
 public:
-    typedef unsigned char   VALUE_TYPE;
-    typedef size_t          SIZE_TYPE;
+    typedef uint8_t         ValueType;
+    typedef size_t          SizeType;
 
-    ConfigurationHost(VALUE_TYPE b1, VALUE_TYPE b2, VALUE_TYPE b3, VALUE_TYPE b4);
+    ConfigurationHost(ValueType b1, ValueType b2, ValueType b3, ValueType b4);
     ConfigurationHost(const ConfigurationHost& other);
     ConfigurationHost(const std::string& hostStr);
 
@@ -23,22 +23,22 @@ public:
     std::string toString() const;
     // Get number from IP at specified position.
     // May throw an exception on if position is invalid.
-    VALUE_TYPE at(SIZE_TYPE position) const;
+    ValueType at(SizeType position) const;
 
     // Set IP number to specified position.
     // May throw an exception on if position is invalid.
-    void set(VALUE_TYPE value, SIZE_TYPE position);
+    void set(ValueType value, SizeType position);
 
 private:
-    const static SIZE_TYPE maxSize_ = 4;
-    VALUE_TYPE ip_[maxSize_];
+    const static SizeType maxSize_ = 4;
+    ValueType ip_[maxSize_];
 
     // Convert VALUE_TYPE to string.
-    std::string toString_(VALUE_TYPE val) const;
+    std::string toString_(ValueType val) const;
 
     // Convert string number to VALUE_TYPE.
     // May throw exception.
-    VALUE_TYPE stringToNumber_(const std::string& str) const;
+    ValueType stringToNumber_(const std::string& str) const;
 
 };
 

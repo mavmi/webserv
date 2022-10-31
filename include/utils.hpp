@@ -5,6 +5,9 @@
 #include <iostream>
 #include <algorithm>
 
+const std::string DEFAULT_SERVER_PATH = "DefaultServer";
+const std::string DEFAULT_SERVER_CONFIG_FILE_PATH = DEFAULT_SERVER_PATH + "/ConfigFile.txt";
+
 enum MSG_TYPE {
     DEBUG,
     INFO,

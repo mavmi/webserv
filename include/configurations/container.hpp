@@ -8,13 +8,13 @@ namespace configuration {
 template <typename T>
 class Container {
 public:
-    typedef std::vector<T>                                  INNER_CONTAINER_TYPE;
-    typedef typename INNER_CONTAINER_TYPE::size_type        SIZE_TYPE;
-    typedef typename INNER_CONTAINER_TYPE::difference_type  DIFFERENCE_TYPE;
-    typedef T                                               VALUE_TYPE;
-    typedef T*                                              POINTER_TYPE;
-    typedef T&                                              REFERENCE_TYPE;
-    typedef const T&                                        CONST_REFERENCE_TYPE;
+    typedef std::vector<T>                                  InnerContainerType;
+    typedef typename InnerContainerType::size_type          SizeType;
+    typedef typename InnerContainerType::difference_type    DifferenceType;
+    typedef T                                               ValueType;
+    typedef T*                                              PointerType;
+    typedef T&                                              ReferenceType;
+    typedef const T&                                        ConstReferenceType;
 
     Container(){}
     Container(const Container& other){
@@ -27,40 +27,40 @@ public:
         return *this;
     }
 
-    SIZE_TYPE size() const {
+    SizeType size() const {
         return innerContainer_.size();
     }
 
-    REFERENCE_TYPE at(DIFFERENCE_TYPE position) {
+    ReferenceType at(DifferenceType position) {
         return innerContainer_.at(position);
     }
-    CONST_REFERENCE_TYPE at(DIFFERENCE_TYPE position) const {
+    ConstReferenceType at(DifferenceType position) const {
         return innerContainer_.at(position);
     }
 
-    void push_back(REFERENCE_TYPE value){
+    void push_back(ReferenceType value){
         innerContainer_.push_back(value);
     }
-    void push_back(CONST_REFERENCE_TYPE value){
+    void push_back(ConstReferenceType value){
         innerContainer_.push_back(value);
     }
 
-    REFERENCE_TYPE front(){
+    ReferenceType front(){
         return innerContainer_.front();
     }
-    CONST_REFERENCE_TYPE front() const {
+    ConstReferenceType front() const {
         return innerContainer_.front();
     }
 
-    REFERENCE_TYPE back(){
+    ReferenceType back(){
         return innerContainer_.back();
     }
-    CONST_REFERENCE_TYPE back() const {
+    ConstReferenceType back() const {
         return innerContainer_.back();
     }
 
 private:
-    INNER_CONTAINER_TYPE innerContainer_;
+    InnerContainerType innerContainer_;
 
 };
 

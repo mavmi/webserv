@@ -2,7 +2,7 @@
 
 namespace configuration {
 
-ConfigurationHost::ConfigurationHost(VALUE_TYPE b1, VALUE_TYPE b2, VALUE_TYPE b3, VALUE_TYPE b4){
+ConfigurationHost::ConfigurationHost(ValueType b1, ValueType b2, ValueType b3, ValueType b4){
     ip_[0] = b1;
     ip_[1] = b2;
     ip_[2] = b3;
@@ -16,13 +16,13 @@ ConfigurationHost::ConfigurationHost(const std::string& hostStr){
 }
 
 ConfigurationHost& ConfigurationHost::operator=(const ConfigurationHost& other){
-    for (SIZE_TYPE i = 0; i < maxSize_; i++) ip_[i] = other.ip_[i];
+    for (SizeType i = 0; i < maxSize_; i++) ip_[i] = other.ip_[i];
     return *this;
 }
 ConfigurationHost& ConfigurationHost::operator=(const std::string& hostStr){
     const std::string errorStr = "Invalid host string";
-    SIZE_TYPE counter = 0;
-    VALUE_TYPE numbers[maxSize_];
+    SizeType counter = 0;
+    ValueType numbers[maxSize_];
 
     std::string::const_iterator begin = hostStr.begin();
     while (counter < maxSize_){
@@ -42,14 +42,14 @@ ConfigurationHost& ConfigurationHost::operator=(const std::string& hostStr){
     }
 
     if (counter != maxSize_) throw ConfigurationHostException(errorStr, __FILE__, __FUNCTION__, __LINE__);
-    for (SIZE_TYPE i = 0; i < maxSize_; i++) ip_[i] = numbers[i];
+    for (SizeType i = 0; i < maxSize_; i++) ip_[i] = numbers[i];
     return *this;
 }
 
 std::string ConfigurationHost::toString() const {
     std::string str = "";
 
-    for (SIZE_TYPE i = 0; i < maxSize_; i++){
+    for (SizeType i = 0; i < maxSize_; i++){
         str += toString_(ip_[i]);
         if (i + 1 != maxSize_){
             str += '.';
@@ -58,24 +58,24 @@ std::string ConfigurationHost::toString() const {
 
     return str;
 }
-ConfigurationHost::VALUE_TYPE ConfigurationHost::at(SIZE_TYPE position) const {
+ConfigurationHost::ValueType ConfigurationHost::at(SizeType position) const {
     if (position > maxSize_) throw ConfigurationHostException("Bad IP position", __FILE__, __FUNCTION__, __LINE__);
     return ip_[position];
 }
 
-void ConfigurationHost::set(VALUE_TYPE value, SIZE_TYPE position){
+void ConfigurationHost::set(ValueType value, SizeType position){
     if (position > maxSize_) throw ConfigurationHostException("Bad IP position", __FILE__, __FUNCTION__, __LINE__);
     ip_[position] = value;  
 }
 
-std::string ConfigurationHost::toString_(VALUE_TYPE val) const {
-    return utilsNumToString<VALUE_TYPE>(val);
+std::string ConfigurationHost::toString_(ValueType val) const {
+    return utilsNumToString<ValueType>(val);
 }
 
-ConfigurationHost::VALUE_TYPE ConfigurationHost::stringToNumber_(const std::string& str) const {
+ConfigurationHost::ValueType ConfigurationHost::stringToNumber_(const std::string& str) const {
     try {
         if (str.size() > 3) throw UtilsException("Numeric value too long");
-        return utilsStringToNum<VALUE_TYPE>(str);
+        return utilsStringToNum<ValueType>(str);
     } catch (UtilsException& e) {
         throw ConfigurationHostException(e.what(), __FILE__, __FUNCTION__, __LINE__);
     }

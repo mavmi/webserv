@@ -45,7 +45,7 @@ void utilsPrintMsg(const std::string& msg, MSG_TYPE msgType = INFO){
 // Check if number of arguments is valid.
 // Exit on error
 void utilsCheckArgsCount(int argc){
-    if (argc != 2){
+    if (argc > 2){
         utilsPrintMsg("configuration file required", ERROR);
         exit(1);
     }

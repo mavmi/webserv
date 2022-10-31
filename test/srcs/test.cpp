@@ -113,10 +113,10 @@ void test::CONFIGURATION_HOST_TESTS(){
 void test::FILES_TESTS(){
     ___HEADER___
 
-    typedef configuration::Configuration::SERVER_TYPE                                      SERVER;
-    typedef configuration::Configuration::SERVER_TYPE::ROUTE_TYPE                          ROUTE;
-    typedef configuration::Configuration::SERVER_TYPE::ERROR_PAGE_TYPE                     ERROR_PAGE;
-    typedef configuration::Configuration::SERVER_TYPE::ROUTE_TYPE::METHOD_TYPE             METHOD;
+    typedef configuration::Configuration::ServerType                                    Server;
+    typedef configuration::Configuration::ServerType::RouteType                         Route;
+    typedef configuration::Configuration::ServerType::ErrorPageType                     ErrorPage;
+    typedef configuration::Configuration::ServerType::RouteType::MethodType             Method;
 
     // Valid files
     {
@@ -128,17 +128,17 @@ void test::FILES_TESTS(){
             assert(false);
         }
 
-        configuration::Container<SERVER>& servers = configuration.getServers();
+        configuration::Container<Server>& servers = configuration.getServers();
         assert(servers.size() == 1);
 
-        SERVER& server = servers.back();
+        Server& server = servers.back();
         assert(server.getPort() == 80);
         assert(server.getHost().toString() == "127.0.0.1");
         assert(server.getServerName() == "SERVER_NAME");
 
-        configuration::Container<ERROR_PAGE>& errorPages = server.getErrorPages();
+        configuration::Container<ErrorPage>& errorPages = server.getErrorPages();
         assert(errorPages.size() == 2);
-        for (configuration::Container<ERROR_PAGE>::SIZE_TYPE i = 0; i < errorPages.size(); i++){
+        for (configuration::Container<ErrorPage>::SizeType i = 0; i < errorPages.size(); i++){
             assert(errorPages.at(i) == server.getErrorPage(i));
         }
         assert(errorPages.at(0) == "path1");
@@ -150,12 +150,12 @@ void test::FILES_TESTS(){
 
         assert(server.getBodySize() == 123456789);
 
-        configuration::Container<ROUTE>& routes = server.getRoutes();
+        configuration::Container<Route>& routes = server.getRoutes();
         assert(routes.size() == server.getRoutesCount());
         assert(routes.size() == 1);
 
-        ROUTE& route = routes.back();
-        configuration::Container<METHOD> methods = route.getMethods();
+        Route& route = routes.back();
+        configuration::Container<Method> methods = route.getMethods();
         assert(methods.size() == route.getMethodsCount());
         assert(methods.size() == 3);
 
@@ -175,15 +175,15 @@ void test::FILES_TESTS(){
             assert(false);
         } 
 
-        configuration::Container<SERVER> servers = configuration.getServers();
+        configuration::Container<Server> servers = configuration.getServers();
         assert(servers.size() == 1);
 
-        SERVER& server = servers.back();
+        Server& server = servers.back();
         assert(server.getPort() == 8080);
         assert(server.getHost().toString() == "127.0.0.1");
         assert(server.getServerName() == "SERVER_NAME");
 
-        configuration::Container<ERROR_PAGE> errorPages = server.getErrorPages();
+        configuration::Container<ErrorPage> errorPages = server.getErrorPages();
         assert(errorPages.size() == server.getErrorPagesCount());
         assert(errorPages.size() == 3);
         assert(errorPages.at(0) == "path1");
@@ -192,13 +192,13 @@ void test::FILES_TESTS(){
 
         assert(server.getBodySize() == 1223334444);
 
-        configuration::Container<ROUTE>& routes = server.getRoutes();
+        configuration::Container<Route>& routes = server.getRoutes();
         assert(routes.size() == 3);
 
         // route 1
         {
-            ROUTE& route1 = routes.at(0);
-            configuration::Container<METHOD> methods = route1.getMethods();
+            Route& route1 = routes.at(0);
+            configuration::Container<Method> methods = route1.getMethods();
             assert(methods.size() == 3);
             assert(route1.getRedirection() == "PATH1");
             assert(route1.getDirectory() == "PATH22");
@@ -219,7 +219,7 @@ void test::FILES_TESTS(){
 
         // route 2
         {
-            ROUTE& route2 = routes.at(1);
+            Route& route2 = routes.at(1);
             try{
                 route2.getMethods();
                 assert(false);
@@ -243,7 +243,7 @@ void test::FILES_TESTS(){
 
         // route 3
         {
-            ROUTE& route3 = routes.at(2);
+            Route& route3 = routes.at(2);
             try{
                 route3.getMethods();
                 assert(false);
@@ -276,17 +276,17 @@ void test::FILES_TESTS(){
             std::cerr << e.what() << std::endl;
             assert(false);
         }
-        configuration::Container<SERVER> servers = configuration.getServers();
+        configuration::Container<Server> servers = configuration.getServers();
         assert(servers.size() == 3);
 
         // server 1 
         {
-            SERVER& server1 = servers.front();
+            Server& server1 = servers.front();
             assert(server1.getPort() == 1111);
             assert(server1.getHost().toString() == "192.168.10.1");
             assert(server1.getServerName() == "SERVER_NAME");
 
-            configuration::Container<ERROR_PAGE> errorPages = server1.getErrorPages();
+            configuration::Container<ErrorPage> errorPages = server1.getErrorPages();
             assert(errorPages.size() == server1.getErrorPagesCount());
             assert(errorPages.size() == 3);
             assert(errorPages.at(0) == "path1");
@@ -295,13 +295,13 @@ void test::FILES_TESTS(){
 
             assert(server1.getBodySize() == 1223334444);
 
-            configuration::Container<ROUTE>& routes = server1.getRoutes();
+            configuration::Container<Route>& routes = server1.getRoutes();
             assert(routes.size() == 3);
         
             // route 1
             {
-                ROUTE& route1 = routes.at(0);
-                configuration::Container<METHOD> methods = route1.getMethods();
+                Route& route1 = routes.at(0);
+                configuration::Container<Method> methods = route1.getMethods();
                 assert(methods.size() == 3);
                 assert(route1.getRedirection() == "PATH1");
                 assert(route1.getDirectory() == "PATH22");
@@ -322,7 +322,7 @@ void test::FILES_TESTS(){
 
             // route 2
             {
-                ROUTE& route2 = routes.at(1);
+                Route& route2 = routes.at(1);
                 try{
                     route2.getMethods();
                     assert(false);
@@ -346,7 +346,7 @@ void test::FILES_TESTS(){
 
             // route 3
             {
-                ROUTE& route3 = routes.at(2);
+                Route& route3 = routes.at(2);
                 try{
                     route3.getMethods();
                     assert(false);
@@ -374,12 +374,12 @@ void test::FILES_TESTS(){
 
         // server 2
         {
-            SERVER& server2 = servers.at(1);
+            Server& server2 = servers.at(1);
             assert(server2.getPort() == 80);
             assert(server2.getHost().toString() == "127.0.0.1");
             assert(server2.getServerName() == "SERVER_NAME");
 
-            configuration::Container<ERROR_PAGE> errorPages = server2.getErrorPages();
+            configuration::Container<ErrorPage> errorPages = server2.getErrorPages();
             assert(errorPages.size() == server2.getErrorPagesCount());
             assert(errorPages.size() == 3);
             assert(errorPages.at(0) == "path1");
@@ -388,13 +388,13 @@ void test::FILES_TESTS(){
 
             assert(server2.getBodySize() == 1223335444);
 
-            configuration::Container<ROUTE>& routes = server2.getRoutes();
+            configuration::Container<Route>& routes = server2.getRoutes();
             assert(routes.size() == 3);
         
             // route 1
             {
-                ROUTE& route1 = routes.at(0);
-                configuration::Container<METHOD> methods = route1.getMethods();
+                Route& route1 = routes.at(0);
+                configuration::Container<Method> methods = route1.getMethods();
                 assert(methods.size() == 3);
                 assert(route1.getRedirection() == "PATH1");
                 assert(route1.getDirectory() == "PATH22");
@@ -415,7 +415,7 @@ void test::FILES_TESTS(){
 
             // route 2
             {
-                ROUTE& route2 = routes.at(1);
+                Route& route2 = routes.at(1);
                 try{
                     route2.getMethods();
                     assert(false);
@@ -439,7 +439,7 @@ void test::FILES_TESTS(){
 
             // route 3
             {
-                ROUTE& route3 = routes.at(2);
+                Route& route3 = routes.at(2);
                 try{
                     route3.getMethods();
                     assert(false);
@@ -467,7 +467,7 @@ void test::FILES_TESTS(){
     
         // server 3
         {
-            SERVER& server3 = servers.at(2);
+            Server& server3 = servers.at(2);
 
             try{
                 server3.getPort();

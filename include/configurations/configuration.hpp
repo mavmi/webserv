@@ -11,8 +11,9 @@ namespace configuration {
 // configuration file
 class Configuration{
 public:
-    typedef ServerConfiguration     SERVER_TYPE;
-    typedef Container<SERVER_TYPE>  SERVERS_CONTAINER_TYPE;
+    typedef ServerConfiguration     ServerType;
+    typedef Container<ServerType>   ServersContainerType;
+    typedef ConfigurationException  ExceptionType;
 
     Configuration();
     Configuration(const Configuration& other);
@@ -23,20 +24,20 @@ public:
     // Parse configuration file.
     // May throw exception on error.
     void parseFile(const std::string& inputFile);
-    SERVERS_CONTAINER_TYPE& getServers();
+    ServersContainerType& getServers();
 
 private:
-    SERVERS_CONTAINER_TYPE servers_;
+    ServersContainerType* servers_;
 
     // Check if string contains only whitespaces
     bool isLineEmpty_(const std::string& line) const;
 
     // Return reference to the last server in the list of servers.
     // Throw an exception if there are no servers.
-    SERVER_TYPE& getLastServer_();
+    ServerType& getLastServer_();
     // Return reference to the last route of last server.
     // May throw exception too.
-    SERVER_TYPE::ROUTE_TYPE& getLastRoute_();
+    ServerType::RouteType& getLastRoute_();
 
     /*
         All these methods below are about parsing different types
@@ -50,11 +51,13 @@ private:
         try {
             return utilsStringToNum<ReturnType>(str);
         } catch (UtilsException& e) {
-            throw ConfigurationException(e.what(), __FILE__, __FUNCTION__, __LINE__);
+            throw ExceptionType(e.what(), __FILE__, __FUNCTION__, __LINE__);
         }
     }
     std::pair<std::string, std::string> split_(const std::string& str) const;
     void parseValueString_(const std::string& str);
+    void copyData_(const Configuration& other);
+    void deleteData_();
 
 };
 
