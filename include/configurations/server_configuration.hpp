@@ -15,7 +15,7 @@ namespace configuration {
 class ServerConfiguration{
 public:
     typedef size_t                          SizeType;
-    typedef unsigned short                  PortType;
+    typedef uint16_t                        PortType;
     typedef ConfigurationHost               HostType;
     typedef std::string                     ServerNameType;
     typedef std::string                     ErrorPageType;

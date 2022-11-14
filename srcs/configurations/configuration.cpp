@@ -131,7 +131,7 @@ Configuration::ServerType& Configuration::getLastServer_(){
     if (!servers_->size()) throw ExceptionType("Servers are not defined", __FILE__, __FUNCTION__, __LINE__);
     return servers_->back();
 }
-Configuration::ServerType::RouteType& Configuration::getLastRoute_(){
+Configuration::ServerType::RouteType& Configuration::getLastRoute_() {
     return getLastServer_().getRoutes().back();
 }
 
