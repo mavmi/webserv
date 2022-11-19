@@ -26,6 +26,10 @@ public:
     void parseFile(const std::string& inputFile);
     ServersContainerType& getServers();
     const ServersContainerType& getServers() const;
+    
+    const ServerType& getServer(ServerType::PortType port) const;
+    const ServerType& getServer(const ServerType::HostType& host) const;
+    const ServerType& getServer(ServerType::PortType port, const ServerType::HostType& host) const;
 
     static Configuration* getObject();
     static Configuration* getObject(const Configuration& other);

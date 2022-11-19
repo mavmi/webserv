@@ -46,6 +46,16 @@ ConfigurationHost& ConfigurationHost::operator=(const std::string& hostStr){
     return *this;
 }
 
+bool ConfigurationHost::operator==(const ConfigurationHost& other) const {
+    for (SizeType i = 0; i < maxSize_; i++){
+        if (ip_[i] != other.ip_[i]) return false;
+    }
+    return true;
+}
+bool ConfigurationHost::operator!=(const ConfigurationHost& other) const {
+    return !(*this == other);
+}
+
 std::string ConfigurationHost::toString() const {
     std::string str = "";
 

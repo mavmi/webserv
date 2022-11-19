@@ -25,6 +25,34 @@ const Configuration::ServersContainerType& Configuration::getServers() const{
     return *servers_;
 }
 
+const Configuration::ServerType& Configuration::getServer(ServerType::PortType port) const{
+    for (ServersContainerType::SizeType i = 0; i < servers_->size(); i++){
+        try {
+            const ServerType& server = servers_->at(i);
+            if (server.getPort() == port) return server;
+        } catch (...) {}
+    }
+    throw ExceptionType("No server with such port", __FILE__, __FUNCTION__, __LINE__);
+}
+const Configuration::ServerType& Configuration::getServer(const ServerType::HostType& host) const{
+    for (ServersContainerType::SizeType i = 0; i < servers_->size(); i++){
+        try {
+            const ServerType& server = servers_->at(i);
+            if (server.getHost() == host) return server;
+        } catch (...) {}
+    }
+    throw ExceptionType("No server with such port", __FILE__, __FUNCTION__, __LINE__);
+}
+const Configuration::ServerType& Configuration::getServer(ServerType::PortType port, const ServerType::HostType& host) const{
+    for (ServersContainerType::SizeType i = 0; i < servers_->size(); i++){
+        try {
+            const ServerType& server = servers_->at(i);
+            if (server.getPort() == port && server.getHost() == host) return server;
+        } catch (...) {}
+    }
+    throw ExceptionType("No server with such port and host", __FILE__, __FUNCTION__, __LINE__);
+}
+
 Configuration* Configuration::getObject(){
     return new Configuration();
 }

@@ -19,6 +19,9 @@ public:
     ConfigurationHost& operator=(const ConfigurationHost& other);
     ConfigurationHost& operator=(const std::string& hostStr);
 
+    bool operator==(const ConfigurationHost& other) const;
+    bool operator!=(const ConfigurationHost& other) const;
+
     // Return string representation of IP address.
     std::string toString() const;
     // Get number from IP at specified position.
