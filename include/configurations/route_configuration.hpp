@@ -56,6 +56,13 @@ public:
     PathType& getCgiBinPath();
     const PathType& getCgiBinPath() const;
 
+    void setSaveFiles(bool saveFiles);
+    bool getSaveFiles() const;
+
+    void setSaveTo(const PathType& saveTo);
+    PathType& getSaveTo();
+    const PathType& getSaveTo() const;
+
     bool isDone() const;
     void done();
 
@@ -71,6 +78,8 @@ private:
     PathType* default_if_directory_response_path_;
     PathType* cgi_script_path_;
     PathType* cgi_bin_path_;
+    bool saveFiles_;
+    PathType* saveTo_;
 
     void deleteData_();
     void copyData_(const RouteConfiguration& other);

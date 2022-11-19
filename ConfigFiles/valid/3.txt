@@ -52,6 +52,8 @@
 
     [
         cgi_bin:             PATH55555  ;
+        save_files:          true;
+        save_to:             PATH11111;
     ]
 }
 

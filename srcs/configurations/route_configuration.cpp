@@ -11,6 +11,8 @@ RouteConfiguration::RouteConfiguration(){
     default_if_directory_response_path_ = NULL;
     cgi_script_path_ = NULL;
     cgi_bin_path_ = NULL;
+    saveFiles_ = false;
+    saveTo_ = NULL;
 }
 RouteConfiguration::RouteConfiguration(const RouteConfiguration& other){
     copyData_(other);
@@ -139,6 +141,28 @@ const RouteConfiguration::PathType& RouteConfiguration::getCgiBinPath() const{
     throw ExceptionType("CGI bin path is not defined", __FILE__, __FUNCTION__, __LINE__);
 }
 
+void RouteConfiguration::setSaveFiles(bool saveFiles){
+    throwOnDone();
+    saveFiles_ = saveFiles;
+}
+bool RouteConfiguration::getSaveFiles() const{
+    return saveFiles_;
+}
+
+void RouteConfiguration::setSaveTo(const PathType& saveTo){
+    throwOnDone();
+    if (!saveTo_) saveTo_ = new PathType(saveTo);
+    else *saveTo_ = saveTo;
+}
+RouteConfiguration::PathType& RouteConfiguration::getSaveTo(){
+    if (saveTo_) return *saveTo_;
+    throw ExceptionType("Path to save files is not defined", __FILE__, __FUNCTION__, __LINE__);
+}
+const RouteConfiguration::PathType& RouteConfiguration::getSaveTo() const{
+    if (saveTo_) return *saveTo_;
+    throw ExceptionType("Path to save files is not defined", __FILE__, __FUNCTION__, __LINE__);
+}
+
 bool RouteConfiguration::isDone() const{
     return isDone_;
 }
@@ -161,6 +185,7 @@ void RouteConfiguration::deleteData_(){
     delete default_if_directory_response_path_;
     delete cgi_script_path_;
     delete cgi_bin_path_;
+    delete saveTo_;
 
     isDone_ = false;
     methods_ = NULL;
@@ -170,6 +195,8 @@ void RouteConfiguration::deleteData_(){
     default_if_directory_response_path_ = NULL;
     cgi_script_path_ = NULL;
     cgi_bin_path_ = NULL;
+    saveFiles_ = false;
+    saveTo_ = NULL;
 }
 void RouteConfiguration::copyData_(const RouteConfiguration& other){
     isDone_ = other.isDone_;
@@ -180,6 +207,8 @@ void RouteConfiguration::copyData_(const RouteConfiguration& other){
     default_if_directory_response_path_ = (other.default_if_directory_response_path_) ? new PathType(*other.default_if_directory_response_path_) : NULL;
     cgi_script_path_ = (other.cgi_script_path_) ? new PathType(*other.cgi_script_path_) : NULL;
     cgi_bin_path_ = (other.cgi_bin_path_) ? new PathType(*other.cgi_bin_path_) : NULL;
+    saveFiles_ = other.saveFiles_;
+    saveTo_ = (other.saveTo_) ? new PathType(*other.saveTo_) : NULL;
 }
 void RouteConfiguration::checkValidity_() const{
 

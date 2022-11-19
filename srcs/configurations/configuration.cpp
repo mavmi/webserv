@@ -279,6 +279,12 @@ void Configuration::parseValueString_(const std::string& str){
         } else if (key == "cgi_bin"){
             lastRoute.setCgiBinPath(value);
             return;
+        } else if (key == "save_files"){
+            lastRoute.setSaveFiles(stringToBool_(value));
+            return;
+        } else if (key == "save_to"){
+            lastRoute.setSaveTo(value);
+            return;
         }
     }
 

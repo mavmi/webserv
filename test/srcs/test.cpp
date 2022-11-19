@@ -466,6 +466,8 @@ void test::FILES_TESTS(){
                     assert(false);
                 } catch (...) {}
                 assert(route3.getCgiBinPath() == "PATH55555");
+                assert(route3.getSaveFiles());
+                assert(route3.getSaveTo() == "PATH11111");
             }
         }
     
