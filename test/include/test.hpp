@@ -1,6 +1,7 @@
 #pragma once
 
 #include "test_utils.hpp"
+#include "../../include/configurations/parser.hpp"
 #include "../../include/configurations/configuration.hpp"
 #include "../../include/configurations/configuration_host.hpp"
 

@@ -17,8 +17,19 @@ Configuration& Configuration::operator=(const Configuration& other){
     copyData_(other);
     return *this;
 }
+
 Configuration::ServersContainerType& Configuration::getServers(){
     return *servers_;
+}
+const Configuration::ServersContainerType& Configuration::getServers() const{
+    return *servers_;
+}
+
+Configuration* Configuration::getObject(){
+    return new Configuration();
+}
+Configuration* Configuration::getObject(const Configuration& other){
+    return new Configuration(other);
 }
 
 void Configuration::parseFile(const std::string& inputFile){

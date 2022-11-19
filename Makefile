@@ -16,9 +16,9 @@ MAIN_OBJ	=	$(MAIN_SRC:.cpp=.o)
 MAIN_DEPEN	=	$(MAIN_SRC:.cpp=.d)
 
 SRCS		=	$(addprefix $(SRCS_UTILS_DIR)/, utils_1.cpp)\
-					$(addprefix $(SRCS_CONFIG_DIR)/, configuration.cpp configuration_host.cpp exceptions.cpp route_configuration.cpp server_configuration.cpp utils.cpp)
+					$(addprefix $(SRCS_CONFIG_DIR)/, configuration.cpp configuration_host.cpp exceptions.cpp parser.cpp route_configuration.cpp server_configuration.cpp utils.cpp)
 HDRS		=	$(addprefix $(HDRS_DIR)/, utils.hpp)\
-					$(addprefix $(HDRS_CONFIG_DIR)/, configuration_host.hpp	configuration.hpp container.hpp exceptions.hpp route_configuration.hpp server_configuration.hpp utils.hpp)
+					$(addprefix $(HDRS_CONFIG_DIR)/, configuration_host.hpp	configuration.hpp container.hpp exceptions.hpp parser.hpp route_configuration.hpp server_configuration.hpp utils.hpp)
 OBJS		=	$(SRCS:.cpp=.o)
 DEPEN		=	$(SRCS:.cpp=.d)
 

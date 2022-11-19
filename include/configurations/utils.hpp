@@ -35,4 +35,9 @@ enum HTTP_METHOD{
     DELETE
 };
 
+class Configuration;
+class ServerConfiguration;
+class RouteConfiguration;
+template <typename T> class Container;
+
 }

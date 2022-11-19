@@ -17,14 +17,18 @@ public:
 
     Configuration();
     Configuration(const Configuration& other);
-    ~Configuration();
-
     Configuration& operator=(const Configuration& other);
+
+    ~Configuration();
 
     // Parse configuration file.
     // May throw exception on error.
     void parseFile(const std::string& inputFile);
     ServersContainerType& getServers();
+    const ServersContainerType& getServers() const;
+
+    static Configuration* getObject();
+    static Configuration* getObject(const Configuration& other);
 
 private:
     ServersContainerType* servers_;

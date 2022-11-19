@@ -39,7 +39,11 @@ void ServerConfiguration::setHost(const HostType& host){
     if (!host_) host_ = new HostType(host);
     else *host_ = host;
 }
-ServerConfiguration::HostType& ServerConfiguration::getHost() const{
+ServerConfiguration::HostType& ServerConfiguration::getHost(){
+    if (host_) return *host_;
+    throw ExceptionType("Host is not defined", __FILE__, __FUNCTION__, __LINE__);
+}
+const ServerConfiguration::HostType& ServerConfiguration::getHost() const{
     if (host_) return *host_;
     throw ExceptionType("Host is not defined", __FILE__, __FUNCTION__, __LINE__);
 }
@@ -49,7 +53,11 @@ void ServerConfiguration::setServerName(const ServerNameType& serverName){
     if (!serverName_) serverName_ = new ServerNameType(serverName);
     else *serverName_ = serverName; 
 }
-ServerConfiguration::ServerNameType& ServerConfiguration::getServerName() const{
+ServerConfiguration::ServerNameType& ServerConfiguration::getServerName(){
+    if (serverName_) return *serverName_;
+    throw ExceptionType("Server name is not defined", __FILE__, __FUNCTION__, __LINE__);
+}
+const ServerConfiguration::ServerNameType& ServerConfiguration::getServerName() const{
     if (serverName_) return *serverName_;
     throw ExceptionType("Server name is not defined", __FILE__, __FUNCTION__, __LINE__);
 }
@@ -59,7 +67,11 @@ void ServerConfiguration::setErrorPages(const ErrorPagesContainerType& errorPage
     if (!errorPages_) errorPages_ = new ErrorPagesContainerType(errorPages);
     else *errorPages_ = errorPages;
 }
-ServerConfiguration::ErrorPagesContainerType& ServerConfiguration::getErrorPages() const{
+ServerConfiguration::ErrorPagesContainerType& ServerConfiguration::getErrorPages(){
+    if (errorPages_) return *errorPages_;
+    throw ExceptionType("Error pages are not defined", __FILE__, __FUNCTION__, __LINE__);
+}
+const ServerConfiguration::ErrorPagesContainerType& ServerConfiguration::getErrorPages() const{
     if (errorPages_) return *errorPages_;
     throw ExceptionType("Error pages are not defined", __FILE__, __FUNCTION__, __LINE__);
 }
@@ -69,6 +81,10 @@ void ServerConfiguration::setErrorPage(const ErrorPageType& errorPage, SizeType 
     else throw ExceptionType("Error pages are not defined", __FILE__, __FUNCTION__, __LINE__);
 }
 ServerConfiguration::ErrorPageType& ServerConfiguration::getErrorPage(SizeType position){
+    if (errorPages_) return errorPages_->at(position);
+    else throw ExceptionType("Error pages are not defined", __FILE__, __FUNCTION__, __LINE__);
+}
+const ServerConfiguration::ErrorPageType& ServerConfiguration::getErrorPage(SizeType position) const{
     if (errorPages_) return errorPages_->at(position);
     else throw ExceptionType("Error pages are not defined", __FILE__, __FUNCTION__, __LINE__);
 }
@@ -95,7 +111,11 @@ void ServerConfiguration::setRoutes(const RoutesContainerType& routes){
     if (!routes_) routes_ = new RoutesContainerType(routes);
     else *routes_ = routes;
 }
-ServerConfiguration::RoutesContainerType& ServerConfiguration::getRoutes() const{
+ServerConfiguration::RoutesContainerType& ServerConfiguration::getRoutes(){
+    if (routes_) return *routes_;
+    throw ExceptionType("Routes are not defined", __FILE__, __FUNCTION__, __LINE__);
+}
+const ServerConfiguration::RoutesContainerType& ServerConfiguration::getRoutes() const{
     if (routes_) return *routes_;
     throw ExceptionType("Routes are not defined", __FILE__, __FUNCTION__, __LINE__);
 }
@@ -104,7 +124,11 @@ void ServerConfiguration::setRoute(const RouteType& route, SizeType position){
     if (routes_) routes_->at(position) = route;
     throw ExceptionType("Routes are not defined", __FILE__, __FUNCTION__, __LINE__);
 }
-ServerConfiguration::RouteType& ServerConfiguration::getRoute(SizeType position) const{
+ServerConfiguration::RouteType& ServerConfiguration::getRoute(SizeType position){
+    if (routes_) return routes_->at(position);
+    throw ExceptionType("Routes are not defined", __FILE__, __FUNCTION__, __LINE__);
+}
+const ServerConfiguration::RouteType& ServerConfiguration::getRoute(SizeType position) const{
     if (routes_) return routes_->at(position);
     throw ExceptionType("Routes are not defined", __FILE__, __FUNCTION__, __LINE__);
 }
@@ -124,6 +148,13 @@ bool ServerConfiguration::isDone() const{
 void ServerConfiguration::done(){
     checkValidity_();
     isDone_ = true;
+}
+
+ServerConfiguration* ServerConfiguration::getObject(){
+    return new ServerConfiguration();
+}
+ServerConfiguration* ServerConfiguration::getObject(const ServerConfiguration& other){
+    return new ServerConfiguration(other);
 }
 
 void ServerConfiguration::deleteData_(){

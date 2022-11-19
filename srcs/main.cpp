@@ -1,15 +1,15 @@
 #include "../include/utils.hpp"
-#include "../include/configurations/configuration.hpp"
+#include "../include/configurations/parser.hpp"
 
 // не забыть удалить
 void runTestConfigFile(int argc, char** argv){
     utilsCheckArgsCount(argc);
-    configuration::Configuration config;
 
+    Parser parser;
     if (argc == 2){
-        config.parseFile(argv[1]);
+        parser = Parser::parseFile(argv[1]);
     } else {
-        config.parseFile(DEFAULT_SERVER_CONFIG_FILE_PATH);
+        parser = Parser::parseFile(DEFAULT_SERVER_CONFIG_FILE_PATH);
     }
 }
 

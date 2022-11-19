@@ -8,6 +8,8 @@
 
 namespace configuration {
 
+class Configuration;
+
 // Contains information about server.
 // Any getter may throw ServerException if it's value is not set.
 // Use methods [isDone()] to check if the server is finished or not.
@@ -27,23 +29,27 @@ public:
 
     ServerConfiguration();
     ServerConfiguration(const ServerConfiguration& other);
-    ~ServerConfiguration();
-
     ServerConfiguration& operator=(const ServerConfiguration& other);
+
+    ~ServerConfiguration();
 
     void setPort(PortType port);
     PortType getPort() const;
 
     void setHost(const HostType& host);
-    HostType& getHost() const;
+    HostType& getHost();
+    const HostType& getHost() const;
 
     void setServerName(const ServerNameType& serverName);
-    ServerNameType& getServerName() const;
+    ServerNameType& getServerName();
+    const ServerNameType& getServerName() const;
 
     void setErrorPages(const ErrorPagesContainerType& errorPages);
-    ErrorPagesContainerType& getErrorPages() const;
+    ErrorPagesContainerType& getErrorPages();
+    const ErrorPagesContainerType& getErrorPages() const;
     void setErrorPage(const ErrorPageType& errorPage, SizeType position);
     ErrorPageType& getErrorPage(SizeType position);
+    const ErrorPageType& getErrorPage(SizeType position) const;
     void addErrorPage(const ErrorPageType& errorPage);
     SizeType getErrorPagesCount() const;
 
@@ -51,14 +57,19 @@ public:
     BodySizeType getBodySize() const;
 
     void setRoutes(const RoutesContainerType& routes);
-    RoutesContainerType& getRoutes() const;
+    RoutesContainerType& getRoutes();
+    const RoutesContainerType& getRoutes() const;
     void setRoute(const RouteType& route, SizeType position);
-    RouteType& getRoute(SizeType position) const;
+    RouteType& getRoute(SizeType position);
+    const RouteType& getRoute(SizeType position) const;
     void addRoute(const RouteType& route);
     SizeType getRoutesCount() const;
 
     bool isDone() const;
     void done();
+
+    static ServerConfiguration* getObject();
+    static ServerConfiguration* getObject(const ServerConfiguration& other);
 
 private:
     bool isDone_;

@@ -30,7 +30,11 @@ void RouteConfiguration::setMethods(const MethodsContainerType& methods){
     if (!methods_) methods_ = new MethodsContainerType(methods);
     else *methods_ = methods; 
 }
-RouteConfiguration::MethodsContainerType& RouteConfiguration::getMethods() const{
+RouteConfiguration::MethodsContainerType& RouteConfiguration::getMethods(){
+    if (methods_) return *methods_;
+    throw ExceptionType("Methods are not defined", __FILE__, __FUNCTION__, __LINE__);
+}
+const RouteConfiguration::MethodsContainerType& RouteConfiguration::getMethods() const{
     if (methods_) return *methods_;
     throw ExceptionType("Methods are not defined", __FILE__, __FUNCTION__, __LINE__);
 }
@@ -39,7 +43,11 @@ void RouteConfiguration::setMethod(const MethodType& method, SizeType position){
     if (methods_) methods_->at(position) = method;
     else throw ExceptionType("Methods are not defined", __FILE__, __FUNCTION__, __LINE__);
 }
-RouteConfiguration::MethodType& RouteConfiguration::getMethod(SizeType position) const{
+RouteConfiguration::MethodType& RouteConfiguration::getMethod(SizeType position){
+    if (methods_) return methods_->at(position);
+    else throw ExceptionType("Methods are not defined", __FILE__, __FUNCTION__, __LINE__);
+}
+const RouteConfiguration::MethodType& RouteConfiguration::getMethod(SizeType position) const{
     if (methods_) return methods_->at(position);
     else throw ExceptionType("Methods are not defined", __FILE__, __FUNCTION__, __LINE__);
 }
@@ -58,7 +66,11 @@ void RouteConfiguration::setRedirection(const PathType& redirection){
     if (!redirection_) redirection_ = new PathType(redirection);
     else *redirection_ = redirection;
 }
-RouteConfiguration::PathType& RouteConfiguration::getRedirection() const{
+RouteConfiguration::PathType& RouteConfiguration::getRedirection(){
+    if (redirection_) return *redirection_;
+    throw ExceptionType("Redirection is not defined", __FILE__, __FUNCTION__, __LINE__);
+}
+const RouteConfiguration::PathType& RouteConfiguration::getRedirection() const{
     if (redirection_) return *redirection_;
     throw ExceptionType("Redirection is not defined", __FILE__, __FUNCTION__, __LINE__);
 }
@@ -68,7 +80,11 @@ void RouteConfiguration::setDirectory(const PathType& directory){
     if (!directory_) directory_ = new PathType(directory);
     else *directory_ = directory;
 }
-RouteConfiguration::PathType& RouteConfiguration::getDirectory() const{
+RouteConfiguration::PathType& RouteConfiguration::getDirectory(){
+    if (directory_) return *directory_;
+    throw ExceptionType("Directory is not defined", __FILE__, __FUNCTION__, __LINE__);
+}
+const RouteConfiguration::PathType& RouteConfiguration::getDirectory() const{
     if (directory_) return *directory_;
     throw ExceptionType("Directory is not defined", __FILE__, __FUNCTION__, __LINE__);
 }
@@ -86,7 +102,11 @@ void RouteConfiguration::setDefaultIfDirectoryResponse(const PathType& default_i
     if (!default_if_directory_response_path_) default_if_directory_response_path_ = new PathType(default_if_directory_response_path);
     else *default_if_directory_response_path_ = default_if_directory_response_path;
 }
-RouteConfiguration::PathType& RouteConfiguration::getDefaultIfDirectoryResponse() const{
+RouteConfiguration::PathType& RouteConfiguration::getDefaultIfDirectoryResponse(){
+    if (default_if_directory_response_path_) return *default_if_directory_response_path_;
+    throw ExceptionType("Default directory is not defined", __FILE__, __FUNCTION__, __LINE__);
+}
+const RouteConfiguration::PathType& RouteConfiguration::getDefaultIfDirectoryResponse() const{
     if (default_if_directory_response_path_) return *default_if_directory_response_path_;
     throw ExceptionType("Default directory is not defined", __FILE__, __FUNCTION__, __LINE__);
 }
@@ -96,7 +116,11 @@ void RouteConfiguration::setCgiScriptPath(const PathType& cgi_script_path){
     if (!cgi_script_path_) cgi_script_path_ = new PathType(cgi_script_path);
     else *cgi_script_path_ = cgi_script_path;
 }
-RouteConfiguration::PathType& RouteConfiguration::getCgiScriptPath() const{
+RouteConfiguration::PathType& RouteConfiguration::getCgiScriptPath(){
+    if (cgi_script_path_) return *cgi_script_path_;
+    throw ExceptionType("CGI script path is not defined", __FILE__, __FUNCTION__, __LINE__);
+}
+const RouteConfiguration::PathType& RouteConfiguration::getCgiScriptPath() const{
     if (cgi_script_path_) return *cgi_script_path_;
     throw ExceptionType("CGI script path is not defined", __FILE__, __FUNCTION__, __LINE__);
 }
@@ -106,7 +130,11 @@ void RouteConfiguration::setCgiBinPath(const PathType& cgi_bin_path){
     if (!cgi_bin_path_) cgi_bin_path_ = new PathType(cgi_bin_path);
     else *cgi_bin_path_ = cgi_bin_path;
 }
-RouteConfiguration::PathType& RouteConfiguration::getCgiBinPath() const{
+RouteConfiguration::PathType& RouteConfiguration::getCgiBinPath(){
+    if (cgi_bin_path_) return *cgi_bin_path_;
+    throw ExceptionType("CGI bin path is not defined", __FILE__, __FUNCTION__, __LINE__);
+}
+const RouteConfiguration::PathType& RouteConfiguration::getCgiBinPath() const{
     if (cgi_bin_path_) return *cgi_bin_path_;
     throw ExceptionType("CGI bin path is not defined", __FILE__, __FUNCTION__, __LINE__);
 }
@@ -117,6 +145,13 @@ bool RouteConfiguration::isDone() const{
 void RouteConfiguration::done(){
     checkValidity_();
     isDone_ = true;
+}
+
+RouteConfiguration* RouteConfiguration::getObject(){
+    return new RouteConfiguration();
+}
+RouteConfiguration* RouteConfiguration::getObject(const RouteConfiguration& other){
+    return new RouteConfiguration(other);
 }
 
 void RouteConfiguration::deleteData_(){
