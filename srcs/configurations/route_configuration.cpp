@@ -211,7 +211,12 @@ void RouteConfiguration::copyData_(const RouteConfiguration& other){
     saveTo_ = (other.saveTo_) ? new PathType(*other.saveTo_) : NULL;
 }
 void RouteConfiguration::checkValidity_() const{
-
+    if (!methods_ || !methods_->size()) throw ExceptionType("Server methods are not set up", __FILE__, __FUNCTION__, __LINE__);
+    if (!redirection_) throw ExceptionType("HTTP redirection is not set up", __FILE__, __FUNCTION__, __LINE__);
+    if (!directory_) throw ExceptionType("Server directory is not set up", __FILE__, __FUNCTION__, __LINE__);
+    if (directory_listening_ && !default_if_directory_response_path_) throw ExceptionType("ifDirectoryReplyPage is not set up", __FILE__, __FUNCTION__, __LINE__);
+    if (saveFiles_ && !saveTo_) throw ExceptionType("Path for uploading files is not set up", __FILE__, __FUNCTION__, __LINE__);
+    if (cgi_script_path_ && !cgi_bin_path_) throw ExceptionType("CGI bin is not set for CGI script", __FILE__, __FUNCTION__, __LINE__);
 }
 void RouteConfiguration::throwOnDone() const{
     if (isDone_) throw ExceptionType("Route is done. You cannot change it anymore.", __FILE__, __FUNCTION__, __LINE__);

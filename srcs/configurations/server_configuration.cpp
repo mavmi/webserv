@@ -182,7 +182,10 @@ void ServerConfiguration::copyData_(const ServerConfiguration& other){
     routes_ = (other.routes_) ? new RoutesContainerType(*other.routes_) : NULL;
 }
 void ServerConfiguration::checkValidity_() const{
-
+    if (!port_) throw ExceptionType("Port is not set up", __FILE__, __FUNCTION__, __LINE__);
+    if (!host_) throw ExceptionType("Host is not set up", __FILE__, __FUNCTION__, __LINE__);
+    if (!errorPages_ || !errorPages_->size()) throw ExceptionType("Error pages are not set up", __FILE__, __FUNCTION__, __LINE__);
+    if (!bodySize_) throw ExceptionType("Body size is not set up", __FILE__, __FUNCTION__, __LINE__);
 }
 void ServerConfiguration::throwOnDone() const{
     if (isDone_) throw ExceptionType("Route is done. You cannot change it anymore.", __FILE__, __FUNCTION__, __LINE__);

@@ -167,6 +167,7 @@ void test::FILES_TESTS(){
         assert(route.getCgiScriptPath() == "path6");
         assert(route.getCgiBinPath() == "path7");
     }
+    
     {
         Parser parser;
         try {
@@ -183,9 +184,8 @@ void test::FILES_TESTS(){
         const Server& server = servers.back();
         assert(server.getPort() == 8080);
         assert(server.getHost().toString() == "127.0.0.1");
-        assert(server.getServerName() == "SERVER_NAME");
 
-        const configuration::Container<ErrorPage> errorPages = server.getErrorPages();
+        const configuration::Container<ErrorPage>& errorPages = server.getErrorPages();
         assert(errorPages.size() == server.getErrorPagesCount());
         assert(errorPages.size() == 3);
         assert(errorPages.at(0) == "path1");
@@ -194,8 +194,13 @@ void test::FILES_TESTS(){
 
         assert(server.getBodySize() == 1223334444);
 
+        try{
+            server.getServerName();
+            assert(false);
+        } catch (...) {}
+
         const configuration::Container<Route>& routes = server.getRoutes();
-        assert(routes.size() == 3);
+        assert(routes.size() == 2);
 
         // route 1
         {
@@ -222,55 +227,22 @@ void test::FILES_TESTS(){
         // route 2
         {
             const Route& route2 = routes.at(1);
-            try{
-                route2.getMethods();
-                assert(false);
-            } catch (...) {}
-            try{
-                route2.getRedirection();
-                assert(false);
-            } catch (...) {}
-            try{
-                route2.getDirectory();
-                assert(false);
-            } catch (...) {}
-            assert(route2.getDirectoryListening() == true);
+            assert(route2.getMethods().size() == 2);
+            assert(route2.getRedirection() == "PATH12341234");
+            assert(route2.getDirectory() == "dirrrrr");
+            assert(route2.getDirectoryListening());
             assert(route2.getDefaultIfDirectoryResponse() == "PATH333");
             assert(route2.getCgiScriptPath() == "PATH4444");
+            assert(route2.getCgiBinPath() == "SOME_CGI_BIN_PATH");
+            assert(route2.getSaveFiles() == false);
             try{
-                route2.getCgiBinPath();
+                route2.getSaveTo();
                 assert(false);
             } catch (...) {}
-        }
-
-        // route 3
-        {
-            const Route& route3 = routes.at(2);
-            try{
-                route3.getMethods();
-                assert(false);
-            } catch (...) {}
-            try{
-                route3.getRedirection();
-                assert(false);
-            } catch (...) {}
-            try{
-                route3.getDirectory();
-                assert(false);
-            } catch (...) {}
-            assert(route3.getDirectoryListening() == false);
-            try{
-                route3.getDefaultIfDirectoryResponse();
-                assert(false);
-            } catch (...) {}
-            try{
-                route3.getCgiScriptPath();
-                assert(false);
-            } catch (...) {}
-            assert(route3.getCgiBinPath() == "PATH55555");
         }
     }
-    {
+
+    /*{
         Parser parser;
         try {
             parser = Parser::parseFile("ConfigFiles/valid/3.txt");
@@ -497,7 +469,7 @@ void test::FILES_TESTS(){
                 assert(false);
             } catch (...) {}
         }
-    }
+    }*/
 }
 
 void RUN_ALL_TESTS(){
