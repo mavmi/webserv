@@ -1,6 +1,7 @@
 #pragma once
 
 #include <set>
+#include <map>
 #include <cctype>
 #include <string>
 #include <vector>
@@ -8,9 +9,23 @@
 #include <fstream>
 #include <utility>
 #include <stdint.h>
+#include <typeinfo>
 #include <algorithm>
 
 #include "../utils.hpp"
+
+class Parser;
+namespace configuration {
+
+template <typename T> class Wrapper;
+class Configuration;
+class ServerConfiguration;
+class RouteConfiguration;
+template <typename T> class Container;
+
+}
+
+
 
 namespace configuration {
 
@@ -34,10 +49,5 @@ enum HTTP_METHOD{
     POST,
     DELETE
 };
-
-class Configuration;
-class ServerConfiguration;
-class RouteConfiguration;
-template <typename T> class Container;
 
 }

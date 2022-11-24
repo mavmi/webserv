@@ -2,6 +2,8 @@
 
 #include "utils.hpp"
 
+#define EXC_ARGS    __FILE__, __FUNCTION__, __LINE__
+
 /*
     A bunch of exceptions for configuration classes.
 */
@@ -92,6 +94,38 @@ public:
 
     RouteException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_, int code);
     RouteException(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_, int code);
+
+protected:
+    std::string output_() const;
+
+};
+
+class WrapperException : public Exception {
+public:
+    WrapperException(const char* msg);
+    WrapperException(const std::string& msg);
+
+    WrapperException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_);
+    WrapperException(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_);
+
+    WrapperException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_, int code);
+    WrapperException(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_, int code);
+
+protected:
+    std::string output_() const;
+
+};
+
+class ContainerException : public Exception {
+public:
+    ContainerException(const char* msg);
+    ContainerException(const std::string& msg);
+
+    ContainerException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_);
+    ContainerException(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_);
+
+    ContainerException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_, int code);
+    ContainerException(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_, int code);
 
 protected:
     std::string output_() const;

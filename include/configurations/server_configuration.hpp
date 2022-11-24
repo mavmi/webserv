@@ -1,6 +1,7 @@
 #pragma once
 
 #include "utils.hpp"
+#include "wrapper.hpp"
 #include "container.hpp"
 #include "exceptions.hpp"
 #include "configuration_host.hpp"
@@ -15,6 +16,8 @@ class Configuration;
 // Use methods [isDone()] to check if the server is finished or not.
 // Method [done()] marks the server as finished. May throw an exception.
 class ServerConfiguration{
+friend Configuration;
+friend Container<ServerConfiguration>;
 public:
     typedef size_t                          SizeType;
     typedef uint16_t                        PortType;
@@ -26,10 +29,6 @@ public:
     typedef RouteConfiguration              RouteType;
     typedef Container<RouteType>            RoutesContainerType;
     typedef ServerException                 ExceptionType;
-
-    ServerConfiguration();
-    ServerConfiguration(const ServerConfiguration& other);
-    ServerConfiguration& operator=(const ServerConfiguration& other);
 
     ~ServerConfiguration();
 
@@ -68,17 +67,24 @@ public:
     bool isDone() const;
     void done();
 
-    static ServerConfiguration* getObject();
-    static ServerConfiguration* getObject(const ServerConfiguration& other);
-
 private:
     bool isDone_;
-    PortType* port_;
-    HostType* host_;
-    ServerNameType* serverName_;
-    ErrorPagesContainerType* errorPages_;
+    Wrapper<PortType> port_;
+    Wrapper<HostType> host_;
+    Wrapper<ServerNameType> serverName_;
+    Wrapper<ErrorPagesContainerType> errorPages_;
     BodySizeType bodySize_;
-    RoutesContainerType* routes_;
+    Wrapper<RoutesContainerType> routes_;
+
+    explicit ServerConfiguration();
+    explicit ServerConfiguration(const ServerConfiguration& other);
+
+    ServerConfiguration& operator=(const ServerConfiguration& other);
+    static void* operator new(size_t size);
+    static void* operator new(size_t size, const ServerConfiguration& other);
+    static void* operator new[](size_t size);
+    static void operator delete(void* ptr);
+    static void operator delete[](void* ptr);
 
     void deleteData_();
     void copyData_(const ServerConfiguration& other);

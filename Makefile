@@ -18,7 +18,7 @@ MAIN_DEPEN	=	$(MAIN_SRC:.cpp=.d)
 SRCS		=	$(addprefix $(SRCS_UTILS_DIR)/, utils_1.cpp)\
 					$(addprefix $(SRCS_CONFIG_DIR)/, configuration.cpp configuration_host.cpp exceptions.cpp parser.cpp route_configuration.cpp server_configuration.cpp utils.cpp)
 HDRS		=	$(addprefix $(HDRS_DIR)/, utils.hpp)\
-					$(addprefix $(HDRS_CONFIG_DIR)/, configuration_host.hpp	configuration.hpp container.hpp exceptions.hpp parser.hpp route_configuration.hpp server_configuration.hpp utils.hpp)
+					$(addprefix $(HDRS_CONFIG_DIR)/, configuration_host.hpp	configuration.hpp container.hpp exceptions.hpp parser.hpp route_configuration.hpp server_configuration.hpp utils.hpp wrapper.hpp)
 OBJS		=	$(SRCS:.cpp=.o)
 DEPEN		=	$(SRCS:.cpp=.d)
 
@@ -43,7 +43,7 @@ TEST_DEPEN		=	$(TEST_SRCS:.cpp=.d)
 ### RULES ###
 #############
 CC			=	g++
-GCC			=	$(CC) -Wall -Wextra -Werror -std=c++98 -MMD -g -fsanitize=undefined -fsanitize=address
+GCC			=	$(CC) -Wall -Wextra -Werror -std=c++98 -MMD -g -fsanitize=undefined -fsanitize=address -fsanitize=leak
 
 
 %.o:		%.cpp $(HDRS) $(TEST_HDRS)

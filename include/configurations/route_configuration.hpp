@@ -1,6 +1,7 @@
 #pragma once
 
 #include "utils.hpp"
+#include "wrapper.hpp"
 #include "container.hpp"
 #include "exceptions.hpp"
 
@@ -11,16 +12,15 @@ namespace configuration {
 // Use methods [isDone()] to check if the route is finished or not.
 // Method [done()] marks the route as finished. May throw an exception.
 class RouteConfiguration{
+friend Configuration;
+friend ServerConfiguration;
+friend Container<RouteConfiguration>;
 public:
     typedef size_t                      SizeType;
     typedef int                         MethodType;
     typedef Container<MethodType>       MethodsContainerType;
     typedef std::string                 PathType;
     typedef RouteException              ExceptionType;
-
-    RouteConfiguration();
-    RouteConfiguration(const RouteConfiguration& other);
-    RouteConfiguration& operator=(const RouteConfiguration& other);
 
     ~RouteConfiguration();
 
@@ -66,20 +66,27 @@ public:
     bool isDone() const;
     void done();
 
-    static RouteConfiguration* getObject();
-    static RouteConfiguration* getObject(const RouteConfiguration& other);
-
 private:
     bool isDone_;
-    MethodsContainerType* methods_;
-    PathType* redirection_;
-    PathType* directory_;
+    Wrapper<MethodsContainerType> methods_;
+    Wrapper<PathType> redirection_;
+    Wrapper<PathType> directory_;
     bool directory_listening_;
-    PathType* default_if_directory_response_path_;
-    PathType* cgi_script_path_;
-    PathType* cgi_bin_path_;
+    Wrapper<PathType> default_if_directory_response_path_;
+    Wrapper<PathType> cgi_script_path_;
+    Wrapper<PathType> cgi_bin_path_;
     bool saveFiles_;
-    PathType* saveTo_;
+    Wrapper<PathType> saveTo_;
+
+    explicit RouteConfiguration();
+    explicit RouteConfiguration(const RouteConfiguration& other);
+
+    RouteConfiguration& operator=(const RouteConfiguration& other);
+    static void* operator new(size_t size);
+    static void* operator new(size_t size, const RouteConfiguration& other);
+    static void* operator new[](size_t size);
+    static void operator delete(void* ptr);
+    static void operator delete[](void* ptr);
 
     void deleteData_();
     void copyData_(const RouteConfiguration& other);

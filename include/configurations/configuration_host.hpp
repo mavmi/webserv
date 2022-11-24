@@ -12,15 +12,21 @@ public:
     typedef uint8_t         ValueType;
     typedef size_t          SizeType;
 
+    ConfigurationHost();
     ConfigurationHost(ValueType b1, ValueType b2, ValueType b3, ValueType b4);
     ConfigurationHost(const ConfigurationHost& other);
     ConfigurationHost(const std::string& hostStr);
+    ~ConfigurationHost(){}
 
     ConfigurationHost& operator=(const ConfigurationHost& other);
     ConfigurationHost& operator=(const std::string& hostStr);
 
     bool operator==(const ConfigurationHost& other) const;
     bool operator!=(const ConfigurationHost& other) const;
+    bool operator<(const ConfigurationHost& other) const;
+    bool operator<=(const ConfigurationHost& other) const;
+    bool operator>(const ConfigurationHost& other) const;
+    bool operator>=(const ConfigurationHost& other) const;
 
     // Return string representation of IP address.
     std::string toString() const;

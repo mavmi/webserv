@@ -156,7 +156,7 @@ void test::FILES_TESTS(){
         assert(routes.size() == 1);
 
         const Route& route = routes.back();
-        configuration::Container<Method> methods = route.getMethods();
+        const configuration::Container<Method>& methods = route.getMethods();
         assert(methods.size() == route.getMethodsCount());
         assert(methods.size() == 3);
 
@@ -205,7 +205,7 @@ void test::FILES_TESTS(){
         // route 1
         {
             const Route& route1 = routes.at(0);
-            configuration::Container<Method> methods = route1.getMethods();
+            const configuration::Container<Method>& methods = route1.getMethods();
             assert(methods.size() == 3);
             assert(route1.getRedirection() == "PATH1");
             assert(route1.getDirectory() == "PATH22");
