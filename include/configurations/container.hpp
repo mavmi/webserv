@@ -1,66 +1,116 @@
 #pragma once
 
+#include <memory>
+
 #include "utils.hpp"
+#include "exceptions.hpp"
 
 namespace configuration {
 
 // It is wrapper class for configuration classes's container.
 template <typename T>
 class Container {
+friend Configuration;
+friend ServerConfiguration;
+friend RouteConfiguration;
+friend Wrapper<Container>;
 public:
     typedef std::vector<T>                                  InnerContainerType;
-    typedef typename InnerContainerType::size_type          SizeType;
-    typedef typename InnerContainerType::difference_type    DifferenceType;
+    typedef size_t                                          SizeType;
+    typedef size_t                                          DifferenceType;
     typedef T                                               ValueType;
     typedef T*                                              PointerType;
     typedef T&                                              ReferenceType;
     typedef const T&                                        ConstReferenceType;
+    typedef ContainerException                              ExceptionType;
 
-    Container(){}
-    Container(const Container& other){
-        operator=(other);
-    }
-    ~Container(){}
-
-    Container& operator=(const Container& other){
-        innerContainer_ = other.innerContainer_;
-        return *this;
+    ~Container(){
+        delete[] data_;
     }
 
     SizeType size() const {
-        return innerContainer_.size();
+        return size_;
+    }
+    SizeType capacity() const {
+        return capacity_;
     }
 
     ReferenceType at(DifferenceType position) {
-        return innerContainer_.at(position);
+        if (position >= size_) throw ExceptionType("Out of bounds", EXC_ARGS);
+        return data_[position];
     }
     ConstReferenceType at(DifferenceType position) const {
-        return innerContainer_.at(position);
+        if (position >= size_) throw ExceptionType("Out of bounds", EXC_ARGS);
+        return data_[position];
     }
 
     void push_back(ReferenceType value){
-        innerContainer_.push_back(value);
+        if (size_ == capacity_) updateCapacity_((capacity_ == 0) ? 1 : capacity_ * 2);
+        data_[size_++] = value;
     }
     void push_back(ConstReferenceType value){
-        innerContainer_.push_back(value);
+        if (size_ == capacity_) updateCapacity_((capacity_ == 0) ? 1 : capacity_ * 2);
+        data_[size_++] = value;
     }
 
     ReferenceType front(){
-        return innerContainer_.front();
+        if (size_) return data_[0];
+        throw ExceptionType("Container is emtpy", EXC_ARGS);
     }
     ConstReferenceType front() const {
-        return innerContainer_.front();
+        if (size_) return data_[0];
+        throw ExceptionType("Container is emtpy", EXC_ARGS);
     }
 
     ReferenceType back(){
-        return innerContainer_.back();
+        if (size_) return data_[size_ - 1];
+        throw ExceptionType("Container is emtpy", EXC_ARGS);
     }
     ConstReferenceType back() const {
-        return innerContainer_.back();
+        if (size_) return data_[size_ - 1];
+        throw ExceptionType("Container is emtpy", EXC_ARGS);
     }
 
 private:
-    InnerContainerType innerContainer_;
+    SizeType size_;
+    SizeType capacity_;
+    PointerType data_;
+
+    Container(){
+        data_ = NULL;
+        size_ = 0;
+        capacity_ = 0;
+    }
+    Container(const Container& other){
+        copyData_(other);
+    }
+
+    Container& operator=(const Container& other){
+        delete[] data_;
+        copyData_(other);
+        return *this;
+    }
+
+    void updateCapacity_(SizeType capacity){
+        if (capacity_ >= capacity) return;
+
+        capacity_ = capacity;
+        PointerType newData = new ValueType[capacity_];
+        for (SizeType i = 0; i < size_; i++){
+            newData[i] = data_[i];
+        }
+        delete[] data_;
+        data_ = newData;
+    }
+
+    void copyData_(const Container& other){
+        size_ = other.size_;
+        capacity_ = other.capacity_;
+        data_ = new ValueType[capacity_];
+        for (SizeType i = 0; i < size_; i++){
+            data_[i] = other.data_[i];
+        }
+    }
 
 };
 

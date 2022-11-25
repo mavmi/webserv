@@ -4,7 +4,6 @@
     server_name:     DEFAULT_SERVER;
     error_pages:     path1, path2;
     body_size:       4096;
-    
     [
         methods:             GET;
         redir:               path3;

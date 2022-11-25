@@ -3,7 +3,8 @@
 namespace configuration {
 
 Configuration::Configuration(){
-    servers_ = new ServersContainerType();
+    servers_ = ServersContainerType();
+    hostPortPairs_ = HostPortPairsContainerType();
 }
 Configuration::Configuration(const Configuration& other){
     copyData_(other);
@@ -17,15 +18,51 @@ Configuration& Configuration::operator=(const Configuration& other){
     copyData_(other);
     return *this;
 }
+
 Configuration::ServersContainerType& Configuration::getServers(){
-    return *servers_;
+    return servers_;
+}
+const Configuration::ServersContainerType& Configuration::getServers() const{
+    return servers_;
+}
+
+const Configuration::ServerType& Configuration::getServer(ServerType::PortType port) const{
+    for (ServersContainerType::SizeType i = 0; i < servers_.size(); i++){
+        try {
+            const ServerType& server = servers_.at(i);
+            if (server.getPort() == port) return server;
+        } catch (...) {}
+    }
+    throw ExceptionType("No server with such port", EXC_ARGS);
+}
+const Configuration::ServerType& Configuration::getServer(const ServerType::HostType& host) const{
+    for (ServersContainerType::SizeType i = 0; i < servers_.size(); i++){
+        try {
+            const ServerType& server = servers_.at(i);
+            if (server.getHost() == host) return server;
+        } catch (...) {}
+    }
+    throw ExceptionType("No server with such port", EXC_ARGS);
+}
+const Configuration::ServerType& Configuration::getServer(ServerType::PortType port, const ServerType::HostType& host) const{
+    for (ServersContainerType::SizeType i = 0; i < servers_.size(); i++){
+        try {
+            const ServerType& server = servers_.at(i);
+            if (server.getPort() == port && server.getHost() == host) return server;
+        } catch (...) {}
+    }
+    throw ExceptionType("No server with such port and host", EXC_ARGS);
+}
+
+const Configuration::HostPortPairsContainerType& Configuration::getHostPortPairs() const{
+    return hostPortPairs_;
 }
 
 void Configuration::parseFile(const std::string& inputFile){
     typedef std::string::iterator Iterator;
 
     std::ifstream inputFileStream(inputFile.c_str(), std::ios::in);
-    if (!inputFileStream.is_open()) throw ExceptionType("Unable to open input file: " + inputFile, __FILE__, __FUNCTION__, __LINE__);
+    if (!inputFileStream.is_open()) throw ExceptionType("Unable to open input file: " + inputFile, EXC_ARGS);
 
     std::string line;
     while(std::getline(inputFileStream, line)){     // it does not have whitespaces here anymore    
@@ -40,10 +77,10 @@ void Configuration::parseFile(const std::string& inputFile){
 
                 try {
                     ServerType& lastServer = getLastServer_();
-                    if (!lastServer.isDone()) throw Exception("Unable to start server: the previous one is not done", __FILE__, __FUNCTION__, __LINE__);
-                    servers_->push_back(ServerType());
+                    if (!lastServer.isDone()) throw Exception("Unable to start server: the previous one is not done", EXC_ARGS);
+                    servers_.push_back(ServerType());
                 } catch (ExceptionType&){
-                    servers_->push_back(ServerType());
+                    servers_.push_back(ServerType());
                 } catch (Exception&){
                     throw;
                 }
@@ -52,9 +89,10 @@ void Configuration::parseFile(const std::string& inputFile){
 
                 try {
                     ServerType& lastServer = getLastServer_();
-                    if (lastServer.isDone()) throw Exception("Unable to finish server: it is already finished", __FILE__, __FUNCTION__, __LINE__);
-                    if (!getLastRoute_().isDone()) throw Exception("Unable to finish server: it contains unfinished route", __FILE__, __FUNCTION__, __LINE__);
+                    if (lastServer.isDone()) throw Exception("Unable to finish server: it is already finished", EXC_ARGS);
+                    if (!getLastRoute_().isDone()) throw Exception("Unable to finish server: it contains unfinished route", EXC_ARGS);
                     lastServer.done();
+                    hostPortPairs_.insert(std::make_pair(lastServer.getHost(), lastServer.getPort()));
                 } catch (ServerException&){
                     getLastServer_().done();
                 } catch (ExceptionType&){
@@ -67,8 +105,8 @@ void Configuration::parseFile(const std::string& inputFile){
 
                 try {
                     ServerType& lastServer = getLastServer_();
-                    if (lastServer.isDone()) throw Exception("Unable to start route: there are no unfinished servers to contain one", __FILE__, __FUNCTION__, __LINE__);
-                    if (!getLastRoute_().isDone()) throw Exception("Unable to start route: there is unfinished one", __FILE__, __FUNCTION__, __LINE__);
+                    if (lastServer.isDone()) throw Exception("Unable to start route: there are no unfinished servers to contain one", EXC_ARGS);
+                    if (!getLastRoute_().isDone()) throw Exception("Unable to start route: there is unfinished one", EXC_ARGS);
                     lastServer.addRoute(ServerType::RouteType());
                 } catch (ServerException&){
                     getLastServer_().addRoute(ServerType::RouteType());
@@ -82,8 +120,8 @@ void Configuration::parseFile(const std::string& inputFile){
 
                 try {
                     ServerType& lastServer = getLastServer_();
-                    if (lastServer.isDone()) throw Exception("Unable to finish route: there are no unfinished servers to contain one", __FILE__, __FUNCTION__, __LINE__);
-                    if (getLastRoute_().isDone()) throw Exception("Unable to finish route: there are no non-finished routes", __FILE__, __FUNCTION__, __LINE__);
+                    if (lastServer.isDone()) throw Exception("Unable to finish route: there are no unfinished servers to contain one", EXC_ARGS);
+                    if (getLastRoute_().isDone()) throw Exception("Unable to finish route: there are no non-finished routes", EXC_ARGS);
                     getLastRoute_().done();
                 } catch (ServerException&){
                     throw;
@@ -97,7 +135,7 @@ void Configuration::parseFile(const std::string& inputFile){
 
                 Iterator begin = iter;
                 Iterator end = std::find(begin, line.end(), ';');
-                if (end == line.end()) throw ExceptionType("Invalid key-value line", __FILE__, __FUNCTION__, __LINE__);  // Did not find ';' == very bad
+                if (end == line.end()) throw ExceptionType("Invalid key-value line", EXC_ARGS);  // Did not find ';' == very bad
                 
                 std::string substring = line.substr(
                     std::distance(line.begin(), begin),
@@ -128,10 +166,10 @@ bool Configuration::isLineEmpty_(const std::string& line) const{
 }
 
 Configuration::ServerType& Configuration::getLastServer_(){
-    if (!servers_->size()) throw ExceptionType("Servers are not defined", __FILE__, __FUNCTION__, __LINE__);
-    return servers_->back();
+    if (!servers_.size()) throw ExceptionType("Servers are not defined", EXC_ARGS);
+    return servers_.back();
 }
-Configuration::ServerType::RouteType& Configuration::getLastRoute_(){
+Configuration::ServerType::RouteType& Configuration::getLastRoute_() {
     return getLastServer_().getRoutes().back();
 }
 
@@ -139,7 +177,7 @@ HTTP_METHOD Configuration::stringToHttpMethod_(const std::string& str){
     if (str == "GET") return GET;
     else if (str == "POST") return POST;
     else if (str == "DELETE") return DELETE;
-    throw ExceptionType("Invalid HTTP method", __FILE__, __FUNCTION__, __LINE__);
+    throw ExceptionType("Invalid HTTP method", EXC_ARGS);
 }
 std::set<std::string> Configuration::stringToArray_(const std::string& str){
     typedef std::string::const_iterator Iterator;
@@ -163,7 +201,7 @@ std::set<std::string> Configuration::stringToArray_(const std::string& str){
 bool Configuration::stringToBool_(const std::string& str) const {
     if (str == "true") return true;
     else if (str == "false") return false;
-    throw ExceptionType("Invalid boolean value", __FILE__, __FUNCTION__, __LINE__);
+    throw ExceptionType("Invalid boolean value", EXC_ARGS);
 }
 
 std::pair<std::string, std::string> Configuration::split_(const std::string& str) const {
@@ -171,8 +209,8 @@ std::pair<std::string, std::string> Configuration::split_(const std::string& str
     const std::string errorMsg = "Invalid key-value line";
 
     Iterator splitPoint = std::find(str.begin(), str.end(), ':');
-    if (splitPoint == str.end()) throw ExceptionType(errorMsg, __FILE__, __FUNCTION__, __LINE__);
-    if (std::find(splitPoint + 1, str.end(), ':') != str.end()) throw ExceptionType(errorMsg, __FILE__, __FUNCTION__, __LINE__);
+    if (splitPoint == str.end()) throw ExceptionType(errorMsg, EXC_ARGS);
+    if (std::find(splitPoint + 1, str.end(), ':') != str.end()) throw ExceptionType(errorMsg, EXC_ARGS);
 
     std::string key = str.substr(0, std::distance(str.begin(), splitPoint));
     std::string value = str.substr(
@@ -189,7 +227,7 @@ void Configuration::parseValueString_(const std::string& str){
 
     // Server configs parsing
     ServerType& lastServer = getLastServer_();
-    if (lastServer.isDone()) throw ExceptionType("Trying to update already finished server", __FILE__, __FUNCTION__, __LINE__);
+    if (lastServer.isDone()) throw ExceptionType("Trying to update already finished server", EXC_ARGS);
     {
         if (key == "port"){
             lastServer.setPort(stringToNumber_<ServerType::PortType>(value));
@@ -214,7 +252,7 @@ void Configuration::parseValueString_(const std::string& str){
     
     // Route configs parsing
     ServerType::RouteType& lastRoute = getLastRoute_();
-    if (lastRoute.isDone()) throw ExceptionType("Trying to update already finished route", __FILE__, __FUNCTION__, __LINE__);
+    if (lastRoute.isDone()) throw ExceptionType("Trying to update already finished route", EXC_ARGS);
     {
         if (key == "methods"){
             std::set<std::string> arr = stringToArray_(value);
@@ -240,20 +278,26 @@ void Configuration::parseValueString_(const std::string& str){
         } else if (key == "cgi_bin"){
             lastRoute.setCgiBinPath(value);
             return;
+        } else if (key == "save_files"){
+            lastRoute.setSaveFiles(stringToBool_(value));
+            return;
+        } else if (key == "save_to"){
+            lastRoute.setSaveTo(value);
+            return;
         }
     }
 
     // Throw an exception on error
-    throw ExceptionType("Invalid key", __FILE__, __FUNCTION__, __LINE__);
+    throw ExceptionType("Invalid key", EXC_ARGS);
 }
 
 void Configuration::copyData_(const Configuration& other){
-    servers_ = (other.servers_) ? new ServersContainerType(*other.servers_) : NULL;
+    servers_ = other.servers_;
+    hostPortPairs_ = other.hostPortPairs_;
 }
 void Configuration::deleteData_(){
-    delete servers_;
-
-    servers_ = NULL;
+    servers_ = ServersContainerType();
+    hostPortPairs_ = HostPortPairsContainerType();
 }
 
 }

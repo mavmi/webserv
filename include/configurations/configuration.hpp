@@ -10,24 +10,36 @@ namespace configuration {
 // This class contains all info from
 // configuration file
 class Configuration{
+friend Parser;
 public:
-    typedef ServerConfiguration     ServerType;
-    typedef Container<ServerType>   ServersContainerType;
-    typedef ConfigurationException  ExceptionType;
+    typedef ServerConfiguration                                                                 ServerType;
+    typedef Container<ServerType>                                                               ServersContainerType;
+    typedef ConfigurationException                                                              ExceptionType;
+    typedef std::pair<const ServerType::HostType, const ServerType::PortType>                   HostPortPairType;
+    typedef std::set<HostPortPairType>                                                          HostPortPairsContainerType;
 
-    Configuration();
-    Configuration(const Configuration& other);
     ~Configuration();
-
-    Configuration& operator=(const Configuration& other);
 
     // Parse configuration file.
     // May throw exception on error.
     void parseFile(const std::string& inputFile);
     ServersContainerType& getServers();
+    const ServersContainerType& getServers() const;
+    
+    const ServerType& getServer(ServerType::PortType port) const;
+    const ServerType& getServer(const ServerType::HostType& host) const;
+    const ServerType& getServer(ServerType::PortType port, const ServerType::HostType& host) const;
+
+    const HostPortPairsContainerType& getHostPortPairs() const;
 
 private:
-    ServersContainerType* servers_;
+    ServersContainerType servers_;
+    HostPortPairsContainerType hostPortPairs_;
+
+    explicit Configuration();
+    explicit Configuration(const Configuration& other);
+
+    Configuration& operator=(const Configuration& other);
 
     // Check if string contains only whitespaces
     bool isLineEmpty_(const std::string& line) const;
@@ -51,7 +63,7 @@ private:
         try {
             return utilsStringToNum<ReturnType>(str);
         } catch (UtilsException& e) {
-            throw ExceptionType(e.what(), __FILE__, __FUNCTION__, __LINE__);
+            throw ExceptionType(e.what(), EXC_ARGS);
         }
     }
     std::pair<std::string, std::string> split_(const std::string& str) const;

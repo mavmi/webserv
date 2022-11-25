@@ -7,11 +7,13 @@
     
     [
         methods:             GET,POST,DELETE;    [1-n](GET POST DELETE)
-        redir:               path1;              [0-1](путь к файлу)
+        redir:               path1;              [1](путь к файлу)
         dir:                 path1;              [1](путь к папке с файлом)
-        dir_listening:       true/false;         [1](false по умолчанию)
+        dir_listening:       true/false;         [0-1](false по умолчанию)
         def_if_dir:          path1;              [0-1](путь к файлу ответа, если запрос к директории)
         cgi_script:          path1;              [0-1]
         cgi_bin:             path;               [0-1]
+        save_files:          true/false;         [0-1](будет ли роут сохранять файлы)
+        save_to:             path1;              [0-1](куда роут будет сохранять файлы)
     ]
 }
