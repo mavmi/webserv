@@ -49,36 +49,28 @@ void RouteConfiguration::setMethods(const MethodsContainerType& methods){
     methods_.set(methods);
 }
 RouteConfiguration::MethodsContainerType& RouteConfiguration::getMethods(){
-    try{
+    HANDLE_EXC_BEGIN
         return methods_.get();
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 const RouteConfiguration::MethodsContainerType& RouteConfiguration::getMethods() const{
-    try {
+    HANDLE_EXC_BEGIN
         return methods_.get();
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 void RouteConfiguration::setMethod(const MethodType& method, SizeType position){
     throwOnDone();
     methods_.get().at(position) = method;
 }
 RouteConfiguration::MethodType& RouteConfiguration::getMethod(SizeType position){
-    try {
+    HANDLE_EXC_BEGIN
         return methods_.get().at(position);
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 const RouteConfiguration::MethodType& RouteConfiguration::getMethod(SizeType position) const{
-    try {
+    HANDLE_EXC_BEGIN
         return methods_.get().at(position);
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 void RouteConfiguration::addMethod(const MethodType& method){
     throwOnDone();
@@ -86,11 +78,9 @@ void RouteConfiguration::addMethod(const MethodType& method){
     methods_.get().push_back(method);
 }
 RouteConfiguration::SizeType RouteConfiguration::getMethodsCount() const{
-    try {
+    HANDLE_EXC_BEGIN
         return methods_.get().size();
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 
 void RouteConfiguration::setRedirection(const PathType& redirection){
@@ -98,18 +88,14 @@ void RouteConfiguration::setRedirection(const PathType& redirection){
     redirection_.set(redirection);
 }
 RouteConfiguration::PathType& RouteConfiguration::getRedirection(){
-    try {
+    HANDLE_EXC_BEGIN
         return redirection_.get();
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 const RouteConfiguration::PathType& RouteConfiguration::getRedirection() const{
-    try {
+    HANDLE_EXC_BEGIN
         return redirection_.get();
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 
 void RouteConfiguration::setDirectory(const PathType& directory){
@@ -117,18 +103,14 @@ void RouteConfiguration::setDirectory(const PathType& directory){
     directory_.set(directory);
 }
 RouteConfiguration::PathType& RouteConfiguration::getDirectory(){
-    try {
+    HANDLE_EXC_BEGIN
         return directory_.get();
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 const RouteConfiguration::PathType& RouteConfiguration::getDirectory() const{
-    try {
+    HANDLE_EXC_BEGIN
         return directory_.get();
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 
 void RouteConfiguration::setDirectoryListening(bool directoryListening){
@@ -144,18 +126,14 @@ void RouteConfiguration::setDefaultIfDirectoryResponse(const PathType& default_i
     default_if_directory_response_path_.set(default_if_directory_response_path);
 }
 RouteConfiguration::PathType& RouteConfiguration::getDefaultIfDirectoryResponse(){
-    try {
+    HANDLE_EXC_BEGIN
         return default_if_directory_response_path_.get();
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 const RouteConfiguration::PathType& RouteConfiguration::getDefaultIfDirectoryResponse() const{
-    try {
+    HANDLE_EXC_BEGIN
         return default_if_directory_response_path_.get();
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 
 void RouteConfiguration::setCgiScriptPath(const PathType& cgi_script_path){
@@ -163,18 +141,14 @@ void RouteConfiguration::setCgiScriptPath(const PathType& cgi_script_path){
     cgi_script_path_.set(cgi_script_path);
 }
 RouteConfiguration::PathType& RouteConfiguration::getCgiScriptPath(){
-    try {
+    HANDLE_EXC_BEGIN
         return cgi_script_path_.get();
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 const RouteConfiguration::PathType& RouteConfiguration::getCgiScriptPath() const{
-    try {
+    HANDLE_EXC_BEGIN
         return cgi_script_path_.get();
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 
 void RouteConfiguration::setCgiBinPath(const PathType& cgi_bin_path){
@@ -182,18 +156,14 @@ void RouteConfiguration::setCgiBinPath(const PathType& cgi_bin_path){
     cgi_bin_path_.set(cgi_bin_path);
 }
 RouteConfiguration::PathType& RouteConfiguration::getCgiBinPath(){
-    try {
+    HANDLE_EXC_BEGIN
         return cgi_bin_path_.get();
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 const RouteConfiguration::PathType& RouteConfiguration::getCgiBinPath() const{
-    try {
+    HANDLE_EXC_BEGIN
         return cgi_bin_path_.get();
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 
 void RouteConfiguration::setSaveFiles(bool saveFiles){
@@ -209,18 +179,14 @@ void RouteConfiguration::setSaveTo(const PathType& saveTo){
     saveTo_.set(saveTo);
 }
 RouteConfiguration::PathType& RouteConfiguration::getSaveTo(){
-    try {
+    HANDLE_EXC_BEGIN
         return saveTo_.get();
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 const RouteConfiguration::PathType& RouteConfiguration::getSaveTo() const{
-    try {
+    HANDLE_EXC_BEGIN
         return saveTo_.get();
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 
 bool RouteConfiguration::isDone() const{

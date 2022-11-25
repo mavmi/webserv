@@ -7,6 +7,11 @@
 
 namespace configuration {
 
+#define HANDLE_EXC_BEGIN    try {
+#define HANDLE_EXC_END      } catch (WrapperException& e){      \
+                                throw ExceptionType(e.what());  \
+                            }
+
 // Contains information about server's route.
 // Any getter may throw RouteException if it's value is not set.
 // Use methods [isDone()] to check if the route is finished or not.

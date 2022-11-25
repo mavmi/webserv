@@ -9,6 +9,11 @@
 
 namespace configuration {
 
+#define HANDLE_EXC_BEGIN    try {
+#define HANDLE_EXC_END      } catch (WrapperException& e){      \
+                                throw ExceptionType(e.what());  \
+                            }
+
 class Configuration;
 
 // Contains information about server.

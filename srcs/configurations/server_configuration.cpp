@@ -46,11 +46,9 @@ void ServerConfiguration::setPort(PortType port){
     port_.set(port);
 }
 ServerConfiguration::PortType ServerConfiguration::getPort() const{
-    try {
+    HANDLE_EXC_BEGIN
         return port_.get();
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 
 void ServerConfiguration::setHost(const HostType& host){
@@ -58,18 +56,14 @@ void ServerConfiguration::setHost(const HostType& host){
     host_.set(host);
 }
 ServerConfiguration::HostType& ServerConfiguration::getHost(){
-    try {
+    HANDLE_EXC_BEGIN
         return host_.get();
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 const ServerConfiguration::HostType& ServerConfiguration::getHost() const{
-    try {
+    HANDLE_EXC_BEGIN
         return host_.get();
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 
 void ServerConfiguration::setServerName(const ServerNameType& serverName){
@@ -77,18 +71,14 @@ void ServerConfiguration::setServerName(const ServerNameType& serverName){
     serverName_.set(serverName);
 }
 ServerConfiguration::ServerNameType& ServerConfiguration::getServerName(){
-    try {
+    HANDLE_EXC_BEGIN
         return serverName_.get();
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 const ServerConfiguration::ServerNameType& ServerConfiguration::getServerName() const{
-    try {
+    HANDLE_EXC_BEGIN
         return serverName_.get();
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 
 void ServerConfiguration::setErrorPages(const ErrorPagesContainerType& errorPages){
@@ -96,36 +86,28 @@ void ServerConfiguration::setErrorPages(const ErrorPagesContainerType& errorPage
     errorPages_.set(errorPages);
 }
 ServerConfiguration::ErrorPagesContainerType& ServerConfiguration::getErrorPages(){
-    try {
+    HANDLE_EXC_BEGIN
         return errorPages_.get();
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 const ServerConfiguration::ErrorPagesContainerType& ServerConfiguration::getErrorPages() const{
-    try {
+    HANDLE_EXC_BEGIN
         return errorPages_.get();
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 void ServerConfiguration::setErrorPage(const ErrorPageType& errorPage, SizeType position){
     throwOnDone();
     errorPages_.get().at(position) = errorPage;
 }
 ServerConfiguration::ErrorPageType& ServerConfiguration::getErrorPage(SizeType position){
-    try {
+    HANDLE_EXC_BEGIN
         return errorPages_.get().at(position);
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 const ServerConfiguration::ErrorPageType& ServerConfiguration::getErrorPage(SizeType position) const{
-    try {
+    HANDLE_EXC_BEGIN
         return errorPages_.get().at(position);
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 void ServerConfiguration::addErrorPage(const ErrorPageType& errorPage){
     throwOnDone();
@@ -133,11 +115,9 @@ void ServerConfiguration::addErrorPage(const ErrorPageType& errorPage){
     errorPages_.get().push_back(errorPage);
 }
 ServerConfiguration::SizeType ServerConfiguration::getErrorPagesCount() const{
-    try {
+    HANDLE_EXC_BEGIN
         return errorPages_.get().size();
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 
 void ServerConfiguration::setBodySize(BodySizeType bodySize){
@@ -153,36 +133,28 @@ void ServerConfiguration::setRoutes(const RoutesContainerType& routes){
     routes_.set(routes);
 }
 ServerConfiguration::RoutesContainerType& ServerConfiguration::getRoutes(){
-    try {
+    HANDLE_EXC_BEGIN
         return routes_.get();
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 const ServerConfiguration::RoutesContainerType& ServerConfiguration::getRoutes() const{
-    try {
+    HANDLE_EXC_BEGIN
         return routes_.get();
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 void ServerConfiguration::setRoute(const RouteType& route, SizeType position){
     throwOnDone();
     routes_.get().at(position) = route;
 }
 ServerConfiguration::RouteType& ServerConfiguration::getRoute(SizeType position){
-    try {
+    HANDLE_EXC_BEGIN
         return routes_.get().at(position);
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 const ServerConfiguration::RouteType& ServerConfiguration::getRoute(SizeType position) const{
-    try {
+    HANDLE_EXC_BEGIN
         return routes_.get().at(position);
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 void ServerConfiguration::addRoute(const RouteType& route){
     throwOnDone();
@@ -190,11 +162,9 @@ void ServerConfiguration::addRoute(const RouteType& route){
     routes_.get().push_back(route);
 }
 ServerConfiguration::SizeType ServerConfiguration::getRoutesCount() const{
-    try {
+    HANDLE_EXC_BEGIN
         return routes_.get().size();
-    } catch (WrapperException& e){
-        throw ExceptionType(e.what());
-    }
+    HANDLE_EXC_END
 }
 
 bool ServerConfiguration::isDone() const{
