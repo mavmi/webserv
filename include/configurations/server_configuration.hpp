@@ -7,7 +7,7 @@
 #include "configuration_host.hpp"
 #include "route_configuration.hpp"
 
-namespace configuration {
+namespace wsrv::configuration {
 
 #define HANDLE_EXC_BEGIN    try {
 #define HANDLE_EXC_END      } catch (WrapperException& e){      \

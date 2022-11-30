@@ -1,6 +1,6 @@
 #include "../../include/configurations/configuration.hpp"
 
-namespace configuration {
+namespace wsrv::configuration {
 
 Configuration::Configuration(){
     servers_ = ServersContainerType();
@@ -54,6 +54,9 @@ const Configuration::ServerType& Configuration::getServer(ServerType::PortType p
     throw ExceptionType("No server with such port and host", EXC_ARGS);
 }
 
+Configuration::ServersContainerType::SizeType Configuration::getServersCount() const {
+    return servers_.size();
+}
 const Configuration::HostPortPairsContainerType& Configuration::getHostPortPairs() const{
     return hostPortPairs_;
 }

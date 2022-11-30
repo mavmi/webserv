@@ -5,7 +5,7 @@
 #include "utils.hpp"
 #include "exceptions.hpp"
 
-namespace configuration {
+namespace wsrv::configuration {
 
 // It is wrapper class for configuration classes's container.
 template <typename T>

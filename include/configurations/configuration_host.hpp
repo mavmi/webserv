@@ -3,7 +3,7 @@
 #include "utils.hpp"
 #include "exceptions.hpp"
 
-namespace configuration {
+namespace wsrv::configuration {
 
 // This class contains IP address.
 // Some of it's methods may throw ConfigurationHostException on error.

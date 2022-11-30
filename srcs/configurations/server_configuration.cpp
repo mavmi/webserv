@@ -1,6 +1,6 @@
 #include "../../include/configurations/server_configuration.hpp"
 
-namespace configuration {
+namespace wsrv::configuration {
 
 ServerConfiguration::ServerConfiguration(){
     isDone_ = false;

@@ -14,7 +14,10 @@
 
 #include "../utils.hpp"
 
+namespace wsrv{
+
 class Parser;
+
 namespace configuration {
 
 template <typename T> class Wrapper;
@@ -25,9 +28,11 @@ template <typename T> class Container;
 
 }
 
+}
 
 
-namespace configuration {
+
+namespace wsrv::configuration {
 
 enum CONFIG_ELEM{
     PORT,

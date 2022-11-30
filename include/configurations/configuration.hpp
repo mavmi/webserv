@@ -5,7 +5,7 @@
 #include "exceptions.hpp"
 #include "server_configuration.hpp"
 
-namespace configuration {
+namespace wsrv::configuration {
 
 // This class contains all info from
 // configuration file
@@ -30,6 +30,7 @@ public:
     const ServerType& getServer(const ServerType::HostType& host) const;
     const ServerType& getServer(ServerType::PortType port, const ServerType::HostType& host) const;
 
+    ServersContainerType::SizeType getServersCount() const;
     const HostPortPairsContainerType& getHostPortPairs() const;
 
 private:

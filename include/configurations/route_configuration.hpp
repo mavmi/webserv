@@ -5,7 +5,7 @@
 #include "container.hpp"
 #include "exceptions.hpp"
 
-namespace configuration {
+namespace wsrv::configuration {
 
 #define HANDLE_EXC_BEGIN    try {
 #define HANDLE_EXC_END      } catch (WrapperException& e){      \

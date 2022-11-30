@@ -1,6 +1,6 @@
 #include "../../include/configurations/configuration_host.hpp"
 
-namespace configuration {
+namespace wsrv::configuration {
 
 ConfigurationHost::ConfigurationHost(){
     ip_[0] = 0;
