@@ -1,6 +1,6 @@
 #include "../../include/configurations/exceptions.hpp"
 
-namespace configuration {
+namespace wsrv::configuration {
 
 Exception::Exception(const char* msg) 
     : msg_(std::string(msg)), _file_(""), _function_(""), _line_(0), code_(0){}

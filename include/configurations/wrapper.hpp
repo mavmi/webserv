@@ -3,7 +3,7 @@
 #include "utils.hpp"
 #include "exceptions.hpp"
 
-namespace configuration{
+namespace wsrv::configuration{
 
 template <typename T>
 class Wrapper{

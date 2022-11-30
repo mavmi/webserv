@@ -1,6 +1,6 @@
 #include "../../include/configurations/route_configuration.hpp"
 
-namespace configuration {
+namespace wsrv::configuration {
 
 RouteConfiguration::RouteConfiguration(){
     isDone_ = false;

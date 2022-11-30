@@ -3,6 +3,8 @@
 #include "utils.hpp"
 #include "configuration.hpp"
 
+namespace wsrv{
+
 class Parser{
 public:
     Parser();
@@ -21,3 +23,5 @@ private:
     configuration::Configuration configuration_;
 
 };
+
+}

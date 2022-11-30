@@ -8,7 +8,7 @@
     A bunch of exceptions for configuration classes.
 */
 
-namespace configuration {
+namespace wsrv::configuration {
 
 class Exception {
 public:

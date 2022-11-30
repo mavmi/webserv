@@ -1,5 +1,7 @@
 #include "../../include/configurations/parser.hpp"
 
+namespace wsrv{
+
 Parser::Parser(){}
 Parser::Parser(const std::string& inputFile){
     configuration_.parseFile(inputFile);
@@ -24,4 +26,6 @@ Parser Parser::parseFile(const std::string& inputFile){
 }
 const configuration::Configuration& Parser::getConfiguration() const{
     return configuration_;
+}
+
 }
