@@ -5,9 +5,13 @@ namespace MAIN_NAMESPACE{
 HttpRequest::HttpRequest(){
 
 }
+HttpRequest::HttpRequest(const HttpRequest::BufferContainerType& buffer){
+    (void)buffer;
+}
 HttpRequest::HttpRequest(const HttpRequest& other){
     (void)other;
 }
+
 HttpRequest::~HttpRequest(){
 
 }
@@ -16,9 +20,13 @@ HttpRequest& HttpRequest::operator=(const HttpRequest& other){
     (void)other;
     return *this;
 }
+const HTTP_REQUEST_PARS_NAMESPACE::HttpRequestParser& HttpRequest::operator->(){
+    return httpRequestParser_;
+}
 
-void HttpRequest::parseHttpRequest(const std::vector<char *>& buffer){
+HttpRequest HttpRequest::parseHttpRequest(const HttpRequest::BufferContainerType& buffer){
     (void)buffer;
+    return HttpRequest();
 }
 const HTTP_REQUEST_PARS_NAMESPACE::HttpRequestParser& HttpRequest::getHttpRequest() const{
     return httpRequestParser_;
