@@ -5,6 +5,12 @@
 #include <iostream>
 #include <algorithm>
 
+#define wsrv            MAIN_NAMESPACE
+#define configuration   CONFIG_NAMESPACE
+#define utils           UTILS_NAMESPACE
+
+namespace MAIN_NAMESPACE::UTILS_NAMESPACE{
+
 const std::string DEFAULT_SERVER_PATH = "DefaultServer";
 const std::string DEFAULT_SERVER_CONFIG_FILE_PATH = DEFAULT_SERVER_PATH + "/ConfigFile.txt";
 
@@ -14,7 +20,6 @@ enum MSG_TYPE {
     WARNING,
     ERROR
 };
-
 
 class UtilsException {
 public:
@@ -31,10 +36,8 @@ protected:
     
 };
 
-
 void        utilsPrintMsg(const std::string& msg, MSG_TYPE msgType);
 void        utilsCheckArgsCount(int argc);
-
 
 template <typename Type>
 std::string utilsNumToString(Type num){
@@ -73,5 +76,7 @@ Type        utilsStringToNum(const std::string& str){
 
     if (!positive) res *= -1;
     return res;
+
+}
 
 }

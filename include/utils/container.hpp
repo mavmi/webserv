@@ -1,18 +1,42 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 
 #include "utils.hpp"
+#include "wrapper.hpp"
 #include "exceptions.hpp"
 
-namespace wsrv::configuration {
+namespace MAIN_NAMESPACE::CONFIG_NAMESPACE{
+class Configuration;
+class RouteConfiguration;
+class ServerConfiguration;
+}
+
+namespace MAIN_NAMESPACE::UTILS_NAMESPACE{
+
+class ContainerException : public MAIN_NAMESPACE::UTILS_NAMESPACE::Exception {
+public:
+    ContainerException(const char* msg);
+    ContainerException(const std::string& msg);
+
+    ContainerException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_);
+    ContainerException(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_);
+
+    ContainerException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_, int code);
+    ContainerException(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_, int code);
+
+protected:
+    std::string output_() const;
+
+};
 
 // It is wrapper class for configuration classes's container.
 template <typename T>
 class Container {
-friend Configuration;
-friend ServerConfiguration;
-friend RouteConfiguration;
+friend MAIN_NAMESPACE::CONFIG_NAMESPACE::Configuration;
+friend MAIN_NAMESPACE::CONFIG_NAMESPACE::ServerConfiguration;
+friend MAIN_NAMESPACE::CONFIG_NAMESPACE::RouteConfiguration;
 friend Wrapper<Container>;
 public:
     typedef std::vector<T>                                  InnerContainerType;

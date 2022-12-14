@@ -123,13 +123,13 @@ void test::FILES_TESTS(){
         wsrv::Parser parser;
         try {
             parser = wsrv::Parser::parseFile("ConfigFiles/valid/1.txt");
-        } catch (wsrv::configuration::Exception& e){
+        } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::Exception& e){
             std::cerr << e.what() << std::endl;
             assert(false);
         }
         const wsrv::configuration::Configuration& configuration = parser.getConfiguration();
 
-        const wsrv::configuration::Container<Server>& servers = configuration.getServers();
+        const MAIN_NAMESPACE::UTILS_NAMESPACE::Container<Server>& servers = configuration.getServers();
         assert(servers.size() == 1);
 
         const Server& server = servers.back();
@@ -137,9 +137,9 @@ void test::FILES_TESTS(){
         assert(server.getHost().toString() == "127.0.0.1");
         assert(server.getServerName() == "SERVER_NAME");
 
-        const wsrv::configuration::Container<ErrorPage>& errorPages = server.getErrorPages();
+        const MAIN_NAMESPACE::UTILS_NAMESPACE::Container<ErrorPage>& errorPages = server.getErrorPages();
         assert(errorPages.size() == 2);
-        for (wsrv::configuration::Container<ErrorPage>::SizeType i = 0; i < errorPages.size(); i++){
+        for (MAIN_NAMESPACE::UTILS_NAMESPACE::Container<ErrorPage>::SizeType i = 0; i < errorPages.size(); i++){
             assert(errorPages.at(i) == server.getErrorPage(i));
         }
         assert(errorPages.at(0) == "path1");
@@ -151,12 +151,12 @@ void test::FILES_TESTS(){
 
         assert(server.getBodySize() == 123456789);
 
-        const wsrv::configuration::Container<Route>& routes = server.getRoutes();
+        const MAIN_NAMESPACE::UTILS_NAMESPACE::Container<Route>& routes = server.getRoutes();
         assert(routes.size() == server.getRoutesCount());
         assert(routes.size() == 1);
 
         const Route& route = routes.back();
-        const wsrv::configuration::Container<Method>& methods = route.getMethods();
+        const MAIN_NAMESPACE::UTILS_NAMESPACE::Container<Method>& methods = route.getMethods();
         assert(methods.size() == route.getMethodsCount());
         assert(methods.size() == 3);
 
@@ -172,20 +172,20 @@ void test::FILES_TESTS(){
         wsrv::Parser parser;
         try {
             parser = wsrv::Parser::parseFile("ConfigFiles/valid/2.txt");
-        } catch (wsrv::configuration::Exception& e){
+        } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::Exception& e){
             std::cerr << e.what() << std::endl;
             assert(false);
         }
         const wsrv::configuration::Configuration& configuration = parser.getConfiguration();
 
-        const wsrv::configuration::Container<Server>& servers = configuration.getServers();
+        const MAIN_NAMESPACE::UTILS_NAMESPACE::Container<Server>& servers = configuration.getServers();
         assert(servers.size() == 1);
 
         const Server& server = servers.back();
         assert(server.getPort() == 8080);
         assert(server.getHost().toString() == "127.0.0.1");
 
-        const wsrv::configuration::Container<ErrorPage>& errorPages = server.getErrorPages();
+        const MAIN_NAMESPACE::UTILS_NAMESPACE::Container<ErrorPage>& errorPages = server.getErrorPages();
         assert(errorPages.size() == server.getErrorPagesCount());
         assert(errorPages.size() == 3);
         assert(errorPages.at(0) == "path1");
@@ -199,13 +199,13 @@ void test::FILES_TESTS(){
             assert(false);
         } catch (...) {}
 
-        const wsrv::configuration::Container<Route>& routes = server.getRoutes();
+        const MAIN_NAMESPACE::UTILS_NAMESPACE::Container<Route>& routes = server.getRoutes();
         assert(routes.size() == 2);
 
         // route 1
         {
             const Route& route1 = routes.at(0);
-            const wsrv::configuration::Container<Method>& methods = route1.getMethods();
+            const MAIN_NAMESPACE::UTILS_NAMESPACE::Container<Method>& methods = route1.getMethods();
             assert(methods.size() == 3);
             assert(route1.getRedirection() == "PATH1");
             assert(route1.getDirectory() == "PATH22");

@@ -1,6 +1,6 @@
 #include "../../include/configurations/utils.hpp"
 
-namespace configuration {
+namespace MAIN_NAMESPACE::CONFIG_NAMESPACE {
 
 
 }
