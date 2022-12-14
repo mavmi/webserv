@@ -20,10 +20,10 @@ MAIN_DEPEN	=	$(MAIN_SRC:.cpp=.d)
 
 SRCS		=	$(addprefix $(SRCS_UTILS_DIR)/, container.cpp exceptions.cpp utils.cpp wrapper.cpp)\
 					$(addprefix $(SRCS_CONFIG_DIR)/, configuration.cpp configuration_host.cpp parser.cpp route_configuration.cpp server_configuration.cpp utils.cpp)\
-					$(addprefix $(SRCS_HTTP_PARS_DIR)/,)
+					$(addprefix $(SRCS_HTTP_PARS_DIR)/, HttpRequest.cpp HttpRequestParser.cpp HtttRequestHeaders.cpp HtttRequestStatusLine.cpp utils.cpp)
 HDRS		=	$(addprefix $(HDRS_UTILS_DIR)/, container.hpp exceptions.hpp utils.hpp wrapper.hpp)\
 					$(addprefix $(HDRS_CONFIG_DIR)/, configuration_host.hpp	configuration.hpp parser.hpp route_configuration.hpp server_configuration.hpp utils.hpp)\
-					$(addprefix $(HDRS_HTTP_PARS_DIR)/,)
+					$(addprefix $(HDRS_HTTP_PARS_DIR)/, HttpRequest.hpp HttpRequestParser.hpp HtttRequestHeaders.hpp HtttRequestStatusLine.hpp utils.hpp)
 OBJS		=	$(SRCS:.cpp=.o)
 DEPEN		=	$(SRCS:.cpp=.d)
 
