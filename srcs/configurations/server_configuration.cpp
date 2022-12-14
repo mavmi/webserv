@@ -1,15 +1,31 @@
 #include "../../include/configurations/server_configuration.hpp"
 
-namespace wsrv::configuration {
+namespace MAIN_NAMESPACE::CONFIG_NAMESPACE {
+ServerException::ServerException(const char* msg) : Exception(msg){}
+ServerException::ServerException(const std::string& msg) : Exception(msg){}
+ServerException::ServerException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_) 
+    : Exception(msg, _file_, _function_, _line_) {}
+ServerException::ServerException(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_) 
+    : Exception(msg, _file_, _function_, _line_) {}
+ServerException::ServerException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_, int code)
+    : Exception(msg, _file_, _function_, _line_, code) {}
+ServerException::ServerException(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_, int code)
+    : Exception(msg, _file_, _function_, _line_, code) {}
+std::string ServerException::output_() const {
+    return "SERVER_EXCEPTION: " + msg_;
+}
+}
 
+
+namespace MAIN_NAMESPACE::CONFIG_NAMESPACE {
 ServerConfiguration::ServerConfiguration(){
     isDone_ = false;
-    port_ = Wrapper<PortType>();
-    host_ = Wrapper<HostType>();
-    serverName_ = Wrapper<ServerNameType>();
-    errorPages_ = Wrapper<ErrorPagesContainerType>();
+    port_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PortType>();
+    host_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<HostType>();
+    serverName_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ServerNameType>();
+    errorPages_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ErrorPagesContainerType>();
     bodySize_ = 0;
-    routes_ = Wrapper<RoutesContainerType>();
+    routes_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<RoutesContainerType>();
 }
 ServerConfiguration::ServerConfiguration(const ServerConfiguration& other){
     copyData_(other);
@@ -177,12 +193,12 @@ void ServerConfiguration::done(){
 
 void ServerConfiguration::deleteData_(){
     isDone_ = false;
-    port_ = Wrapper<PortType>();
-    host_ = Wrapper<HostType>();
-    serverName_ = Wrapper<ServerNameType>();
-    errorPages_ = Wrapper<ErrorPagesContainerType>();
+    port_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PortType>();
+    host_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<HostType>();
+    serverName_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ServerNameType>();
+    errorPages_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ErrorPagesContainerType>();
     bodySize_ = 0;
-    routes_ = Wrapper<RoutesContainerType>();
+    routes_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<RoutesContainerType>();
 }
 void ServerConfiguration::copyData_(const ServerConfiguration& other){
     isDone_ = other.isDone_;

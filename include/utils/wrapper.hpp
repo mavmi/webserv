@@ -3,7 +3,23 @@
 #include "utils.hpp"
 #include "exceptions.hpp"
 
-namespace wsrv::configuration{
+namespace MAIN_NAMESPACE::UTILS_NAMESPACE{
+
+class WrapperException : public Exception {
+public:
+    WrapperException(const char* msg);
+    WrapperException(const std::string& msg);
+
+    WrapperException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_);
+    WrapperException(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_);
+
+    WrapperException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_, int code);
+    WrapperException(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_, int code);
+
+protected:
+    std::string output_() const;
+
+};
 
 template <typename T>
 class Wrapper{

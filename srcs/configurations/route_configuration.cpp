@@ -1,18 +1,34 @@
 #include "../../include/configurations/route_configuration.hpp"
 
-namespace wsrv::configuration {
+namespace MAIN_NAMESPACE::CONFIG_NAMESPACE {
+RouteException::RouteException(const char* msg) : Exception(msg){}
+RouteException::RouteException(const std::string& msg) : Exception(msg){}
+RouteException::RouteException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_) 
+    : Exception(msg, _file_, _function_, _line_) {}
+RouteException::RouteException(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_) 
+    : Exception(msg, _file_, _function_, _line_) {}
+RouteException::RouteException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_, int code)
+    : Exception(msg, _file_, _function_, _line_, code) {}
+RouteException::RouteException(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_, int code)
+    : Exception(msg, _file_, _function_, _line_, code) {}
+std::string RouteException::output_() const {
+    return "ROUTE_EXCEPTION: " + msg_;
+}
+}
 
+
+namespace MAIN_NAMESPACE::CONFIG_NAMESPACE {
 RouteConfiguration::RouteConfiguration(){
     isDone_ = false;
-    methods_ = Wrapper<MethodsContainerType>();
-    redirection_ = Wrapper<PathType>();
-    directory_ = Wrapper<PathType>();
+    methods_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<MethodsContainerType>();
+    redirection_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType>();
+    directory_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType>();
     directory_listening_ = false;
-    default_if_directory_response_path_ = Wrapper<PathType>();
-    cgi_script_path_ = Wrapper<PathType>();
-    cgi_bin_path_ = Wrapper<PathType>();
+    default_if_directory_response_path_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType>();
+    cgi_script_path_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType>();
+    cgi_bin_path_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType>();
     saveFiles_ = false;
-    saveTo_ = Wrapper<PathType>();
+    saveTo_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType>();
 }
 RouteConfiguration::RouteConfiguration(const RouteConfiguration& other){
     copyData_(other);
@@ -199,15 +215,15 @@ void RouteConfiguration::done(){
 
 void RouteConfiguration::deleteData_(){
     isDone_ = false;
-    methods_ = Wrapper<MethodsContainerType>();
-    redirection_ = Wrapper<PathType>();
-    directory_ = Wrapper<PathType>();
+    methods_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<MethodsContainerType>();
+    redirection_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType>();
+    directory_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType>();
     directory_listening_ = false;
-    default_if_directory_response_path_ = Wrapper<PathType>();
-    cgi_script_path_ = Wrapper<PathType>();
-    cgi_bin_path_ = Wrapper<PathType>();
+    default_if_directory_response_path_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType>();
+    cgi_script_path_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType>();
+    cgi_bin_path_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType>();
     saveFiles_ = false;
-    saveTo_ = Wrapper<PathType>();
+    saveTo_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType>();
 }
 void RouteConfiguration::copyData_(const RouteConfiguration& other){
     isDone_ = other.isDone_;

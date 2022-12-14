@@ -1,6 +1,6 @@
 #include "../../include/configurations/parser.hpp"
 
-namespace wsrv{
+namespace MAIN_NAMESPACE{
 
 Parser::Parser(){}
 Parser::Parser(const std::string& inputFile){
