@@ -4,22 +4,26 @@ TEST_NAME	=	$(NAME)_test
 #######################
 ### WEBSERV SOURCES ###
 #######################
-HDRS_DIR		=	include
-HDRS_UTILS_DIR	=	$(HDRS_DIR)/utils
-HDRS_CONFIG_DIR	=	$(HDRS_DIR)/configurations
+HDRS_DIR			=	include
+HDRS_UTILS_DIR		=	$(HDRS_DIR)/utils
+HDRS_CONFIG_DIR		=	$(HDRS_DIR)/configurations
+HDRS_HTTP_PARS_DIR	=	$(HDRS_DIR)/http_request_parser
 
-SRCS_DIR		=	srcs
-SRCS_UTILS_DIR	=	$(SRCS_DIR)/utils
-SRCS_CONFIG_DIR	=	$(SRCS_DIR)/configurations
+SRCS_DIR			=	srcs
+SRCS_UTILS_DIR		=	$(SRCS_DIR)/utils
+SRCS_CONFIG_DIR		=	$(SRCS_DIR)/configurations
+SRCS_HTTP_PARS_DIR	=	$(SRCS_DIR)/http_request_parser
 
 MAIN_SRC	=	$(SRCS_DIR)/main.cpp
 MAIN_OBJ	=	$(MAIN_SRC:.cpp=.o)
 MAIN_DEPEN	=	$(MAIN_SRC:.cpp=.d)
 
 SRCS		=	$(addprefix $(SRCS_UTILS_DIR)/, container.cpp exceptions.cpp utils.cpp wrapper.cpp)\
-					$(addprefix $(SRCS_CONFIG_DIR)/, configuration.cpp configuration_host.cpp parser.cpp route_configuration.cpp server_configuration.cpp utils.cpp)
+					$(addprefix $(SRCS_CONFIG_DIR)/, configuration.cpp configuration_host.cpp parser.cpp route_configuration.cpp server_configuration.cpp utils.cpp)\
+					$(addprefix $(SRCS_HTTP_PARS_DIR)/,)
 HDRS		=	$(addprefix $(HDRS_UTILS_DIR)/, container.hpp exceptions.hpp utils.hpp wrapper.hpp)\
-					$(addprefix $(HDRS_CONFIG_DIR)/, configuration_host.hpp	configuration.hpp parser.hpp route_configuration.hpp server_configuration.hpp utils.hpp)
+					$(addprefix $(HDRS_CONFIG_DIR)/, configuration_host.hpp	configuration.hpp parser.hpp route_configuration.hpp server_configuration.hpp utils.hpp)\
+					$(addprefix $(HDRS_HTTP_PARS_DIR)/,)
 OBJS		=	$(SRCS:.cpp=.o)
 DEPEN		=	$(SRCS:.cpp=.d)
 
