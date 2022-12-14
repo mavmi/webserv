@@ -1,16 +1,29 @@
 #pragma once
 
 #include "utils.hpp"
-#include "wrapper.hpp"
-#include "container.hpp"
-#include "exceptions.hpp"
 
-namespace configuration {
+namespace MAIN_NAMESPACE::CONFIG_NAMESPACE {
 
 #define HANDLE_EXC_BEGIN    try {
-#define HANDLE_EXC_END      } catch (WrapperException& e){      \
-                                throw ExceptionType(e.what());  \
+#define HANDLE_EXC_END      } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::WrapperException& e){     \
+                                throw ExceptionType(e.what());              \
                             }
+
+class RouteException : public MAIN_NAMESPACE::UTILS_NAMESPACE::Exception {
+public:
+    RouteException(const char* msg);
+    RouteException(const std::string& msg);
+
+    RouteException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_);
+    RouteException(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_);
+
+    RouteException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_, int code);
+    RouteException(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_, int code);
+
+protected:
+    std::string output_() const;
+
+};
 
 // Contains information about server's route.
 // Any getter may throw RouteException if it's value is not set.
@@ -19,13 +32,13 @@ namespace configuration {
 class RouteConfiguration{
 friend Configuration;
 friend ServerConfiguration;
-friend Container<RouteConfiguration>;
+friend MAIN_NAMESPACE::UTILS_NAMESPACE::Container<RouteConfiguration>;
 public:
-    typedef size_t                      SizeType;
-    typedef int                         MethodType;
-    typedef Container<MethodType>       MethodsContainerType;
-    typedef std::string                 PathType;
-    typedef RouteException              ExceptionType;
+    typedef size_t                                                      SizeType;
+    typedef int                                                         MethodType;
+    typedef MAIN_NAMESPACE::UTILS_NAMESPACE::Container<MethodType>      MethodsContainerType;
+    typedef std::string                                                 PathType;
+    typedef RouteException                                              ExceptionType;
 
     ~RouteConfiguration();
 
@@ -73,15 +86,15 @@ public:
 
 private:
     bool isDone_;
-    Wrapper<MethodsContainerType> methods_;
-    Wrapper<PathType> redirection_;
-    Wrapper<PathType> directory_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<MethodsContainerType> methods_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType> redirection_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType> directory_;
     bool directory_listening_;
-    Wrapper<PathType> default_if_directory_response_path_;
-    Wrapper<PathType> cgi_script_path_;
-    Wrapper<PathType> cgi_bin_path_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType> default_if_directory_response_path_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType> cgi_script_path_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType> cgi_bin_path_;
     bool saveFiles_;
-    Wrapper<PathType> saveTo_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType> saveTo_;
 
     explicit RouteConfiguration();
     explicit RouteConfiguration(const RouteConfiguration& other);

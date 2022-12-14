@@ -1,5 +1,7 @@
-#include "../../include/utils.hpp"
+#include "../../include/utils/utils.hpp"
 
+
+namespace MAIN_NAMESPACE::UTILS_NAMESPACE{
 
 UtilsException::UtilsException(const char* msg) 
     : msg_(std::string(msg)){}
@@ -49,4 +51,6 @@ void utilsCheckArgsCount(int argc){
         utilsPrintMsg("configuration file required", ERROR);
         exit(1);
     }
+}
+
 }

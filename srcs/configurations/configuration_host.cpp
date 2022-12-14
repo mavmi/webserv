@@ -1,7 +1,23 @@
 #include "../../include/configurations/configuration_host.hpp"
 
-namespace configuration {
+namespace MAIN_NAMESPACE::CONFIG_NAMESPACE{
+ConfigurationHostException::ConfigurationHostException(const char* msg) : Exception(msg){}
+ConfigurationHostException::ConfigurationHostException(const std::string& msg) : Exception(msg){}
+ConfigurationHostException::ConfigurationHostException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_) 
+    : Exception(msg, _file_, _function_, _line_) {}
+ConfigurationHostException::ConfigurationHostException(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_) 
+    : Exception(msg, _file_, _function_, _line_) {}
+ConfigurationHostException::ConfigurationHostException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_, int code)
+    : Exception(msg, _file_, _function_, _line_, code) {}
+ConfigurationHostException::ConfigurationHostException(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_, int code)
+    : Exception(msg, _file_, _function_, _line_, code) {}
+std::string ConfigurationHostException::output_() const {
+    return "CONFIGURATION_HOST_EXCEPTION: " + msg_;
+}
+}
 
+
+namespace MAIN_NAMESPACE::CONFIG_NAMESPACE{
 ConfigurationHost::ConfigurationHost(){
     ip_[0] = 0;
     ip_[1] = 0;
@@ -101,16 +117,15 @@ void ConfigurationHost::set(ValueType value, SizeType position){
 }
 
 std::string ConfigurationHost::toString_(ValueType val) const {
-    return utilsNumToString<ValueType>(val);
+    return MAIN_NAMESPACE::UTILS_NAMESPACE::utilsNumToString<ValueType>(val);
 }
 
 ConfigurationHost::ValueType ConfigurationHost::stringToNumber_(const std::string& str) const {
     try {
-        if (str.size() > 3) throw UtilsException("Numeric value too long");
-        return utilsStringToNum<ValueType>(str);
-    } catch (UtilsException& e) {
+        if (str.size() > 3) throw MAIN_NAMESPACE::UTILS_NAMESPACE::UtilsException("Numeric value too long");
+        return MAIN_NAMESPACE::UTILS_NAMESPACE::utilsStringToNum<ValueType>(str);
+    } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::UtilsException& e) {
         throw ConfigurationHostException(e.what(), EXC_ARGS);
     }
 }
-
 } 

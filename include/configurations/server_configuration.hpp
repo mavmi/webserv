@@ -1,20 +1,33 @@
 #pragma once
 
 #include "utils.hpp"
-#include "wrapper.hpp"
-#include "container.hpp"
-#include "exceptions.hpp"
 #include "configuration_host.hpp"
 #include "route_configuration.hpp"
 
-namespace configuration {
+namespace MAIN_NAMESPACE::CONFIG_NAMESPACE {
 
 #define HANDLE_EXC_BEGIN    try {
-#define HANDLE_EXC_END      } catch (WrapperException& e){      \
-                                throw ExceptionType(e.what());  \
+#define HANDLE_EXC_END      } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::WrapperException& e){ \
+                                throw ExceptionType(e.what());          \
                             }
 
 class Configuration;
+
+class ServerException : public MAIN_NAMESPACE::UTILS_NAMESPACE::Exception {
+public:
+    ServerException(const char* msg);
+    ServerException(const std::string& msg);
+
+    ServerException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_);
+    ServerException(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_);
+
+    ServerException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_, int code);
+    ServerException(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_, int code);
+
+protected:
+    std::string output_() const;
+
+};
 
 // Contains information about server.
 // Any getter may throw ServerException if it's value is not set.
@@ -22,18 +35,18 @@ class Configuration;
 // Method [done()] marks the server as finished. May throw an exception.
 class ServerConfiguration{
 friend Configuration;
-friend Container<ServerConfiguration>;
+friend MAIN_NAMESPACE::UTILS_NAMESPACE::Container<ServerConfiguration>;
 public:
-    typedef size_t                          SizeType;
-    typedef uint16_t                        PortType;
-    typedef ConfigurationHost               HostType;
-    typedef std::string                     ServerNameType;
-    typedef std::string                     ErrorPageType;
-    typedef Container<ErrorPageType>        ErrorPagesContainerType;
-    typedef SizeType                        BodySizeType;
-    typedef RouteConfiguration              RouteType;
-    typedef Container<RouteType>            RoutesContainerType;
-    typedef ServerException                 ExceptionType;
+    typedef size_t                                                          SizeType;
+    typedef uint16_t                                                        PortType;
+    typedef ConfigurationHost                                               HostType;
+    typedef std::string                                                     ServerNameType;
+    typedef std::string                                                     ErrorPageType;
+    typedef MAIN_NAMESPACE::UTILS_NAMESPACE::Container<ErrorPageType>       ErrorPagesContainerType;
+    typedef SizeType                                                        BodySizeType;
+    typedef RouteConfiguration                                              RouteType;
+    typedef MAIN_NAMESPACE::UTILS_NAMESPACE::Container<RouteType>           RoutesContainerType;
+    typedef ServerException                                                 ExceptionType;
 
     ~ServerConfiguration();
 
@@ -74,12 +87,12 @@ public:
 
 private:
     bool isDone_;
-    Wrapper<PortType> port_;
-    Wrapper<HostType> host_;
-    Wrapper<ServerNameType> serverName_;
-    Wrapper<ErrorPagesContainerType> errorPages_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PortType> port_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<HostType> host_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ServerNameType> serverName_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ErrorPagesContainerType> errorPages_;
     BodySizeType bodySize_;
-    Wrapper<RoutesContainerType> routes_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<RoutesContainerType> routes_;
 
     explicit ServerConfiguration();
     explicit ServerConfiguration(const ServerConfiguration& other);

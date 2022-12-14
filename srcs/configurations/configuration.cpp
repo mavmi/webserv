@@ -1,7 +1,23 @@
 #include "../../include/configurations/configuration.hpp"
 
-namespace configuration {
+namespace MAIN_NAMESPACE::CONFIG_NAMESPACE{
+ConfigurationException::ConfigurationException(const char* msg) : Exception(msg){}
+ConfigurationException::ConfigurationException(const std::string& msg) : Exception(msg){}
+ConfigurationException::ConfigurationException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_) 
+    : Exception(msg, _file_, _function_, _line_) {}
+ConfigurationException::ConfigurationException(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_) 
+    : Exception(msg, _file_, _function_, _line_) {}
+ConfigurationException::ConfigurationException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_, int code)
+    : Exception(msg, _file_, _function_, _line_, code) {}
+ConfigurationException::ConfigurationException(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_, int code)
+    : Exception(msg, _file_, _function_, _line_, code) {}
+std::string ConfigurationException::output_() const {
+    return "CONFIGURATION_EXCEPTION: " + msg_;
+}
+}
 
+
+namespace MAIN_NAMESPACE::CONFIG_NAMESPACE{
 Configuration::Configuration(){
     servers_ = ServersContainerType();
     hostPortPairs_ = HostPortPairsContainerType();
@@ -54,6 +70,9 @@ const Configuration::ServerType& Configuration::getServer(ServerType::PortType p
     throw ExceptionType("No server with such port and host", EXC_ARGS);
 }
 
+Configuration::ServersContainerType::SizeType Configuration::getServersCount() const {
+    return servers_.size();
+}
 const Configuration::HostPortPairsContainerType& Configuration::getHostPortPairs() const{
     return hostPortPairs_;
 }
@@ -77,11 +96,11 @@ void Configuration::parseFile(const std::string& inputFile){
 
                 try {
                     ServerType& lastServer = getLastServer_();
-                    if (!lastServer.isDone()) throw Exception("Unable to start server: the previous one is not done", EXC_ARGS);
+                    if (!lastServer.isDone()) throw MAIN_NAMESPACE::UTILS_NAMESPACE::Exception("Unable to start server: the previous one is not done", EXC_ARGS);
                     servers_.push_back(ServerType());
                 } catch (ExceptionType&){
                     servers_.push_back(ServerType());
-                } catch (Exception&){
+                } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::Exception&){
                     throw;
                 }
 
@@ -89,15 +108,15 @@ void Configuration::parseFile(const std::string& inputFile){
 
                 try {
                     ServerType& lastServer = getLastServer_();
-                    if (lastServer.isDone()) throw Exception("Unable to finish server: it is already finished", EXC_ARGS);
-                    if (!getLastRoute_().isDone()) throw Exception("Unable to finish server: it contains unfinished route", EXC_ARGS);
+                    if (lastServer.isDone()) throw MAIN_NAMESPACE::UTILS_NAMESPACE::Exception("Unable to finish server: it is already finished", EXC_ARGS);
+                    if (!getLastRoute_().isDone()) throw MAIN_NAMESPACE::UTILS_NAMESPACE::Exception("Unable to finish server: it contains unfinished route", EXC_ARGS);
                     lastServer.done();
                     hostPortPairs_.insert(std::make_pair(lastServer.getHost(), lastServer.getPort()));
                 } catch (ServerException&){
                     getLastServer_().done();
                 } catch (ExceptionType&){
                     throw;
-                } catch (Exception&){
+                } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::Exception&){
                     throw;
                 }
 
@@ -105,14 +124,14 @@ void Configuration::parseFile(const std::string& inputFile){
 
                 try {
                     ServerType& lastServer = getLastServer_();
-                    if (lastServer.isDone()) throw Exception("Unable to start route: there are no unfinished servers to contain one", EXC_ARGS);
-                    if (!getLastRoute_().isDone()) throw Exception("Unable to start route: there is unfinished one", EXC_ARGS);
+                    if (lastServer.isDone()) throw MAIN_NAMESPACE::UTILS_NAMESPACE::Exception("Unable to start route: there are no unfinished servers to contain one", EXC_ARGS);
+                    if (!getLastRoute_().isDone()) throw MAIN_NAMESPACE::UTILS_NAMESPACE::Exception("Unable to start route: there is unfinished one", EXC_ARGS);
                     lastServer.addRoute(ServerType::RouteType());
                 } catch (ServerException&){
                     getLastServer_().addRoute(ServerType::RouteType());
                 } catch (ExceptionType&){
                     throw;
-                } catch (Exception&){
+                } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::Exception&){
                     throw;
                 }
 
@@ -120,14 +139,14 @@ void Configuration::parseFile(const std::string& inputFile){
 
                 try {
                     ServerType& lastServer = getLastServer_();
-                    if (lastServer.isDone()) throw Exception("Unable to finish route: there are no unfinished servers to contain one", EXC_ARGS);
-                    if (getLastRoute_().isDone()) throw Exception("Unable to finish route: there are no non-finished routes", EXC_ARGS);
+                    if (lastServer.isDone()) throw MAIN_NAMESPACE::UTILS_NAMESPACE::Exception("Unable to finish route: there are no unfinished servers to contain one", EXC_ARGS);
+                    if (getLastRoute_().isDone()) throw MAIN_NAMESPACE::UTILS_NAMESPACE::Exception("Unable to finish route: there are no non-finished routes", EXC_ARGS);
                     getLastRoute_().done();
                 } catch (ServerException&){
                     throw;
                 } catch (ExceptionType&){
                     throw;
-                } catch (Exception&){
+                } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::Exception&){
                     throw;
                 }
 
@@ -299,5 +318,4 @@ void Configuration::deleteData_(){
     servers_ = ServersContainerType();
     hostPortPairs_ = HostPortPairsContainerType();
 }
-
 }

@@ -1,11 +1,26 @@
 #pragma once
 
 #include "utils.hpp"
-#include "container.hpp"
-#include "exceptions.hpp"
 #include "server_configuration.hpp"
 
-namespace configuration {
+namespace MAIN_NAMESPACE::CONFIG_NAMESPACE {
+
+class ConfigurationException : public MAIN_NAMESPACE::UTILS_NAMESPACE::Exception {
+public:
+    ConfigurationException(const char* msg);
+    ConfigurationException(const std::string& msg);
+
+    ConfigurationException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_);
+    ConfigurationException(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_);
+
+    ConfigurationException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_, int code);
+    ConfigurationException(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_, int code);
+
+protected:
+    virtual std::string output_() const;
+
+};
+
 
 // This class contains all info from
 // configuration file
@@ -13,7 +28,7 @@ class Configuration{
 friend Parser;
 public:
     typedef ServerConfiguration                                                                 ServerType;
-    typedef Container<ServerType>                                                               ServersContainerType;
+    typedef MAIN_NAMESPACE::UTILS_NAMESPACE::Container<ServerType>                              ServersContainerType;
     typedef ConfigurationException                                                              ExceptionType;
     typedef std::pair<const ServerType::HostType, const ServerType::PortType>                   HostPortPairType;
     typedef std::set<HostPortPairType>                                                          HostPortPairsContainerType;
@@ -30,6 +45,7 @@ public:
     const ServerType& getServer(const ServerType::HostType& host) const;
     const ServerType& getServer(ServerType::PortType port, const ServerType::HostType& host) const;
 
+    ServersContainerType::SizeType getServersCount() const;
     const HostPortPairsContainerType& getHostPortPairs() const;
 
 private:
@@ -61,8 +77,8 @@ private:
     template <typename ReturnType>
     ReturnType stringToNumber_(const std::string& str) const {
         try {
-            return utilsStringToNum<ReturnType>(str);
-        } catch (UtilsException& e) {
+            return MAIN_NAMESPACE::UTILS_NAMESPACE::utilsStringToNum<ReturnType>(str);
+        } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::UtilsException& e) {
             throw ExceptionType(e.what(), EXC_ARGS);
         }
     }

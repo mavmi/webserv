@@ -12,23 +12,22 @@
 #include <typeinfo>
 #include <algorithm>
 
-#include "../utils.hpp"
+#include "../utils/utils.hpp"
+#include "../utils/wrapper.hpp"
+#include "../utils/container.hpp"
+#include "../utils/exceptions.hpp"
+
+namespace MAIN_NAMESPACE{
 
 class Parser;
-namespace configuration {
 
-template <typename T> class Wrapper;
+namespace CONFIG_NAMESPACE {
 class Configuration;
 class ServerConfiguration;
 class RouteConfiguration;
-template <typename T> class Container;
+} // namespace configuration
 
-}
-
-
-
-namespace configuration {
-
+namespace CONFIG_NAMESPACE {
 enum CONFIG_ELEM{
     PORT,
     HOST,
@@ -49,5 +48,6 @@ enum HTTP_METHOD{
     POST,
     DELETE
 };
+} // namespace configuration
 
-}
+} // namespace wsrv

@@ -1,9 +1,25 @@
 #pragma once
 
 #include "utils.hpp"
-#include "exceptions.hpp"
 
-namespace configuration {
+namespace MAIN_NAMESPACE::CONFIG_NAMESPACE {
+
+class ConfigurationHostException : public MAIN_NAMESPACE::UTILS_NAMESPACE::Exception {
+public:
+    ConfigurationHostException(const char* msg);
+    ConfigurationHostException(const std::string& msg);
+
+    ConfigurationHostException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_);
+    ConfigurationHostException(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_);
+
+    ConfigurationHostException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_, int code);
+    ConfigurationHostException(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_, int code);
+
+protected:
+    virtual std::string output_() const;
+
+};
+
 
 // This class contains IP address.
 // Some of it's methods may throw ConfigurationHostException on error.

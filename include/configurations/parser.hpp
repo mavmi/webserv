@@ -3,6 +3,8 @@
 #include "utils.hpp"
 #include "configuration.hpp"
 
+namespace MAIN_NAMESPACE{
+
 class Parser{
 public:
     Parser();
@@ -12,12 +14,14 @@ public:
     ~Parser();
 
     Parser& operator=(const Parser& other);
-    const configuration::Configuration& operator->();
+    const CONFIG_NAMESPACE::Configuration& operator->();
 
     static Parser parseFile(const std::string& inputFile);
-    const configuration::Configuration& getConfiguration() const;
+    const CONFIG_NAMESPACE::Configuration& getConfiguration() const;
 
 private:
-    configuration::Configuration configuration_;
+    CONFIG_NAMESPACE::Configuration configuration_;
 
 };
+
+}
