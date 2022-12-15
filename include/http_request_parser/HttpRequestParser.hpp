@@ -35,7 +35,7 @@ public:
 
     ~HttpRequestParser();
 
-    void parseHttpRequest(const BufferContainerType& buffer);
+    void parseHttpRequest(const BufferContainerType& buffer, int bufferSize, int lastSize);
 
     void clear();
 
@@ -47,6 +47,9 @@ private:
     HttpRequestParser(const HttpRequestParser& other);
 
     HttpRequestParser& operator=(const HttpRequestParser& other);
+
+    int find_(char* arr, int startPoint, int size, char c);
+    void parseBuffer_(const BufferContainerType& buffer, int bufferSize, int lastSize);
 
 };
 
