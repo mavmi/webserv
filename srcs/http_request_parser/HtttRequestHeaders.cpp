@@ -21,15 +21,31 @@ namespace MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE{
 HttpRequestHeaders::HttpRequestHeaders(){
 
 }
-HttpRequestHeaders::HttpRequestHeaders(const HttpRequestHeaders& other){
-    (void)other;
+HttpRequestHeaders::HttpRequestHeaders(const HttpRequestHeaders& other)
+    : ParserAbstractParent(other), HttpHeadersAbstractParent(other) {
+    copyData_(other);
 }
 HttpRequestHeaders::~HttpRequestHeaders(){
-
+    deleteData_();
 }
 
 HttpRequestHeaders& HttpRequestHeaders::operator=(const HttpRequestHeaders& other){
-    (void)other;
+    deleteData_();
+    copyData_(other);
     return *this;
+}
+
+void HttpRequestHeaders::deleteData_(){
+
+}
+void HttpRequestHeaders::copyData_(const ParserAbstractParent& o){
+    const HttpRequestHeaders& other = dynamic_cast<const HttpRequestHeaders&>(o);
+    (void)other;
+}
+void HttpRequestHeaders::checkValidity_() const{
+
+}
+void HttpRequestHeaders::throwOnDone_() const{
+    if (isDone_) throw ExceptionType("Request headers are done. You cannot change it anymore");
 }
 }

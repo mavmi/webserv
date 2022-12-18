@@ -22,6 +22,7 @@ HttpRequestParser::HttpRequestParser(){
 
 }
 HttpRequestParser::HttpRequestParser(const HttpRequestParser& other){
+    httpGeneralHeaders_ = other.httpGeneralHeaders_;
     httpRequestHeaders_ = other.httpRequestHeaders_;
     httpRequestStatusLine_ = other.httpRequestStatusLine_;
 }
@@ -30,6 +31,7 @@ HttpRequestParser::~HttpRequestParser(){
 }
 
 HttpRequestParser& HttpRequestParser::operator=(const HttpRequestParser& other){
+    httpGeneralHeaders_ = other.httpGeneralHeaders_;
     httpRequestHeaders_ = other.httpRequestHeaders_;
     httpRequestStatusLine_ = other.httpRequestStatusLine_;
     return *this;
@@ -40,6 +42,7 @@ void HttpRequestParser::parseHttpRequest(const HttpRequestParser::BufferContaine
     parseStatusLine(content.at(0));
 }
 void HttpRequestParser::clear(){
+    httpGeneralHeaders_ = HttpGeneralHeaders();
     httpRequestHeaders_ = HttpRequestHeaders();
     httpRequestStatusLine_ = HttpRequestStatusLine();
 }

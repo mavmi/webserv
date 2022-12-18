@@ -5,6 +5,7 @@
 #include <stddef.h>
 
 #include "utils.hpp"
+#include "HttpGeneralHeaders.hpp"
 #include "HtttRequestHeaders.hpp"
 #include "HtttRequestStatusLine.hpp"
 
@@ -44,6 +45,7 @@ public:
     const HttpRequestStatusLine& getStatusLine() const;
 
 private:
+    HttpGeneralHeaders httpGeneralHeaders_;
     HttpRequestHeaders httpRequestHeaders_;
     HttpRequestStatusLine httpRequestStatusLine_;
 
