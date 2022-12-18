@@ -61,7 +61,7 @@ void RouteConfiguration::operator delete[](void* ptr){
 }
 
 void RouteConfiguration::setMethods(const MethodsContainerType& methods){
-    throwOnDone();
+    throwOnDone_();
     methods_.set(methods);
 }
 RouteConfiguration::MethodsContainerType& RouteConfiguration::getMethods(){
@@ -75,7 +75,7 @@ const RouteConfiguration::MethodsContainerType& RouteConfiguration::getMethods()
     HANDLE_EXC_END
 }
 void RouteConfiguration::setMethod(const MethodType& method, SizeType position){
-    throwOnDone();
+    throwOnDone_();
     methods_.get().at(position) = method;
 }
 RouteConfiguration::MethodType& RouteConfiguration::getMethod(SizeType position){
@@ -89,7 +89,7 @@ const RouteConfiguration::MethodType& RouteConfiguration::getMethod(SizeType pos
     HANDLE_EXC_END
 }
 void RouteConfiguration::addMethod(const MethodType& method){
-    throwOnDone();
+    throwOnDone_();
     if (!methods_.isSet()) methods_.set(MethodsContainerType());
     methods_.get().push_back(method);
 }
@@ -100,7 +100,7 @@ RouteConfiguration::SizeType RouteConfiguration::getMethodsCount() const{
 }
 
 void RouteConfiguration::setRedirection(const PathType& redirection){
-    throwOnDone();
+    throwOnDone_();
     redirection_.set(redirection);
 }
 RouteConfiguration::PathType& RouteConfiguration::getRedirection(){
@@ -115,7 +115,7 @@ const RouteConfiguration::PathType& RouteConfiguration::getRedirection() const{
 }
 
 void RouteConfiguration::setDirectory(const PathType& directory){
-    throwOnDone();
+    throwOnDone_();
     directory_.set(directory);
 }
 RouteConfiguration::PathType& RouteConfiguration::getDirectory(){
@@ -130,7 +130,7 @@ const RouteConfiguration::PathType& RouteConfiguration::getDirectory() const{
 }
 
 void RouteConfiguration::setDirectoryListening(bool directoryListening){
-    throwOnDone();
+    throwOnDone_();
     directory_listening_ = directoryListening;
 }
 bool RouteConfiguration::getDirectoryListening() const{
@@ -138,7 +138,7 @@ bool RouteConfiguration::getDirectoryListening() const{
 }
 
 void RouteConfiguration::setDefaultIfDirectoryResponse(const PathType& default_if_directory_response_path){
-    throwOnDone();
+    throwOnDone_();
     default_if_directory_response_path_.set(default_if_directory_response_path);
 }
 RouteConfiguration::PathType& RouteConfiguration::getDefaultIfDirectoryResponse(){
@@ -153,7 +153,7 @@ const RouteConfiguration::PathType& RouteConfiguration::getDefaultIfDirectoryRes
 }
 
 void RouteConfiguration::setCgiScriptPath(const PathType& cgi_script_path){
-    throwOnDone();
+    throwOnDone_();
     cgi_script_path_.set(cgi_script_path);
 }
 RouteConfiguration::PathType& RouteConfiguration::getCgiScriptPath(){
@@ -168,7 +168,7 @@ const RouteConfiguration::PathType& RouteConfiguration::getCgiScriptPath() const
 }
 
 void RouteConfiguration::setCgiBinPath(const PathType& cgi_bin_path){
-    throwOnDone();
+    throwOnDone_();
     cgi_bin_path_.set(cgi_bin_path);
 }
 RouteConfiguration::PathType& RouteConfiguration::getCgiBinPath(){
@@ -183,7 +183,7 @@ const RouteConfiguration::PathType& RouteConfiguration::getCgiBinPath() const{
 }
 
 void RouteConfiguration::setSaveFiles(bool saveFiles){
-    throwOnDone();
+    throwOnDone_();
     saveFiles_ = saveFiles;
 }
 bool RouteConfiguration::getSaveFiles() const{
@@ -191,7 +191,7 @@ bool RouteConfiguration::getSaveFiles() const{
 }
 
 void RouteConfiguration::setSaveTo(const PathType& saveTo){
-    throwOnDone();
+    throwOnDone_();
     saveTo_.set(saveTo);
 }
 RouteConfiguration::PathType& RouteConfiguration::getSaveTo(){
@@ -203,14 +203,6 @@ const RouteConfiguration::PathType& RouteConfiguration::getSaveTo() const{
     HANDLE_EXC_BEGIN
         return saveTo_.get();
     HANDLE_EXC_END
-}
-
-bool RouteConfiguration::isDone() const{
-    return isDone_;
-}
-void RouteConfiguration::done(){
-    checkValidity_();
-    isDone_ = true;
 }
 
 void RouteConfiguration::deleteData_(){
@@ -225,7 +217,9 @@ void RouteConfiguration::deleteData_(){
     saveFiles_ = false;
     saveTo_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType>();
 }
-void RouteConfiguration::copyData_(const RouteConfiguration& other){
+void RouteConfiguration::copyData_(const MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent& o){
+    const RouteConfiguration& other = dynamic_cast<const RouteConfiguration&>(o);
+    
     isDone_ = other.isDone_;
     methods_ = other.methods_;
     redirection_ = other.redirection_;
@@ -245,7 +239,7 @@ void RouteConfiguration::checkValidity_() const{
     if (saveFiles_ && !saveTo_.isSet()) throw ExceptionType("Path for uploading files is not set up", EXC_ARGS);
     if (cgi_script_path_.isSet() && !cgi_bin_path_.isSet()) throw ExceptionType("CGI bin is not set for CGI script", EXC_ARGS);
 }
-void RouteConfiguration::throwOnDone() const{
+void RouteConfiguration::throwOnDone_() const{
     if (isDone_) throw ExceptionType("Route is done. You cannot change it anymore.", EXC_ARGS);
 }
 

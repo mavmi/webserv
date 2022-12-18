@@ -39,7 +39,6 @@ friend MAIN_NAMESPACE::CONFIG_NAMESPACE::ServerConfiguration;
 friend MAIN_NAMESPACE::CONFIG_NAMESPACE::RouteConfiguration;
 friend Wrapper<Container>;
 public:
-    typedef std::vector<T>                                  InnerContainerType;
     typedef size_t                                          SizeType;
     typedef size_t                                          DifferenceType;
     typedef T                                               ValueType;

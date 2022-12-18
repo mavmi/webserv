@@ -110,7 +110,7 @@ void test::CONFIGURATION_HOST_TESTS(){
     }
 }
 
-void test::FILES_TESTS(){
+void test::CONFIGURATION_FILES_TESTS(){
     ___HEADER___
 
     typedef wsrv::configuration::Configuration::ServerType                                    Server;
@@ -472,7 +472,61 @@ void test::FILES_TESTS(){
     }*/
 }
 
+void test::HTTP_REQUEST_FILE_TEST(){
+    ___HEADER___
+
+    const int bufferSize = 8;
+    int lastSize;
+    std::vector<char*> content;
+    
+    // read http request file
+    {
+
+        int fileFd = open("/home/username/Desktop/webserv/test/httpRequest.txt", O_RDONLY);
+        if (fileFd == -1){
+            std::cerr << "Cannot open file" << std::endl;
+            exit(1);
+        }
+
+        while(true){
+            char* buffer = (char*)malloc(bufferSize * sizeof(char));
+            int readCount = read(fileFd, buffer, bufferSize);
+            content.push_back(buffer);
+            if (readCount < bufferSize){
+                lastSize = readCount;
+                break;
+            }
+        }
+
+        std::cout << test_utils::getColor(test_utils::CYAN) << "\n\tHTTP request file content:" << std::endl;
+        std::cout << "\t==========================" << std::endl;
+        for (size_t i = 0; i < content.size(); i++){
+            for (int j = 0; j < (i + 1 == content.size() ? lastSize : bufferSize); j++){
+                std::cout << content[i][j];
+            }
+        }
+        std::cout << "\n\t==========================\n" << test_utils::getColor(test_utils::DEFAULT) << std::endl;
+    }
+
+    try{
+        wsrv::HttpRequest httpRequest = wsrv::HttpRequest::parseHttpRequest(content, bufferSize, lastSize);
+        const wsrv::http_request::HttpRequestStatusLine& statusLine = httpRequest.getHttpRequest().getStatusLine();
+        assert(test_utils::areDoublesEqual(statusLine.getHttpVersion(), 1.2345));
+        assert(statusLine.getMethod() == wsrv::http_request::HttpRequestStatusLine::POST);
+        assert(statusLine.getUrl() == "/cgi-bin/process.cgi");
+    } catch (wsrv::utils::Exception& e){
+        std::cout << e.what() << std::endl;
+        assert(false);
+    }
+
+    // free malloced http content
+    {
+        for (size_t i = 0; i < content.size(); i++) free(content[i]);
+    }
+}
+
 void RUN_ALL_TESTS(){
     test::CONFIGURATION_HOST_TESTS();
-    test::FILES_TESTS();
+    test::CONFIGURATION_FILES_TESTS();
+    test::HTTP_REQUEST_FILE_TEST();
 }

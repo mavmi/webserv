@@ -4,11 +4,6 @@
 
 namespace MAIN_NAMESPACE::CONFIG_NAMESPACE {
 
-#define HANDLE_EXC_BEGIN    try {
-#define HANDLE_EXC_END      } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::WrapperException& e){     \
-                                throw ExceptionType(e.what());              \
-                            }
-
 class RouteException : public MAIN_NAMESPACE::UTILS_NAMESPACE::Exception {
 public:
     RouteException(const char* msg);
@@ -29,7 +24,7 @@ protected:
 // Any getter may throw RouteException if it's value is not set.
 // Use methods [isDone()] to check if the route is finished or not.
 // Method [done()] marks the route as finished. May throw an exception.
-class RouteConfiguration{
+class RouteConfiguration : public MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent{
 friend Configuration;
 friend ServerConfiguration;
 friend MAIN_NAMESPACE::UTILS_NAMESPACE::Container<RouteConfiguration>;
@@ -81,11 +76,7 @@ public:
     PathType& getSaveTo();
     const PathType& getSaveTo() const;
 
-    bool isDone() const;
-    void done();
-
 private:
-    bool isDone_;
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<MethodsContainerType> methods_;
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType> redirection_;
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType> directory_;
@@ -107,9 +98,9 @@ private:
     static void operator delete[](void* ptr);
 
     void deleteData_();
-    void copyData_(const RouteConfiguration& other);
+    void copyData_(const MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent& o);
     void checkValidity_() const;
-    void throwOnDone() const;
+    void throwOnDone_() const;
 
 };
 

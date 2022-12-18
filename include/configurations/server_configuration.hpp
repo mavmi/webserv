@@ -6,11 +6,6 @@
 
 namespace MAIN_NAMESPACE::CONFIG_NAMESPACE {
 
-#define HANDLE_EXC_BEGIN    try {
-#define HANDLE_EXC_END      } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::WrapperException& e){ \
-                                throw ExceptionType(e.what());          \
-                            }
-
 class Configuration;
 
 class ServerException : public MAIN_NAMESPACE::UTILS_NAMESPACE::Exception {
@@ -33,7 +28,7 @@ protected:
 // Any getter may throw ServerException if it's value is not set.
 // Use methods [isDone()] to check if the server is finished or not.
 // Method [done()] marks the server as finished. May throw an exception.
-class ServerConfiguration{
+class ServerConfiguration : public MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent{
 friend Configuration;
 friend MAIN_NAMESPACE::UTILS_NAMESPACE::Container<ServerConfiguration>;
 public:
@@ -82,11 +77,7 @@ public:
     void addRoute(const RouteType& route);
     SizeType getRoutesCount() const;
 
-    bool isDone() const;
-    void done();
-
 private:
-    bool isDone_;
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PortType> port_;
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<HostType> host_;
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ServerNameType> serverName_;
@@ -105,9 +96,9 @@ private:
     static void operator delete[](void* ptr);
 
     void deleteData_();
-    void copyData_(const ServerConfiguration& other);
+    void copyData_(const MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent& o);
     void checkValidity_() const;
-    void throwOnDone() const;
+    void throwOnDone_() const;
 
 };
 
