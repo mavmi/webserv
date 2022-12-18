@@ -70,6 +70,15 @@ re:			fclean all
 test:		$(OBJS) $(TEST_OBJS) $(TEST_MAIN_OBJ)
 			$(GCC) $(OBJS) $(TEST_OBJS) $(TEST_MAIN_OBJ) -o $(TEST_NAME)
 
+doNotForgetToDelete:
+			$(eval wsrv_dir:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST)))))
+
+			@echo '\033[0;31m' &&\
+				grep -r --include "*.hpp" --include "*.cpp"\
+					'[Н,н][Е,е]\s*[З,з][А,а][Б,б][Ы,ы][Т,т][Ь,ь]\s*[У,у][Д,д][А,а][Л,л][И,и][Т,т][Ь,ь]'\
+				$(wsrv_dir);\
+				echo '\033[0m'
+			
 -include $(DEPEN)
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re test doNotForgetToDelete
