@@ -98,7 +98,7 @@ private:
     static void operator delete[](void* ptr);
 
     void deleteData_();
-    void copyData_(const RouteConfiguration& other);
+    void copyData_(const MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent& o);
     void checkValidity_() const;
     void throwOnDone_() const;
 

@@ -27,6 +27,7 @@ public:
     typedef WrapperException    ExceptionType;
 
     Wrapper(){
+        value_ = T();
         isSet_ = false;
     }
     Wrapper(const Wrapper& other)

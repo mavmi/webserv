@@ -22,20 +22,15 @@ HttpRequestStatusLine::HttpRequestStatusLine(){
     isDone_ = false;
 }
 HttpRequestStatusLine::HttpRequestStatusLine(const HttpRequestStatusLine& other){
-    isDone_ = other.isDone_;
-    method_ = other.method_;
-    url_ = other.url_;
-    httpVersion_ = other.httpVersion_;
+    copyData_(other);
 }
 HttpRequestStatusLine::~HttpRequestStatusLine(){
-
+    deleteData_();
 }
 
 HttpRequestStatusLine& HttpRequestStatusLine::operator=(const HttpRequestStatusLine& other){
-    isDone_ = other.isDone_;
-    method_ = other.method_;
-    url_ = other.url_;
-    httpVersion_ = other.httpVersion_;
+    deleteData_();
+    copyData_(other);
     return *this;    
 }
 
@@ -84,6 +79,20 @@ const HttpRequestStatusLine::HTTP_VERSION_TYPE& HttpRequestStatusLine::getHttpVe
     HANDLE_EXC_END
 }
 
+void HttpRequestStatusLine::deleteData_(){
+    isDone_ = false;
+    method_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<METHOD>();
+    url_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<URL_TYPE>();
+    httpVersion_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<HTTP_VERSION_TYPE>();
+}
+void HttpRequestStatusLine::copyData_(const MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent& o){
+    const HttpRequestStatusLine& other = dynamic_cast<const HttpRequestStatusLine&>(o);
+
+    isDone_ = other.isDone_;
+    method_ = other.method_;
+    url_ = other.url_;
+    httpVersion_ = other.httpVersion_;
+}
 void HttpRequestStatusLine::checkValidity_() const{
     if (!method_.isSet()) throw ExceptionType("Method is not set up", EXC_ARGS);
     if (!url_.isSet()) throw ExceptionType("URL is not set up", EXC_ARGS);

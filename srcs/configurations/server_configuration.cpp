@@ -192,7 +192,9 @@ void ServerConfiguration::deleteData_(){
     bodySize_ = 0;
     routes_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<RoutesContainerType>();
 }
-void ServerConfiguration::copyData_(const ServerConfiguration& other){
+void ServerConfiguration::copyData_(const MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent& o){
+    const ServerConfiguration& other = dynamic_cast<const ServerConfiguration&>(o);
+
     isDone_ = other.isDone_;
     port_ = other.port_;
     host_ = other.host_;

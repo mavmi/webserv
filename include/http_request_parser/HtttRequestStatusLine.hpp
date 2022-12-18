@@ -58,6 +58,8 @@ private:
 
     HttpRequestStatusLine& operator=(const HttpRequestStatusLine& other);
 
+    void deleteData_();
+    void copyData_(const MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent& other);
     void checkValidity_() const;
     void throwOnDone_() const;
 

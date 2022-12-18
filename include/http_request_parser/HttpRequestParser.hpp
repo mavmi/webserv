@@ -52,7 +52,7 @@ private:
 
     HttpRequestParser& operator=(const HttpRequestParser& other);
 
-    std::vector<std::string> split_(const std::string& str, char delimiter);
+    std::vector<std::string> split_(const std::string& str  , char delimiter);
     int find_(char* arr, int startPoint, int size, char c);
 
     std::vector<std::string> parseBuffer_(const BufferContainerType& buffer, int bufferSize, int lastSize);

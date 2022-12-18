@@ -519,7 +519,6 @@ void test::HTTP_REQUEST_FILE_TEST(){
         assert(false);
     }
 
-
     // free malloced http content
     {
         for (size_t i = 0; i < content.size(); i++) free(content[i]);

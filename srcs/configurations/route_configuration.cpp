@@ -217,7 +217,9 @@ void RouteConfiguration::deleteData_(){
     saveFiles_ = false;
     saveTo_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType>();
 }
-void RouteConfiguration::copyData_(const RouteConfiguration& other){
+void RouteConfiguration::copyData_(const MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent& o){
+    const RouteConfiguration& other = dynamic_cast<const RouteConfiguration&>(o);
+    
     isDone_ = other.isDone_;
     methods_ = other.methods_;
     redirection_ = other.redirection_;
