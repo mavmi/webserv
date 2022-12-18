@@ -4,7 +4,8 @@ namespace MAIN_NAMESPACE::UTILS_NAMESPACE{
 
 ParserAbstractParent::ParserAbstractParent(){}
 ParserAbstractParent::~ParserAbstractParent(){}
-ParserAbstractParent& ParserAbstractParent::operator=(const ParserAbstractParent&){
+ParserAbstractParent& ParserAbstractParent::operator=(const ParserAbstractParent& other){
+    isDone_ = other.isDone_;
     return *this;
 }
 

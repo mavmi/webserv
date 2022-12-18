@@ -15,7 +15,7 @@ protected:
     ParserAbstractParent();
     ~ParserAbstractParent();
 
-    ParserAbstractParent& operator=(const ParserAbstractParent&);
+    ParserAbstractParent& operator=(const ParserAbstractParent& other);
 
     virtual void checkValidity_() const = 0;
     virtual void throwOnDone_() const = 0;
