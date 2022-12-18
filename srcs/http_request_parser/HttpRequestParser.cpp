@@ -136,10 +136,14 @@ void HttpRequestParser::parseStatusLine(const std::string& line){
 
         const std::string excMsg = "Invalid HTTP version";
         const std::string& verLine = splitedLine.at(2);
-        const std::string httpVersionStr = std::string(
-            std::find(verLine.begin(), verLine.end(), '/') + 1,
-            verLine.end()
-        );
+
+        std::string::const_iterator slashIter = std::find(verLine.begin(), verLine.end(), '/');
+        if (slashIter == verLine.end()) throw ExceptionType(excMsg, EXC_ARGS);
+
+        const std::string protocolName = std::string(verLine.begin(), slashIter);
+        if (protocolName != "HTTP") throw ExceptionType("Incorrect protocol", EXC_ARGS);
+
+        const std::string httpVersionStr = std::string(slashIter + 1, verLine.end());
         {
             int dotsCount = 0;
             for (size_t i = 0; i < httpVersionStr.size(); i++){
