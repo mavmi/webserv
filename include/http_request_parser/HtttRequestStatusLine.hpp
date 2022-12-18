@@ -24,17 +24,46 @@ protected:
 class HttpRequestStatusLine{
 friend HttpRequestParser;
 public:
+    typedef std::string                     URL_TYPE;
+    typedef double                          HTTP_VERSION_TYPE;
+    typedef HttpRequestStatusLineException  ExceptionType;
+
+    enum METHOD{
+        GET,
+        POST,
+        DELETE
+    };
+
     ~HttpRequestStatusLine();
 
+    void setMethod(METHOD method);
+    METHOD& getMethod();
+    const METHOD& getMethod() const;
+
+    void setUrl(const URL_TYPE& url);
+    URL_TYPE& getUrl();
+    const URL_TYPE& getUrl() const;
+
+    void setHttpVersion(HTTP_VERSION_TYPE httpVersion);
+    HTTP_VERSION_TYPE& getHttpVersion();
+    const HTTP_VERSION_TYPE& getHttpVersion() const;
+
+    void done();
+    bool isDone() const;
+
 private:
-    /*
-        Bunch of wrappers must be here
-    */
+    bool isDone_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<METHOD> method_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<URL_TYPE> url_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<HTTP_VERSION_TYPE> httpVersion_;
 
     HttpRequestStatusLine();
     HttpRequestStatusLine(const HttpRequestStatusLine& other);
 
     HttpRequestStatusLine& operator=(const HttpRequestStatusLine& other);
+
+    void checkValidity_() const;
+    void throwOnDone_() const;
 
 };
 

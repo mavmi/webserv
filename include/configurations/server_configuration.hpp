@@ -6,11 +6,6 @@
 
 namespace MAIN_NAMESPACE::CONFIG_NAMESPACE {
 
-#define HANDLE_EXC_BEGIN    try {
-#define HANDLE_EXC_END      } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::WrapperException& e){ \
-                                throw ExceptionType(e.what());          \
-                            }
-
 class Configuration;
 
 class ServerException : public MAIN_NAMESPACE::UTILS_NAMESPACE::Exception {

@@ -2,15 +2,15 @@
 
 #include "test_utils.hpp"
 #include "../../include/configurations/parser.hpp"
-#include "../../include/configurations/configuration.hpp"
-#include "../../include/configurations/configuration_host.hpp"
+#include "../../include/http_request_parser/HttpRequest.hpp"
 
 #define ___HEADER___ TestHeader(__FUNCTION__);
 
 namespace test{
 
 void CONFIGURATION_HOST_TESTS();
-void FILES_TESTS();
+void CONFIGURATION_FILES_TESTS();
+void HTTP_REQUEST_FILE_TEST();
 
 }
 

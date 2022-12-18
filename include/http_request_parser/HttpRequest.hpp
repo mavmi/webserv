@@ -10,7 +10,7 @@ public:
     typedef HTTP_REQUEST_PARS_NAMESPACE::HttpRequestParser::BufferContainerType     BufferContainerType;
 
     HttpRequest();
-    HttpRequest(const BufferContainerType& buffer);
+    HttpRequest(const BufferContainerType& buffer, int bufferSize, int lastSize);
     HttpRequest(const HttpRequest& other);
 
     ~HttpRequest();
@@ -18,7 +18,7 @@ public:
     HttpRequest& operator=(const HttpRequest& other);
     const HTTP_REQUEST_PARS_NAMESPACE::HttpRequestParser& operator->();
 
-    static HttpRequest parseHttpRequest(const BufferContainerType& buffer);
+    static HttpRequest parseHttpRequest(const BufferContainerType& buffer, int bufferSize, int lastSize);
     const HTTP_REQUEST_PARS_NAMESPACE::HttpRequestParser& getHttpRequest() const;
 
 private:

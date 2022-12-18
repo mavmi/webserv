@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <sstream>
 #include <stddef.h>
 
 #include "utils.hpp"
@@ -32,12 +33,15 @@ public:
     typedef size_t                      SizeType;
     typedef char*                       BufferType;
     typedef std::vector<BufferType>     BufferContainerType;
+    typedef HttpRequestParserException  ExceptionType;
 
     ~HttpRequestParser();
 
     void parseHttpRequest(const BufferContainerType& buffer, int bufferSize, int lastSize);
-
     void clear();
+
+    const HttpRequestHeaders& getHeaders() const;
+    const HttpRequestStatusLine& getStatusLine() const;
 
 private:
     HttpRequestHeaders httpRequestHeaders_;
@@ -48,8 +52,11 @@ private:
 
     HttpRequestParser& operator=(const HttpRequestParser& other);
 
+    std::vector<std::string> split_(const std::string& str, char delimiter);
     int find_(char* arr, int startPoint, int size, char c);
-    void parseBuffer_(const BufferContainerType& buffer, int bufferSize, int lastSize);
+
+    std::vector<std::string> parseBuffer_(const BufferContainerType& buffer, int bufferSize, int lastSize);
+    void parseStatusLine(const std::string& line);
 
 };
 

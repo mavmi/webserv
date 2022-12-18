@@ -22,31 +22,56 @@ HttpRequestParser::HttpRequestParser(){
 
 }
 HttpRequestParser::HttpRequestParser(const HttpRequestParser& other){
-    (void)other;
+    httpRequestHeaders_ = other.httpRequestHeaders_;
+    httpRequestStatusLine_ = other.httpRequestStatusLine_;
 }
 HttpRequestParser::~HttpRequestParser(){
 
 }
 
 HttpRequestParser& HttpRequestParser::operator=(const HttpRequestParser& other){
-    (void)other;
+    httpRequestHeaders_ = other.httpRequestHeaders_;
+    httpRequestStatusLine_ = other.httpRequestStatusLine_;
     return *this;
 }
 
 void HttpRequestParser::parseHttpRequest(const HttpRequestParser::BufferContainerType& buffer, int bufferSize, int lastSize){
-    (void)buffer; (void)bufferSize; (void)lastSize;
+    std::vector<std::string> content = parseBuffer_(buffer, bufferSize, lastSize);
+    parseStatusLine(content.at(0));
 }
 void HttpRequestParser::clear(){
-
+    httpRequestHeaders_ = HttpRequestHeaders();
+    httpRequestStatusLine_ = HttpRequestStatusLine();
 }
 
+const HttpRequestHeaders& HttpRequestParser::getHeaders() const{
+    return httpRequestHeaders_;
+}
+const HttpRequestStatusLine& HttpRequestParser::getStatusLine() const{
+    return httpRequestStatusLine_;
+}
+
+std::vector<std::string> HttpRequestParser::split_(const std::string& str, char delimiter){    
+    std::string::const_iterator begin = str.begin(), end = str.begin();
+    std::vector<std::string> result;
+    while (true){
+        end = std::find(begin, str.end(), delimiter);
+        std::string substr(begin, end);
+        if (substr.size()) result.push_back(substr);
+        if (end == str.end()) break;
+        begin = end + 1;
+    }
+
+    return result;
+}
 int HttpRequestParser::find_(char* arr, int startPoint, int size, char c){
     for (int i = startPoint; i < size; i++){
         if (arr[i] == c) return i;
     }
     return -1;
 }
-void HttpRequestParser::parseBuffer_(const BufferContainerType& buffer, int bufferSize, int lastSize){
+
+std::vector<std::string> HttpRequestParser::parseBuffer_(const BufferContainerType& buffer, int bufferSize, int lastSize){
     int startPoint;
     bool isLastFinished = true;
     const char newLine = '\n';
@@ -78,6 +103,64 @@ void HttpRequestParser::parseBuffer_(const BufferContainerType& buffer, int buff
                 isLastFinished = true;
             }
             startPoint = endPoint + 1;
+        }
+    }
+
+    return result;
+}
+void HttpRequestParser::parseStatusLine(const std::string& line){
+    std::vector<std::string> splitedLine = split_(line, ' ');
+    size_t splitedLineSize = splitedLine.size();
+    if (splitedLineSize < 2 || splitedLineSize > 3) throw ExceptionType("Status line got invalid number of arguments", EXC_ARGS);
+    
+    // Method
+    {
+        const std::string& method = splitedLine.at(0);
+        
+        if (method == "GET") httpRequestStatusLine_.setMethod(HttpRequestStatusLine::GET);
+        else if (method == "POST") httpRequestStatusLine_.setMethod(HttpRequestStatusLine::POST);
+        else if (method == "DELETE") httpRequestStatusLine_.setMethod(HttpRequestStatusLine::DELETE);
+        else throw ExceptionType("Invalid method", EXC_ARGS);
+    }
+    // URL
+    {
+        const std::string& url = splitedLine.at(1);
+        httpRequestStatusLine_.setUrl(url);
+    }
+    // HTTP version
+    {
+        if (splitedLineSize == 2) {
+            httpRequestStatusLine_.setHttpVersion(0.9);
+            return;
+        }
+
+        const std::string excMsg = "Invalid HTTP version";
+        const std::string& verLine = splitedLine.at(2);
+        const std::string httpVersionStr = std::string(
+            std::find(verLine.begin(), verLine.end(), '/') + 1,
+            verLine.end()
+        );
+        {
+            int dotsCount = 0;
+            for (size_t i = 0; i < httpVersionStr.size(); i++){
+                char curChar = httpVersionStr.at(i);
+                
+                if (curChar == '.') {
+                    dotsCount++;
+                    if (dotsCount > 1) throw ExceptionType(excMsg, EXC_ARGS);
+                }
+                else if (curChar < '0' || curChar > '9') throw ExceptionType(excMsg, EXC_ARGS);
+            }
+
+            std::stringstream stream(httpVersionStr);
+            double httpVersionDouble;
+            try {
+                stream >> httpVersionDouble;
+                httpRequestStatusLine_.setHttpVersion(httpVersionDouble);
+            } catch (std::ios::failure& e) {
+                throw ExceptionType(e.what(), EXC_ARGS);
+            }
+
         }
     }
 }
