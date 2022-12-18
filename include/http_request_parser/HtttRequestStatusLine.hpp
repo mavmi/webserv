@@ -21,7 +21,7 @@ protected:
 };
 
 
-class HttpRequestStatusLine{
+class HttpRequestStatusLine : public MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent{
 friend HttpRequestParser;
 public:
     typedef std::string                     URL_TYPE;
@@ -48,11 +48,7 @@ public:
     HTTP_VERSION_TYPE& getHttpVersion();
     const HTTP_VERSION_TYPE& getHttpVersion() const;
 
-    void done();
-    bool isDone() const;
-
 private:
-    bool isDone_;
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<METHOD> method_;
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<URL_TYPE> url_;
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<HTTP_VERSION_TYPE> httpVersion_;

@@ -24,7 +24,7 @@ protected:
 // Any getter may throw RouteException if it's value is not set.
 // Use methods [isDone()] to check if the route is finished or not.
 // Method [done()] marks the route as finished. May throw an exception.
-class RouteConfiguration{
+class RouteConfiguration : public MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent{
 friend Configuration;
 friend ServerConfiguration;
 friend MAIN_NAMESPACE::UTILS_NAMESPACE::Container<RouteConfiguration>;
@@ -76,11 +76,7 @@ public:
     PathType& getSaveTo();
     const PathType& getSaveTo() const;
 
-    bool isDone() const;
-    void done();
-
 private:
-    bool isDone_;
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<MethodsContainerType> methods_;
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType> redirection_;
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType> directory_;
@@ -104,7 +100,7 @@ private:
     void deleteData_();
     void copyData_(const RouteConfiguration& other);
     void checkValidity_() const;
-    void throwOnDone() const;
+    void throwOnDone_() const;
 
 };
 

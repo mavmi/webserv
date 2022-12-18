@@ -58,7 +58,7 @@ void ServerConfiguration::operator delete[](void* ptr){
 }
 
 void ServerConfiguration::setPort(PortType port){
-    throwOnDone();
+    throwOnDone_();
     port_.set(port);
 }
 ServerConfiguration::PortType ServerConfiguration::getPort() const{
@@ -68,7 +68,7 @@ ServerConfiguration::PortType ServerConfiguration::getPort() const{
 }
 
 void ServerConfiguration::setHost(const HostType& host){
-    throwOnDone();
+    throwOnDone_();
     host_.set(host);
 }
 ServerConfiguration::HostType& ServerConfiguration::getHost(){
@@ -83,7 +83,7 @@ const ServerConfiguration::HostType& ServerConfiguration::getHost() const{
 }
 
 void ServerConfiguration::setServerName(const ServerNameType& serverName){
-    throwOnDone();
+    throwOnDone_();
     serverName_.set(serverName);
 }
 ServerConfiguration::ServerNameType& ServerConfiguration::getServerName(){
@@ -98,7 +98,7 @@ const ServerConfiguration::ServerNameType& ServerConfiguration::getServerName() 
 }
 
 void ServerConfiguration::setErrorPages(const ErrorPagesContainerType& errorPages){
-    throwOnDone();
+    throwOnDone_();
     errorPages_.set(errorPages);
 }
 ServerConfiguration::ErrorPagesContainerType& ServerConfiguration::getErrorPages(){
@@ -112,7 +112,7 @@ const ServerConfiguration::ErrorPagesContainerType& ServerConfiguration::getErro
     HANDLE_EXC_END
 }
 void ServerConfiguration::setErrorPage(const ErrorPageType& errorPage, SizeType position){
-    throwOnDone();
+    throwOnDone_();
     errorPages_.get().at(position) = errorPage;
 }
 ServerConfiguration::ErrorPageType& ServerConfiguration::getErrorPage(SizeType position){
@@ -126,7 +126,7 @@ const ServerConfiguration::ErrorPageType& ServerConfiguration::getErrorPage(Size
     HANDLE_EXC_END
 }
 void ServerConfiguration::addErrorPage(const ErrorPageType& errorPage){
-    throwOnDone();
+    throwOnDone_();
     if (!errorPages_.isSet()) errorPages_.set(ErrorPagesContainerType());
     errorPages_.get().push_back(errorPage);
 }
@@ -137,7 +137,7 @@ ServerConfiguration::SizeType ServerConfiguration::getErrorPagesCount() const{
 }
 
 void ServerConfiguration::setBodySize(BodySizeType bodySize){
-    throwOnDone();
+    throwOnDone_();
     bodySize_ = bodySize;
 }
 ServerConfiguration::BodySizeType ServerConfiguration::getBodySize() const{
@@ -145,7 +145,7 @@ ServerConfiguration::BodySizeType ServerConfiguration::getBodySize() const{
 }
 
 void ServerConfiguration::setRoutes(const RoutesContainerType& routes){
-    throwOnDone();
+    throwOnDone_();
     routes_.set(routes);
 }
 ServerConfiguration::RoutesContainerType& ServerConfiguration::getRoutes(){
@@ -159,7 +159,7 @@ const ServerConfiguration::RoutesContainerType& ServerConfiguration::getRoutes()
     HANDLE_EXC_END
 }
 void ServerConfiguration::setRoute(const RouteType& route, SizeType position){
-    throwOnDone();
+    throwOnDone_();
     routes_.get().at(position) = route;
 }
 ServerConfiguration::RouteType& ServerConfiguration::getRoute(SizeType position){
@@ -173,7 +173,7 @@ const ServerConfiguration::RouteType& ServerConfiguration::getRoute(SizeType pos
     HANDLE_EXC_END
 }
 void ServerConfiguration::addRoute(const RouteType& route){
-    throwOnDone();
+    throwOnDone_();
     if (!routes_.isSet()) routes_.set(RoutesContainerType());
     routes_.get().push_back(route);
 }
@@ -181,14 +181,6 @@ ServerConfiguration::SizeType ServerConfiguration::getRoutesCount() const{
     HANDLE_EXC_BEGIN
         return routes_.get().size();
     HANDLE_EXC_END
-}
-
-bool ServerConfiguration::isDone() const{
-    return isDone_;
-}
-void ServerConfiguration::done(){
-    checkValidity_();
-    isDone_ = true;
 }
 
 void ServerConfiguration::deleteData_(){
@@ -215,7 +207,7 @@ void ServerConfiguration::checkValidity_() const{
     if (!errorPages_.isSet() || !errorPages_.get().size()) throw ExceptionType("Error pages are not set up", EXC_ARGS);
     if (!bodySize_) throw ExceptionType("Body size is not set up", EXC_ARGS);
 }
-void ServerConfiguration::throwOnDone() const{
+void ServerConfiguration::throwOnDone_() const{
     if (isDone_) throw ExceptionType("Route is done. You cannot change it anymore.", EXC_ARGS);
 }
 

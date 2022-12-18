@@ -28,7 +28,7 @@ protected:
 // Any getter may throw ServerException if it's value is not set.
 // Use methods [isDone()] to check if the server is finished or not.
 // Method [done()] marks the server as finished. May throw an exception.
-class ServerConfiguration{
+class ServerConfiguration : public MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent{
 friend Configuration;
 friend MAIN_NAMESPACE::UTILS_NAMESPACE::Container<ServerConfiguration>;
 public:
@@ -77,11 +77,7 @@ public:
     void addRoute(const RouteType& route);
     SizeType getRoutesCount() const;
 
-    bool isDone() const;
-    void done();
-
 private:
-    bool isDone_;
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PortType> port_;
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<HostType> host_;
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ServerNameType> serverName_;
@@ -102,7 +98,7 @@ private:
     void deleteData_();
     void copyData_(const ServerConfiguration& other);
     void checkValidity_() const;
-    void throwOnDone() const;
+    void throwOnDone_() const;
 
 };
 

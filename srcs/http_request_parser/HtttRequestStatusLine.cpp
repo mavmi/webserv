@@ -84,14 +84,6 @@ const HttpRequestStatusLine::HTTP_VERSION_TYPE& HttpRequestStatusLine::getHttpVe
     HANDLE_EXC_END
 }
 
-void HttpRequestStatusLine::done(){
-    checkValidity_();
-    isDone_ = true;
-}
-bool HttpRequestStatusLine::isDone() const{
-    return isDone_;
-}
-
 void HttpRequestStatusLine::checkValidity_() const{
     if (!method_.isSet()) throw ExceptionType("Method is not set up", EXC_ARGS);
     if (!url_.isSet()) throw ExceptionType("URL is not set up", EXC_ARGS);
