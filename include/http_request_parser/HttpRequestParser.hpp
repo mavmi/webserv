@@ -5,9 +5,9 @@
 #include <stddef.h>
 
 #include "utils.hpp"
+#include "HtttRequestStatusLine.hpp"
 #include "HttpGeneralHeaders.hpp"
 #include "HtttRequestHeaders.hpp"
-#include "HtttRequestStatusLine.hpp"
 
 namespace MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE{
 
@@ -41,13 +41,14 @@ public:
     void parseHttpRequest(const BufferContainerType& buffer, int bufferSize, int lastSize);
     void clear();
 
-    const HttpRequestHeaders& getHeaders() const;
     const HttpRequestStatusLine& getStatusLine() const;
+    const HttpGeneralHeaders& getGeneralHeaders() const;
+    const HttpRequestHeaders& getRequestHeaders() const;
 
 private:
+    HttpRequestStatusLine httpRequestStatusLine_;
     HttpGeneralHeaders httpGeneralHeaders_;
     HttpRequestHeaders httpRequestHeaders_;
-    HttpRequestStatusLine httpRequestStatusLine_;
 
     HttpRequestParser();
     HttpRequestParser(const HttpRequestParser& other);
@@ -58,7 +59,7 @@ private:
     int find_(char* arr, int startPoint, int size, char c);
 
     std::vector<std::string> parseBuffer_(const BufferContainerType& buffer, int bufferSize, int lastSize);
-    void parseStatusLine(const std::string& line);
+    void parseStatusLine_(const std::string& line);
 
 };
 

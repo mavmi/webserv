@@ -5,20 +5,39 @@
 
 namespace MAIN_NAMESPACE::UTILS_NAMESPACE{
 
-class HttpHeadersAbstractParent{
+class HttpHeadersAbstractParentException : public MAIN_NAMESPACE::UTILS_NAMESPACE::Exception {
 public:
-    typedef MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE::HttpRequestStatusLine::HTTP_VERSION_TYPE   HTTP_VERSION_TYPE;
-    
-    void setVersion(HTTP_VERSION_TYPE httpVersionType);
+    HttpHeadersAbstractParentException(const char* msg);
+    HttpHeadersAbstractParentException(const std::string& msg);
+
+    HttpHeadersAbstractParentException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_);
+    HttpHeadersAbstractParentException(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_);
+
+    HttpHeadersAbstractParentException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_, int code);
+    HttpHeadersAbstractParentException(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_, int code);
 
 protected:
-    HTTP_VERSION_TYPE httpVersion_;
+    virtual std::string output_() const;
 
-    HttpHeadersAbstractParent();
+};
+
+
+class HttpHeadersAbstractParent{
+public:
+    typedef MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE::HttpRequestStatusLine::HTTP_VERSION_TYPE   HttpVersionType;
+    typedef HttpHeadersAbstractParentException                                                      ExceptionType;
+
+protected:
+    const MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE::HttpRequestStatusLine& statusLine_;
+
+    HttpHeadersAbstractParent(const MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE::HttpRequestStatusLine& statusLine);
     HttpHeadersAbstractParent(const HttpHeadersAbstractParent& other);
     ~HttpHeadersAbstractParent();
 
-    HttpHeadersAbstractParent& operator=(const HttpHeadersAbstractParent& other);
+    HttpHeadersAbstractParent& operator=(const HttpHeadersAbstractParent&);
+
+    virtual HttpVersionType getHttpVersion_() const;
+    virtual void checkVersion_(HttpVersionType version);
 
 };
 

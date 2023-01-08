@@ -24,15 +24,25 @@ protected:
 class HttpRequestStatusLine : public MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent{
 friend HttpRequestParser;
 public:
-    typedef std::string                     URL_TYPE;
-    typedef double                          HTTP_VERSION_TYPE;
-    typedef HttpRequestStatusLineException  ExceptionType;
-
     enum METHOD{
         GET,
         POST,
         DELETE
     };
+    enum HTTP_VERSION{
+        HTTP_0_9,
+        HTTP_1_0,
+        HTTP_1_1,
+        HTTP_1_1v2,
+        HTTP_AUTH,
+        MIME,
+        MD5H,
+        CDH
+    };
+
+    typedef std::string                     URL_TYPE;
+    typedef HTTP_VERSION                    HTTP_VERSION_TYPE;
+    typedef HttpRequestStatusLineException  ExceptionType;
 
     ~HttpRequestStatusLine();
 

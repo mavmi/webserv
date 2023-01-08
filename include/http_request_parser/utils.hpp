@@ -13,6 +13,7 @@ class HttpRequest;
 namespace HTTP_REQUEST_PARS_NAMESPACE{
 class HttpRequestParser;
 class HttpRequestHeaders;
+class HttpGeneralHeaders;
 class HttpRequestStatusLine;
 }
 

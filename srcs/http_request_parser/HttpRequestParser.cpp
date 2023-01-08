@@ -18,40 +18,47 @@ std::string HttpRequestParserException::output_() const {
 
 
 namespace MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE{
-HttpRequestParser::HttpRequestParser(){
+HttpRequestParser::HttpRequestParser()
+    : httpRequestStatusLine_(HttpRequestStatusLine()),
+        httpGeneralHeaders_(HttpGeneralHeaders(httpRequestStatusLine_)),
+        httpRequestHeaders_(HttpRequestHeaders(httpRequestStatusLine_)){
 
 }
-HttpRequestParser::HttpRequestParser(const HttpRequestParser& other){
-    httpGeneralHeaders_ = other.httpGeneralHeaders_;
-    httpRequestHeaders_ = other.httpRequestHeaders_;
-    httpRequestStatusLine_ = other.httpRequestStatusLine_;
+HttpRequestParser::HttpRequestParser(const HttpRequestParser& other)
+    : httpRequestStatusLine_(other.httpRequestStatusLine_),
+        httpGeneralHeaders_(HttpGeneralHeaders(httpRequestStatusLine_)),
+        httpRequestHeaders_(HttpRequestHeaders(httpRequestStatusLine_)) {
+    
 }
 HttpRequestParser::~HttpRequestParser(){
 
 }
 
 HttpRequestParser& HttpRequestParser::operator=(const HttpRequestParser& other){
+    httpRequestStatusLine_ = other.httpRequestStatusLine_;
     httpGeneralHeaders_ = other.httpGeneralHeaders_;
     httpRequestHeaders_ = other.httpRequestHeaders_;
-    httpRequestStatusLine_ = other.httpRequestStatusLine_;
     return *this;
 }
 
 void HttpRequestParser::parseHttpRequest(const HttpRequestParser::BufferContainerType& buffer, int bufferSize, int lastSize){
     std::vector<std::string> content = parseBuffer_(buffer, bufferSize, lastSize);
-    parseStatusLine(content.at(0));
+    parseStatusLine_(content.at(0));
 }
 void HttpRequestParser::clear(){
-    httpGeneralHeaders_ = HttpGeneralHeaders();
-    httpRequestHeaders_ = HttpRequestHeaders();
     httpRequestStatusLine_ = HttpRequestStatusLine();
+    httpGeneralHeaders_ = HttpGeneralHeaders(httpRequestStatusLine_);
+    httpRequestHeaders_ = HttpRequestHeaders(httpRequestStatusLine_);
 }
 
-const HttpRequestHeaders& HttpRequestParser::getHeaders() const{
-    return httpRequestHeaders_;
-}
 const HttpRequestStatusLine& HttpRequestParser::getStatusLine() const{
     return httpRequestStatusLine_;
+}
+const HttpGeneralHeaders& HttpRequestParser::getGeneralHeaders() const{
+    return httpGeneralHeaders_;
+}
+const HttpRequestHeaders& HttpRequestParser::getRequestHeaders() const{
+    return httpRequestHeaders_;
 }
 
 std::vector<std::string> HttpRequestParser::split_(const std::string& str, char delimiter){    
@@ -111,7 +118,7 @@ std::vector<std::string> HttpRequestParser::parseBuffer_(const BufferContainerTy
 
     return result;
 }
-void HttpRequestParser::parseStatusLine(const std::string& line){
+void HttpRequestParser::parseStatusLine_(const std::string& line){
     std::vector<std::string> splitedLine = split_(line, ' ');
     size_t splitedLineSize = splitedLine.size();
     if (splitedLineSize < 2 || splitedLineSize > 3) throw ExceptionType("Status line got invalid number of arguments", EXC_ARGS);
@@ -133,14 +140,34 @@ void HttpRequestParser::parseStatusLine(const std::string& line){
     // HTTP version
     {
         if (splitedLineSize == 2) {
-            httpRequestStatusLine_.setHttpVersion(0.9);
+            httpRequestStatusLine_.setHttpVersion(HttpRequestStatusLine::HTTP_0_9);
             return;
         }
 
         const std::string excMsg = "Invalid HTTP version";
         const std::string& verLine = splitedLine.at(2);
 
-        std::string::const_iterator slashIter = std::find(verLine.begin(), verLine.end(), '/');
+        if (verLine == "HTTP/0.9"){
+            httpRequestStatusLine_.setHttpVersion(HttpRequestStatusLine::HTTP_0_9);
+        } else if (verLine == "HTTP/1.0"){
+            httpRequestStatusLine_.setHttpVersion(HttpRequestStatusLine::HTTP_1_0);
+        } else if (verLine == "HTTP/1.1"){
+            httpRequestStatusLine_.setHttpVersion(HttpRequestStatusLine::HTTP_1_1);
+        } else if (verLine == "HTTP/1.1v2"){
+            httpRequestStatusLine_.setHttpVersion(HttpRequestStatusLine::HTTP_1_1v2);
+        } else if (verLine == "HTTP-Auth"){
+            httpRequestStatusLine_.setHttpVersion(HttpRequestStatusLine::HTTP_AUTH);
+        } else if (verLine == "MIME"){
+            httpRequestStatusLine_.setHttpVersion(HttpRequestStatusLine::MIME);
+        } else if (verLine == "MD5H"){
+            httpRequestStatusLine_.setHttpVersion(HttpRequestStatusLine::MD5H);
+        } else if (verLine == "CDH"){
+            httpRequestStatusLine_.setHttpVersion(HttpRequestStatusLine::CDH);
+        } else {
+            throw ExceptionType("Invalid HTTP version", EXC_ARGS);
+        }
+
+        /*std::string::const_iterator slashIter = std::find(verLine.begin(), verLine.end(), '/');
         if (slashIter == verLine.end()) throw ExceptionType(excMsg, EXC_ARGS);
 
         const std::string protocolName = std::string(verLine.begin(), slashIter);
@@ -168,7 +195,7 @@ void HttpRequestParser::parseStatusLine(const std::string& line){
                 throw ExceptionType(e.what(), EXC_ARGS);
             }
 
-        }
+        }*/
     }
 }
 }

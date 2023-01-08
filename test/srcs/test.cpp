@@ -511,7 +511,7 @@ void test::HTTP_REQUEST_FILE_TEST(){
     try{
         wsrv::HttpRequest httpRequest = wsrv::HttpRequest::parseHttpRequest(content, bufferSize, lastSize);
         const wsrv::http_request::HttpRequestStatusLine& statusLine = httpRequest.getHttpRequest().getStatusLine();
-        assert(test_utils::areDoublesEqual(statusLine.getHttpVersion(), 1.2345));
+        assert(statusLine.getHttpVersion() == wsrv::http_request::HttpRequestStatusLine::HTTP_1_1);
         assert(statusLine.getMethod() == wsrv::http_request::HttpRequestStatusLine::POST);
         assert(statusLine.getUrl() == "/cgi-bin/process.cgi");
     } catch (wsrv::utils::Exception& e){
