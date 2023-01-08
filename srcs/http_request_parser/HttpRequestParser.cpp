@@ -21,13 +21,15 @@ namespace MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE{
 HttpRequestParser::HttpRequestParser()
     : httpRequestStatusLine_(HttpRequestStatusLine()),
         httpGeneralHeaders_(HttpGeneralHeaders(httpRequestStatusLine_)),
-        httpRequestHeaders_(HttpRequestHeaders(httpRequestStatusLine_)){
+        httpRequestHeaders_(HttpRequestHeaders(httpRequestStatusLine_)),
+        httpRequestContent_(std::vector<std::string>()){
 
 }
 HttpRequestParser::HttpRequestParser(const HttpRequestParser& other)
     : httpRequestStatusLine_(other.httpRequestStatusLine_),
         httpGeneralHeaders_(HttpGeneralHeaders(httpRequestStatusLine_)),
-        httpRequestHeaders_(HttpRequestHeaders(httpRequestStatusLine_)) {
+        httpRequestHeaders_(HttpRequestHeaders(httpRequestStatusLine_)),
+        httpRequestContent_(std::vector<std::string>()) {
     
 }
 HttpRequestParser::~HttpRequestParser(){
@@ -38,17 +40,33 @@ HttpRequestParser& HttpRequestParser::operator=(const HttpRequestParser& other){
     httpRequestStatusLine_ = other.httpRequestStatusLine_;
     httpGeneralHeaders_ = other.httpGeneralHeaders_;
     httpRequestHeaders_ = other.httpRequestHeaders_;
+    httpRequestContent_ = other.httpRequestContent_;
     return *this;
 }
 
 void HttpRequestParser::parseHttpRequest(const HttpRequestParser::BufferContainerType& buffer, int bufferSize, int lastSize){
     std::vector<std::string> content = parseBuffer_(buffer, bufferSize, lastSize);
+    if (content.size() < 2) throw ExceptionType("HTTP request doesn't contain headers");
+
     parseStatusLine_(content.at(0));
+
+    size_t i = 1;
+    while (i < content.size() && !isLineEmpty_(content[i])){
+        parseHeader_(content[i++]);
+    }
+    httpGeneralHeaders_.done();
+    httpRequestHeaders_.done();
+
+    i++;
+    while (i < content.size()){
+        httpRequestContent_.push_back(content[i++]);
+    }
 }
 void HttpRequestParser::clear(){
     httpRequestStatusLine_ = HttpRequestStatusLine();
     httpGeneralHeaders_ = HttpGeneralHeaders(httpRequestStatusLine_);
     httpRequestHeaders_ = HttpRequestHeaders(httpRequestStatusLine_);
+    httpRequestContent_ = std::vector<std::string>();
 }
 
 const HttpRequestStatusLine& HttpRequestParser::getStatusLine() const{
@@ -60,8 +78,11 @@ const HttpGeneralHeaders& HttpRequestParser::getGeneralHeaders() const{
 const HttpRequestHeaders& HttpRequestParser::getRequestHeaders() const{
     return httpRequestHeaders_;
 }
+const std::vector<std::string>& HttpRequestParser::getRequestContent() const{
+    return httpRequestContent_;
+}
 
-std::vector<std::string> HttpRequestParser::split_(const std::string& str, char delimiter){    
+std::vector<std::string> HttpRequestParser::split_(const std::string& str, char delimiter){
     std::string::const_iterator begin = str.begin(), end = str.begin();
     std::vector<std::string> result;
     while (true){
@@ -80,6 +101,12 @@ int HttpRequestParser::find_(char* arr, int startPoint, int size, char c){
     }
     return -1;
 }
+bool HttpRequestParser::isLineEmpty_(const std::string& line){
+    for (size_t i = 0; i < line.size(); i++){
+        if (!std::isspace(line[i])) return false;
+    }
+    return true;
+}
 
 std::vector<std::string> HttpRequestParser::parseBuffer_(const BufferContainerType& buffer, int bufferSize, int lastSize){
     int startPoint;
@@ -93,7 +120,7 @@ std::vector<std::string> HttpRequestParser::parseBuffer_(const BufferContainerTy
             int newLinePos = find_(
                 buffer[i],
                 startPoint,
-                i + 1 == buffer.size() ? bufferSize : lastSize,
+                i + 1 == buffer.size() ? lastSize : bufferSize,
                 newLine
             );
             
@@ -166,36 +193,106 @@ void HttpRequestParser::parseStatusLine_(const std::string& line){
         } else {
             throw ExceptionType("Invalid HTTP version", EXC_ARGS);
         }
+    }
 
-        /*std::string::const_iterator slashIter = std::find(verLine.begin(), verLine.end(), '/');
-        if (slashIter == verLine.end()) throw ExceptionType(excMsg, EXC_ARGS);
+    httpRequestStatusLine_.done();
+}
+void HttpRequestParser::parseHeader_(const std::string& line){
+    const std::vector<std::string> splittedLine = split_(line, ':');
+    if (splittedLine.size() != 2) throw ExceptionType("Invalid header line");
 
-        const std::string protocolName = std::string(verLine.begin(), slashIter);
-        if (protocolName != "HTTP") throw ExceptionType("Incorrect protocol", EXC_ARGS);
+    const std::string& key = splittedLine.at(0);
+    const std::string& value = splittedLine.at(1);
 
-        const std::string httpVersionStr = std::string(slashIter + 1, verLine.end());
-        {
-            int dotsCount = 0;
-            for (size_t i = 0; i < httpVersionStr.size(); i++){
-                char curChar = httpVersionStr.at(i);
-                
-                if (curChar == '.') {
-                    dotsCount++;
-                    if (dotsCount > 1) throw ExceptionType(excMsg, EXC_ARGS);
-                }
-                else if (curChar < '0' || curChar > '9') throw ExceptionType(excMsg, EXC_ARGS);
-            }
-
-            std::stringstream stream(httpVersionStr);
-            double httpVersionDouble;
-            try {
-                stream >> httpVersionDouble;
-                httpRequestStatusLine_.setHttpVersion(httpVersionDouble);
-            } catch (std::ios::failure& e) {
-                throw ExceptionType(e.what(), EXC_ARGS);
-            }
-
-        }*/
+    // General headers
+    if (key == "Cache-Control"){
+        httpGeneralHeaders_.setCacheControl(value);
+    } else if (key == "Connection"){
+        httpGeneralHeaders_.setConnection(value);
+    } else if (key == "Date"){
+        httpGeneralHeaders_.setDate(value);
+    } else if (key == "MIME-Version"){
+        httpGeneralHeaders_.setMimeVersion(value);
+    } else if (key == "Pragma"){
+        httpGeneralHeaders_.setPragma(value);
+    } else if (key == "Trailer"){
+        httpGeneralHeaders_.setTrailer(value);
+    } else if (key == "Transfer-Encoding"){
+        httpGeneralHeaders_.setTransferEncoding(value);
+    } else if (key ==  "Upgrade"){
+        httpGeneralHeaders_.setUpgrade(value);
+    } else if (key == "Via"){
+        httpGeneralHeaders_.setVia(value);
+    } else if (key == "Warning"){
+        httpGeneralHeaders_.setWarning(value);
+    }
+    // Request headers
+    else if (key == "Accept"){
+        httpRequestHeaders_.setAccept(value);   
+    } else if (key == "Accept-Charset"){
+        httpRequestHeaders_.setAcceptCharset(value);
+    } else if (key == "Accept-Encoding"){
+        httpRequestHeaders_.setAcceptEncoding(value);
+    } else if (key == "Accept-Language"){
+        httpRequestHeaders_.setAcceptLanguage(value);
+    } else if (key == "Authorization"){
+        httpRequestHeaders_.setAuthorization(value);
+    } else if (key == "Content-Disposition"){
+        httpRequestHeaders_.setContentDisposition(value);
+    } else if (key == "Content-Encoding"){
+        httpRequestHeaders_.setContentEncoding(value);
+    } else if (key == "Content-Language"){
+        httpRequestHeaders_.setContentLanguage(value);
+    } else if (key == "Content-Length"){
+        httpRequestHeaders_.setContentLength(value);
+    } else if (key == "Content-Location"){
+        httpRequestHeaders_.setContentLocation(value);
+    } else if (key == "Content-MD5"){
+        httpRequestHeaders_.setContentMD5(value);
+    } else if (key == "Content-Range"){
+        httpRequestHeaders_.setContentRange(value);
+    } else if (key == "Content-Type"){
+        httpRequestHeaders_.setContentType(value);
+    } else if (key == "Content-Version"){
+        httpRequestHeaders_.setContentVersion(value);
+    } else if (key == "Derived-From"){
+        httpRequestHeaders_.setDerivedFrom(value);
+    } else if (key == "Expect"){
+        httpRequestHeaders_.setExpect(value);
+    } else if (key == "Expires"){
+        httpRequestHeaders_.setExpires(value);
+    } else if (key == "From"){
+        httpRequestHeaders_.setFrom(value);
+    } else if (key == "Host"){
+        httpRequestHeaders_.setHost(value);
+    } else if (key == "If-Match"){
+        httpRequestHeaders_.setIfMatch(value);
+    } else if (key == "If-Modified-Since"){
+        httpRequestHeaders_.setIfModifiedSince(value);
+    } else if (key == "If-None-Match"){
+        httpRequestHeaders_.setIfNoneMatch(value);
+    } else if (key == "If-Range"){
+        httpRequestHeaders_.setIfRange(value);
+    } else if (key == "If-Unmodified-Since"){
+        httpRequestHeaders_.setIfUnmodifiedSince(value);
+    } else if (key == "Last-Modified"){
+        httpRequestHeaders_.setLastModified(value);
+    } else if (key == "Link"){
+        httpRequestHeaders_.setLink(value);
+    } else if (key == "Max-Forwards"){
+        httpRequestHeaders_.setMaxForwards(value);
+    } else if (key == "Proxy-Authorization"){
+        httpRequestHeaders_.setProxyAuthorization(value);
+    } else if (key == "Range"){
+        httpRequestHeaders_.setRange(value);
+    } else if (key == "Referer"){
+        httpRequestHeaders_.setReferer(value);
+    } else if (key == "Title"){
+        httpRequestHeaders_.setTitle(value);
+    } else if (key == "TE"){
+        httpRequestHeaders_.setTE(value);
+    } else if (key == "User-Agent"){
+        httpRequestHeaders_.setUserAgent(value);
     }
 }
 }

@@ -44,23 +44,26 @@ public:
     const HttpRequestStatusLine& getStatusLine() const;
     const HttpGeneralHeaders& getGeneralHeaders() const;
     const HttpRequestHeaders& getRequestHeaders() const;
+    const std::vector<std::string>& getRequestContent() const;
 
 private:
     HttpRequestStatusLine httpRequestStatusLine_;
     HttpGeneralHeaders httpGeneralHeaders_;
     HttpRequestHeaders httpRequestHeaders_;
+    std::vector<std::string> httpRequestContent_;
 
     HttpRequestParser();
     HttpRequestParser(const HttpRequestParser& other);
 
     HttpRequestParser& operator=(const HttpRequestParser& other);
 
-    std::vector<std::string> split_(const std::string& str  , char delimiter);
+    std::vector<std::string> split_(const std::string& str, char delimiter);
     int find_(char* arr, int startPoint, int size, char c);
+    bool isLineEmpty_(const std::string& line);
 
     std::vector<std::string> parseBuffer_(const BufferContainerType& buffer, int bufferSize, int lastSize);
     void parseStatusLine_(const std::string& line);
-
+    void parseHeader_(const std::string& line);
 };
 
 }

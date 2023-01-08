@@ -637,7 +637,7 @@ void HttpRequestHeaders::copyData_(const ParserAbstractParent& o){
     userAgent_ = other.userAgent_;
 }
 void HttpRequestHeaders::checkValidity_() const{
-
+    
 }
 void HttpRequestHeaders::throwOnDone_() const{
     if (isDone_) throw ExceptionType("Request headers are done. You cannot change it anymore");

@@ -2,7 +2,9 @@
 
 namespace MAIN_NAMESPACE::UTILS_NAMESPACE{
 
-ParserAbstractParent::ParserAbstractParent(){}
+ParserAbstractParent::ParserAbstractParent(){
+    isDone_ = false;
+}
 ParserAbstractParent::~ParserAbstractParent(){}
 ParserAbstractParent& ParserAbstractParent::operator=(const ParserAbstractParent& other){
     isDone_ = other.isDone_;
