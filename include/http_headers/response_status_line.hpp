@@ -1,8 +1,9 @@
 #pragma once
 
 #include "utils.hpp"
+#include "status_line_abstract_parent.hpp"
 
-namespace MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE{
+namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
 
 class HttpResponseStatusLineException : public MAIN_NAMESPACE::UTILS_NAMESPACE::Exception {
 public:
@@ -20,10 +21,9 @@ protected:
 
 };
 
-class HttpResponseStatusLine : public MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent{
+class HttpResponseStatusLine : public StatusLineAbstractParent{
 public:
     typedef HttpResponseStatusLineException                 ExceptionType;
-    typedef MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_VERSION   HttpVersionType;
     typedef std::string                                     StatusCodeType;
     typedef std::string                                     MessageType;
 
@@ -32,10 +32,6 @@ public:
     ~HttpResponseStatusLine();
 
     HttpResponseStatusLine& operator=(const HttpResponseStatusLine& other);
-
-    void setHttpVersion(HttpVersionType httpVersion);
-    HttpVersionType& getHttpVersion();
-    const HttpVersionType& getHttpVersion() const;
 
     void setStatusCode(StatusCodeType statusCode);
     StatusCodeType& getStatusCode();
@@ -46,14 +42,12 @@ public:
     const MessageType& getMessage() const;
 
 private:
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<HttpVersionType> httpVersion_;
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<StatusCodeType> statusCode_;
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<MessageType> message_;
 
     void deleteData_();
     void copyData_(const MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent& o);
     void checkValidity_() const;
-    void throwOnDone_() const;
 
 };
 

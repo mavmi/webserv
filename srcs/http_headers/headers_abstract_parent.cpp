@@ -1,6 +1,6 @@
 #include "../../include/http_headers/headers_abstract_parent.hpp"
 
-namespace MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE{
+namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
 HttpHeadersAbstractParentException::HttpHeadersAbstractParentException(const char* msg) : Exception(msg){}
 HttpHeadersAbstractParentException::HttpHeadersAbstractParentException(const std::string& msg) : Exception(msg){}
 HttpHeadersAbstractParentException::HttpHeadersAbstractParentException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_) 
@@ -17,8 +17,8 @@ std::string HttpHeadersAbstractParentException::output_() const {
 }
 
 
-namespace MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE{
-HttpHeadersAbstractParent::HttpHeadersAbstractParent(const HttpRequestStatusLine& statusLine)
+namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
+HttpHeadersAbstractParent::HttpHeadersAbstractParent(const StatusLineAbstractParent& statusLine)
     : statusLine_(statusLine) {
     
 }

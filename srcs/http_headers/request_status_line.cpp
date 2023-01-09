@@ -1,6 +1,6 @@
 #include "../../include/http_headers/request_status_line.hpp"
 
-namespace MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE{
+namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
 HttpRequestStatusLineException::HttpRequestStatusLineException(const char* msg) : Exception(msg){}
 HttpRequestStatusLineException::HttpRequestStatusLineException(const std::string& msg) : Exception(msg){}
 HttpRequestStatusLineException::HttpRequestStatusLineException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_) 
@@ -17,11 +17,12 @@ std::string HttpRequestStatusLineException::output_() const {
 }
 
 
-namespace MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE{
+namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
 HttpRequestStatusLine::HttpRequestStatusLine(){
     isDone_ = false;
 }
-HttpRequestStatusLine::HttpRequestStatusLine(const HttpRequestStatusLine& other){
+HttpRequestStatusLine::HttpRequestStatusLine(const HttpRequestStatusLine& other)
+    : StatusLineAbstractParent(other) {
     copyData_(other);
 }
 HttpRequestStatusLine::~HttpRequestStatusLine(){
@@ -64,21 +65,6 @@ const HttpRequestStatusLine::UrlType& HttpRequestStatusLine::getUrl() const{
     HANDLE_EXC_END
 }
 
-void HttpRequestStatusLine::setHttpVersion(HttpVersionType httpVersion){
-    throwOnDone_();
-    httpVersion_.set(httpVersion);
-}
-HttpRequestStatusLine::HttpVersionType& HttpRequestStatusLine::getHttpVersion(){
-    HANDLE_EXC_BEGIN
-        return httpVersion_.get();
-    HANDLE_EXC_END
-}
-const HttpRequestStatusLine::HttpVersionType& HttpRequestStatusLine::getHttpVersion() const{
-    HANDLE_EXC_BEGIN
-        return httpVersion_.get();
-    HANDLE_EXC_END
-}
-
 void HttpRequestStatusLine::deleteData_(){
     isDone_ = false;
     method_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<MethodType>();
@@ -97,8 +83,5 @@ void HttpRequestStatusLine::checkValidity_() const{
     if (!method_.isSet()) throw ExceptionType("Method is not set up", EXC_ARGS);
     if (!url_.isSet()) throw ExceptionType("URL is not set up", EXC_ARGS);
     if (!httpVersion_.isSet()) throw ExceptionType("HTTP version is not set up", EXC_ARGS);
-}
-void HttpRequestStatusLine::throwOnDone_() const{
-    if (isDone_) throw ExceptionType("Status line is done. You cannot change it anymore.", EXC_ARGS);
 }
 }

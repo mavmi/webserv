@@ -511,15 +511,15 @@ void test::HTTP_REQUEST_FILE_TEST(){
     try{
         wsrv::HttpRequest httpRequest = wsrv::HttpRequest::parseHttpRequest(content, bufferSize, lastSize);
 
-        const wsrv::http_request::HttpRequestStatusLine& statusLine = httpRequest.getHttpRequest().getStatusLine();
+        const wsrv::http_headers::HttpRequestStatusLine& statusLine = httpRequest.getHttpRequest().getStatusLine();
         assert(statusLine.getHttpVersion() == wsrv::utils::HTTP_1_1);
         assert(statusLine.getMethod() == wsrv::utils::POST);
         assert(statusLine.getUrl() == "/cgi-bin/process.cgi");
 
-        const wsrv::http_request::HttpGeneralHeaders& generalHeaders = httpRequest.getHttpRequest().getGeneralHeaders();
+        const wsrv::http_headers::HttpGeneralHeaders& generalHeaders = httpRequest.getHttpRequest().getGeneralHeaders();
         assert(generalHeaders.getConnection() == " Keep-Alive");
         
-        const wsrv::http_request::HttpRequestHeaders& requestHeaders = httpRequest.getHttpRequest().getRequestHeaders();
+        const wsrv::http_headers::HttpRequestHeaders& requestHeaders = httpRequest.getHttpRequest().getRequestHeaders();
         assert(requestHeaders.getHost() == " www.tutorialspoint.com");
         assert(requestHeaders.getContentType() == " text/xml; charset=utf-8");
         assert(requestHeaders.getContentLength() == " length");

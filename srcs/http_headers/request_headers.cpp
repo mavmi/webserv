@@ -1,6 +1,6 @@
 #include "../../include/http_headers/request_headers.hpp"
 
-namespace MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE{
+namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
 HttpRequestHeadersException::HttpRequestHeadersException(const char* msg) : Exception(msg){}
 HttpRequestHeadersException::HttpRequestHeadersException(const std::string& msg) : Exception(msg){}
 HttpRequestHeadersException::HttpRequestHeadersException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_) 
@@ -17,8 +17,8 @@ std::string HttpRequestHeadersException::output_() const {
 }
 
 
-namespace MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE{
-HttpRequestHeaders::HttpRequestHeaders(const HttpRequestStatusLine& statusLine)
+namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
+HttpRequestHeaders::HttpRequestHeaders(const StatusLineAbstractParent& statusLine)
     : HttpCommonHeaders(statusLine) {
 
 }

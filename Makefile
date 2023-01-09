@@ -8,26 +8,30 @@ TEST_NAME	=	$(NAME)_test
 ### headers ###
 HDRS_UTILS			=	container.hpp exceptions.hpp parser_abstract_parent.hpp utils.hpp wrapper.hpp
 HDRS_CONFIG			=	configuration_host.hpp	configuration.hpp parser.hpp route_configuration.hpp server_configuration.hpp utils.hpp
-HDRS_HTTP_HEADERS	=	common_headers.hpp general_headers.hpp headers_abstract_parent.hpp request_headers.hpp request_status_line.hpp response_headers.hpp utils.hpp
+HDRS_HTTP_HEADERS	=	common_headers.hpp general_headers.hpp headers_abstract_parent.hpp request_headers.hpp request_status_line.hpp response_headers.hpp response_status_line.hpp status_line_abstract_parent.hpp utils.hpp
 HDRS_HTTP_REQ		=	http_request.hpp http_request_parser.hpp utils.hpp
+HDRS_HTTP_RES		=	http_response_generator.hpp http_response.hpp utils.hpp
 
 ### sources ###
 SRCS_UTILS			=	container.cpp exceptions.cpp parser_abstract_parent.cpp utils.cpp wrapper.cpp
 SRCS_CONFIG			=	configuration.cpp configuration_host.cpp parser.cpp route_configuration.cpp server_configuration.cpp utils.cpp
-SRCS_HTTP_HEADERS	=	common_headers.cpp general_headers.cpp headers_abstract_parent.cpp request_headers.cpp request_status_line.cpp response_headers.cpp
+SRCS_HTTP_HEADERS	=	common_headers.cpp general_headers.cpp headers_abstract_parent.cpp request_headers.cpp request_status_line.cpp response_headers.cpp response_status_line.cpp status_line_abstract_parent.cpp
 SRCS_HTTP_REQ		=	http_request.cpp http_request_parser.cpp utils.cpp
+SRCS_HTTP_RES		=	http_response_generator.cpp http_response.cpp
 
 ### objects ###
 OBJS_UTILS			=	$(SRCS_UTILS:.cpp=.o)
 OBJS_CONFIG			=	$(SRCS_CONFIG:.cpp=.o)
 OBJS_HTTP_HEADERS	=	$(SRCS_HTTP_HEADERS:.cpp=.o)
 OBJS_HTTP_REQ		=	$(SRCS_HTTP_REQ:.cpp=.o)
+OBJS_HTTP_RES		=	$(SRCS_HTTP_RES:.cpp=.o)
 
 ### dependencies ###
 DEPEN_UTILS			=	$(SRCS_UTILS:.cpp=.d)
 DEPEN_CONFIG		=	$(SRCS_CONFIG:.cpp=.d)
 DEPEN_HTTP_HEADERS	=	$(SRCS_HTTP_HEADERS:.cpp=.d)
 DEPEN_HTTP_REQ		=	$(SRCS_HTTP_REQ:.cpp=.d)
+DEPEN_HTTP_RES		=	$(SRCS_HTTP_RES:.cpp=.d)
 
 ### directories ###
 HDRS_DIR			=	include
@@ -35,12 +39,14 @@ HDRS_UTILS_DIR		=	$(HDRS_DIR)/utils
 HDRS_CONFIG_DIR		=	$(HDRS_DIR)/configurations
 HDRS_HTTP_HEAD_DIR	=	$(HDRS_DIR)/http_headers
 HDRS_HTTP_REQ_DIR	=	$(HDRS_DIR)/http_request_parser
+HDRS_HTTP_RES_DIR	=	$(HDRS_DIR)/http_response_generator
 
 SRCS_DIR			=	srcs
 SRCS_UTILS_DIR		=	$(SRCS_DIR)/utils
 SRCS_CONFIG_DIR		=	$(SRCS_DIR)/configurations
 SRCS_HTTP_HEAD_DIR	=	$(SRCS_DIR)/http_headers
 SRCS_HTTP_REQ_DIR	=	$(SRCS_DIR)/http_request_parser
+SRCS_HTTP_RES_DIR	=	$(SRCS_DIR)/http_response_generator
 
 ### main ###
 MAIN_SRC	=	$(SRCS_DIR)/main.cpp
@@ -51,11 +57,13 @@ MAIN_DEPEN	=	$(MAIN_SRC:.cpp=.d)
 HDRS		=	$(addprefix $(HDRS_UTILS_DIR)/, $(HDRS_UTILS))\
 					$(addprefix $(HDRS_CONFIG_DIR)/, $(HDRS_CONFIG))\
 					$(addprefix $(HDRS_HTTP_HEAD_DIR)/, $(HDRS_HTTP_HEADERS))\
-					$(addprefix $(HDRS_HTTP_REQ_DIR)/, $(HDRS_HTTP_REQ))
+					$(addprefix $(HDRS_HTTP_REQ_DIR)/, $(HDRS_HTTP_REQ))\
+					$(addprefix $(HDRS_HTTP_RES_DIR)/, $(HDRS_HTTP_RES))
 SRCS		=	$(addprefix $(SRCS_UTILS_DIR)/, $(SRCS_UTILS))\
 					$(addprefix $(SRCS_CONFIG_DIR)/, $(SRCS_CONFIG))\
 					$(addprefix $(SRCS_HTTP_HEAD_DIR)/, $(SRCS_HTTP_HEADERS))\
-					$(addprefix $(SRCS_HTTP_REQ_DIR)/, $(SRCS_HTTP_REQ))
+					$(addprefix $(SRCS_HTTP_REQ_DIR)/, $(SRCS_HTTP_REQ))\
+					$(addprefix $(SRCS_HTTP_RES_DIR)/, $(SRCS_HTTP_RES))
 OBJS		=	$(SRCS:.cpp=.o)
 DEPEN		=	$(SRCS:.cpp=.d)
 
@@ -101,12 +109,12 @@ GCC			=	$(CC) -Wall -Wextra -Werror -std=c++98 -MMD -g -fsanitize=undefined -fsa
 
 
 %.o:		%.cpp $(HDRS) $(TEST_HDRS)
-			@$(GCC) -c -o $@ $<
+			$(GCC) -c -o $@ $<
 
 all:		$(NAME)
 
 $(NAME):	$(OBJS) $(MAIN_OBJ)
-			@$(GCC) $(OBJS) $(MAIN_OBJ) -o $(NAME)
+			$(GCC) $(OBJS) $(MAIN_OBJ) -o $(NAME)
 
 clean:
 			@rm -f\

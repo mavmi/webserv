@@ -5,7 +5,7 @@
 #include "../utils/utils.hpp"
 #include "../utils/exceptions.hpp"
 
-namespace MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE{
+namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
 
 class HttpHeadersAbstractParentException : public MAIN_NAMESPACE::UTILS_NAMESPACE::Exception {
 public:
@@ -30,9 +30,9 @@ public:
     typedef HttpHeadersAbstractParentException              ExceptionType;
 
 protected:
-    const HttpRequestStatusLine& statusLine_;
+    const StatusLineAbstractParent& statusLine_;
 
-    HttpHeadersAbstractParent(const HttpRequestStatusLine& statusLine);
+    HttpHeadersAbstractParent(const StatusLineAbstractParent& statusLine);
     HttpHeadersAbstractParent(const HttpHeadersAbstractParent& other);
     ~HttpHeadersAbstractParent();
 

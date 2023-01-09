@@ -19,16 +19,16 @@ std::string HttpRequestParserException::output_() const {
 
 namespace MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE{
 HttpRequestParser::HttpRequestParser()
-    : httpRequestStatusLine_(HttpRequestStatusLine()),
-        httpGeneralHeaders_(HttpGeneralHeaders(httpRequestStatusLine_)),
-        httpRequestHeaders_(HttpRequestHeaders(httpRequestStatusLine_)),
+    : httpRequestStatusLine_(MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpRequestStatusLine()),
+        httpGeneralHeaders_(MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeaders(httpRequestStatusLine_)),
+        httpRequestHeaders_(MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpRequestHeaders(httpRequestStatusLine_)),
         httpRequestContent_(std::vector<std::string>()){
 
 }
 HttpRequestParser::HttpRequestParser(const HttpRequestParser& other)
     : httpRequestStatusLine_(other.httpRequestStatusLine_),
-        httpGeneralHeaders_(HttpGeneralHeaders(httpRequestStatusLine_)),
-        httpRequestHeaders_(HttpRequestHeaders(httpRequestStatusLine_)),
+        httpGeneralHeaders_(MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeaders(httpRequestStatusLine_)),
+        httpRequestHeaders_(MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpRequestHeaders(httpRequestStatusLine_)),
         httpRequestContent_(std::vector<std::string>()) {
     
 }
@@ -63,19 +63,19 @@ void HttpRequestParser::parseHttpRequest(const HttpRequestParser::BufferContaine
     }
 }
 void HttpRequestParser::clear(){
-    httpRequestStatusLine_ = HttpRequestStatusLine();
-    httpGeneralHeaders_ = HttpGeneralHeaders(httpRequestStatusLine_);
-    httpRequestHeaders_ = HttpRequestHeaders(httpRequestStatusLine_);
+    httpRequestStatusLine_ = MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpRequestStatusLine();
+    httpGeneralHeaders_ = MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeaders(httpRequestStatusLine_);
+    httpRequestHeaders_ = MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpRequestHeaders(httpRequestStatusLine_);
     httpRequestContent_ = std::vector<std::string>();
 }
 
-const HttpRequestStatusLine& HttpRequestParser::getStatusLine() const{
+const MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpRequestStatusLine& HttpRequestParser::getStatusLine() const{
     return httpRequestStatusLine_;
 }
-const HttpGeneralHeaders& HttpRequestParser::getGeneralHeaders() const{
+const MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeaders& HttpRequestParser::getGeneralHeaders() const{
     return httpGeneralHeaders_;
 }
-const HttpRequestHeaders& HttpRequestParser::getRequestHeaders() const{
+const MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpRequestHeaders& HttpRequestParser::getRequestHeaders() const{
     return httpRequestHeaders_;
 }
 const std::vector<std::string>& HttpRequestParser::getRequestContent() const{

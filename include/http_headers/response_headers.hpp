@@ -3,7 +3,7 @@
 #include "utils.hpp"
 #include "common_headers.hpp"
 
-namespace MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE{
+namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
 
 class HttpResponseHeadersException : public MAIN_NAMESPACE::UTILS_NAMESPACE::Exception {
 public:
@@ -38,7 +38,7 @@ public:
     typedef std::string                     VaryType;
     typedef std::string                     WWWAuthenticateType;
 
-    HttpResponseHeaders(const HttpRequestStatusLine& statusLine);
+    HttpResponseHeaders(const StatusLineAbstractParent& statusLine);
     HttpResponseHeaders(const HttpResponseHeaders& other);
     ~HttpResponseHeaders();
 

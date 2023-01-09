@@ -7,7 +7,9 @@
 
 #define wsrv            MAIN_NAMESPACE
 #define configuration   CONFIG_NAMESPACE
+#define http_headers    HTTP_HEADERS_NAMESPACE
 #define http_request    HTTP_REQUEST_PARS_NAMESPACE
+#define http_response   HTTP_RESPONSE_GENER_NAMESPACE
 #define utils           UTILS_NAMESPACE
 
 namespace MAIN_NAMESPACE::UTILS_NAMESPACE{

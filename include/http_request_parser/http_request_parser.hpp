@@ -44,15 +44,15 @@ public:
     void parseHttpRequest(const BufferContainerType& buffer, int bufferSize, int lastSize);
     void clear();
 
-    const HttpRequestStatusLine& getStatusLine() const;
-    const HttpGeneralHeaders& getGeneralHeaders() const;
-    const HttpRequestHeaders& getRequestHeaders() const;
+    const MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpRequestStatusLine& getStatusLine() const;
+    const MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeaders& getGeneralHeaders() const;
+    const MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpRequestHeaders& getRequestHeaders() const;
     const std::vector<std::string>& getRequestContent() const;
 
 private:
-    HttpRequestStatusLine httpRequestStatusLine_;
-    HttpGeneralHeaders httpGeneralHeaders_;
-    HttpRequestHeaders httpRequestHeaders_;
+    MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpRequestStatusLine httpRequestStatusLine_;
+    MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeaders httpGeneralHeaders_;
+    MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpRequestHeaders httpRequestHeaders_;
     std::vector<std::string> httpRequestContent_;
 
     std::vector<std::string> split_(const std::string& str, char delimiter);

@@ -3,7 +3,7 @@
 #include "utils.hpp"
 #include "headers_abstract_parent.hpp"
 
-namespace MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE{
+namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
 
 class HttpGeneralHeadersException : public MAIN_NAMESPACE::UTILS_NAMESPACE::Exception {
 public:
@@ -37,7 +37,7 @@ public:
     typedef std::string                                     ViaType;
     typedef std::string                                     WarningType;
 
-    HttpGeneralHeaders(const HttpRequestStatusLine& statusLine);
+    HttpGeneralHeaders(const StatusLineAbstractParent& statusLine);
     HttpGeneralHeaders(const HttpGeneralHeaders& other);
     ~HttpGeneralHeaders();
 

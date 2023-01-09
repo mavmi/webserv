@@ -1,8 +1,9 @@
 #pragma once
 
 #include "utils.hpp"
+#include "status_line_abstract_parent.hpp"
 
-namespace MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE{
+namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
 
 class HttpRequestStatusLineException : public MAIN_NAMESPACE::UTILS_NAMESPACE::Exception {
 public:
@@ -21,10 +22,9 @@ protected:
 };
 
 
-class HttpRequestStatusLine : public MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent{
+class HttpRequestStatusLine : public StatusLineAbstractParent{
 public:
     typedef std::string                                     UrlType;
-    typedef MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_VERSION   HttpVersionType;
     typedef MAIN_NAMESPACE::UTILS_NAMESPACE::METHOD         MethodType;
     typedef HttpRequestStatusLineException                  ExceptionType;
 
@@ -42,19 +42,13 @@ public:
     UrlType& getUrl();
     const UrlType& getUrl() const;
 
-    void setHttpVersion(HttpVersionType httpVersion);
-    HttpVersionType& getHttpVersion();
-    const HttpVersionType& getHttpVersion() const;
-
 private:
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<MethodType> method_;
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<UrlType> url_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<HttpVersionType> httpVersion_;
 
     void deleteData_();
     void copyData_(const MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent& other);
     void checkValidity_() const;
-    void throwOnDone_() const;
 
 };
 

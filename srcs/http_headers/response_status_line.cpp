@@ -1,6 +1,6 @@
 #include "../../include/http_headers/response_status_line.hpp"
 
-namespace MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE{
+namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
 HttpResponseStatusLineException::HttpResponseStatusLineException(const char* msg) : Exception(msg){}
 HttpResponseStatusLineException::HttpResponseStatusLineException(const std::string& msg) : Exception(msg){}
 HttpResponseStatusLineException::HttpResponseStatusLineException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_) 
@@ -17,11 +17,12 @@ std::string HttpResponseStatusLineException::output_() const {
 }
 
 
-namespace MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE{
+namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
 HttpResponseStatusLine::HttpResponseStatusLine(){
     isDone_ = false;
 }
-HttpResponseStatusLine::HttpResponseStatusLine(const HttpResponseStatusLine& other){
+HttpResponseStatusLine::HttpResponseStatusLine(const HttpResponseStatusLine& other)
+    : StatusLineAbstractParent(other){
     copyData_(other);
 }
 HttpResponseStatusLine::~HttpResponseStatusLine(){
@@ -32,21 +33,6 @@ HttpResponseStatusLine& HttpResponseStatusLine::operator=(const HttpResponseStat
     deleteData_();
     copyData_(other);
     return *this;
-}
-
-void HttpResponseStatusLine::setHttpVersion(HttpVersionType httpVersion){
-    throwOnDone_();
-    httpVersion_.set(httpVersion);
-}
-HttpResponseStatusLine::HttpVersionType& HttpResponseStatusLine::getHttpVersion(){
-    HANDLE_EXC_BEGIN
-        return httpVersion_.get();
-    HANDLE_EXC_END
-}
-const HttpResponseStatusLine::HttpVersionType& HttpResponseStatusLine::getHttpVersion() const{
-    HANDLE_EXC_BEGIN
-        return httpVersion_.get();
-    HANDLE_EXC_END
 }
 
 void HttpResponseStatusLine::setStatusCode(StatusCodeType statusCode){
@@ -101,8 +87,5 @@ void HttpResponseStatusLine::checkValidity_() const{
         char c = statusCode_.get().at(i); 
         if (c < '0' || c > '9') throw ExceptionType(errMsg);
     }
-}
-void HttpResponseStatusLine::throwOnDone_() const{
-    if (isDone_) throw ExceptionType("Status line is done. You cannot change it anymore.", EXC_ARGS);
 }
 }

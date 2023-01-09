@@ -3,7 +3,7 @@
 #include "utils.hpp"
 #include "common_headers.hpp"
 
-namespace MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE{
+namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
 
 class HttpRequestHeadersException : public MAIN_NAMESPACE::UTILS_NAMESPACE::Exception {
 public:
@@ -46,7 +46,7 @@ public:
     typedef std::string                                     TEType;
     typedef std::string                                     UserAgentType;
 
-    HttpRequestHeaders(const HttpRequestStatusLine& statusLine);
+    HttpRequestHeaders(const StatusLineAbstractParent& statusLine);
     HttpRequestHeaders(const HttpRequestHeaders& other);
     ~HttpRequestHeaders();
 

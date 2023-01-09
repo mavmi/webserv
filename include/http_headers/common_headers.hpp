@@ -3,7 +3,7 @@
 #include "utils.hpp"
 #include "headers_abstract_parent.hpp"
 
-namespace MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE{
+namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
 
 class HttpCommonHeadersException : public MAIN_NAMESPACE::UTILS_NAMESPACE::Exception {
 public:
@@ -40,7 +40,7 @@ public:
     typedef std::string                     LinkType;
     typedef std::string                     TitleType;
 
-    HttpCommonHeaders(const HttpRequestStatusLine& statusLine);
+    HttpCommonHeaders(const StatusLineAbstractParent& statusLine);
     HttpCommonHeaders(const HttpCommonHeaders& other);
     ~HttpCommonHeaders();
 
