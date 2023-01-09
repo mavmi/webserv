@@ -1,4 +1,4 @@
-#include "../../include/http_request_parser/HtttRequestStatusLine.hpp"
+#include "../../include/http_headers/request_status_line.hpp"
 
 namespace MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE{
 HttpRequestStatusLineException::HttpRequestStatusLineException(const char* msg) : Exception(msg){}
@@ -34,46 +34,46 @@ HttpRequestStatusLine& HttpRequestStatusLine::operator=(const HttpRequestStatusL
     return *this;    
 }
 
-void HttpRequestStatusLine::setMethod(METHOD method){
+void HttpRequestStatusLine::setMethod(MethodType method){
     throwOnDone_();
     method_.set(method);
 }
-HttpRequestStatusLine::METHOD& HttpRequestStatusLine::getMethod(){
+HttpRequestStatusLine::MethodType& HttpRequestStatusLine::getMethod(){
     HANDLE_EXC_BEGIN
         return method_.get();
     HANDLE_EXC_END
 }
-const HttpRequestStatusLine::METHOD& HttpRequestStatusLine::getMethod() const{
+const HttpRequestStatusLine::MethodType& HttpRequestStatusLine::getMethod() const{
     HANDLE_EXC_BEGIN
         return method_.get();
     HANDLE_EXC_END
 }
 
-void HttpRequestStatusLine::setUrl(const URL_TYPE& url){
+void HttpRequestStatusLine::setUrl(const UrlType& url){
     throwOnDone_();
     url_.set(url);
 }
-HttpRequestStatusLine::URL_TYPE& HttpRequestStatusLine::getUrl(){
+HttpRequestStatusLine::UrlType& HttpRequestStatusLine::getUrl(){
     HANDLE_EXC_BEGIN
         return url_.get();
     HANDLE_EXC_END
 }
-const HttpRequestStatusLine::URL_TYPE& HttpRequestStatusLine::getUrl() const{
+const HttpRequestStatusLine::UrlType& HttpRequestStatusLine::getUrl() const{
     HANDLE_EXC_BEGIN
         return url_.get();
     HANDLE_EXC_END
 }
 
-void HttpRequestStatusLine::setHttpVersion(HTTP_VERSION_TYPE httpVersion){
+void HttpRequestStatusLine::setHttpVersion(HttpVersionType httpVersion){
     throwOnDone_();
     httpVersion_.set(httpVersion);
 }
-HttpRequestStatusLine::HTTP_VERSION_TYPE& HttpRequestStatusLine::getHttpVersion(){
+HttpRequestStatusLine::HttpVersionType& HttpRequestStatusLine::getHttpVersion(){
     HANDLE_EXC_BEGIN
         return httpVersion_.get();
     HANDLE_EXC_END
 }
-const HttpRequestStatusLine::HTTP_VERSION_TYPE& HttpRequestStatusLine::getHttpVersion() const{
+const HttpRequestStatusLine::HttpVersionType& HttpRequestStatusLine::getHttpVersion() const{
     HANDLE_EXC_BEGIN
         return httpVersion_.get();
     HANDLE_EXC_END
@@ -81,9 +81,9 @@ const HttpRequestStatusLine::HTTP_VERSION_TYPE& HttpRequestStatusLine::getHttpVe
 
 void HttpRequestStatusLine::deleteData_(){
     isDone_ = false;
-    method_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<METHOD>();
-    url_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<URL_TYPE>();
-    httpVersion_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<HTTP_VERSION_TYPE>();
+    method_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<MethodType>();
+    url_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<UrlType>();
+    httpVersion_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<HttpVersionType>();
 }
 void HttpRequestStatusLine::copyData_(const MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent& o){
     const HttpRequestStatusLine& other = dynamic_cast<const HttpRequestStatusLine&>(o);

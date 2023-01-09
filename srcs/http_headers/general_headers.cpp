@@ -1,4 +1,4 @@
-#include "../../include/http_request_parser/HttpGeneralHeaders.hpp"
+#include "../../include/http_headers/general_headers.hpp"
 
 namespace MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE{
 HttpGeneralHeadersException::HttpGeneralHeadersException(const char* msg) : Exception(msg){}
@@ -12,7 +12,7 @@ HttpGeneralHeadersException::HttpGeneralHeadersException(const char* msg, const 
 HttpGeneralHeadersException::HttpGeneralHeadersException(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_, int code)
     : Exception(msg, _file_, _function_, _line_, code) {}
 std::string HttpGeneralHeadersException::output_() const {
-    return "HTTP_REQUEST_HEADERS_EXCEPTION: " + msg_;
+    return "HTTP_GENERAL_HEADERS_EXCEPTION: " + msg_;
 }
 }
 
@@ -38,7 +38,7 @@ HttpGeneralHeaders& HttpGeneralHeaders::operator=(const HttpGeneralHeaders& othe
 
 void HttpGeneralHeaders::setCacheControl(const CacheControlType& cacheControl){
     throwOnDone_();
-    checkVersion_(HttpRequestStatusLine::HTTP_1_1);
+    checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
     cacheControl_.set(cacheControl);
 }
 HttpGeneralHeaders::CacheControlType& HttpGeneralHeaders::getCacheControl(){
@@ -54,7 +54,7 @@ const HttpGeneralHeaders::CacheControlType& HttpGeneralHeaders::getCacheControl(
 
 void HttpGeneralHeaders::setConnection(const ConnectionType& connection){
     throwOnDone_();
-    checkVersion_(HttpRequestStatusLine::HTTP_1_1);
+    checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
     connection_.set(connection);
 }
 HttpGeneralHeaders::ConnectionType& HttpGeneralHeaders::getConnection(){
@@ -70,7 +70,7 @@ const HttpGeneralHeaders::ConnectionType& HttpGeneralHeaders::getConnection() co
 
 void HttpGeneralHeaders::setDate(const DateType& date){
     throwOnDone_();
-    checkVersion_(HttpRequestStatusLine::HTTP_1_0);
+    checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
     date_.set(date);
 }
 HttpGeneralHeaders::DateType& HttpGeneralHeaders::getDate(){
@@ -86,7 +86,7 @@ const HttpGeneralHeaders::DateType& HttpGeneralHeaders::getDate() const{
 
 void HttpGeneralHeaders::setMimeVersion(const MimeVersionType& mimeVersion){
     throwOnDone_();
-    checkVersion_(HttpRequestStatusLine::MIME);
+    checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::MIME);
     mimeVersion_.set(mimeVersion);
 }
 HttpGeneralHeaders::MimeVersionType& HttpGeneralHeaders::getMimeVersion(){
@@ -102,7 +102,7 @@ const HttpGeneralHeaders::MimeVersionType& HttpGeneralHeaders::getMimeVersion() 
 
 void HttpGeneralHeaders::setPragma(const PragmaType& pragma){
     throwOnDone_();
-    checkVersion_(HttpRequestStatusLine::HTTP_1_0);
+    checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
     pragma_.set(pragma);
 }
 HttpGeneralHeaders::PragmaType& HttpGeneralHeaders::getPragma(){
@@ -118,7 +118,7 @@ const HttpGeneralHeaders::PragmaType& HttpGeneralHeaders::getPragma() const{
 
 void HttpGeneralHeaders::setTrailer(const TrailerType& trailer){
     throwOnDone_();
-    checkVersion_(HttpRequestStatusLine::HTTP_1_1v2);
+    checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1v2);
     trailer_.set(trailer);
 }
 HttpGeneralHeaders::TrailerType& HttpGeneralHeaders::getTrailer(){
@@ -134,7 +134,7 @@ const HttpGeneralHeaders::TrailerType& HttpGeneralHeaders::getTrailer() const{
 
 void HttpGeneralHeaders::setTransferEncoding(const TransferEncodingType& transferEncoding){
     throwOnDone_();
-    checkVersion_(HttpRequestStatusLine::HTTP_1_1);
+    checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
     transferEncoding_.set(transferEncoding);
 }
 HttpGeneralHeaders::TransferEncodingType& HttpGeneralHeaders::getTransferEncoding(){
@@ -150,7 +150,7 @@ const HttpGeneralHeaders::TransferEncodingType& HttpGeneralHeaders::getTransferE
 
 void HttpGeneralHeaders::setUpgrade(const UpgradeType& upgrade){
     throwOnDone_();
-    checkVersion_(HttpRequestStatusLine::HTTP_1_1);
+    checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
     upgrade_.set(upgrade);
 }
 HttpGeneralHeaders::UpgradeType& HttpGeneralHeaders::getUpgrade(){
@@ -166,7 +166,7 @@ const HttpGeneralHeaders::UpgradeType& HttpGeneralHeaders::getUpgrade() const{
 
 void HttpGeneralHeaders::setVia(const ViaType& via){
     throwOnDone_();
-    checkVersion_(HttpRequestStatusLine::HTTP_1_1);
+    checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
     via_.set(via);
 }
 HttpGeneralHeaders::ViaType& HttpGeneralHeaders::getVia(){
@@ -182,7 +182,7 @@ const HttpGeneralHeaders::ViaType& HttpGeneralHeaders::getVia() const{
 
 void HttpGeneralHeaders::setWarning(const WarningType& warning){
     throwOnDone_();
-    checkVersion_(HttpRequestStatusLine::HTTP_1_1);
+    checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
     warning_.set(warning);
 }
 HttpGeneralHeaders::WarningType& HttpGeneralHeaders::getWarning(){

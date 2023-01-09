@@ -33,11 +33,7 @@ protected:
 
 // It is wrapper class for configuration classes's container.
 template <typename T>
-class Container {
-friend MAIN_NAMESPACE::CONFIG_NAMESPACE::Configuration;
-friend MAIN_NAMESPACE::CONFIG_NAMESPACE::ServerConfiguration;
-friend MAIN_NAMESPACE::CONFIG_NAMESPACE::RouteConfiguration;
-friend Wrapper<Container>;
+class Container{
 public:
     typedef size_t                                          SizeType;
     typedef size_t                                          DifferenceType;
@@ -47,8 +43,22 @@ public:
     typedef const T&                                        ConstReferenceType;
     typedef ContainerException                              ExceptionType;
 
+    Container(){
+        data_ = NULL;
+        size_ = 0;
+        capacity_ = 0;
+    }
+    Container(const Container& other){
+        copyData_(other);
+    }
     ~Container(){
         delete[] data_;
+    }
+
+    Container& operator=(const Container& other){
+        delete[] data_;
+        copyData_(other);
+        return *this;
     }
 
     SizeType size() const {
@@ -98,21 +108,6 @@ private:
     SizeType size_;
     SizeType capacity_;
     PointerType data_;
-
-    Container(){
-        data_ = NULL;
-        size_ = 0;
-        capacity_ = 0;
-    }
-    Container(const Container& other){
-        copyData_(other);
-    }
-
-    Container& operator=(const Container& other){
-        delete[] data_;
-        copyData_(other);
-        return *this;
-    }
 
     void updateCapacity_(SizeType capacity){
         if (capacity_ >= capacity) return;

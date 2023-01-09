@@ -1,0 +1,60 @@
+#pragma once
+
+#include "utils.hpp"
+
+namespace MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE{
+
+class HttpResponseStatusLineException : public MAIN_NAMESPACE::UTILS_NAMESPACE::Exception {
+public:
+    HttpResponseStatusLineException(const char* msg);
+    HttpResponseStatusLineException(const std::string& msg);
+
+    HttpResponseStatusLineException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_);
+    HttpResponseStatusLineException(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_);
+
+    HttpResponseStatusLineException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_, int code);
+    HttpResponseStatusLineException(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_, int code);
+
+protected:
+    virtual std::string output_() const;
+
+};
+
+class HttpResponseStatusLine : public MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent{
+public:
+    typedef HttpResponseStatusLineException                 ExceptionType;
+    typedef MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_VERSION   HttpVersionType;
+    typedef std::string                                     StatusCodeType;
+    typedef std::string                                     MessageType;
+
+    HttpResponseStatusLine();
+    HttpResponseStatusLine(const HttpResponseStatusLine& other);
+    ~HttpResponseStatusLine();
+
+    HttpResponseStatusLine& operator=(const HttpResponseStatusLine& other);
+
+    void setHttpVersion(HttpVersionType httpVersion);
+    HttpVersionType& getHttpVersion();
+    const HttpVersionType& getHttpVersion() const;
+
+    void setStatusCode(StatusCodeType statusCode);
+    StatusCodeType& getStatusCode();
+    const StatusCodeType& getStatusCode() const;
+
+    void setMessage(MessageType message);
+    MessageType& getMessage();
+    const MessageType& getMessage() const;
+
+private:
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<HttpVersionType> httpVersion_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<StatusCodeType> statusCode_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<MessageType> message_;
+
+    void deleteData_();
+    void copyData_(const MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent& o);
+    void checkValidity_() const;
+    void throwOnDone_() const;
+
+};
+
+}

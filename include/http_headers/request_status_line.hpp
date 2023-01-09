@@ -22,51 +22,34 @@ protected:
 
 
 class HttpRequestStatusLine : public MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent{
-friend HttpRequestParser;
 public:
-    enum METHOD{
-        GET,
-        POST,
-        DELETE
-    };
-    enum HTTP_VERSION{
-        HTTP_0_9,
-        HTTP_1_0,
-        HTTP_1_1,
-        HTTP_1_1v2,
-        HTTP_AUTH,
-        MIME,
-        MD5H,
-        CDH
-    };
-
-    typedef std::string                     URL_TYPE;
-    typedef HTTP_VERSION                    HTTP_VERSION_TYPE;
-    typedef HttpRequestStatusLineException  ExceptionType;
-
-    ~HttpRequestStatusLine();
-
-    void setMethod(METHOD method);
-    METHOD& getMethod();
-    const METHOD& getMethod() const;
-
-    void setUrl(const URL_TYPE& url);
-    URL_TYPE& getUrl();
-    const URL_TYPE& getUrl() const;
-
-    void setHttpVersion(HTTP_VERSION_TYPE httpVersion);
-    HTTP_VERSION_TYPE& getHttpVersion();
-    const HTTP_VERSION_TYPE& getHttpVersion() const;
-
-private:
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<METHOD> method_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<URL_TYPE> url_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<HTTP_VERSION_TYPE> httpVersion_;
+    typedef std::string                                     UrlType;
+    typedef MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_VERSION   HttpVersionType;
+    typedef MAIN_NAMESPACE::UTILS_NAMESPACE::METHOD         MethodType;
+    typedef HttpRequestStatusLineException                  ExceptionType;
 
     HttpRequestStatusLine();
     HttpRequestStatusLine(const HttpRequestStatusLine& other);
+    ~HttpRequestStatusLine();
 
     HttpRequestStatusLine& operator=(const HttpRequestStatusLine& other);
+
+    void setMethod(MethodType method);
+    MethodType& getMethod();
+    const MethodType& getMethod() const;
+
+    void setUrl(const UrlType& url);
+    UrlType& getUrl();
+    const UrlType& getUrl() const;
+
+    void setHttpVersion(HttpVersionType httpVersion);
+    HttpVersionType& getHttpVersion();
+    const HttpVersionType& getHttpVersion() const;
+
+private:
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<MethodType> method_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<UrlType> url_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<HttpVersionType> httpVersion_;
 
     void deleteData_();
     void copyData_(const MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent& other);

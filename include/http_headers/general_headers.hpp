@@ -1,8 +1,7 @@
 #pragma once
 
 #include "utils.hpp"
-#include "HtttRequestStatusLine.hpp"
-#include "../utils/httpHeadersAbstractParent.hpp"
+#include "headers_abstract_parent.hpp"
 
 namespace MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE{
 
@@ -23,23 +22,26 @@ protected:
 };
 
 
-class HttpGeneralHeaders : public MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent,
-                            public MAIN_NAMESPACE::UTILS_NAMESPACE::HttpHeadersAbstractParent{
-friend HttpRequestParser;
+class HttpGeneralHeaders : public MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent, public HttpHeadersAbstractParent{
 public:
-    typedef HttpGeneralHeadersException     ExceptionType;
-    typedef std::string                     CacheControlType;
-    typedef std::string                     ConnectionType;
-    typedef std::string                     DateType;
-    typedef std::string                     MimeVersionType;
-    typedef std::string                     PragmaType;
-    typedef std::string                     TrailerType;
-    typedef std::string                     TransferEncodingType;
-    typedef std::string                     UpgradeType;
-    typedef std::string                     ViaType;
-    typedef std::string                     WarningType;
+    typedef HttpGeneralHeadersException                     ExceptionType;
+    typedef MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_VERSION   HttpVersionType;
+    typedef std::string                                     CacheControlType;
+    typedef std::string                                     ConnectionType;
+    typedef std::string                                     DateType;
+    typedef std::string                                     MimeVersionType;
+    typedef std::string                                     PragmaType;
+    typedef std::string                                     TrailerType;
+    typedef std::string                                     TransferEncodingType;
+    typedef std::string                                     UpgradeType;
+    typedef std::string                                     ViaType;
+    typedef std::string                                     WarningType;
 
+    HttpGeneralHeaders(const HttpRequestStatusLine& statusLine);
+    HttpGeneralHeaders(const HttpGeneralHeaders& other);
     ~HttpGeneralHeaders();
+
+    HttpGeneralHeaders& operator=(const HttpGeneralHeaders& other);
 
     void setCacheControl(const CacheControlType& cacheControl);
     CacheControlType& getCacheControl();
@@ -92,11 +94,6 @@ private:
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<UpgradeType> upgrade_;
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ViaType> via_;
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<WarningType> warning_;
-
-    HttpGeneralHeaders(const HttpRequestStatusLine& statusLine);
-    HttpGeneralHeaders(const HttpGeneralHeaders& other);
-
-    HttpGeneralHeaders& operator=(const HttpGeneralHeaders& other);
 
     void deleteData_();
     void copyData_(const ParserAbstractParent& o);

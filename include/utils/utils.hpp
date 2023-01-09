@@ -12,6 +12,23 @@
 
 namespace MAIN_NAMESPACE::UTILS_NAMESPACE{
 
+enum METHOD{
+    GET,
+    POST,
+    DELETE
+};
+
+enum HTTP_VERSION{
+    HTTP_0_9,
+    HTTP_1_0,
+    HTTP_1_1,
+    HTTP_1_1v2,
+    HTTP_AUTH,
+    MIME,
+    MD5H,
+    CDH
+};
+
 const std::string DEFAULT_SERVER_PATH = "DefaultServer";
 const std::string DEFAULT_SERVER_CONFIG_FILE_PATH = DEFAULT_SERVER_PATH + "/ConfigFile.txt";
 

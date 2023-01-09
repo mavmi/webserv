@@ -2,7 +2,7 @@
 
 #include "test_utils.hpp"
 #include "../../include/configurations/parser.hpp"
-#include "../../include/http_request_parser/HttpRequest.hpp"
+#include "../../include/http_request_parser/http_request.hpp"
 
 #define ___HEADER___ TestHeader(__FUNCTION__);
 

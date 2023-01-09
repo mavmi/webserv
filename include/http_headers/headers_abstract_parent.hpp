@@ -1,9 +1,11 @@
 #pragma once
 
-#include "utils.hpp"
-#include "../http_request_parser/HtttRequestStatusLine.hpp"
+#include "request_status_line.hpp"
 
-namespace MAIN_NAMESPACE::UTILS_NAMESPACE{
+#include "../utils/utils.hpp"
+#include "../utils/exceptions.hpp"
+
+namespace MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE{
 
 class HttpHeadersAbstractParentException : public MAIN_NAMESPACE::UTILS_NAMESPACE::Exception {
 public:
@@ -24,13 +26,13 @@ protected:
 
 class HttpHeadersAbstractParent{
 public:
-    typedef MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE::HttpRequestStatusLine::HTTP_VERSION_TYPE   HttpVersionType;
-    typedef HttpHeadersAbstractParentException                                                      ExceptionType;
+    typedef MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_VERSION   HttpVersionType;
+    typedef HttpHeadersAbstractParentException              ExceptionType;
 
 protected:
-    const MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE::HttpRequestStatusLine& statusLine_;
+    const HttpRequestStatusLine& statusLine_;
 
-    HttpHeadersAbstractParent(const MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE::HttpRequestStatusLine& statusLine);
+    HttpHeadersAbstractParent(const HttpRequestStatusLine& statusLine);
     HttpHeadersAbstractParent(const HttpHeadersAbstractParent& other);
     ~HttpHeadersAbstractParent();
 

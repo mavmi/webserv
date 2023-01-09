@@ -5,9 +5,9 @@
 #include <stddef.h>
 
 #include "utils.hpp"
-#include "HtttRequestStatusLine.hpp"
-#include "HttpGeneralHeaders.hpp"
-#include "HtttRequestHeaders.hpp"
+#include "../http_headers/request_status_line.hpp"
+#include "../http_headers/general_headers.hpp"
+#include "../http_headers/request_headers.hpp"
 
 namespace MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE{
 
@@ -29,14 +29,17 @@ protected:
 
 
 class HttpRequestParser{
-friend MAIN_NAMESPACE::HttpRequest;
 public:
     typedef size_t                      SizeType;
     typedef char*                       BufferType;
     typedef std::vector<BufferType>     BufferContainerType;
     typedef HttpRequestParserException  ExceptionType;
 
+    HttpRequestParser();
+    HttpRequestParser(const HttpRequestParser& other);
     ~HttpRequestParser();
+
+    HttpRequestParser& operator=(const HttpRequestParser& other);
 
     void parseHttpRequest(const BufferContainerType& buffer, int bufferSize, int lastSize);
     void clear();
@@ -51,11 +54,6 @@ private:
     HttpGeneralHeaders httpGeneralHeaders_;
     HttpRequestHeaders httpRequestHeaders_;
     std::vector<std::string> httpRequestContent_;
-
-    HttpRequestParser();
-    HttpRequestParser(const HttpRequestParser& other);
-
-    HttpRequestParser& operator=(const HttpRequestParser& other);
 
     std::vector<std::string> split_(const std::string& str, char delimiter);
     int find_(char* arr, int startPoint, int size, char c);

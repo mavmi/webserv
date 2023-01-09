@@ -1,4 +1,4 @@
-#include "../../include/http_request_parser/HttpRequestParser.hpp"
+#include "../../include/http_request_parser/http_request_parser.hpp"
 
 namespace MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE{
 HttpRequestParserException::HttpRequestParserException(const char* msg) : Exception(msg){}
@@ -154,9 +154,9 @@ void HttpRequestParser::parseStatusLine_(const std::string& line){
     {
         const std::string& method = splitedLine.at(0);
         
-        if (method == "GET") httpRequestStatusLine_.setMethod(HttpRequestStatusLine::GET);
-        else if (method == "POST") httpRequestStatusLine_.setMethod(HttpRequestStatusLine::POST);
-        else if (method == "DELETE") httpRequestStatusLine_.setMethod(HttpRequestStatusLine::DELETE);
+        if (method == "GET") httpRequestStatusLine_.setMethod(MAIN_NAMESPACE::UTILS_NAMESPACE::GET);
+        else if (method == "POST") httpRequestStatusLine_.setMethod(MAIN_NAMESPACE::UTILS_NAMESPACE::POST);
+        else if (method == "DELETE") httpRequestStatusLine_.setMethod(MAIN_NAMESPACE::UTILS_NAMESPACE::DELETE);
         else throw ExceptionType("Invalid method", EXC_ARGS);
     }
     // URL
@@ -167,7 +167,7 @@ void HttpRequestParser::parseStatusLine_(const std::string& line){
     // HTTP version
     {
         if (splitedLineSize == 2) {
-            httpRequestStatusLine_.setHttpVersion(HttpRequestStatusLine::HTTP_0_9);
+            httpRequestStatusLine_.setHttpVersion(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_0_9);
             return;
         }
 
@@ -175,21 +175,21 @@ void HttpRequestParser::parseStatusLine_(const std::string& line){
         const std::string& verLine = splitedLine.at(2);
 
         if (verLine == "HTTP/0.9"){
-            httpRequestStatusLine_.setHttpVersion(HttpRequestStatusLine::HTTP_0_9);
+            httpRequestStatusLine_.setHttpVersion(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_0_9);
         } else if (verLine == "HTTP/1.0"){
-            httpRequestStatusLine_.setHttpVersion(HttpRequestStatusLine::HTTP_1_0);
+            httpRequestStatusLine_.setHttpVersion(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
         } else if (verLine == "HTTP/1.1"){
-            httpRequestStatusLine_.setHttpVersion(HttpRequestStatusLine::HTTP_1_1);
+            httpRequestStatusLine_.setHttpVersion(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
         } else if (verLine == "HTTP/1.1v2"){
-            httpRequestStatusLine_.setHttpVersion(HttpRequestStatusLine::HTTP_1_1v2);
+            httpRequestStatusLine_.setHttpVersion(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1v2);
         } else if (verLine == "HTTP-Auth"){
-            httpRequestStatusLine_.setHttpVersion(HttpRequestStatusLine::HTTP_AUTH);
+            httpRequestStatusLine_.setHttpVersion(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_AUTH);
         } else if (verLine == "MIME"){
-            httpRequestStatusLine_.setHttpVersion(HttpRequestStatusLine::MIME);
+            httpRequestStatusLine_.setHttpVersion(MAIN_NAMESPACE::UTILS_NAMESPACE::MIME);
         } else if (verLine == "MD5H"){
-            httpRequestStatusLine_.setHttpVersion(HttpRequestStatusLine::MD5H);
+            httpRequestStatusLine_.setHttpVersion(MAIN_NAMESPACE::UTILS_NAMESPACE::MD5H);
         } else if (verLine == "CDH"){
-            httpRequestStatusLine_.setHttpVersion(HttpRequestStatusLine::CDH);
+            httpRequestStatusLine_.setHttpVersion(MAIN_NAMESPACE::UTILS_NAMESPACE::CDH);
         } else {
             throw ExceptionType("Invalid HTTP version", EXC_ARGS);
         }

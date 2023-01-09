@@ -6,8 +6,6 @@
 
 namespace MAIN_NAMESPACE::CONFIG_NAMESPACE {
 
-class Configuration;
-
 class ServerException : public MAIN_NAMESPACE::UTILS_NAMESPACE::Exception {
 public:
     ServerException(const char* msg);
@@ -29,8 +27,6 @@ protected:
 // Use methods [isDone()] to check if the server is finished or not.
 // Method [done()] marks the server as finished. May throw an exception.
 class ServerConfiguration : public MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent{
-friend Configuration;
-friend MAIN_NAMESPACE::UTILS_NAMESPACE::Container<ServerConfiguration>;
 public:
     typedef size_t                                                          SizeType;
     typedef uint16_t                                                        PortType;
@@ -43,7 +39,11 @@ public:
     typedef MAIN_NAMESPACE::UTILS_NAMESPACE::Container<RouteType>           RoutesContainerType;
     typedef ServerException                                                 ExceptionType;
 
+    explicit ServerConfiguration();
+    explicit ServerConfiguration(const ServerConfiguration& other);
     ~ServerConfiguration();
+
+    ServerConfiguration& operator=(const ServerConfiguration& other);
 
     void setPort(PortType port);
     PortType getPort() const;
@@ -84,17 +84,7 @@ private:
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ErrorPagesContainerType> errorPages_;
     BodySizeType bodySize_;
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<RoutesContainerType> routes_;
-
-    explicit ServerConfiguration();
-    explicit ServerConfiguration(const ServerConfiguration& other);
-
-    ServerConfiguration& operator=(const ServerConfiguration& other);
-    static void* operator new(size_t size);
-    static void* operator new(size_t size, const ServerConfiguration& other);
-    static void* operator new[](size_t size);
-    static void operator delete(void* ptr);
-    static void operator delete[](void* ptr);
-
+    
     void deleteData_();
     void copyData_(const MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent& o);
     void checkValidity_() const;
