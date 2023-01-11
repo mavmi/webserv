@@ -5,6 +5,9 @@ TEST_NAME	=	$(NAME)_test
 ### WEBSERV SOURCES ###
 #######################
 
+### .o & .d ###
+TMP_FILES_DIR		=	tmp_files
+
 ### headers ###
 HDRS_UTILS			=	container.hpp exceptions.hpp parser_abstract_parent.hpp utils.hpp wrapper.hpp
 HDRS_CONFIG			=	configuration_host.hpp	configuration.hpp parser.hpp route_configuration.hpp server_configuration.hpp utils.hpp
@@ -48,10 +51,10 @@ SRCS_HTTP_HEAD_DIR	=	$(SRCS_DIR)/http_headers
 SRCS_HTTP_REQ_DIR	=	$(SRCS_DIR)/http_request_parser
 SRCS_HTTP_RES_DIR	=	$(SRCS_DIR)/http_response_generator
 
-### main ###
-MAIN_SRC	=	$(SRCS_DIR)/main.cpp
-MAIN_OBJ	=	$(MAIN_SRC:.cpp=.o)
-MAIN_DEPEN	=	$(MAIN_SRC:.cpp=.d)
+### main.cpp ###
+MAIN_SRC		=	$(SRCS_DIR)/main.cpp
+MAIN_OBJ		=	$(addprefix $(TMP_FILES_DIR)/, $(MAIN_SRC:.cpp=.o))
+MAIN_DEPEN		=	$(addprefix $(TMP_FILES_DIR)/, $(MAIN_SRC:.cpp=.d))
 
 ### result values ###
 HDRS		=	$(addprefix $(HDRS_UTILS_DIR)/, $(HDRS_UTILS))\
@@ -64,8 +67,8 @@ SRCS		=	$(addprefix $(SRCS_UTILS_DIR)/, $(SRCS_UTILS))\
 					$(addprefix $(SRCS_HTTP_HEAD_DIR)/, $(SRCS_HTTP_HEADERS))\
 					$(addprefix $(SRCS_HTTP_REQ_DIR)/, $(SRCS_HTTP_REQ))\
 					$(addprefix $(SRCS_HTTP_RES_DIR)/, $(SRCS_HTTP_RES))
-OBJS		=	$(SRCS:.cpp=.o)
-DEPEN		=	$(SRCS:.cpp=.d)
+OBJS		=	$(addprefix $(TMP_FILES_DIR)/, $(SRCS:.cpp=.o))
+DEPEN		=	$(addprefix $(TMP_FILES_DIR)/, $(SRCS:.cpp=.d))
 
 ####################
 ### TEST SOURCES ###
@@ -89,16 +92,16 @@ TEST_DIR		=	test
 TEST_HDRS_DIR	=	$(TEST_DIR)/include
 TEST_SRCS_DIR	=	$(TEST_DIR)/srcs
 
-### main ###
+### main.cpp ###
 TEST_MAIN		=	$(TEST_SRCS_DIR)/main.cpp
-TEST_MAIN_OBJ	=	$(TEST_MAIN:.cpp=.o)
-TEST_MAIN_DEPEN	=	$(TEST_MAIN:.cpp=.d)
+TEST_MAIN_OBJ	=	$(addprefix $(TMP_FILES_DIR)/, $(TEST_MAIN:.cpp=.o))
+TEST_MAIN_DEPEN	=	$(addprefix $(TMP_FILES_DIR)/, $(TEST_MAIN:.cpp=.d))
 
 ### result values ###
 TEST_HDRS	=	$(addprefix $(TEST_HDRS_DIR)/, $(TEST_HDRS_test))
 TEST_SRCS	=	$(addprefix $(TEST_SRCS_DIR)/, $(TEST_SRCS_test))
-TEST_OBJS	=	$(TEST_SRCS:.cpp=.o)
-TEST_DEPEN	=	$(TEST_SRCS:.cpp=.d)
+TEST_OBJS	=	$(addprefix $(TMP_FILES_DIR)/, $(TEST_SRCS:.cpp=.o))
+TEST_DEPEN	=	$(addprefix $(TMP_FILES_DIR)/, $(TEST_SRCS:.cpp=.d))
 
 
 #############
@@ -108,37 +111,36 @@ CC			=	g++
 GCC			=	$(CC) -Wall -Wextra -Werror -std=c++98 -MMD -g -fsanitize=undefined -fsanitize=address -fsanitize=leak
 
 
-%.o:		%.cpp $(HDRS) $(TEST_HDRS)
-			$(GCC) -c -o $@ $<
+# $@					$<
+$(TMP_FILES_DIR)/%.o:	%.cpp $(HDRS) $(TEST_HDRS)
+						@mkdir -p $(dir $@)
+						$(GCC) -c -o $@ $<
 
-all:		$(NAME)
+all:					$(NAME)
 
-$(NAME):	$(OBJS) $(MAIN_OBJ)
-			$(GCC) $(OBJS) $(MAIN_OBJ) -o $(NAME)
+$(NAME):				$(OBJS) $(MAIN_OBJ)
+						$(GCC) $(OBJS) $(MAIN_OBJ) -o $(NAME)
 
-clean:
-			@rm -f\
-				$(MAIN_OBJ) $(MAIN_DEPEN)\
-				$(OBJS) $(DEPEN)\
-				$(TEST_MAIN_OBJ) $(TEST_MAIN_DEPEN)\
-				$(TEST_OBJS) $(TEST_DEPEN)
+clean:			
+						@rm -rf $(TMP_FILES_DIR)
 
-fclean:		clean
-			@rm -f $(NAME) $(TEST_NAME)
+fclean:					clean
+						@rm -f $(NAME) $(TEST_NAME)
 
-re:			fclean all
+re:						fclean all
 
-test:		$(OBJS) $(TEST_OBJS) $(TEST_MAIN_OBJ)
-			@$(GCC) $(OBJS) $(TEST_OBJS) $(TEST_MAIN_OBJ) -o $(TEST_NAME)
+test:					$(OBJS) $(TEST_OBJS) $(TEST_MAIN_OBJ)
+						@mkdir -p $(dir $@)
+						$(GCC) $(OBJS) $(TEST_OBJS) $(TEST_MAIN_OBJ) -o $(TEST_NAME)
 
 doNotForgetToDelete:
-			$(eval wsrv_dir:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST)))))
+						$(eval wsrv_dir:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST)))))
 
-			@echo '\033[0;31m' &&\
-				grep -r --include "*.hpp" --include "*.cpp"\
-					'[Н,н][Е,е]\s*[З,з][А,а][Б,б][Ы,ы][Т,т][Ь,ь]\s*[У,у][Д,д][А,а][Л,л][И,и][Т,т][Ь,ь]'\
-				$(wsrv_dir);\
-				echo '\033[0m'
+						@echo '\033[0;31m' &&\
+							grep -r --include "*.hpp" --include "*.cpp"\
+								'[Н,н][Е,е]\s*[З,з][А,а][Б,б][Ы,ы][Т,т][Ь,ь]\s*[У,у][Д,д][А,а][Л,л][И,и][Т,т][Ь,ь]'\
+							$(wsrv_dir);\
+							echo '\033[0m'
 			
 -include $(DEPEN)
 

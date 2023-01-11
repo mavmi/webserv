@@ -26,25 +26,7 @@ protected:
 
 class HttpResponseGenerator{
 public:
-    typedef char*                           BufferType;
-    typedef std::vector<BufferType>         BufferContainerType;
     typedef HttpResponseGeneratorException  ExceptionType;
-    
-    struct BytesContainer{
-        BytesContainer(){
-            container = BufferContainerType();
-            bufferSize = 64;
-            lastSize = 0;
-        }
-        BytesContainer(const BytesContainer& other);
-        ~BytesContainer();
-
-        BytesContainer& operator=(const BytesContainer& other);
-
-        BufferContainerType container;
-        size_t bufferSize;
-        size_t lastSize;
-    };
 
     HttpResponseGenerator();
     HttpResponseGenerator(const HttpResponseGenerator& other);
@@ -61,7 +43,7 @@ public:
     std::vector<std::string>& getMessage();
     const std::vector<std::string>& getMessage() const;
 
-    BytesContainer toBytes();
+    MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer toBytes();
 
 private:
     MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseStatusLine responseStatusLine_;

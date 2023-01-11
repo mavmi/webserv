@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include <cstdlib>
 #include <iostream>
 #include <algorithm>
@@ -13,6 +14,16 @@
 #define utils           UTILS_NAMESPACE
 
 namespace MAIN_NAMESPACE::UTILS_NAMESPACE{
+
+const std::string DEFAULT_SERVER_PATH = "DefaultServer";
+const std::string DEFAULT_SERVER_CONFIG_FILE_PATH = DEFAULT_SERVER_PATH + "/ConfigFile.txt";
+
+enum MSG_TYPE {
+    DEBUG,
+    INFO,
+    WARNING,
+    ERROR
+};
 
 enum METHOD{
     GET,
@@ -31,14 +42,23 @@ enum HTTP_VERSION{
     CDH
 };
 
-const std::string DEFAULT_SERVER_PATH = "DefaultServer";
-const std::string DEFAULT_SERVER_CONFIG_FILE_PATH = DEFAULT_SERVER_PATH + "/ConfigFile.txt";
+class BytesContainer{
+public:
+    BytesContainer();
+    BytesContainer(const BytesContainer& other);
+    ~BytesContainer();
 
-enum MSG_TYPE {
-    DEBUG,
-    INFO,
-    WARNING,
-    ERROR
+    BytesContainer& operator=(const BytesContainer& other);
+
+    std::vector<char*> bytesContainer;
+    size_t bufferSize;
+    size_t lastSize;
+
+private:
+    void cpy_(const BytesContainer& other);
+    char* realloc_(char* buffer, size_t bufferSize);
+    void free_();
+
 };
 
 class UtilsException {
@@ -55,6 +75,9 @@ protected:
     virtual std::string output_() const;
     
 };
+
+std::string     httpVersionToString(HTTP_VERSION httpVersion);
+HTTP_VERSION    httpVersionFromString(const std::string& httpVersionStr);
 
 void        utilsPrintMsg(const std::string& msg, MSG_TYPE msgType);
 void        utilsCheckArgsCount(int argc);

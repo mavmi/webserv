@@ -44,8 +44,8 @@ HttpRequestParser& HttpRequestParser::operator=(const HttpRequestParser& other){
     return *this;
 }
 
-void HttpRequestParser::parseHttpRequest(const HttpRequestParser::BufferContainerType& buffer, int bufferSize, int lastSize){
-    std::vector<std::string> content = parseBuffer_(buffer, bufferSize, lastSize);
+void HttpRequestParser::parseHttpRequest(const MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer& buffer){
+    std::vector<std::string> content = parseBuffer_(buffer);
     if (content.size() < 2) throw ExceptionType("HTTP request doesn't contain headers");
 
     parseStatusLine_(content.at(0));
@@ -108,25 +108,25 @@ bool HttpRequestParser::isLineEmpty_(const std::string& line){
     return true;
 }
 
-std::vector<std::string> HttpRequestParser::parseBuffer_(const BufferContainerType& buffer, int bufferSize, int lastSize){
+std::vector<std::string> HttpRequestParser::parseBuffer_(const MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer& buffer){
     int startPoint;
     bool isLastFinished = true;
     const char newLine = '\n';
     std::vector<std::string> result;
 
-    for (size_t i = 0; i < buffer.size(); i++){
+    for (size_t i = 0; i < buffer.bytesContainer.size(); i++){
         startPoint = 0;
         while (true){
             int newLinePos = find_(
-                buffer[i],
+                buffer.bytesContainer[i],
                 startPoint,
-                i + 1 == buffer.size() ? lastSize : bufferSize,
+                i + 1 == buffer.bytesContainer.size() ? buffer.lastSize : buffer.bufferSize,
                 newLine
             );
             
-            int endPoint = newLinePos == -1 ? (i + 1 == buffer.size() ? lastSize : bufferSize) : newLinePos;
+            int endPoint = newLinePos == -1 ? (i + 1 == buffer.bytesContainer.size() ? buffer.lastSize : buffer.bufferSize) : newLinePos;
             std::string substr(
-                buffer[i] + startPoint,
+                buffer.bytesContainer[i] + startPoint,
                 endPoint - startPoint
             );
 
@@ -174,24 +174,10 @@ void HttpRequestParser::parseStatusLine_(const std::string& line){
         const std::string excMsg = "Invalid HTTP version";
         const std::string& verLine = splitedLine.at(2);
 
-        if (verLine == "HTTP/0.9"){
-            httpRequestStatusLine_.setHttpVersion(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_0_9);
-        } else if (verLine == "HTTP/1.0"){
-            httpRequestStatusLine_.setHttpVersion(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
-        } else if (verLine == "HTTP/1.1"){
-            httpRequestStatusLine_.setHttpVersion(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
-        } else if (verLine == "HTTP/1.1v2"){
-            httpRequestStatusLine_.setHttpVersion(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1v2);
-        } else if (verLine == "HTTP-Auth"){
-            httpRequestStatusLine_.setHttpVersion(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_AUTH);
-        } else if (verLine == "MIME"){
-            httpRequestStatusLine_.setHttpVersion(MAIN_NAMESPACE::UTILS_NAMESPACE::MIME);
-        } else if (verLine == "MD5H"){
-            httpRequestStatusLine_.setHttpVersion(MAIN_NAMESPACE::UTILS_NAMESPACE::MD5H);
-        } else if (verLine == "CDH"){
-            httpRequestStatusLine_.setHttpVersion(MAIN_NAMESPACE::UTILS_NAMESPACE::CDH);
-        } else {
-            throw ExceptionType("Invalid HTTP version", EXC_ARGS);
+        try {
+            httpRequestStatusLine_.setHttpVersion(MAIN_NAMESPACE::UTILS_NAMESPACE::httpVersionFromString(verLine));
+        } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::UtilsException& e){
+            throw ExceptionType(e.what(), EXC_ARGS);
         }
     }
 

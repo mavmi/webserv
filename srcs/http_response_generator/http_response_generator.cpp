@@ -62,33 +62,20 @@ const std::vector<std::string>& HttpResponseGenerator::getMessage() const{
     return message_;
 }
 
-HttpResponseGenerator::BytesContainer HttpResponseGenerator::toBytes(){
+MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer HttpResponseGenerator::toBytes(){
     responseStatusLine_.done();
     responseHeaders_.done();
     
-    BytesContainer result;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer result;
 
     // Status line
     {
         std::string statusLineStr;
 
-        MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_VERSION httpVersion = responseStatusLine_.getHttpVersion();
-        if (httpVersion == MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_0_9){
-            statusLineStr += "HTTP/0.9";
-        } else if (httpVersion == MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0){
-            statusLineStr += "HTTP/1.0";
-        } else if (httpVersion == MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1){
-            statusLineStr += "HTTP/1.1";
-        } else if (httpVersion == MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1v2){
-            statusLineStr += "HTTP/1.1v2";
-        } else if (httpVersion == MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_AUTH){
-            statusLineStr += "HTTP-Auth";
-        } else if (httpVersion == MAIN_NAMESPACE::UTILS_NAMESPACE::MIME){
-            statusLineStr += "MIME";
-        } else if (httpVersion == MAIN_NAMESPACE::UTILS_NAMESPACE::MD5H){
-            statusLineStr += "MD5H";
-        } else if (httpVersion == MAIN_NAMESPACE::UTILS_NAMESPACE::CDH){
-            statusLineStr += "CDH";
+        try{
+            statusLineStr += MAIN_NAMESPACE::UTILS_NAMESPACE::httpVersionToString(responseStatusLine_.getHttpVersion());
+        } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::UtilsException& e){
+            throw ExceptionType(e.what(), EXC_ARGS);
         }
 
         statusLineStr += " ";
@@ -96,17 +83,15 @@ HttpResponseGenerator::BytesContainer HttpResponseGenerator::toBytes(){
 
         try {
             statusLineStr += responseStatusLine_.getMessage();
-        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseStatusLineException&){
-
-        }
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseStatusLineException&){}
 
         size_t begin = 0, end = 0;
         while (true){
             end = (begin + result.bufferSize <= statusLineStr.size()) ? begin + result.bufferSize : statusLineStr.size();
             size_t size = end - begin;
-            result.container.push_back(new char[size]);
+            result.bytesContainer.push_back(new char[size]);
             for (size_t i = 0, strIter = begin; i < size; i++, strIter++){
-                result.container.back()[i] = statusLineStr[strIter];
+                result.bytesContainer.back()[i] = statusLineStr[strIter];
             }
             if (end == statusLineStr.size()){
                 result.lastSize = size;

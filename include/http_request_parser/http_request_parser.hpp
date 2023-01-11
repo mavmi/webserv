@@ -41,7 +41,7 @@ public:
 
     HttpRequestParser& operator=(const HttpRequestParser& other);
 
-    void parseHttpRequest(const BufferContainerType& buffer, int bufferSize, int lastSize);
+    void parseHttpRequest(const MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer& buffer);
     void clear();
 
     const MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpRequestStatusLine& getStatusLine() const;
@@ -59,7 +59,7 @@ private:
     int find_(char* arr, int startPoint, int size, char c);
     bool isLineEmpty_(const std::string& line);
 
-    std::vector<std::string> parseBuffer_(const BufferContainerType& buffer, int bufferSize, int lastSize);
+    std::vector<std::string> parseBuffer_(const MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer& buffer);
     void parseStatusLine_(const std::string& line);
     void parseHeader_(const std::string& line);
 };

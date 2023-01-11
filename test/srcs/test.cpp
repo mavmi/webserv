@@ -475,9 +475,9 @@ void test::CONFIGURATION_FILES_TESTS(){
 void test::HTTP_REQUEST_FILE_TEST(){
     ___HEADER___
 
-    const int bufferSize = 8;
-    int lastSize;
-    std::vector<char*> content;
+    wsrv::utils::BytesContainer content;
+    content.bufferSize = 8;
+    content.lastSize = 0;
     
     // read http request file
     {
@@ -489,27 +489,27 @@ void test::HTTP_REQUEST_FILE_TEST(){
         }
 
         while(true){
-            char* buffer = (char*)malloc(bufferSize * sizeof(char));
-            int readCount = read(fileFd, buffer, bufferSize);
-            content.push_back(buffer);
-            if (readCount < bufferSize){
-                lastSize = readCount;
+            char* buffer = new char [content.bufferSize];
+            size_t readCount = static_cast<size_t>(read(fileFd, buffer, content.bufferSize));
+            content.bytesContainer.push_back(buffer);
+            if (readCount < content.bufferSize){
+                content.lastSize = readCount;
                 break;
             }
         }
 
         std::cout << test_utils::getColor(test_utils::CYAN) << "\n\tHTTP request file content:" << std::endl;
         std::cout << "\t==========================" << std::endl;
-        for (size_t i = 0; i < content.size(); i++){
-            for (int j = 0; j < (i + 1 == content.size() ? lastSize : bufferSize); j++){
-                std::cout << content[i][j];
+        for (size_t i = 0; i < content.bytesContainer.size(); i++){
+            for (size_t j = 0; j < (i + 1 == content.bytesContainer.size() ? content.lastSize : content.bufferSize); j++){
+                std::cout << content.bytesContainer[i][j];
             }
         }
         std::cout << "\n\t==========================\n" << test_utils::getColor(test_utils::DEFAULT) << std::endl;
     }
 
     try{
-        wsrv::HttpRequest httpRequest = wsrv::HttpRequest::parseHttpRequest(content, bufferSize, lastSize);
+        wsrv::HttpRequest httpRequest = wsrv::HttpRequest::parseHttpRequest(content);
 
         const wsrv::http_headers::HttpRequestStatusLine& statusLine = httpRequest.getHttpRequest().getStatusLine();
         assert(statusLine.getHttpVersion() == wsrv::utils::HTTP_1_1);
@@ -533,11 +533,6 @@ void test::HTTP_REQUEST_FILE_TEST(){
     } catch (wsrv::utils::Exception& e){
         std::cout << e.what() << std::endl;
         assert(false);
-    }
-
-    // free malloced http content
-    {
-        for (size_t i = 0; i < content.size(); i++) free(content[i]);
     }
 }
 
