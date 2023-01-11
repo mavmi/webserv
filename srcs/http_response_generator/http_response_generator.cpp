@@ -20,12 +20,14 @@ std::string HttpResponseGeneratorException::output_() const {
 namespace MAIN_NAMESPACE::HTTP_RESPONSE_GENER_NAMESPACE{
 HttpResponseGenerator::HttpResponseGenerator()
     : responseStatusLine_(MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseStatusLine()),
+        generalHeaders_(MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeaders(responseStatusLine_)),
         responseHeaders_(MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeaders(responseStatusLine_)),
         message_(std::vector<std::string>()) {
 
 }
 HttpResponseGenerator::HttpResponseGenerator(const HttpResponseGenerator& other)
     : responseStatusLine_(other.responseStatusLine_),
+        generalHeaders_(other.generalHeaders_),
         responseHeaders_(other.responseHeaders_),
         message_(other.message_){
 
@@ -48,10 +50,17 @@ const MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseStatusLine& HttpRespon
     return responseStatusLine_;
 }
 
-MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeaders& HttpResponseGenerator::getHeaders(){
+MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeaders& HttpResponseGenerator::getGeneralHeaders(){
+    return generalHeaders_;
+}
+const MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeaders& HttpResponseGenerator::getGeneralHeaders() const{
+    return generalHeaders_;
+}
+
+MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeaders& HttpResponseGenerator::getResponseHeaders(){
     return responseHeaders_;
 }
-const MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeaders& HttpResponseGenerator::getHeaders() const{
+const MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeaders& HttpResponseGenerator::getResponseHeaders() const{
     return responseHeaders_;
 }
 
@@ -92,6 +101,48 @@ MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer HttpResponseGenerator::toBytes()
 
     // Headers
     {
+        // General headers
+        try{
+            result.pushBack("Cache-Control:" + generalHeaders_.getCacheControl());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeadersException&){}
+        try{
+            result.pushBack("Connection:" + generalHeaders_.getConnection());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeadersException&){}
+        try{
+            result.pushBack("Date:" + generalHeaders_.getDate());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeadersException&){}
+        try{
+            result.pushBack("MIME-Version:" + generalHeaders_.getMimeVersion());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeadersException&){}
+        try{
+            result.pushBack("Pragma:" + generalHeaders_.getPragma());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeadersException&){}
+        try{
+            result.pushBack("Trailer:" + generalHeaders_.getTrailer());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeadersException&){}
+        try{
+            result.pushBack("Transfer-Encoding:" + generalHeaders_.getTransferEncoding());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeadersException&){}
+        try{
+            result.pushBack("Upgrade:" + generalHeaders_.getUpgrade());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeadersException&){}
+        try{
+            result.pushBack("Via:" + generalHeaders_.getVia());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeadersException&){}
+        try{
+            result.pushBack("Warning:" + generalHeaders_.getWarning());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeadersException&){}
+
         // Common headers
         try{
             result.pushBack("Content-Disposition:" + responseHeaders_.getContentDisposition());
@@ -154,51 +205,51 @@ MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer HttpResponseGenerator::toBytes()
         try{
             result.pushBack("Accept-Ranges:" + responseHeaders_.getAcceptRanges());
             result.pushBack(newLine);
-        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeadersException&){}
         try{
             result.pushBack("Age:" + responseHeaders_.getAge());
             result.pushBack(newLine);
-        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeadersException&){}
         try{
             result.pushBack("Allow:" + responseHeaders_.getAllow());
             result.pushBack(newLine);
-        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeadersException&){}
         try{
             result.pushBack("Alternates:" + responseHeaders_.getAlternates());
             result.pushBack(newLine);
-        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeadersException&){}
         try{
             result.pushBack("ETag:" + responseHeaders_.getETag());
             result.pushBack(newLine);
-        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeadersException&){}
         try{
             result.pushBack("Location:" + responseHeaders_.getLocation());
             result.pushBack(newLine);
-        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeadersException&){}
         try{
             result.pushBack("Proxy-Authenticate:" + responseHeaders_.getProxyAuthenticate());
             result.pushBack(newLine);
-        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeadersException&){}
         try{
             result.pushBack("Public:"  + responseHeaders_.getPublic());
             result.pushBack(newLine);
-        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeadersException&){}
         try{
             result.pushBack("Retry-After:" + responseHeaders_.getRetryAfter());
             result.pushBack(newLine);
-        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeadersException&){}
         try{
             result.pushBack("Server:" + responseHeaders_.getServer());
             result.pushBack(newLine);
-        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeadersException&){}
         try{
             result.pushBack("Vary:" + responseHeaders_.getVary());
             result.pushBack(newLine);
-        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeadersException&){}
         try{
             result.pushBack("WWW-Authenticate:" + responseHeaders_.getWWWAuthenticate());
             result.pushBack(newLine);
-        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeadersException&){}
     }
 
     // Message

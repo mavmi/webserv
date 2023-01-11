@@ -37,8 +37,11 @@ public:
     MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseStatusLine& getStatusLine();
     const MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseStatusLine& getStatusLine() const;
 
-    MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeaders& getHeaders();
-    const MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeaders& getHeaders() const;
+    MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeaders& getGeneralHeaders();
+    const MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeaders& getGeneralHeaders() const;
+
+    MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeaders& getResponseHeaders();
+    const MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeaders& getResponseHeaders() const;
 
     std::vector<std::string>& getMessage();
     const std::vector<std::string>& getMessage() const;
@@ -47,6 +50,7 @@ public:
 
 private:
     MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseStatusLine responseStatusLine_;
+    MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeaders generalHeaders_;
     MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeaders responseHeaders_;
     std::vector<std::string> message_;
 
