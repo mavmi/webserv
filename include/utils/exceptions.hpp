@@ -8,7 +8,7 @@
 #define EXC_ARGS    __FILE__, __FUNCTION__, __LINE__
 #define HANDLE_EXC_BEGIN    try {
 #define HANDLE_EXC_END      } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::WrapperException& e){ \
-                                throw ExceptionType(e.what());          \
+                                throw ExceptionType(e.what());                              \
                             }
 
 namespace MAIN_NAMESPACE::UTILS_NAMESPACE{

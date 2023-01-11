@@ -475,9 +475,7 @@ void test::CONFIGURATION_FILES_TESTS(){
 void test::HTTP_REQUEST_FILE_TEST(){
     ___HEADER___
 
-    const int bufferSize = 8;
-    int lastSize;
-    std::vector<char*> content;
+    wsrv::utils::BytesContainer content;
     
     // read http request file
     {
@@ -489,39 +487,50 @@ void test::HTTP_REQUEST_FILE_TEST(){
         }
 
         while(true){
-            char* buffer = (char*)malloc(bufferSize * sizeof(char));
-            int readCount = read(fileFd, buffer, bufferSize);
-            content.push_back(buffer);
-            if (readCount < bufferSize){
-                lastSize = readCount;
+            char* buffer = new char [content.bufferSize];
+            size_t readCount = static_cast<size_t>(read(fileFd, buffer, content.bufferSize));
+            content.bytesContainer.push_back(buffer);
+            if (readCount < content.bufferSize){
+                content.lastSize = readCount;
                 break;
             }
         }
 
         std::cout << test_utils::getColor(test_utils::CYAN) << "\n\tHTTP request file content:" << std::endl;
         std::cout << "\t==========================" << std::endl;
-        for (size_t i = 0; i < content.size(); i++){
-            for (int j = 0; j < (i + 1 == content.size() ? lastSize : bufferSize); j++){
-                std::cout << content[i][j];
+        for (size_t i = 0; i < content.bytesContainer.size(); i++){
+            for (size_t j = 0; j < (i + 1 == content.bytesContainer.size() ? content.lastSize : content.bufferSize); j++){
+                std::cout << content.bytesContainer[i][j];
             }
         }
         std::cout << "\n\t==========================\n" << test_utils::getColor(test_utils::DEFAULT) << std::endl;
     }
 
     try{
-        wsrv::HttpRequest httpRequest = wsrv::HttpRequest::parseHttpRequest(content, bufferSize, lastSize);
-        const wsrv::http_request::HttpRequestStatusLine& statusLine = httpRequest.getHttpRequest().getStatusLine();
-        assert(test_utils::areDoublesEqual(statusLine.getHttpVersion(), 1.2345));
-        assert(statusLine.getMethod() == wsrv::http_request::HttpRequestStatusLine::POST);
+        wsrv::HttpRequest httpRequest = wsrv::HttpRequest::parseHttpRequest(content);
+
+        const wsrv::http_headers::HttpRequestStatusLine& statusLine = httpRequest.getHttpRequest().getStatusLine();
+        assert(statusLine.getHttpVersion() == wsrv::utils::HTTP_1_1);
+        assert(statusLine.getMethod() == wsrv::utils::POST);
         assert(statusLine.getUrl() == "/cgi-bin/process.cgi");
+
+        const wsrv::http_headers::HttpGeneralHeaders& generalHeaders = httpRequest.getHttpRequest().getGeneralHeaders();
+        assert(generalHeaders.getConnection() == " Keep-Alive");
+        
+        const wsrv::http_headers::HttpRequestHeaders& requestHeaders = httpRequest.getHttpRequest().getRequestHeaders();
+        assert(requestHeaders.getHost() == " www.tutorialspoint.com");
+        assert(requestHeaders.getContentType() == " text/xml; charset=utf-8");
+        assert(requestHeaders.getContentLength() == " length");
+        assert(requestHeaders.getAcceptLanguage() == " en-us");
+        assert(requestHeaders.getAcceptEncoding() == " gzip, deflate");
+
+        const std::vector<std::string>& httpRequestContent = httpRequest.getHttpRequest().getRequestContent();
+        assert(httpRequestContent.size() == 2);
+        assert(httpRequestContent[0] == "<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+        assert(httpRequestContent[1] == "<string xmlns=\"http://clearforest.com/\">string</string>");
     } catch (wsrv::utils::Exception& e){
         std::cout << e.what() << std::endl;
         assert(false);
-    }
-
-    // free malloced http content
-    {
-        for (size_t i = 0; i < content.size(); i++) free(content[i]);
     }
 }
 

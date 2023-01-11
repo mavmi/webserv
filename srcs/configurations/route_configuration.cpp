@@ -42,23 +42,6 @@ RouteConfiguration& RouteConfiguration::operator=(const RouteConfiguration& othe
     copyData_(other);
     return *this;        
 }
-void* RouteConfiguration::operator new(size_t size){
-    return malloc(size);
-}
-void* RouteConfiguration::operator new(size_t size, const RouteConfiguration& other){
-    RouteConfiguration* ptr = (RouteConfiguration*)malloc(size);
-    *ptr = other;
-    return ptr;
-}
-void* RouteConfiguration::operator new[](size_t size){
-    return malloc(size);
-}
-void RouteConfiguration::operator delete(void* ptr){
-    free(ptr);
-}
-void RouteConfiguration::operator delete[](void* ptr){
-    free(ptr);
-}
 
 void RouteConfiguration::setMethods(const MethodsContainerType& methods){
     throwOnDone_();

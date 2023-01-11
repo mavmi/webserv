@@ -25,15 +25,19 @@ protected:
 // This class contains all info from
 // configuration file
 class Configuration{
-friend Parser;
 public:
     typedef ServerConfiguration                                                                 ServerType;
     typedef MAIN_NAMESPACE::UTILS_NAMESPACE::Container<ServerType>                              ServersContainerType;
     typedef ConfigurationException                                                              ExceptionType;
     typedef std::pair<const ServerType::HostType, const ServerType::PortType>                   HostPortPairType;
     typedef std::set<HostPortPairType>                                                          HostPortPairsContainerType;
+    typedef MAIN_NAMESPACE::UTILS_NAMESPACE::METHOD                                             MethodType;
 
+    explicit Configuration();
+    explicit Configuration(const Configuration& other);
     ~Configuration();
+
+    Configuration& operator=(const Configuration& other);
 
     // Parse configuration file.
     // May throw exception on error.
@@ -52,11 +56,6 @@ private:
     ServersContainerType servers_;
     HostPortPairsContainerType hostPortPairs_;
 
-    explicit Configuration();
-    explicit Configuration(const Configuration& other);
-
-    Configuration& operator=(const Configuration& other);
-
     // Check if string contains only whitespaces
     bool isLineEmpty_(const std::string& line) const;
 
@@ -71,7 +70,7 @@ private:
         All these methods below are about parsing different types
         of strings from an input file.
     */
-    HTTP_METHOD stringToHttpMethod_(const std::string& str);
+    MethodType stringToHttpMethod_(const std::string& str);
     std::set<std::string> stringToArray_(const std::string& str);
     bool stringToBool_(const std::string& str) const;
     template <typename ReturnType>

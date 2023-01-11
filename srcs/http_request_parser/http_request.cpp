@@ -1,10 +1,10 @@
-#include "../../include/http_request_parser/HttpRequest.hpp"
+#include "../../include/http_request_parser/http_request.hpp"
 
 namespace MAIN_NAMESPACE{
 
 HttpRequest::HttpRequest(){}
-HttpRequest::HttpRequest(const HttpRequest::BufferContainerType& buffer, int bufferSize, int lastSize){
-    httpRequestParser_.parseHttpRequest(buffer, bufferSize, lastSize);
+HttpRequest::HttpRequest(const MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer& buffer){
+    httpRequestParser_.parseHttpRequest(buffer);
 }
 HttpRequest::HttpRequest(const HttpRequest& other){
     httpRequestParser_ = other.httpRequestParser_;
@@ -20,8 +20,8 @@ const HTTP_REQUEST_PARS_NAMESPACE::HttpRequestParser& HttpRequest::operator->(){
     return httpRequestParser_;
 }
 
-HttpRequest HttpRequest::parseHttpRequest(const HttpRequest::BufferContainerType& buffer, int bufferSize, int lastSize){
-    return HttpRequest(buffer, bufferSize, lastSize);
+HttpRequest HttpRequest::parseHttpRequest(const MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer& buffer){
+    return HttpRequest(buffer);
 }
 const HTTP_REQUEST_PARS_NAMESPACE::HttpRequestParser& HttpRequest::getHttpRequest() const{
     return httpRequestParser_;

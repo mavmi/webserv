@@ -39,23 +39,6 @@ ServerConfiguration& ServerConfiguration::operator=(const ServerConfiguration& o
     copyData_(other);
     return *this;
 }
-void* ServerConfiguration::operator new(size_t size){
-    return malloc(size);
-}
-void* ServerConfiguration::operator new(size_t size, const ServerConfiguration& other){
-    ServerConfiguration* ptr = (ServerConfiguration*)malloc(size);
-    *ptr = other;
-    return ptr;
-}
-void* ServerConfiguration::operator new[](size_t size){
-    return malloc(size);
-}
-void ServerConfiguration::operator delete(void* ptr){
-    free(ptr);
-}
-void ServerConfiguration::operator delete[](void* ptr){
-    free(ptr);
-}
 
 void ServerConfiguration::setPort(PortType port){
     throwOnDone_();

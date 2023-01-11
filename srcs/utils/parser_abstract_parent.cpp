@@ -1,8 +1,10 @@
-#include "../../include/utils/parserAbstractParent.hpp"
+#include "../../include/utils/parser_abstract_parent.hpp"
 
 namespace MAIN_NAMESPACE::UTILS_NAMESPACE{
 
-ParserAbstractParent::ParserAbstractParent(){}
+ParserAbstractParent::ParserAbstractParent(){
+    isDone_ = false;
+}
 ParserAbstractParent::~ParserAbstractParent(){}
 ParserAbstractParent& ParserAbstractParent::operator=(const ParserAbstractParent& other){
     isDone_ = other.isDone_;

@@ -192,10 +192,10 @@ Configuration::ServerType::RouteType& Configuration::getLastRoute_() {
     return getLastServer_().getRoutes().back();
 }
 
-HTTP_METHOD Configuration::stringToHttpMethod_(const std::string& str){
-    if (str == "GET") return GET;
-    else if (str == "POST") return POST;
-    else if (str == "DELETE") return DELETE;
+Configuration::MethodType Configuration::stringToHttpMethod_(const std::string& str){
+    if (str == "GET") return MAIN_NAMESPACE::UTILS_NAMESPACE::GET;
+    else if (str == "POST") return MAIN_NAMESPACE::UTILS_NAMESPACE::POST;
+    else if (str == "DELETE") return MAIN_NAMESPACE::UTILS_NAMESPACE::DELETE;
     throw ExceptionType("Invalid HTTP method", EXC_ARGS);
 }
 std::set<std::string> Configuration::stringToArray_(const std::string& str){

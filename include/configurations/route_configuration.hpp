@@ -25,9 +25,6 @@ protected:
 // Use methods [isDone()] to check if the route is finished or not.
 // Method [done()] marks the route as finished. May throw an exception.
 class RouteConfiguration : public MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent{
-friend Configuration;
-friend ServerConfiguration;
-friend MAIN_NAMESPACE::UTILS_NAMESPACE::Container<RouteConfiguration>;
 public:
     typedef size_t                                                      SizeType;
     typedef int                                                         MethodType;
@@ -35,7 +32,11 @@ public:
     typedef std::string                                                 PathType;
     typedef RouteException                                              ExceptionType;
 
+    explicit RouteConfiguration();
+    explicit RouteConfiguration(const RouteConfiguration& other);
     ~RouteConfiguration();
+
+    RouteConfiguration& operator=(const RouteConfiguration& other);
 
     void setMethods(const MethodsContainerType& methods);
     MethodsContainerType& getMethods();
@@ -86,16 +87,6 @@ private:
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType> cgi_bin_path_;
     bool saveFiles_;
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType> saveTo_;
-
-    explicit RouteConfiguration();
-    explicit RouteConfiguration(const RouteConfiguration& other);
-
-    RouteConfiguration& operator=(const RouteConfiguration& other);
-    static void* operator new(size_t size);
-    static void* operator new(size_t size, const RouteConfiguration& other);
-    static void* operator new[](size_t size);
-    static void operator delete(void* ptr);
-    static void operator delete[](void* ptr);
 
     void deleteData_();
     void copyData_(const MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent& o);
