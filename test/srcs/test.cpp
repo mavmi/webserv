@@ -476,8 +476,6 @@ void test::HTTP_REQUEST_FILE_TEST(){
     ___HEADER___
 
     wsrv::utils::BytesContainer content;
-    content.bufferSize = 8;
-    content.lastSize = 0;
     
     // read http request file
     {

@@ -66,6 +66,7 @@ MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer HttpResponseGenerator::toBytes()
     responseStatusLine_.done();
     responseHeaders_.done();
     
+    const std::string newLine = "\n";
     MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer result;
 
     // Status line
@@ -85,30 +86,128 @@ MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer HttpResponseGenerator::toBytes()
             statusLineStr += responseStatusLine_.getMessage();
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseStatusLineException&){}
 
-        size_t begin = 0, end = 0;
-        while (true){
-            end = (begin + result.bufferSize <= statusLineStr.size()) ? begin + result.bufferSize : statusLineStr.size();
-            size_t size = end - begin;
-            result.bytesContainer.push_back(new char[size]);
-            for (size_t i = 0, strIter = begin; i < size; i++, strIter++){
-                result.bytesContainer.back()[i] = statusLineStr[strIter];
-            }
-            if (end == statusLineStr.size()){
-                result.lastSize = size;
-                break;
-            }
-            begin = end;
-        }
+        result.pushBack(statusLineStr);
+        result.pushBack(newLine);
     }
 
     // Headers
     {
-        // TO DO
+        // Common headers
+        try{
+            result.pushBack("Content-Disposition:" + responseHeaders_.getContentDisposition());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        try{
+            result.pushBack("Content-Encoding:" + responseHeaders_.getContentEncoding());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        try{
+            result.pushBack("Content-Language:" + responseHeaders_.getContentLanguage());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        try{
+            result.pushBack("Content-Length:" + responseHeaders_.getContentLength());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        try{
+            result.pushBack("Content-Location:" + responseHeaders_.getContentLocation());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        try{
+            result.pushBack("Content-MD5:" + responseHeaders_.getContentMD5());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        try{
+            result.pushBack("Content-Range:" + responseHeaders_.getContentRange());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        try{
+            result.pushBack("Content-Type:" + responseHeaders_.getContentType());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        try{
+            result.pushBack("Content-Version:" + responseHeaders_.getContentVersion());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        try{
+            result.pushBack("Derived-From:" + responseHeaders_.getDerivedFrom());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        try{
+            result.pushBack("Expires:" + responseHeaders_.getExpires());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        try{
+            result.pushBack("Last-Modified:" + responseHeaders_.getLastModified());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        try{
+            result.pushBack("Link:" + responseHeaders_.getLink());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        try{
+            result.pushBack("Title:" + responseHeaders_.getTitle());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+
+        // Response headers
+        try{
+            result.pushBack("Accept-Ranges:" + responseHeaders_.getAcceptRanges());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        try{
+            result.pushBack("Age:" + responseHeaders_.getAge());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        try{
+            result.pushBack("Allow:" + responseHeaders_.getAllow());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        try{
+            result.pushBack("Alternates:" + responseHeaders_.getAlternates());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        try{
+            result.pushBack("ETag:" + responseHeaders_.getETag());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        try{
+            result.pushBack("Location:" + responseHeaders_.getLocation());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        try{
+            result.pushBack("Proxy-Authenticate:" + responseHeaders_.getProxyAuthenticate());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        try{
+            result.pushBack("Public:"  + responseHeaders_.getPublic());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        try{
+            result.pushBack("Retry-After:" + responseHeaders_.getRetryAfter());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        try{
+            result.pushBack("Server:" + responseHeaders_.getServer());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        try{
+            result.pushBack("Vary:" + responseHeaders_.getVary());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
+        try{
+            result.pushBack("WWW-Authenticate:" + responseHeaders_.getWWWAuthenticate());
+            result.pushBack(newLine);
+        } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
     }
 
     // Message
     {
-        // TO DO
+        result.pushBack(newLine);
+        for (size_t i = 0; i < message_.size(); i++){
+            result.pushBack(message_[i]);
+            if (i + 1 != message_.size()) result.pushBack(newLine);
+        }
     }
 
     return result;

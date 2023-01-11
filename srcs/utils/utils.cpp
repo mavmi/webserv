@@ -3,11 +3,12 @@
 namespace MAIN_NAMESPACE::UTILS_NAMESPACE{
 BytesContainer::BytesContainer()
     : bytesContainer(std::vector<char*>()),
-        bufferSize(0),
+        bufferSize(BUFFER_SIZE),
         lastSize(0) {
     
 }
-BytesContainer::BytesContainer(const BytesContainer& other){
+BytesContainer::BytesContainer(const BytesContainer& other)
+    : bufferSize(BUFFER_SIZE) {
     cpy_(other);
 }
 BytesContainer::~BytesContainer(){
@@ -20,12 +21,32 @@ BytesContainer& BytesContainer::operator=(const BytesContainer& other){
     return *this;
 }
 
+void BytesContainer::pushBack(const std::string& line){
+    if (lastSize == bufferSize || bytesContainer.empty()){
+        lastSize = 0;
+        bytesContainer.push_back(new char[bufferSize]);
+    }
+
+    size_t i = 0;
+    while (true){
+        while (i < line.size() && lastSize < bufferSize){
+            bytesContainer.back()[lastSize++] = line.at(i++);
+        }
+
+        if (i == line.size()) {
+            break;
+        }
+
+        lastSize = 0;
+        bytesContainer.push_back(new char[bufferSize]);
+    }
+}
+
 void BytesContainer::cpy_(const BytesContainer& other){
     for (size_t i = 0; i + 1 < other.bytesContainer.size(); i++){
         bytesContainer.push_back(realloc_(other.bytesContainer.at(i), other.bufferSize));
     }
     bytesContainer.push_back(realloc_(other.bytesContainer.back(), other.lastSize));
-    bufferSize = other.bufferSize;
     lastSize = other.lastSize;
 }
 char* BytesContainer::realloc_(char* buffer, size_t bufferSize){
