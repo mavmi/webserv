@@ -1,6 +1,7 @@
 #include "../../include/configurations/route_configuration.hpp"
 
-namespace MAIN_NAMESPACE::CONFIG_NAMESPACE {
+namespace MAIN_NAMESPACE{
+namespace CONFIG_NAMESPACE{
 RouteException::RouteException(const char* msg) : Exception(msg){}
 RouteException::RouteException(const std::string& msg) : Exception(msg){}
 RouteException::RouteException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_) 
@@ -15,9 +16,11 @@ std::string RouteException::output_() const {
     return "ROUTE_EXCEPTION: " + msg_;
 }
 }
+}
 
 
-namespace MAIN_NAMESPACE::CONFIG_NAMESPACE {
+namespace MAIN_NAMESPACE{
+namespace CONFIG_NAMESPACE{
 RouteConfiguration::RouteConfiguration(){
     isDone_ = false;
     methods_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<MethodsContainerType>();
@@ -226,4 +229,5 @@ void RouteConfiguration::throwOnDone_() const{
     if (isDone_) throw ExceptionType("Route is done. You cannot change it anymore.", EXC_ARGS);
 }
 
+}
 }

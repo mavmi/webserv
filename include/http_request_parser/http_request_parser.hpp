@@ -9,7 +9,8 @@
 #include "../http_headers/general_headers.hpp"
 #include "../http_headers/request_headers.hpp"
 
-namespace MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace HTTP_REQUEST_PARS_NAMESPACE{
 
 class HttpRequestParserException : public MAIN_NAMESPACE::UTILS_NAMESPACE::Exception {
 public:
@@ -64,4 +65,5 @@ private:
     void parseHeader_(const std::string& line);
 };
 
+}
 }

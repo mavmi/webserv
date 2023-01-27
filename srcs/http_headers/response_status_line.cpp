@@ -1,6 +1,7 @@
 #include "../../include/http_headers/response_status_line.hpp"
 
-namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace HTTP_HEADERS_NAMESPACE{
 HttpResponseStatusLineException::HttpResponseStatusLineException(const char* msg) : Exception(msg){}
 HttpResponseStatusLineException::HttpResponseStatusLineException(const std::string& msg) : Exception(msg){}
 HttpResponseStatusLineException::HttpResponseStatusLineException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_) 
@@ -15,9 +16,11 @@ std::string HttpResponseStatusLineException::output_() const {
     return "HTTP_RESPONSE_STATUS_LINE_EXCEPTION: " + msg_;
 }
 }
+}
 
 
-namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace HTTP_HEADERS_NAMESPACE{
 HttpResponseStatusLine::HttpResponseStatusLine(){
     isDone_ = false;
 }
@@ -87,5 +90,6 @@ void HttpResponseStatusLine::checkValidity_() const{
         char c = statusCode_.get().at(i); 
         if (c < '0' || c > '9') throw ExceptionType(errMsg);
     }
+}
 }
 }

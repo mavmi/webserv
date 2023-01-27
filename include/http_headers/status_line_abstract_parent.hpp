@@ -2,7 +2,8 @@
 
 #include "utils.hpp"
 
-namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace HTTP_HEADERS_NAMESPACE{
 class StatusLineAbstractParentException : public MAIN_NAMESPACE::UTILS_NAMESPACE::Exception {
 public:
     StatusLineAbstractParentException(const char* msg);
@@ -44,4 +45,5 @@ protected:
     void throwOnDone_() const;
 
 };
+}
 }

@@ -133,7 +133,7 @@ void test::CONFIGURATION_FILES_TESTS(){
         assert(servers.size() == 1);
 
         const Server& server = servers.back();
-        assert(server.getPort() == 80);
+        assert(server.getPort() == 800);
         assert(server.getHost().toString() == "127.0.0.1");
         assert(server.getServerName() == "SERVER_NAME");
 

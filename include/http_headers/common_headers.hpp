@@ -3,7 +3,8 @@
 #include "utils.hpp"
 #include "headers_abstract_parent.hpp"
 
-namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace HTTP_HEADERS_NAMESPACE{
 
 class HttpCommonHeadersException : public MAIN_NAMESPACE::UTILS_NAMESPACE::Exception {
 public:
@@ -125,4 +126,5 @@ private:
 
 };
 
+}
 }

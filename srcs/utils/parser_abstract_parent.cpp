@@ -1,6 +1,7 @@
 #include "../../include/utils/parser_abstract_parent.hpp"
 
-namespace MAIN_NAMESPACE::UTILS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace UTILS_NAMESPACE{
 
 ParserAbstractParent::ParserAbstractParent(){
     isDone_ = false;
@@ -19,4 +20,5 @@ bool ParserAbstractParent::isDone() const{
     return isDone_;
 }
 
+}
 }

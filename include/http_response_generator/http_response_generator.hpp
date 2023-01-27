@@ -5,7 +5,8 @@
 #include "../http_headers/general_headers.hpp"
 #include "../http_headers/response_headers.hpp"
 
-namespace MAIN_NAMESPACE::HTTP_RESPONSE_GENER_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace HTTP_RESPONSE_GENER_NAMESPACE{
 
 class HttpResponseGeneratorException : public MAIN_NAMESPACE::UTILS_NAMESPACE::Exception {
 public:
@@ -56,4 +57,5 @@ private:
 
 };
     
+}
 }

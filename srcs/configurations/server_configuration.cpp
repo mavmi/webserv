@@ -1,6 +1,7 @@
 #include "../../include/configurations/server_configuration.hpp"
 
-namespace MAIN_NAMESPACE::CONFIG_NAMESPACE {
+namespace MAIN_NAMESPACE{
+namespace CONFIG_NAMESPACE{
 ServerException::ServerException(const char* msg) : Exception(msg){}
 ServerException::ServerException(const std::string& msg) : Exception(msg){}
 ServerException::ServerException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_) 
@@ -15,9 +16,11 @@ std::string ServerException::output_() const {
     return "SERVER_EXCEPTION: " + msg_;
 }
 }
+}
 
 
-namespace MAIN_NAMESPACE::CONFIG_NAMESPACE {
+namespace MAIN_NAMESPACE{
+namespace CONFIG_NAMESPACE{
 ServerConfiguration::ServerConfiguration(){
     isDone_ = false;
     port_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PortType>();
@@ -196,4 +199,5 @@ void ServerConfiguration::throwOnDone_() const{
     if (isDone_) throw ExceptionType("Route is done. You cannot change it anymore.", EXC_ARGS);
 }
 
+}
 }

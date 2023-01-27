@@ -1,6 +1,7 @@
 #include "../../include/http_headers/status_line_abstract_parent.hpp"
 
-namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace HTTP_HEADERS_NAMESPACE{
 StatusLineAbstractParentException::StatusLineAbstractParentException(const char* msg) : Exception(msg){}
 StatusLineAbstractParentException::StatusLineAbstractParentException(const std::string& msg) : Exception(msg){}
 StatusLineAbstractParentException::StatusLineAbstractParentException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_) 
@@ -15,9 +16,11 @@ std::string StatusLineAbstractParentException::output_() const {
     return "HTTP_STATUS_LINE_ABSTRACT_PARENT_EXCEPTION: " + msg_;
 }
 }
+}
 
 
-namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace HTTP_HEADERS_NAMESPACE{
 StatusLineAbstractParent::StatusLineAbstractParent(){
     
 }
@@ -62,5 +65,6 @@ void StatusLineAbstractParent::checkValidity_() const{
 }
 void StatusLineAbstractParent::throwOnDone_() const{
     if (isDone_) throw ExceptionType("Status line is done. You cannot change it anymore.", EXC_ARGS);
+}
 }
 }

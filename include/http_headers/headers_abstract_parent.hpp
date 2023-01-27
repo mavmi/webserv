@@ -5,7 +5,8 @@
 #include "../utils/utils.hpp"
 #include "../utils/exceptions.hpp"
 
-namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace HTTP_HEADERS_NAMESPACE{
 
 class HttpHeadersAbstractParentException : public MAIN_NAMESPACE::UTILS_NAMESPACE::Exception {
 public:
@@ -43,4 +44,5 @@ protected:
 
 };
 
+}
 }

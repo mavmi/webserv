@@ -3,7 +3,8 @@
 #include "utils.hpp"
 #include "status_line_abstract_parent.hpp"
 
-namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace HTTP_HEADERS_NAMESPACE{
 
 class HttpRequestStatusLineException : public MAIN_NAMESPACE::UTILS_NAMESPACE::Exception {
 public:
@@ -52,4 +53,5 @@ private:
 
 };
 
+}
 }

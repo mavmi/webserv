@@ -2,7 +2,8 @@
 
 #include "utils.hpp"
 
-namespace MAIN_NAMESPACE::CONFIG_NAMESPACE {
+namespace MAIN_NAMESPACE{
+namespace CONFIG_NAMESPACE{
 
 class ConfigurationHostException : public MAIN_NAMESPACE::UTILS_NAMESPACE::Exception {
 public:
@@ -46,6 +47,7 @@ public:
 
     // Return string representation of IP address.
     std::string toString() const;
+    const char* toCharArray() const;
     // Get number from IP at specified position.
     // May throw an exception on if position is invalid.
     ValueType at(SizeType position) const;
@@ -67,4 +69,5 @@ private:
 
 };
 
+}
 }

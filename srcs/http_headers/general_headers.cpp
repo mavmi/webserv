@@ -1,6 +1,7 @@
 #include "../../include/http_headers/general_headers.hpp"
 
-namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace HTTP_HEADERS_NAMESPACE{
 HttpGeneralHeadersException::HttpGeneralHeadersException(const char* msg) : Exception(msg){}
 HttpGeneralHeadersException::HttpGeneralHeadersException(const std::string& msg) : Exception(msg){}
 HttpGeneralHeadersException::HttpGeneralHeadersException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_) 
@@ -15,9 +16,11 @@ std::string HttpGeneralHeadersException::output_() const {
     return "HTTP_GENERAL_HEADERS_EXCEPTION: " + msg_;
 }
 }
+}
 
 
-namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace HTTP_HEADERS_NAMESPACE{
 HttpGeneralHeaders::HttpGeneralHeaders(const StatusLineAbstractParent& statusLine)
     : HttpHeadersAbstractParent(statusLine) {
 
@@ -227,5 +230,6 @@ void HttpGeneralHeaders::checkValidity_() const{
 }
 void HttpGeneralHeaders::throwOnDone_() const{
     if (isDone_) throw ExceptionType("General headers are done. You cannot change it anymore.");
+}
 }
 }

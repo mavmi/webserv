@@ -1,6 +1,7 @@
 #include "../../include/http_headers/request_status_line.hpp"
 
-namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace HTTP_HEADERS_NAMESPACE{
 HttpRequestStatusLineException::HttpRequestStatusLineException(const char* msg) : Exception(msg){}
 HttpRequestStatusLineException::HttpRequestStatusLineException(const std::string& msg) : Exception(msg){}
 HttpRequestStatusLineException::HttpRequestStatusLineException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_) 
@@ -15,9 +16,11 @@ std::string HttpRequestStatusLineException::output_() const {
     return "HTTP_REQUEST_STATUS_LINE_EXCEPTION: " + msg_;
 }
 }
+}
 
 
-namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace HTTP_HEADERS_NAMESPACE{
 HttpRequestStatusLine::HttpRequestStatusLine(){
     isDone_ = false;
 }
@@ -83,5 +86,6 @@ void HttpRequestStatusLine::checkValidity_() const{
     if (!method_.isSet()) throw ExceptionType("Method is not set up", EXC_ARGS);
     if (!url_.isSet()) throw ExceptionType("URL is not set up", EXC_ARGS);
     if (!httpVersion_.isSet()) throw ExceptionType("HTTP version is not set up", EXC_ARGS);
+}
 }
 }

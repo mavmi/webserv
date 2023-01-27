@@ -1,6 +1,7 @@
 #include "../../include/utils/exceptions.hpp"
 
-namespace MAIN_NAMESPACE::UTILS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace UTILS_NAMESPACE{
 
 Exception::Exception(const char* msg) 
     : msg_(std::string(msg)), _file_(""), _function_(""), _line_(0), code_(0){}
@@ -33,4 +34,5 @@ std::string Exception::output_() const {
     return "EXCEPTION: " + msg_;
 }
 
+}
 }

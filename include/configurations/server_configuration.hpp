@@ -1,10 +1,12 @@
 #pragma once
 
 #include "utils.hpp"
+#include "configuration_port.hpp"
 #include "configuration_host.hpp"
 #include "route_configuration.hpp"
 
-namespace MAIN_NAMESPACE::CONFIG_NAMESPACE {
+namespace MAIN_NAMESPACE{
+namespace CONFIG_NAMESPACE{
 
 class ServerException : public MAIN_NAMESPACE::UTILS_NAMESPACE::Exception {
 public:
@@ -29,7 +31,7 @@ protected:
 class ServerConfiguration : public MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent{
 public:
     typedef size_t                                                          SizeType;
-    typedef uint16_t                                                        PortType;
+    typedef ConfigurationPort                                               PortType;
     typedef ConfigurationHost                                               HostType;
     typedef std::string                                                     ServerNameType;
     typedef std::string                                                     ErrorPageType;
@@ -92,4 +94,5 @@ private:
 
 };
 
+}
 }

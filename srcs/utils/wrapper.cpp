@@ -1,6 +1,7 @@
 #include "../../include/utils/wrapper.hpp"
 
-namespace MAIN_NAMESPACE::UTILS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace UTILS_NAMESPACE{
 
 WrapperException::WrapperException(const char* msg) : Exception(msg){}
 WrapperException::WrapperException(const std::string& msg) : Exception(msg){}
@@ -16,4 +17,5 @@ std::string WrapperException::output_() const {
     return "WRAPPER_EXCEPTION: " + msg_;
 }
 
+}
 }

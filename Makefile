@@ -10,14 +10,14 @@ TMP_FILES_DIR		=	tmp_files
 
 ### headers ###
 HDRS_UTILS			=	container.hpp exceptions.hpp parser_abstract_parent.hpp utils.hpp wrapper.hpp
-HDRS_CONFIG			=	configuration_host.hpp	configuration.hpp parser.hpp route_configuration.hpp server_configuration.hpp utils.hpp
+HDRS_CONFIG			=	configuration_host.hpp configuration_port.hpp configuration.hpp parser.hpp route_configuration.hpp server_configuration.hpp utils.hpp
 HDRS_HTTP_HEADERS	=	common_headers.hpp general_headers.hpp headers_abstract_parent.hpp request_headers.hpp request_status_line.hpp response_headers.hpp response_status_line.hpp status_line_abstract_parent.hpp utils.hpp
 HDRS_HTTP_REQ		=	http_request.hpp http_request_parser.hpp utils.hpp
 HDRS_HTTP_RES		=	http_response_generator.hpp http_response.hpp utils.hpp
 
 ### sources ###
 SRCS_UTILS			=	container.cpp exceptions.cpp parser_abstract_parent.cpp utils.cpp wrapper.cpp
-SRCS_CONFIG			=	configuration.cpp configuration_host.cpp parser.cpp route_configuration.cpp server_configuration.cpp utils.cpp
+SRCS_CONFIG			=	configuration.cpp configuration_host.cpp configuration_port.cpp parser.cpp route_configuration.cpp server_configuration.cpp utils.cpp
 SRCS_HTTP_HEADERS	=	common_headers.cpp general_headers.cpp headers_abstract_parent.cpp request_headers.cpp request_status_line.cpp response_headers.cpp response_status_line.cpp status_line_abstract_parent.cpp
 SRCS_HTTP_REQ		=	http_request.cpp http_request_parser.cpp utils.cpp
 SRCS_HTTP_RES		=	http_response_generator.cpp http_response.cpp
@@ -107,8 +107,8 @@ TEST_DEPEN	=	$(addprefix $(TMP_FILES_DIR)/, $(TEST_SRCS:.cpp=.d))
 #############
 ### RULES ###
 #############
-CC			=	g++
-GCC			=	$(CC) -Wall -Wextra -Werror -std=c++98 -MMD -g -fsanitize=undefined -fsanitize=address -fsanitize=leak
+CC			=	c++
+GCC			=	$(CC) -Wall -Wextra -Werror -std=c++98 -MMD -g -fsanitize=undefined -fsanitize=address
 
 
 # $@					$<

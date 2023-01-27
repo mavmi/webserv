@@ -1,6 +1,7 @@
 #include "../../include/http_response_generator/http_response_generator.hpp"
 
-namespace MAIN_NAMESPACE::HTTP_RESPONSE_GENER_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace HTTP_RESPONSE_GENER_NAMESPACE{
 HttpResponseGeneratorException::HttpResponseGeneratorException(const char* msg) : Exception(msg){}
 HttpResponseGeneratorException::HttpResponseGeneratorException(const std::string& msg) : Exception(msg){}
 HttpResponseGeneratorException::HttpResponseGeneratorException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_) 
@@ -15,9 +16,11 @@ std::string HttpResponseGeneratorException::output_() const {
     return "HTTP_RESPONSE_GENERATOR_EXCEPTION: " + msg_;
 }
 }
+}
 
 
-namespace MAIN_NAMESPACE::HTTP_RESPONSE_GENER_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace HTTP_RESPONSE_GENER_NAMESPACE{
 HttpResponseGenerator::HttpResponseGenerator()
     : responseStatusLine_(MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseStatusLine()),
         generalHeaders_(MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeaders(responseStatusLine_)),
@@ -262,5 +265,6 @@ MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer HttpResponseGenerator::toBytes()
     }
 
     return result;
+}
 }
 }

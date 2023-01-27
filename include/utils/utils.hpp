@@ -6,14 +6,15 @@
 #include <iostream>
 #include <algorithm>
 
-#define wsrv            MAIN_NAMESPACE
-#define configuration   CONFIG_NAMESPACE
-#define http_headers    HTTP_HEADERS_NAMESPACE
-#define http_request    HTTP_REQUEST_PARS_NAMESPACE
-#define http_response   HTTP_RESPONSE_GENER_NAMESPACE
-#define utils           UTILS_NAMESPACE
+#define MAIN_NAMESPACE                  wsrv
+#define CONFIG_NAMESPACE                configuration
+#define HTTP_HEADERS_NAMESPACE          http_headers
+#define HTTP_REQUEST_PARS_NAMESPACE     http_request
+#define HTTP_RESPONSE_GENER_NAMESPACE   http_response
+#define UTILS_NAMESPACE                 utils
 
-namespace MAIN_NAMESPACE::UTILS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace UTILS_NAMESPACE{
 
 const size_t BUFFER_SIZE = 32;
 const std::string DEFAULT_SERVER_PATH = "DefaultServer";
@@ -84,6 +85,7 @@ HTTP_VERSION    httpVersionFromString(const std::string& httpVersionStr);
 
 void        utilsPrintMsg(const std::string& msg, MSG_TYPE msgType);
 void        utilsCheckArgsCount(int argc);
+const char* utilsStringToCharArray(const std::string& str);
 
 template <typename Type>
 std::string utilsNumToString(Type num){
@@ -125,4 +127,5 @@ Type        utilsStringToNum(const std::string& str){
 
 }
 
+}
 }

@@ -1,6 +1,7 @@
 #include "../../include/configurations/configuration_host.hpp"
 
-namespace MAIN_NAMESPACE::CONFIG_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace CONFIG_NAMESPACE{
 ConfigurationHostException::ConfigurationHostException(const char* msg) : Exception(msg){}
 ConfigurationHostException::ConfigurationHostException(const std::string& msg) : Exception(msg){}
 ConfigurationHostException::ConfigurationHostException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_) 
@@ -15,9 +16,11 @@ std::string ConfigurationHostException::output_() const {
     return "CONFIGURATION_HOST_EXCEPTION: " + msg_;
 }
 }
+}
 
 
-namespace MAIN_NAMESPACE::CONFIG_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace CONFIG_NAMESPACE{
 ConfigurationHost::ConfigurationHost(){
     ip_[0] = 0;
     ip_[1] = 0;
@@ -106,6 +109,9 @@ std::string ConfigurationHost::toString() const {
 
     return str;
 }
+const char* ConfigurationHost::toCharArray() const{
+    return MAIN_NAMESPACE::UTILS_NAMESPACE::utilsStringToCharArray(toString());
+}
 ConfigurationHost::ValueType ConfigurationHost::at(SizeType position) const {
     if (position > maxSize_) throw ConfigurationHostException("Bad IP position", EXC_ARGS);
     return ip_[position];
@@ -129,3 +135,4 @@ ConfigurationHost::ValueType ConfigurationHost::stringToNumber_(const std::strin
     }
 }
 } 
+}

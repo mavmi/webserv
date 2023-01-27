@@ -3,7 +3,8 @@
 #include "utils.hpp"
 #include "exceptions.hpp"
 
-namespace MAIN_NAMESPACE::UTILS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace UTILS_NAMESPACE{
 
 class WrapperException : public Exception {
 public:
@@ -70,4 +71,5 @@ private:
 
 };
 
+}
 }

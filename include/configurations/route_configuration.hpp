@@ -2,7 +2,8 @@
 
 #include "utils.hpp"
 
-namespace MAIN_NAMESPACE::CONFIG_NAMESPACE {
+namespace MAIN_NAMESPACE {
+namespace CONFIG_NAMESPACE{
 
 class RouteException : public MAIN_NAMESPACE::UTILS_NAMESPACE::Exception {
 public:
@@ -95,4 +96,5 @@ private:
 
 };
 
+}
 }

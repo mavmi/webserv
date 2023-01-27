@@ -11,7 +11,8 @@
                                 throw ExceptionType(e.what());                              \
                             }
 
-namespace MAIN_NAMESPACE::UTILS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace UTILS_NAMESPACE{
 
 class Exception {
 public:
@@ -39,4 +40,5 @@ protected:
     virtual std::string output_() const;
 };
     
+}
 }

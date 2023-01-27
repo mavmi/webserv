@@ -1,6 +1,7 @@
 #include "../../include/http_headers/headers_abstract_parent.hpp"
 
-namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace HTTP_HEADERS_NAMESPACE{
 HttpHeadersAbstractParentException::HttpHeadersAbstractParentException(const char* msg) : Exception(msg){}
 HttpHeadersAbstractParentException::HttpHeadersAbstractParentException(const std::string& msg) : Exception(msg){}
 HttpHeadersAbstractParentException::HttpHeadersAbstractParentException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_) 
@@ -15,9 +16,11 @@ std::string HttpHeadersAbstractParentException::output_() const {
     return "HTTP_ABSTRACT_HEADERS_PARENT_EXCEPTION: " + msg_;
 }
 }
+}
 
 
-namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace HTTP_HEADERS_NAMESPACE{
 HttpHeadersAbstractParent::HttpHeadersAbstractParent(const StatusLineAbstractParent& statusLine)
     : statusLine_(statusLine) {
     
@@ -48,5 +51,6 @@ void HttpHeadersAbstractParent::checkVersion_(HttpVersionType version){
             throw ExceptionType(excMsg);
         }
     }
+}
 }
 }

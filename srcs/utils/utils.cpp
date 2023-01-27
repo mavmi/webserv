@@ -1,6 +1,7 @@
 #include "../../include/utils/utils.hpp"
 
-namespace MAIN_NAMESPACE::UTILS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace UTILS_NAMESPACE{
 BytesContainer::BytesContainer()
     : bytesContainer(std::vector<char*>()),
         bufferSize(BUFFER_SIZE),
@@ -64,9 +65,11 @@ void BytesContainer::free_(){
     }
 }
 }
+}
 
 
-namespace MAIN_NAMESPACE::UTILS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace UTILS_NAMESPACE{
 UtilsException::UtilsException(const char* msg) 
     : msg_(std::string(msg)){}
 UtilsException::UtilsException(const std::string& msg)
@@ -79,9 +82,11 @@ std::string UtilsException::output_() const {
     return "UTILS_EXCEPTION: " + msg_;
 }
 }
+}
 
 
-namespace MAIN_NAMESPACE::UTILS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace UTILS_NAMESPACE{
 std::string     httpVersionToString(HTTP_VERSION httpVersion){
     if (httpVersion == MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_0_9){
         return "HTTP/0.9";
@@ -160,5 +165,14 @@ void utilsCheckArgsCount(int argc){
         exit(1);
     }
 }
+const char* utilsStringToCharArray(const std::string& str){
+    char* arr = new char[str.size()];
+    
+    for (size_t i = 0; i < str.size(); i++){
+        arr[i] = str[i];
+    }
 
+    return arr;
+}
+}
 }

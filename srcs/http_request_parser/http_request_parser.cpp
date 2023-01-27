@@ -1,6 +1,7 @@
 #include "../../include/http_request_parser/http_request_parser.hpp"
 
-namespace MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace HTTP_REQUEST_PARS_NAMESPACE{
 HttpRequestParserException::HttpRequestParserException(const char* msg) : Exception(msg){}
 HttpRequestParserException::HttpRequestParserException(const std::string& msg) : Exception(msg){}
 HttpRequestParserException::HttpRequestParserException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_) 
@@ -15,9 +16,11 @@ std::string HttpRequestParserException::output_() const {
     return "HTTP_REQUEST_PARSER_EXCEPTION: " + msg_;
 }
 }
+}
 
 
-namespace MAIN_NAMESPACE::HTTP_REQUEST_PARS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace HTTP_REQUEST_PARS_NAMESPACE{
 HttpRequestParser::HttpRequestParser()
     : httpRequestStatusLine_(MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpRequestStatusLine()),
         httpGeneralHeaders_(MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeaders(httpRequestStatusLine_)),
@@ -280,5 +283,6 @@ void HttpRequestParser::parseHeader_(const std::string& line){
     } else if (key == "User-Agent"){
         httpRequestHeaders_.setUserAgent(value);
     }
+}
 }
 }

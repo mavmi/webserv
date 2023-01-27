@@ -1,6 +1,7 @@
 #include "../../include/http_headers/request_headers.hpp"
 
-namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace HTTP_HEADERS_NAMESPACE{
 HttpRequestHeadersException::HttpRequestHeadersException(const char* msg) : Exception(msg){}
 HttpRequestHeadersException::HttpRequestHeadersException(const std::string& msg) : Exception(msg){}
 HttpRequestHeadersException::HttpRequestHeadersException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_) 
@@ -15,9 +16,11 @@ std::string HttpRequestHeadersException::output_() const {
     return "HTTP_REQUEST_HEADERS_EXCEPTION: " + msg_;
 }
 }
+}
 
 
-namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace HTTP_HEADERS_NAMESPACE{
 HttpRequestHeaders::HttpRequestHeaders(const StatusLineAbstractParent& statusLine)
     : HttpCommonHeaders(statusLine) {
 
@@ -389,5 +392,6 @@ void HttpRequestHeaders::checkValidity_() const{
 }
 void HttpRequestHeaders::throwOnDone_() const{
     if (isDone_) throw ExceptionType("Request headers are done. You cannot change it anymore");
+}
 }
 }

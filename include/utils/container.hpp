@@ -7,13 +7,16 @@
 #include "wrapper.hpp"
 #include "exceptions.hpp"
 
-namespace MAIN_NAMESPACE::CONFIG_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace CONFIG_NAMESPACE{
 class Configuration;
 class RouteConfiguration;
 class ServerConfiguration;
 }
+}
 
-namespace MAIN_NAMESPACE::UTILS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace UTILS_NAMESPACE{
 
 class ContainerException : public MAIN_NAMESPACE::UTILS_NAMESPACE::Exception {
 public:
@@ -132,4 +135,5 @@ private:
 
 };
 
+}
 }

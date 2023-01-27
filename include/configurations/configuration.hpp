@@ -3,7 +3,9 @@
 #include "utils.hpp"
 #include "server_configuration.hpp"
 
-namespace MAIN_NAMESPACE::CONFIG_NAMESPACE {
+
+namespace MAIN_NAMESPACE{
+namespace CONFIG_NAMESPACE{
 
 class ConfigurationException : public MAIN_NAMESPACE::UTILS_NAMESPACE::Exception {
 public:
@@ -29,7 +31,7 @@ public:
     typedef ServerConfiguration                                                                 ServerType;
     typedef MAIN_NAMESPACE::UTILS_NAMESPACE::Container<ServerType>                              ServersContainerType;
     typedef ConfigurationException                                                              ExceptionType;
-    typedef std::pair<const ServerType::HostType, const ServerType::PortType>                   HostPortPairType;
+    typedef std::pair<ServerType::HostType, ServerType::PortType>                               HostPortPairType;
     typedef std::set<HostPortPairType>                                                          HostPortPairsContainerType;
     typedef MAIN_NAMESPACE::UTILS_NAMESPACE::METHOD                                             MethodType;
 
@@ -88,4 +90,5 @@ private:
 
 };
 
+}
 }

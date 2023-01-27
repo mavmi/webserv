@@ -1,6 +1,7 @@
 #include "../../include/utils/container.hpp"
 
-namespace MAIN_NAMESPACE::UTILS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace UTILS_NAMESPACE{
 
 ContainerException::ContainerException(const char* msg) : Exception(msg){}
 ContainerException::ContainerException(const std::string& msg) : Exception(msg){}
@@ -16,4 +17,5 @@ std::string ContainerException::output_() const {
     return "CONTAINER_EXCEPTION: " + msg_;
 }
 
+}
 }

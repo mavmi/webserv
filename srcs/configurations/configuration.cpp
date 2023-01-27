@@ -1,6 +1,7 @@
 #include "../../include/configurations/configuration.hpp"
 
-namespace MAIN_NAMESPACE::CONFIG_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace CONFIG_NAMESPACE{
 ConfigurationException::ConfigurationException(const char* msg) : Exception(msg){}
 ConfigurationException::ConfigurationException(const std::string& msg) : Exception(msg){}
 ConfigurationException::ConfigurationException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_) 
@@ -15,9 +16,11 @@ std::string ConfigurationException::output_() const {
     return "CONFIGURATION_EXCEPTION: " + msg_;
 }
 }
+}
 
 
-namespace MAIN_NAMESPACE::CONFIG_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace CONFIG_NAMESPACE{
 Configuration::Configuration(){
     servers_ = ServersContainerType();
     hostPortPairs_ = HostPortPairsContainerType();
@@ -86,13 +89,13 @@ void Configuration::parseFile(const std::string& inputFile){
     std::string line;
     while(std::getline(inputFileStream, line)){     // it does not have whitespaces here anymore    
         if (isLineEmpty_(line)) continue;
-        line.resize(std::distance(line.begin(), std::remove_if(line.begin(), line.end(), isspace)));    // Remove whitespaces from line
 
         Iterator iter = line.begin();
         while (iter != line.end()){
             char c = *iter;
 
-            if (c == '{'){          // Start server
+            if (isspace(c));
+            else if (c == '{'){          // Start server
 
                 try {
                     ServerType& lastServer = getLastServer_();
@@ -152,16 +155,40 @@ void Configuration::parseFile(const std::string& inputFile){
 
             } else {                // value string
 
+                const std::string errMsg = "Invalid key-value line";
+
                 Iterator begin = iter;
                 Iterator end = std::find(begin, line.end(), ';');
-                if (end == line.end()) throw ExceptionType("Invalid key-value line", EXC_ARGS);  // Did not find ';' == very bad
+                if (end == line.end()) throw ExceptionType(errMsg, EXC_ARGS);  // Did not find ';' == very bad
                 
                 std::string substring = line.substr(
                     std::distance(line.begin(), begin),
                     std::distance(begin, end)
                 );
 
-                parseValueString_(substring);
+                {
+                    Iterator iterBegin = std::find(substring.begin(), substring.end(), ':');
+                    if (iterBegin == line.end()) throw ExceptionType(errMsg, EXC_ARGS);
+                    Iterator iterEnd = ++iterBegin;
+                    while (isspace(*iterEnd)) iterEnd++;
+                    if (iterEnd == line.end()) throw ExceptionType(errMsg, EXC_ARGS);
+                    substring.erase(iterBegin, iterEnd);
+
+                    while (true){
+                        bool exit = false;
+                        Iterator iterBegin = std::find(substring.begin(), substring.end(), ':');
+                        Iterator iterEnd = iterBegin;
+                        while (iterEnd != substring.end() && !isspace(*iterEnd)) iterEnd++;
+                        if (iterEnd == substring.end()) break;
+                        iterBegin = iterEnd;
+                        while (iterEnd != substring.end() && isspace(*iterEnd)) iterEnd++;
+                        exit = iterEnd == substring.end();
+                        substring.erase(iterBegin, iterEnd);
+                        if (exit) break;
+                    }
+
+                    parseValueString_(substring);
+                }
 
                 if (end == line.end()) break;
                 iter = ++end;
@@ -249,7 +276,7 @@ void Configuration::parseValueString_(const std::string& str){
     if (lastServer.isDone()) throw ExceptionType("Trying to update already finished server", EXC_ARGS);
     {
         if (key == "port"){
-            lastServer.setPort(stringToNumber_<ServerType::PortType>(value));
+            lastServer.setPort(stringToNumber_<ConfigurationPort::NumericValueType>(value));
             return;
         } else if (key == "host"){
             lastServer.setHost(value);
@@ -317,5 +344,6 @@ void Configuration::copyData_(const Configuration& other){
 void Configuration::deleteData_(){
     servers_ = ServersContainerType();
     hostPortPairs_ = HostPortPairsContainerType();
+}
 }
 }

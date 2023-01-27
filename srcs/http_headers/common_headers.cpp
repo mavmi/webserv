@@ -1,6 +1,7 @@
 #include "../../include/http_headers/common_headers.hpp"
 
-namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace HTTP_HEADERS_NAMESPACE{
 HttpCommonHeadersException::HttpCommonHeadersException(const char* msg) : Exception(msg){}
 HttpCommonHeadersException::HttpCommonHeadersException(const std::string& msg) : Exception(msg){}
 HttpCommonHeadersException::HttpCommonHeadersException(const char* msg, const std::string& _file_, const std::string& _function_, int _line_) 
@@ -15,9 +16,11 @@ std::string HttpCommonHeadersException::output_() const {
     return "HTTP_COMMON_HEADERS_EXCEPTION: " + msg_;
 }
 }
+}
 
 
-namespace MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE{
+namespace MAIN_NAMESPACE{
+namespace HTTP_HEADERS_NAMESPACE{
 HttpCommonHeaders::HttpCommonHeaders(const StatusLineAbstractParent& statusLine)
     : HttpHeadersAbstractParent(statusLine) {
 
@@ -299,5 +302,6 @@ void HttpCommonHeaders::checkValidity_() const{
 }
 void HttpCommonHeaders::throwOnDone_() const{
     if (isDone_) throw ExceptionType("Common headers are done. You cannot change it anymore");
+}
 }
 }
