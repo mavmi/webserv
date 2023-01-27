@@ -166,11 +166,13 @@ void utilsCheckArgsCount(int argc){
     }
 }
 const char* utilsStringToCharArray(const std::string& str){
-    char* arr = new char[str.size()];
+    char* arr = new char[str.size() + 1];
     
-    for (size_t i = 0; i < str.size(); i++){
+    size_t i;
+    for (i = 0; i < str.size(); i++){
         arr[i] = str[i];
     }
+    arr[i] = '\0';
 
     return arr;
 }

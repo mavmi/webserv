@@ -16,7 +16,7 @@
 namespace MAIN_NAMESPACE{
 namespace UTILS_NAMESPACE{
 
-const size_t BUFFER_SIZE = 32;
+const size_t BUFFER_SIZE = 2048;
 const std::string DEFAULT_SERVER_PATH = "DefaultServer";
 const std::string DEFAULT_SERVER_CONFIG_FILE_PATH = DEFAULT_SERVER_PATH + "/ConfigFile.txt";
 
@@ -54,7 +54,7 @@ public:
 
     void pushBack(const std::string& line);
 
-    std::vector<char*> bytesContainer;
+    std::vector<char*> bytesContainer;  ==> std::pair {char* arr; size_t size; }
     const size_t bufferSize;
     size_t lastSize;
 

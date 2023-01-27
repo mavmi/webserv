@@ -47,7 +47,12 @@ void ServerConfiguration::setPort(PortType port){
     throwOnDone_();
     port_.set(port);
 }
-ServerConfiguration::PortType ServerConfiguration::getPort() const{
+ServerConfiguration::PortType& ServerConfiguration::getPort(){
+    HANDLE_EXC_BEGIN
+        return port_.get();
+    HANDLE_EXC_END
+}
+const ServerConfiguration::PortType& ServerConfiguration::getPort() const{
     HANDLE_EXC_BEGIN
         return port_.get();
     HANDLE_EXC_END

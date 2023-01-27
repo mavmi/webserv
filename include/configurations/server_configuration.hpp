@@ -48,7 +48,8 @@ public:
     ServerConfiguration& operator=(const ServerConfiguration& other);
 
     void setPort(PortType port);
-    PortType getPort() const;
+    PortType& getPort();
+    const PortType& getPort() const;
 
     void setHost(const HostType& host);
     HostType& getHost();
