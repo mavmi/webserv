@@ -13,14 +13,14 @@ HDRS_UTILS			=	container.hpp exceptions.hpp parser_abstract_parent.hpp utils.hpp
 HDRS_CONFIG			=	configuration_host.hpp configuration_port.hpp configuration.hpp parser.hpp route_configuration.hpp server_configuration.hpp utils.hpp
 HDRS_HTTP_HEADERS	=	common_headers.hpp general_headers.hpp headers_abstract_parent.hpp request_headers.hpp request_status_line.hpp response_headers.hpp response_status_line.hpp status_line_abstract_parent.hpp utils.hpp
 HDRS_HTTP_REQ		=	http_request.hpp http_request_parser.hpp utils.hpp
-HDRS_HTTP_RES		=	http_response_generator.hpp http_response.hpp utils.hpp
+HDRS_HTTP_RES		=	http_response.hpp utils.hpp
 
 ### sources ###
 SRCS_UTILS			=	container.cpp exceptions.cpp parser_abstract_parent.cpp utils.cpp wrapper.cpp
 SRCS_CONFIG			=	configuration.cpp configuration_host.cpp configuration_port.cpp parser.cpp route_configuration.cpp server_configuration.cpp utils.cpp
 SRCS_HTTP_HEADERS	=	common_headers.cpp general_headers.cpp headers_abstract_parent.cpp request_headers.cpp request_status_line.cpp response_headers.cpp response_status_line.cpp status_line_abstract_parent.cpp
 SRCS_HTTP_REQ		=	http_request.cpp http_request_parser.cpp utils.cpp
-SRCS_HTTP_RES		=	http_response_generator.cpp http_response.cpp
+SRCS_HTTP_RES		=	http_response.cpp
 
 ### objects ###
 OBJS_UTILS			=	$(SRCS_UTILS:.cpp=.o)
@@ -133,6 +133,12 @@ test:					$(OBJS) $(TEST_OBJS) $(TEST_MAIN_OBJ)
 						@mkdir -p $(dir $@)
 						$(GCC) $(OBJS) $(TEST_OBJS) $(TEST_MAIN_OBJ) -o $(TEST_NAME)
 
+run_with_leaks:			$(NAME)
+						leaks --atExit -- ./$(NAME)
+
+run_tests_with_leaks:	test
+						leaks --atExit -- ./$(TEST_NAME)
+
 doNotForgetToDelete:
 						$(eval wsrv_dir:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST)))))
 
@@ -144,4 +150,4 @@ doNotForgetToDelete:
 			
 -include $(DEPEN)
 
-.PHONY: all clean fclean re test doNotForgetToDelete
+.PHONY: all clean fclean re test doNotForgetToDelete run_with_leaks run_tests_with_leaks

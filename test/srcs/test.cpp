@@ -113,21 +113,21 @@ void test::CONFIGURATION_HOST_TESTS(){
 void test::CONFIGURATION_FILES_TESTS(){
     ___HEADER___
 
-    typedef wsrv::configuration::Configuration::ServerType                                    Server;
-    typedef wsrv::configuration::Configuration::ServerType::RouteType                         Route;
-    typedef wsrv::configuration::Configuration::ServerType::ErrorPageType                     ErrorPage;
-    typedef wsrv::configuration::Configuration::ServerType::RouteType::MethodType             Method;
+    typedef wsrv::Configuration::ServerType                                    Server;
+    typedef wsrv::Configuration::ServerType::RouteType                         Route;
+    typedef wsrv::Configuration::ServerType::ErrorPageType                     ErrorPage;
+    typedef wsrv::Configuration::ServerType::RouteType::MethodType             Method;
 
     // Valid files
     {
         wsrv::Parser parser;
         try {
-            parser = wsrv::Parser::parseFile("ConfigFiles/valid/1.txt");
+            parser.parseFile("ConfigFiles/valid/1.txt");
         } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::Exception& e){
             std::cerr << e.what() << std::endl;
             assert(false);
         }
-        const wsrv::configuration::Configuration& configuration = parser.getConfiguration();
+        const wsrv::Configuration& configuration = parser.getConfiguration();
 
         const MAIN_NAMESPACE::UTILS_NAMESPACE::Container<Server>& servers = configuration.getServers();
         assert(servers.size() == 1);
@@ -171,12 +171,12 @@ void test::CONFIGURATION_FILES_TESTS(){
     {
         wsrv::Parser parser;
         try {
-            parser = wsrv::Parser::parseFile("ConfigFiles/valid/2.txt");
+            parser.parseFile("ConfigFiles/valid/2.txt");
         } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::Exception& e){
             std::cerr << e.what() << std::endl;
             assert(false);
         }
-        const wsrv::configuration::Configuration& configuration = parser.getConfiguration();
+        const wsrv::Configuration& configuration = parser.getConfiguration();
 
         const MAIN_NAMESPACE::UTILS_NAMESPACE::Container<Server>& servers = configuration.getServers();
         assert(servers.size() == 1);

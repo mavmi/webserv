@@ -7,9 +7,9 @@ void runTestConfigFile(int argc, char** argv){
 
     MAIN_NAMESPACE::Parser parser;
     if (argc == 2){
-        parser = MAIN_NAMESPACE::Parser::parseFile(argv[1]);
+        parser.parseFile(argv[1]);
     } else {
-        parser = MAIN_NAMESPACE::Parser::parseFile(MAIN_NAMESPACE::UTILS_NAMESPACE::DEFAULT_SERVER_CONFIG_FILE_PATH);
+        parser.parseFile(MAIN_NAMESPACE::UTILS_NAMESPACE::DEFAULT_SERVER_CONFIG_FILE_PATH);
     }
 }
 
