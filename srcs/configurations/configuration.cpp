@@ -169,6 +169,7 @@ void Configuration::parseFile(const std::string& inputFile){
                 {
                     Iterator iterBegin = std::find(substring.begin(), substring.end(), ':');
                     if (iterBegin == line.end()) throw ExceptionType(errMsg, EXC_ARGS);
+                    size_t colonPosNum = std::distance(substring.begin(), iterBegin);
                     Iterator iterEnd = ++iterBegin;
                     while (isspace(*iterEnd)) iterEnd++;
                     if (iterEnd == line.end()) throw ExceptionType(errMsg, EXC_ARGS);
@@ -176,7 +177,7 @@ void Configuration::parseFile(const std::string& inputFile){
 
                     while (true){
                         bool exit = false;
-                        Iterator iterBegin = std::find(substring.begin(), substring.end(), ':');
+                        Iterator iterBegin = std::next(substring.begin(), colonPosNum);
                         Iterator iterEnd = iterBegin;
                         while (iterEnd != substring.end() && !isspace(*iterEnd)) iterEnd++;
                         if (iterEnd == substring.end()) break;
