@@ -10,7 +10,6 @@ namespace CONFIG_NAMESPACE{
 class ConfigurationPort{
 public:
     typedef uint16_t    NumericValueType;
-    typedef std::string StringValueType;
 
     ConfigurationPort();
     ConfigurationPort(NumericValueType port);
@@ -18,28 +17,21 @@ public:
 
     ConfigurationPort& operator=(const ConfigurationPort& other);
     
-    bool operator==(const ConfigurationPort& other);
-    bool operator!=(const ConfigurationPort& other);
-    bool operator<(const ConfigurationPort& other);
-    bool operator<=(const ConfigurationPort& other);
-    bool operator>(const ConfigurationPort& other);
-    bool operator>=(const ConfigurationPort& other);
+    bool operator==(const ConfigurationPort& other) const;
+    bool operator!=(const ConfigurationPort& other) const;
+    bool operator<(const ConfigurationPort& other) const;
+    bool operator<=(const ConfigurationPort& other) const;
+    bool operator>(const ConfigurationPort& other) const;
+    bool operator>=(const ConfigurationPort& other) const;
 
     NumericValueType toNum() const;
-    const StringValueType toString() const;
-    const char* toCharArray() const;
+    std::string toString() const;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::ArrayContainer toCharArray() const;
 
 private:
     NumericValueType port_;
 
 };
-
-bool operator==(const ConfigurationPort& lhs, const ConfigurationPort& rhs);
-bool operator!=(const ConfigurationPort& lhs, const ConfigurationPort& rhs);
-bool operator<(const ConfigurationPort& lhs, const ConfigurationPort& rhs);
-bool operator<=(const ConfigurationPort& lhs, const ConfigurationPort& rhs);
-bool operator>(const ConfigurationPort& lhs, const ConfigurationPort& rhs);
-bool operator>=(const ConfigurationPort& lhs, const ConfigurationPort& rhs);
 
 }
 }

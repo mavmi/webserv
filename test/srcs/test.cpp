@@ -534,7 +534,57 @@ void test::HTTP_REQUEST_FILE_TEST(){
     }
 }
 
+void test::ARRAY_CONTAINER_TEST(){
+    ___HEADER___
+
+    {
+        std::string str = "ekrjghw549ghiujfLjfoijw4tojh5gouihpof34";
+        wsrv::utils::ArrayContainer arrayContainer = wsrv::utils::ArrayContainer::fromString(str);
+        
+        assert(str.size() == arrayContainer.getSize());
+        for (size_t i = 0; i < str.size(); i++){
+            assert(arrayContainer.getData()[i] == str[i]);
+        }
+    }
+
+    {
+        for (int num = 0; num < 5000; num++){
+            std::string str = wsrv::utils::utilsNumToString(num);
+            wsrv::utils::ArrayContainer arrayContainer = wsrv::utils::ArrayContainer::fromNum(num);
+            
+            assert(str.size() == arrayContainer.getSize());
+            for (size_t i = 0; i < str.size(); i++){
+                assert(arrayContainer.getData()[i] == str[i]);
+            }
+        }
+    }
+
+    {
+        const std::string ip = "192.168.0.1";
+        wsrv::configuration::ConfigurationHost host(ip);
+        wsrv::utils::ArrayContainer array = host.toCharArray();
+
+        assert(array.getSize() == ip.size());
+        for (size_t i = 0; i < ip.size(); i++){
+            assert(array.getData()[i] == ip[i]);
+        }
+    }
+
+    {
+        const uint16_t portNum = 65000;
+        const std::string portStr = "65000";
+        wsrv::configuration::ConfigurationPort port(portNum);
+        wsrv::utils::ArrayContainer array = port.toCharArray();
+
+        assert(array.getSize() == portStr.size());
+        for (size_t i = 0; i < portStr.size(); i++){
+            assert(array.getData()[i] == portStr[i]);
+        }
+    }
+}
+
 void RUN_ALL_TESTS(){
+    test::ARRAY_CONTAINER_TEST();
     test::CONFIGURATION_HOST_TESTS();
     test::CONFIGURATION_FILES_TESTS();
     test::HTTP_REQUEST_FILE_TEST();

@@ -47,7 +47,7 @@ public:
 
     // Return string representation of IP address.
     std::string toString() const;
-    const char* toCharArray() const;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::ArrayContainer toCharArray() const;
     // Get number from IP at specified position.
     // May throw an exception on if position is invalid.
     ValueType at(SizeType position) const;
@@ -59,9 +59,6 @@ public:
 private:
     const static SizeType maxSize_ = 4;
     ValueType ip_[maxSize_];
-
-    // Convert VALUE_TYPE to string.
-    std::string toString_(ValueType val) const;
 
     // Convert string number to VALUE_TYPE.
     // May throw exception.

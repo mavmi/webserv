@@ -44,27 +44,6 @@ enum HTTP_VERSION{
     CDH
 };
 
-class BytesContainer{
-public:
-    BytesContainer();
-    BytesContainer(const BytesContainer& other);
-    ~BytesContainer();
-
-    BytesContainer& operator=(const BytesContainer& other);
-
-    void pushBack(const std::string& line);
-
-    std::vector<char*> bytesContainer;  ==> std::pair {char* arr; size_t size; }
-    const size_t bufferSize;
-    size_t lastSize;
-
-private:
-    void cpy_(const BytesContainer& other);
-    char* realloc_(char* buffer, size_t bufferSize);
-    void free_();
-
-};
-
 class UtilsException {
 public:
     UtilsException(const char* msg);
@@ -126,6 +105,57 @@ Type        utilsStringToNum(const std::string& str){
     return res;
 
 }
+
+class BytesContainer{
+public:
+    BytesContainer();
+    BytesContainer(const BytesContainer& other);
+    ~BytesContainer();
+
+    BytesContainer& operator=(const BytesContainer& other);
+
+    void pushBack(const std::string& line);
+
+    std::vector<char*> bytesContainer; // ==> std::pair {char* arr; size_t size; }
+    const size_t bufferSize;
+    size_t lastSize;
+
+private:
+    void cpy_(const BytesContainer& other);
+    char* realloc_(char* buffer, size_t bufferSize);
+    void free_();
+
+};
+
+class ArrayContainer{
+public:
+    typedef size_t SizeType;
+    
+    ArrayContainer(const ArrayContainer& other);
+    ~ArrayContainer();
+
+    ArrayContainer& operator=(const ArrayContainer& other);
+
+    static ArrayContainer fromString(const std::string& str);
+    template <typename T>
+    static ArrayContainer fromNum(T num){
+        return fromString(utilsNumToString(num));
+    }
+
+    const char* getData() const;
+    SizeType getSize() const;
+
+private:
+    char* data_;
+    SizeType size_;
+
+    ArrayContainer();
+
+    void free_();
+    void cpy_(const ArrayContainer& other);
+    char* stringToCharArr_(const std::string& str);
+
+};
 
 }
 }

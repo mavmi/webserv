@@ -17,54 +17,35 @@ ConfigurationPort& ConfigurationPort::operator=(const ConfigurationPort& other){
     port_ = other.port_;
     return *this;
 }
-bool ConfigurationPort::operator==(const ConfigurationPort& other){
+
+bool ConfigurationPort::operator==(const ConfigurationPort& other) const {
     return port_ == other.port_;
 }
-bool ConfigurationPort::operator!=(const ConfigurationPort& other){
+bool ConfigurationPort::operator!=(const ConfigurationPort& other) const {
     return port_ != other.port_;
 }
-bool ConfigurationPort::operator<(const ConfigurationPort& other){
+bool ConfigurationPort::operator<(const ConfigurationPort& other) const {
     return port_ < other.port_;
 }
-bool ConfigurationPort::operator<=(const ConfigurationPort& other){
+bool ConfigurationPort::operator<=(const ConfigurationPort& other) const {
     return port_ <= other.port_;
 }
-bool ConfigurationPort::operator>(const ConfigurationPort& other){
+bool ConfigurationPort::operator>(const ConfigurationPort& other) const {
     return port_ > other.port_;
 }
-bool ConfigurationPort::operator>=(const ConfigurationPort& other){
+bool ConfigurationPort::operator>=(const ConfigurationPort& other) const {
     return port_ >= other.port_;
 }
 
 ConfigurationPort::NumericValueType ConfigurationPort::toNum() const{
     return port_;
 }
-const ConfigurationPort::StringValueType ConfigurationPort::toString() const{
+std::string ConfigurationPort::toString() const{
     return MAIN_NAMESPACE::UTILS_NAMESPACE::utilsNumToString<NumericValueType>(port_);
 }
-const char* ConfigurationPort::toCharArray() const{
-    return MAIN_NAMESPACE::UTILS_NAMESPACE::utilsStringToCharArray(toString());
+MAIN_NAMESPACE::UTILS_NAMESPACE::ArrayContainer ConfigurationPort::toCharArray() const{
+    return MAIN_NAMESPACE::UTILS_NAMESPACE::ArrayContainer::fromString(toString());
 
-}
-
-
-bool operator==(const ConfigurationPort& lhs, const ConfigurationPort& rhs){
-    return lhs.toNum() == rhs.toNum();
-}
-bool operator!=(const ConfigurationPort& lhs, const ConfigurationPort& rhs){
-    return lhs.toNum() != rhs.toNum();
-}
-bool operator<(const ConfigurationPort& lhs, const ConfigurationPort& rhs){
-    return lhs.toNum() < rhs.toNum();
-}
-bool operator<=(const ConfigurationPort& lhs, const ConfigurationPort& rhs){
-    return lhs.toNum() <= rhs.toNum();
-}
-bool operator>(const ConfigurationPort& lhs, const ConfigurationPort& rhs){
-    return lhs.toNum() > rhs.toNum();
-}
-bool operator>=(const ConfigurationPort& lhs, const ConfigurationPort& rhs){
-    return lhs.toNum() >= rhs.toNum();
 }
 
 }

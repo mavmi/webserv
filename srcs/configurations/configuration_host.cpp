@@ -101,7 +101,7 @@ std::string ConfigurationHost::toString() const {
     std::string str = "";
 
     for (SizeType i = 0; i < maxSize_; i++){
-        str += toString_(ip_[i]);
+        str += MAIN_NAMESPACE::UTILS_NAMESPACE::utilsNumToString<ValueType>(ip_[i]);
         if (i + 1 != maxSize_){
             str += '.';
         }
@@ -109,8 +109,8 @@ std::string ConfigurationHost::toString() const {
 
     return str;
 }
-const char* ConfigurationHost::toCharArray() const{
-    return MAIN_NAMESPACE::UTILS_NAMESPACE::utilsStringToCharArray(toString());
+MAIN_NAMESPACE::UTILS_NAMESPACE::ArrayContainer ConfigurationHost::toCharArray() const{
+    return MAIN_NAMESPACE::UTILS_NAMESPACE::ArrayContainer::fromString(toString());
 }
 ConfigurationHost::ValueType ConfigurationHost::at(SizeType position) const {
     if (position > maxSize_) throw ConfigurationHostException("Bad IP position", EXC_ARGS);
@@ -120,10 +120,6 @@ ConfigurationHost::ValueType ConfigurationHost::at(SizeType position) const {
 void ConfigurationHost::set(ValueType value, SizeType position){
     if (position > maxSize_) throw ConfigurationHostException("Bad IP position", EXC_ARGS);
     ip_[position] = value;  
-}
-
-std::string ConfigurationHost::toString_(ValueType val) const {
-    return MAIN_NAMESPACE::UTILS_NAMESPACE::utilsNumToString<ValueType>(val);
 }
 
 ConfigurationHost::ValueType ConfigurationHost::stringToNumber_(const std::string& str) const {

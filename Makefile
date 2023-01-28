@@ -108,7 +108,7 @@ TEST_DEPEN	=	$(addprefix $(TMP_FILES_DIR)/, $(TEST_SRCS:.cpp=.d))
 ### RULES ###
 #############
 CC			=	c++
-GCC			=	$(CC) -Wall -Wextra -Werror -std=c++98 -MMD -g -fsanitize=undefined -fsanitize=address
+GCC			=	$(CC) -Wall -Wextra -Werror -std=c++98 -MMD -g -fsanitize=undefined
 
 
 # $@					$<
@@ -118,7 +118,7 @@ $(TMP_FILES_DIR)/%.o:	%.cpp $(HDRS) $(TEST_HDRS)
 
 all:					$(NAME)
 
-$(NAME):				$(OBJS) $(MAIN_OBJ)
+$(NAME):				$(OBJS) $(MAIN_OBJ) Makefile
 						$(GCC) $(OBJS) $(MAIN_OBJ) -o $(NAME)
 
 clean:			
