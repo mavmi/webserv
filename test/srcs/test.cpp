@@ -507,24 +507,25 @@ void test::HTTP_REQUEST_FILE_TEST(){
     }
 
     try{
-        wsrv::HttpRequest httpRequest = wsrv::HttpRequest::parseHttpRequest(content);
+        wsrv::http_request::HttpRequestParser httpRequestParser;
+        wsrv::http_request::HttpRequest httpRequest = httpRequestParser.parseHttpRequest(content);
 
-        const wsrv::http_headers::HttpRequestStatusLine& statusLine = httpRequest.getHttpRequest().getStatusLine();
+        const wsrv::http_headers::HttpRequestStatusLine& statusLine = httpRequest.getStatusLine();
         assert(statusLine.getHttpVersion() == wsrv::utils::HTTP_1_1);
         assert(statusLine.getMethod() == wsrv::utils::POST);
         assert(statusLine.getUrl() == "/cgi-bin/process.cgi");
 
-        const wsrv::http_headers::HttpGeneralHeaders& generalHeaders = httpRequest.getHttpRequest().getGeneralHeaders();
+        const wsrv::http_headers::HttpGeneralHeaders& generalHeaders = httpRequest.getGeneralHeaders();
         assert(generalHeaders.getConnection() == " Keep-Alive");
         
-        const wsrv::http_headers::HttpRequestHeaders& requestHeaders = httpRequest.getHttpRequest().getRequestHeaders();
+        const wsrv::http_headers::HttpRequestHeaders& requestHeaders = httpRequest.getRequestHeaders();
         assert(requestHeaders.getHost() == " www.tutorialspoint.com");
         assert(requestHeaders.getContentType() == " text/xml; charset=utf-8");
         assert(requestHeaders.getContentLength() == " length");
         assert(requestHeaders.getAcceptLanguage() == " en-us");
         assert(requestHeaders.getAcceptEncoding() == " gzip, deflate");
 
-        const std::vector<std::string>& httpRequestContent = httpRequest.getHttpRequest().getRequestContent();
+        const std::vector<std::string>& httpRequestContent = httpRequest.getRequestContent();
         assert(httpRequestContent.size() == 2);
         assert(httpRequestContent[0] == "<?xml version=\"1.0\" encoding=\"utf-8\"?>");
         assert(httpRequestContent[1] == "<string xmlns=\"http://clearforest.com/\">string</string>");

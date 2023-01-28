@@ -21,18 +21,11 @@ std::string HttpRequestParserException::output_() const {
 
 namespace MAIN_NAMESPACE{
 namespace HTTP_REQUEST_PARS_NAMESPACE{
-HttpRequestParser::HttpRequestParser()
-    : httpRequestStatusLine_(MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpRequestStatusLine()),
-        httpGeneralHeaders_(MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeaders(httpRequestStatusLine_)),
-        httpRequestHeaders_(MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpRequestHeaders(httpRequestStatusLine_)),
-        httpRequestContent_(std::vector<std::string>()){
+HttpRequestParser::HttpRequestParser(){
 
 }
 HttpRequestParser::HttpRequestParser(const HttpRequestParser& other)
-    : httpRequestStatusLine_(other.httpRequestStatusLine_),
-        httpGeneralHeaders_(MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeaders(httpRequestStatusLine_)),
-        httpRequestHeaders_(MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpRequestHeaders(httpRequestStatusLine_)),
-        httpRequestContent_(std::vector<std::string>()) {
+    : httpRequest_(other.httpRequest_) {
     
 }
 HttpRequestParser::~HttpRequestParser(){
@@ -40,14 +33,11 @@ HttpRequestParser::~HttpRequestParser(){
 }
 
 HttpRequestParser& HttpRequestParser::operator=(const HttpRequestParser& other){
-    httpRequestStatusLine_ = other.httpRequestStatusLine_;
-    httpGeneralHeaders_ = other.httpGeneralHeaders_;
-    httpRequestHeaders_ = other.httpRequestHeaders_;
-    httpRequestContent_ = other.httpRequestContent_;
+    httpRequest_ = other.httpRequest_;
     return *this;
 }
 
-void HttpRequestParser::parseHttpRequest(const MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer& buffer){
+const HttpRequest& HttpRequestParser::parseHttpRequest(const MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer& buffer){
     std::vector<std::string> content = parseBuffer_(buffer);
     if (content.size() < 2) throw ExceptionType("HTTP request doesn't contain headers");
 
@@ -57,32 +47,18 @@ void HttpRequestParser::parseHttpRequest(const MAIN_NAMESPACE::UTILS_NAMESPACE::
     while (i < content.size() && !isLineEmpty_(content[i])){
         parseHeader_(content[i++]);
     }
-    httpGeneralHeaders_.done();
-    httpRequestHeaders_.done();
+    httpRequest_.getGeneralHeaders().done();
+    httpRequest_.getRequestHeaders().done();
 
     i++;
     while (i < content.size()){
-        httpRequestContent_.push_back(content[i++]);
+        httpRequest_.getRequestContent().push_back(content[i++]);
     }
-}
-void HttpRequestParser::clear(){
-    httpRequestStatusLine_ = MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpRequestStatusLine();
-    httpGeneralHeaders_ = MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeaders(httpRequestStatusLine_);
-    httpRequestHeaders_ = MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpRequestHeaders(httpRequestStatusLine_);
-    httpRequestContent_ = std::vector<std::string>();
-}
 
-const MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpRequestStatusLine& HttpRequestParser::getStatusLine() const{
-    return httpRequestStatusLine_;
+    return httpRequest_;
 }
-const MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeaders& HttpRequestParser::getGeneralHeaders() const{
-    return httpGeneralHeaders_;
-}
-const MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpRequestHeaders& HttpRequestParser::getRequestHeaders() const{
-    return httpRequestHeaders_;
-}
-const std::vector<std::string>& HttpRequestParser::getRequestContent() const{
-    return httpRequestContent_;
+const HttpRequest& HttpRequestParser::getHttpRequest() const{
+    return httpRequest_;
 }
 
 std::vector<std::string> HttpRequestParser::split_(const std::string& str, char delimiter){
@@ -157,20 +133,20 @@ void HttpRequestParser::parseStatusLine_(const std::string& line){
     {
         const std::string& method = splitedLine.at(0);
         
-        if (method == "GET") httpRequestStatusLine_.setMethod(MAIN_NAMESPACE::UTILS_NAMESPACE::GET);
-        else if (method == "POST") httpRequestStatusLine_.setMethod(MAIN_NAMESPACE::UTILS_NAMESPACE::POST);
-        else if (method == "DELETE") httpRequestStatusLine_.setMethod(MAIN_NAMESPACE::UTILS_NAMESPACE::DELETE);
+        if (method == "GET") httpRequest_.getStatusLine().setMethod(MAIN_NAMESPACE::UTILS_NAMESPACE::GET);
+        else if (method == "POST") httpRequest_.getStatusLine().setMethod(MAIN_NAMESPACE::UTILS_NAMESPACE::POST);
+        else if (method == "DELETE") httpRequest_.getStatusLine().setMethod(MAIN_NAMESPACE::UTILS_NAMESPACE::DELETE);
         else throw ExceptionType("Invalid method", EXC_ARGS);
     }
     // URL
     {
         const std::string& url = splitedLine.at(1);
-        httpRequestStatusLine_.setUrl(url);
+        httpRequest_.getStatusLine().setUrl(url);
     }
     // HTTP version
     {
         if (splitedLineSize == 2) {
-            httpRequestStatusLine_.setHttpVersion(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_0_9);
+            httpRequest_.getStatusLine().setHttpVersion(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_0_9);
             return;
         }
 
@@ -178,13 +154,13 @@ void HttpRequestParser::parseStatusLine_(const std::string& line){
         const std::string& verLine = splitedLine.at(2);
 
         try {
-            httpRequestStatusLine_.setHttpVersion(MAIN_NAMESPACE::UTILS_NAMESPACE::httpVersionFromString(verLine));
+            httpRequest_.getStatusLine().setHttpVersion(MAIN_NAMESPACE::UTILS_NAMESPACE::httpVersionFromString(verLine));
         } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::UtilsException& e){
             throw ExceptionType(e.what(), EXC_ARGS);
         }
     }
 
-    httpRequestStatusLine_.done();
+    httpRequest_.getStatusLine().done();
 }
 void HttpRequestParser::parseHeader_(const std::string& line){
     const std::vector<std::string> splittedLine = split_(line, ':');
@@ -195,93 +171,93 @@ void HttpRequestParser::parseHeader_(const std::string& line){
 
     // General headers
     if (key == "Cache-Control"){
-        httpGeneralHeaders_.setCacheControl(value);
+        httpRequest_.getGeneralHeaders().setCacheControl(value);
     } else if (key == "Connection"){
-        httpGeneralHeaders_.setConnection(value);
+        httpRequest_.getGeneralHeaders().setConnection(value);
     } else if (key == "Date"){
-        httpGeneralHeaders_.setDate(value);
+        httpRequest_.getGeneralHeaders().setDate(value);
     } else if (key == "MIME-Version"){
-        httpGeneralHeaders_.setMimeVersion(value);
+        httpRequest_.getGeneralHeaders().setMimeVersion(value);
     } else if (key == "Pragma"){
-        httpGeneralHeaders_.setPragma(value);
+        httpRequest_.getGeneralHeaders().setPragma(value);
     } else if (key == "Trailer"){
-        httpGeneralHeaders_.setTrailer(value);
+        httpRequest_.getGeneralHeaders().setTrailer(value);
     } else if (key == "Transfer-Encoding"){
-        httpGeneralHeaders_.setTransferEncoding(value);
+        httpRequest_.getGeneralHeaders().setTransferEncoding(value);
     } else if (key ==  "Upgrade"){
-        httpGeneralHeaders_.setUpgrade(value);
+        httpRequest_.getGeneralHeaders().setUpgrade(value);
     } else if (key == "Via"){
-        httpGeneralHeaders_.setVia(value);
+        httpRequest_.getGeneralHeaders().setVia(value);
     } else if (key == "Warning"){
-        httpGeneralHeaders_.setWarning(value);
+        httpRequest_.getGeneralHeaders().setWarning(value);
     }
     // Request headers
     else if (key == "Accept"){
-        httpRequestHeaders_.setAccept(value);   
+        httpRequest_.getRequestHeaders().setAccept(value);   
     } else if (key == "Accept-Charset"){
-        httpRequestHeaders_.setAcceptCharset(value);
+        httpRequest_.getRequestHeaders().setAcceptCharset(value);
     } else if (key == "Accept-Encoding"){
-        httpRequestHeaders_.setAcceptEncoding(value);
+        httpRequest_.getRequestHeaders().setAcceptEncoding(value);
     } else if (key == "Accept-Language"){
-        httpRequestHeaders_.setAcceptLanguage(value);
+        httpRequest_.getRequestHeaders().setAcceptLanguage(value);
     } else if (key == "Authorization"){
-        httpRequestHeaders_.setAuthorization(value);
+        httpRequest_.getRequestHeaders().setAuthorization(value);
     } else if (key == "Content-Disposition"){
-        httpRequestHeaders_.setContentDisposition(value);
+        httpRequest_.getRequestHeaders().setContentDisposition(value);
     } else if (key == "Content-Encoding"){
-        httpRequestHeaders_.setContentEncoding(value);
+        httpRequest_.getRequestHeaders().setContentEncoding(value);
     } else if (key == "Content-Language"){
-        httpRequestHeaders_.setContentLanguage(value);
+        httpRequest_.getRequestHeaders().setContentLanguage(value);
     } else if (key == "Content-Length"){
-        httpRequestHeaders_.setContentLength(value);
+        httpRequest_.getRequestHeaders().setContentLength(value);
     } else if (key == "Content-Location"){
-        httpRequestHeaders_.setContentLocation(value);
+        httpRequest_.getRequestHeaders().setContentLocation(value);
     } else if (key == "Content-MD5"){
-        httpRequestHeaders_.setContentMD5(value);
+        httpRequest_.getRequestHeaders().setContentMD5(value);
     } else if (key == "Content-Range"){
-        httpRequestHeaders_.setContentRange(value);
+        httpRequest_.getRequestHeaders().setContentRange(value);
     } else if (key == "Content-Type"){
-        httpRequestHeaders_.setContentType(value);
+        httpRequest_.getRequestHeaders().setContentType(value);
     } else if (key == "Content-Version"){
-        httpRequestHeaders_.setContentVersion(value);
+        httpRequest_.getRequestHeaders().setContentVersion(value);
     } else if (key == "Derived-From"){
-        httpRequestHeaders_.setDerivedFrom(value);
+        httpRequest_.getRequestHeaders().setDerivedFrom(value);
     } else if (key == "Expect"){
-        httpRequestHeaders_.setExpect(value);
+        httpRequest_.getRequestHeaders().setExpect(value);
     } else if (key == "Expires"){
-        httpRequestHeaders_.setExpires(value);
+        httpRequest_.getRequestHeaders().setExpires(value);
     } else if (key == "From"){
-        httpRequestHeaders_.setFrom(value);
+        httpRequest_.getRequestHeaders().setFrom(value);
     } else if (key == "Host"){
-        httpRequestHeaders_.setHost(value);
+        httpRequest_.getRequestHeaders().setHost(value);
     } else if (key == "If-Match"){
-        httpRequestHeaders_.setIfMatch(value);
+        httpRequest_.getRequestHeaders().setIfMatch(value);
     } else if (key == "If-Modified-Since"){
-        httpRequestHeaders_.setIfModifiedSince(value);
+        httpRequest_.getRequestHeaders().setIfModifiedSince(value);
     } else if (key == "If-None-Match"){
-        httpRequestHeaders_.setIfNoneMatch(value);
+        httpRequest_.getRequestHeaders().setIfNoneMatch(value);
     } else if (key == "If-Range"){
-        httpRequestHeaders_.setIfRange(value);
+        httpRequest_.getRequestHeaders().setIfRange(value);
     } else if (key == "If-Unmodified-Since"){
-        httpRequestHeaders_.setIfUnmodifiedSince(value);
+        httpRequest_.getRequestHeaders().setIfUnmodifiedSince(value);
     } else if (key == "Last-Modified"){
-        httpRequestHeaders_.setLastModified(value);
+        httpRequest_.getRequestHeaders().setLastModified(value);
     } else if (key == "Link"){
-        httpRequestHeaders_.setLink(value);
+        httpRequest_.getRequestHeaders().setLink(value);
     } else if (key == "Max-Forwards"){
-        httpRequestHeaders_.setMaxForwards(value);
+        httpRequest_.getRequestHeaders().setMaxForwards(value);
     } else if (key == "Proxy-Authorization"){
-        httpRequestHeaders_.setProxyAuthorization(value);
+        httpRequest_.getRequestHeaders().setProxyAuthorization(value);
     } else if (key == "Range"){
-        httpRequestHeaders_.setRange(value);
+        httpRequest_.getRequestHeaders().setRange(value);
     } else if (key == "Referer"){
-        httpRequestHeaders_.setReferer(value);
+        httpRequest_.getRequestHeaders().setReferer(value);
     } else if (key == "Title"){
-        httpRequestHeaders_.setTitle(value);
+        httpRequest_.getRequestHeaders().setTitle(value);
     } else if (key == "TE"){
-        httpRequestHeaders_.setTE(value);
+        httpRequest_.getRequestHeaders().setTE(value);
     } else if (key == "User-Agent"){
-        httpRequestHeaders_.setUserAgent(value);
+        httpRequest_.getRequestHeaders().setUserAgent(value);
     }
 }
 }

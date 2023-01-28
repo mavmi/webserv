@@ -5,9 +5,7 @@
 #include <stddef.h>
 
 #include "utils.hpp"
-#include "../http_headers/request_status_line.hpp"
-#include "../http_headers/general_headers.hpp"
-#include "../http_headers/request_headers.hpp"
+#include "http_request.hpp"
 
 namespace MAIN_NAMESPACE{
 namespace HTTP_REQUEST_PARS_NAMESPACE{
@@ -42,19 +40,11 @@ public:
 
     HttpRequestParser& operator=(const HttpRequestParser& other);
 
-    void parseHttpRequest(const MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer& buffer);
-    void clear();
-
-    const MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpRequestStatusLine& getStatusLine() const;
-    const MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeaders& getGeneralHeaders() const;
-    const MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpRequestHeaders& getRequestHeaders() const;
-    const std::vector<std::string>& getRequestContent() const;
+    const HttpRequest& parseHttpRequest(const MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer& buffer);
+    const HttpRequest& getHttpRequest() const;
 
 private:
-    MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpRequestStatusLine httpRequestStatusLine_;
-    MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeaders httpGeneralHeaders_;
-    MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpRequestHeaders httpRequestHeaders_;
-    std::vector<std::string> httpRequestContent_;
+    HttpRequest httpRequest_;
 
     std::vector<std::string> split_(const std::string& str, char delimiter);
     int find_(char* arr, int startPoint, int size, char c);
