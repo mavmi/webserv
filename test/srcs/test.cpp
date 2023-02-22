@@ -1,4 +1,4 @@
-#include "../include/test.hpp"
+#include "../includes/test.hpp"
 
 void test::CONFIGURATION_HOST_TESTS(){
     ___HEADER___

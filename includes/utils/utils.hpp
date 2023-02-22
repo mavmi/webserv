@@ -7,6 +7,7 @@
 #include <algorithm>
 
 #define MAIN_NAMESPACE                  wsrv
+#define CORE                            wsrv
 #define CONFIG_NAMESPACE                configuration
 #define HTTP_HEADERS_NAMESPACE          http_headers
 #define HTTP_REQUEST_PARS_NAMESPACE     http_request

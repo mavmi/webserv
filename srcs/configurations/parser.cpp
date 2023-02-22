@@ -1,4 +1,4 @@
-#include "../../include/configurations/parser.hpp"
+#include "../../includes/configurations/parser.hpp"
 
 namespace MAIN_NAMESPACE{
 ParserException::ParserException(const char* msg) : Exception(msg){}

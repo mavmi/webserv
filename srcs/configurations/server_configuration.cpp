@@ -1,4 +1,4 @@
-#include "../../include/configurations/server_configuration.hpp"
+#include "../../includes/configurations/server_configuration.hpp"
 
 namespace MAIN_NAMESPACE{
 namespace CONFIG_NAMESPACE{

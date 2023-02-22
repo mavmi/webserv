@@ -14,6 +14,7 @@ HDRS_CONFIG			=	configuration_host.hpp configuration_port.hpp configuration.hpp 
 HDRS_HTTP_HEADERS	=	common_headers.hpp general_headers.hpp headers_abstract_parent.hpp request_headers.hpp request_status_line.hpp response_headers.hpp response_status_line.hpp status_line_abstract_parent.hpp utils.hpp
 HDRS_HTTP_REQ		=	http_request.hpp http_request_parser.hpp utils.hpp
 HDRS_HTTP_RES		=	http_response.hpp utils.hpp
+HDRS_CORE			=	managed_fds.hpp server.hpp socket_creator.hpp sockets.hpp utils/core_exception.hpp utils/server_utils.hpp
 
 ### sources ###
 SRCS_UTILS			=	container.cpp exceptions.cpp parser_abstract_parent.cpp utils.cpp wrapper.cpp
@@ -21,6 +22,7 @@ SRCS_CONFIG			=	configuration.cpp configuration_host.cpp configuration_port.cpp 
 SRCS_HTTP_HEADERS	=	common_headers.cpp general_headers.cpp headers_abstract_parent.cpp request_headers.cpp request_status_line.cpp response_headers.cpp response_status_line.cpp status_line_abstract_parent.cpp
 SRCS_HTTP_REQ		=	http_request.cpp http_request_parser.cpp utils.cpp
 SRCS_HTTP_RES		=	http_response.cpp
+SRCS_CORE			=	managed_fds.cpp server.cpp socket_creator.cpp sockets.cpp utils/core_exception.cpp utils/server_utils.cpp
 
 ### objects ###
 OBJS_UTILS			=	$(SRCS_UTILS:.cpp=.o)
@@ -28,6 +30,7 @@ OBJS_CONFIG			=	$(SRCS_CONFIG:.cpp=.o)
 OBJS_HTTP_HEADERS	=	$(SRCS_HTTP_HEADERS:.cpp=.o)
 OBJS_HTTP_REQ		=	$(SRCS_HTTP_REQ:.cpp=.o)
 OBJS_HTTP_RES		=	$(SRCS_HTTP_RES:.cpp=.o)
+OBJS_CORE			=	$(SRCS_CORE:.cpp=.o)
 
 ### dependencies ###
 DEPEN_UTILS			=	$(SRCS_UTILS:.cpp=.d)
@@ -35,14 +38,16 @@ DEPEN_CONFIG		=	$(SRCS_CONFIG:.cpp=.d)
 DEPEN_HTTP_HEADERS	=	$(SRCS_HTTP_HEADERS:.cpp=.d)
 DEPEN_HTTP_REQ		=	$(SRCS_HTTP_REQ:.cpp=.d)
 DEPEN_HTTP_RES		=	$(SRCS_HTTP_RES:.cpp=.d)
+DEPEN_CORE			=	$(SRCS_CORE:.cpp=.d)
 
 ### directories ###
-HDRS_DIR			=	include
+HDRS_DIR			=	includes
 HDRS_UTILS_DIR		=	$(HDRS_DIR)/utils
 HDRS_CONFIG_DIR		=	$(HDRS_DIR)/configurations
 HDRS_HTTP_HEAD_DIR	=	$(HDRS_DIR)/http_headers
 HDRS_HTTP_REQ_DIR	=	$(HDRS_DIR)/http_request_parser
 HDRS_HTTP_RES_DIR	=	$(HDRS_DIR)/http_response_generator
+HDRS_CORE_DIR		=	$(HDRS_DIR)/core
 
 SRCS_DIR			=	srcs
 SRCS_UTILS_DIR		=	$(SRCS_DIR)/utils
@@ -50,6 +55,7 @@ SRCS_CONFIG_DIR		=	$(SRCS_DIR)/configurations
 SRCS_HTTP_HEAD_DIR	=	$(SRCS_DIR)/http_headers
 SRCS_HTTP_REQ_DIR	=	$(SRCS_DIR)/http_request_parser
 SRCS_HTTP_RES_DIR	=	$(SRCS_DIR)/http_response_generator
+SRCS_CORE_DIR		=	$(SRCS_DIR)/core
 
 ### main.cpp ###
 MAIN_SRC		=	$(SRCS_DIR)/main.cpp
@@ -61,12 +67,14 @@ HDRS		=	$(addprefix $(HDRS_UTILS_DIR)/, $(HDRS_UTILS))\
 					$(addprefix $(HDRS_CONFIG_DIR)/, $(HDRS_CONFIG))\
 					$(addprefix $(HDRS_HTTP_HEAD_DIR)/, $(HDRS_HTTP_HEADERS))\
 					$(addprefix $(HDRS_HTTP_REQ_DIR)/, $(HDRS_HTTP_REQ))\
-					$(addprefix $(HDRS_HTTP_RES_DIR)/, $(HDRS_HTTP_RES))
+					$(addprefix $(HDRS_HTTP_RES_DIR)/, $(HDRS_HTTP_RES))\
+					$(addprefix $(HDRS_CORE_DIR)/, $(HDRS_CORE))
 SRCS		=	$(addprefix $(SRCS_UTILS_DIR)/, $(SRCS_UTILS))\
 					$(addprefix $(SRCS_CONFIG_DIR)/, $(SRCS_CONFIG))\
 					$(addprefix $(SRCS_HTTP_HEAD_DIR)/, $(SRCS_HTTP_HEADERS))\
 					$(addprefix $(SRCS_HTTP_REQ_DIR)/, $(SRCS_HTTP_REQ))\
-					$(addprefix $(SRCS_HTTP_RES_DIR)/, $(SRCS_HTTP_RES))
+					$(addprefix $(SRCS_HTTP_RES_DIR)/, $(SRCS_HTTP_RES))\
+					$(addprefix $(SRCS_CORE_DIR)/, $(SRCS_CORE))
 OBJS		=	$(addprefix $(TMP_FILES_DIR)/, $(SRCS:.cpp=.o))
 DEPEN		=	$(addprefix $(TMP_FILES_DIR)/, $(SRCS:.cpp=.d))
 
@@ -120,7 +128,7 @@ all:					$(NAME)
 
 $(NAME):				$(OBJS) $(MAIN_OBJ) Makefile
 						$(GCC) $(OBJS) $(MAIN_OBJ) -o $(NAME)
-
+						
 clean:			
 						@rm -rf $(TMP_FILES_DIR)
 

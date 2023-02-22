@@ -1,25 +1,22 @@
-#include "../include/utils/utils.hpp"
-#include "../include/configurations/parser.hpp"
+#include "../includes/utils/utils.hpp"
+#include "../includes/configurations/parser.hpp"
+#include "../includes/core/server.hpp"
 
 // не забыть удалить
-void runTestConfigFile(int argc, char** argv){
-    MAIN_NAMESPACE::UTILS_NAMESPACE::utilsCheckArgsCount(argc);
-
-    MAIN_NAMESPACE::Parser parser;
-    if (argc == 2){
-        parser.parseFile(argv[1]);
-    } else {
-        parser.parseFile(MAIN_NAMESPACE::UTILS_NAMESPACE::DEFAULT_SERVER_CONFIG_FILE_PATH);
-    }
+const wsrv::Configuration& parseConfig(int argc, char** argv, wsrv::Parser& parser){
+    return (argc == 2) ? parser.parseFile(argv[1]) : 
+            parser.parseFile(wsrv::utils::DEFAULT_SERVER_CONFIG_FILE_PATH);
 }
 
 int main(int argc, char** argv){
     std::cout << " == MAIN ONE == " << std::endl;
 
-    (void)argc; (void)argv;
+    wsrv::utils::utilsCheckArgsCount(argc);
     try {
-        runTestConfigFile(argc, argv);
-    } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::Exception& e){
+        wsrv::Parser parser;
+
+        start_server(parseConfig(argc, argv, parser));
+    } catch (wsrv::utils::Exception& e){
         std::cout << e.what() << std::endl;
     }
-}
+} 

@@ -1,4 +1,4 @@
-#include "../../include/configurations/configuration.hpp"
+#include "../../includes/configurations/configuration.hpp"
 
 namespace MAIN_NAMESPACE{
 ConfigurationException::ConfigurationException(const char* msg) : Exception(msg){}

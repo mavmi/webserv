@@ -1,4 +1,4 @@
-#include "../include/test_utils.hpp"
+#include "../includes/test_utils.hpp"
 
 std::string test_utils::getColor(COLOR color){
     switch (color){

@@ -1,4 +1,4 @@
-#include "../../include/configurations/route_configuration.hpp"
+#include "../../includes/configurations/route_configuration.hpp"
 
 namespace MAIN_NAMESPACE{
 namespace CONFIG_NAMESPACE{
