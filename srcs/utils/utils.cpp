@@ -156,10 +156,12 @@ void BytesContainer::pushBack(const std::string& line){
 }
 
 void BytesContainer::cpy_(const BytesContainer& other){
-    for (size_t i = 0; i + 1 < other.bytesContainer.size(); i++){
-        bytesContainer.push_back(realloc_(other.bytesContainer.at(i), other.bufferSize));
+    if (other.bytesContainer.size()){
+        for (size_t i = 0; i + 1 < other.bytesContainer.size(); i++){
+            bytesContainer.push_back(realloc_(other.bytesContainer.at(i), other.bufferSize));
+        }
+        bytesContainer.push_back(realloc_(other.bytesContainer.back(), other.lastSize));
     }
-    bytesContainer.push_back(realloc_(other.bytesContainer.back(), other.lastSize));
     lastSize = other.lastSize;
 }
 char* BytesContainer::realloc_(char* buffer, size_t bufferSize){

@@ -118,7 +118,7 @@ public:
 
     void pushBack(const std::string& line);
 
-    std::vector<char*> bytesContainer; // ==> std::pair {char* arr; size_t size; }
+    std::vector<char*> bytesContainer;
     const size_t bufferSize;
     size_t lastSize;
 

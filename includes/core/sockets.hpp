@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:22:57 by msalena           #+#    #+#             */
-/*   Updated: 2023/02/23 18:27:21 by msalena          ###   ########.fr       */
+/*   Updated: 2023/02/23 21:35:33 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ private:
 class Fds {
 public:
 	typedef FdObj					fd_type;
+	typedef FdObj&					fd_type_reference;
 	typedef std::list<fd_type>		fd_array;
 	typedef fd_array&				fd_array_reference;
 	typedef fd_array::iterator		fd_array_iter;
@@ -113,7 +114,7 @@ public:
 	fd_array_iter AddFd(int fd);
 
 	// Return:	iterator to the inserted fd
-	fd_array_iter AddFd(fd_type fd);
+	fd_array_iter AddFd(fd_type_reference fd);
 
 	void DeleteFd(fd_array_iter fd);
 
@@ -167,7 +168,7 @@ public:
 
 	// Return:	iterator to the realed fd
 	template < class fd_type >
-		fds_set_iter AddRelatedFd(fd_type fd){
+		fds_set_iter AddRelatedFd(fd_type& fd){
 			return (related_fds.AddFd(fd));
 		}
 private:

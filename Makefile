@@ -120,7 +120,7 @@ GCC			=	$(CC) -Wall -Wextra -Werror -std=c++98 -MMD -g -fsanitize=undefined
 
 
 # $@					$<
-$(TMP_FILES_DIR)/%.o:	%.cpp $(TEST_HDRS) #$(HDRS)
+$(TMP_FILES_DIR)/%.o:	%.cpp $(TEST_HDRS) $(HDRS)
 						@mkdir -p $(dir $@)
 						$(GCC) -c -o $@ $<
 

@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:22:02 by msalena           #+#    #+#             */
-/*   Updated: 2023/02/23 18:19:39 by msalena          ###   ########.fr       */
+/*   Updated: 2023/02/23 22:30:58 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,14 @@ void RequestsReader::SafeRequestMessage_(int readed_count, char* buf,
 									RequestsReader::managed_fds_sets_reference fds_sets) {
 	if (readed_count > 0) {
 		(*it).second.GetRequestMessageReference().pushBack(buf);
+		//PRINT REQUEST
+		/*
+		for (std::vector<char*>::iterator ti = (*it).second.GetRequestMessageReference().bytesContainer.begin();
+			ti != (*it).second.GetRequestMessageReference().bytesContainer.end();
+			++ti){
+			std::cout << (*ti) << std::endl;
+		}
+		*/
 	} else if (readed_count == 0) {
 		// in this place: i should send to pasring
 
@@ -112,9 +120,25 @@ void Server::FtServer(Server::sockets_refernce sockets) {
 	int highest_fd;
 
 	highest_fd = sockets_to_masterread(sockets, masterread);
+	//Print all sockets
+	/*
+	for(Sockets::sock_array_iter it = sockets.Begin();
+		it != sockets.End();
+		++it){
+		std::cout << (*it).GetSocketFd() << std::endl;
+	}
+	*/
 	while(highest_fd){
 		fdread = masterread;
 		fdwrite = masterwrite;
+		//Print sets
+		/*
+		for(ManagedFds::fds_set_iter it = masterwrite.BeginFd();
+			it != fdwrite.EndFd();
+			++it){
+			std::cout << (*it).first << std::endl;
+		}
+		*/
 		if(select(
 			(highest_fd + 1),
 			fdread.GetManagedFds(),

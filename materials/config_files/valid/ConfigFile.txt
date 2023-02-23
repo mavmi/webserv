@@ -1,16 +1,12 @@
 {
-    port: 443;        
-    host: 192.168.31.255;
+    port: 1025; 
+    host: 127.0.0.1;
     server_name:     DEFAULT_SERVER;
-    error_pages:     path1, path2;
+    error_pages:    /Users/msalena/Desktop/webserv/materials/config_files/web_pages/test.html;
     body_size:       4096;
     [
         methods:             GET;
-        redir:               path3;
-        dir:                 path4;
-        dir_listening:       false;
-        def_if_dir:          path5;
-        cgi_script:          path6;
-        cgi_bin:             path7;
+        redir:               /Users/msalena/Desktop/webserv/materials/config_files/web_pages/test.html;
+        dir:                 /Users/msalena/Desktop/webserv/materials/config_files/valid;
     ]
 }
