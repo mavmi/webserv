@@ -19,7 +19,8 @@ namespace UTILS_NAMESPACE{
 
 const size_t BUFFER_SIZE = 2048;
 const std::string DEFAULT_SERVER_PATH = "DefaultServer";
-const std::string DEFAULT_SERVER_CONFIG_FILE_PATH = DEFAULT_SERVER_PATH + "/ConfigFile.txt";
+const std::string DEFAULT_SERVER_CONFIG_FILE_PATH = "materials/config_files/valid/ConfigFile.txt";
+// const std::string DEFAULT_SERVER_CONFIG_FILE_PATH = DEFAULT_SERVER_PATH + "/ConfigFile.txt";
 
 enum MSG_TYPE {
     DEBUG,

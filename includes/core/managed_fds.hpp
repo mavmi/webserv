@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:22:49 by msalena           #+#    #+#             */
-/*   Updated: 2023/01/29 21:46:09 by msalena          ###   ########.fr       */
+/*   Updated: 2023/02/23 18:14:43 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ public:
 	 * Adds fd to the fd_set and adds passed pair<int, fd_pair_class>
 	 * to the fds_array
 	 */
-	void AddFd(int fd, fd_pair_class fd_pair_obj);
+	void AddFd(fd_pair fd_pair_obj);
 
 	/*
 	 * Adds fd to fd_set and create new socket_elem or fd_elem dependig on
@@ -133,7 +133,7 @@ public:
 			AddElemToArray_(fd, array_ref, obj_it);
 		}
 	// Return:	iterator to the element after erased in fds set
-	fds_iter DeleteFd(int fd);
+	fds_set_iter DeleteFd(int fd);
 
 	/*
 	 * Return:
@@ -196,7 +196,7 @@ protected:
 	 * Return:		iterator to the element sfter erased in fds set
 	 * Exception:	throws custom exception if couldn't find the remoted fd
 	 */
-	fds_iter DeleteFdFromArray_(int fd);
+	fds_set_iter DeleteFdFromArray_(int fd);
 } ;
 
 struct ManagedFdsSets {
@@ -204,8 +204,8 @@ public:
 	typedef ManagedFds		managed_fds;
 	typedef managed_fds&	managed_fds_reference;
 
-	ManagedFdsSets(managed_fds mread, managed_fds mwrite,
-				managed_fds fread, managed_fds fwrite);
+	ManagedFdsSets(managed_fds_reference mread, managed_fds_reference mwrite,
+				managed_fds_reference fread, managed_fds_reference fwrite);
 
 	managed_fds_reference	masterread;
 	managed_fds_reference	masterwrite;

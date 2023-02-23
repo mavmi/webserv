@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:22:57 by msalena           #+#    #+#             */
-/*   Updated: 2023/01/29 21:41:40 by msalena          ###   ########.fr       */
+/*   Updated: 2023/02/23 18:27:21 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,23 +134,27 @@ private:
 class SocketObj {
 public:
 	typedef FdObj										fd_obj;
-	typedef wsrv::Configuration::ServerType	server_type;
+	typedef wsrv::Configuration::ServerType				server_type;
 	typedef server_type&								server_type_reference;
 	typedef const server_type&							const_server_type_reference;
+	typedef server_type const *							server_type_pointer;
 	typedef Fds											fds_set;
+	typedef Fds&										fds_set_reference;
 	typedef fds_set::fd_array_reference					fds_array_reference;
 	typedef Fds::fd_array_iter							fds_set_iter;
 	typedef CoreException								except;
 
-	SocketObj(const_server_type_reference server_info);
+	SocketObj(server_type_pointer server_info);
 	SocketObj(const SocketObj& another);
 	~SocketObj(void);
+
+	SocketObj& operator=(const SocketObj& another);
 
 	// Return:	copy of socket's fd number
 	int GetSocketFd(void) const;
 
 	// Return:	reference to fds_array
-	fds_array_reference GetFdsArrayReference(void);
+	fds_set_reference GetFdsSetReference(void);
 
 	/*
 	 * Return:		copy of binding fd object
@@ -169,7 +173,7 @@ public:
 private:
 	int							socket_fd;
 	fds_set						related_fds;
-	const_server_type_reference	server_info;
+	server_type_pointer			server_info;
 };
 
 

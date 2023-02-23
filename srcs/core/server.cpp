@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:22:02 by msalena           #+#    #+#             */
-/*   Updated: 2023/01/29 21:48:38 by msalena          ###   ########.fr       */
+/*   Updated: 2023/02/23 18:19:39 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int FdsOpener::OpenFds(FdsOpener::sockets_reference sockets, int highest_fd,
 			}
 			fds_sets.masterread.AddFd(
 				(*new_fd_it).GetFd(),
-				(*it).GetFdsArrayReference(),
+				(*it).GetFdsSetReference(),
 				new_fd_it
 			);
 			if ((*new_fd_it).GetFd() > highest_fd){
@@ -96,7 +96,7 @@ void RequestsReader::SafeRequestMessage_(int readed_count, char* buf,
 		// in this place: i should send to pasring
 
 		fds_sets.masterread.DeleteFd((*it).first);
-		fds_sets.masterwrite.AddFd((*it).first, (*it).second);
+		fds_sets.masterwrite.AddFd((*it));
 	} else {
 		close_delete_fd(it, fds_sets);
 		throw except("RECV_FAILD: invalid readed_count", EXC_ARGS);
@@ -108,7 +108,7 @@ void RequestsReader::SafeRequestMessage_(int readed_count, char* buf,
 
 void Server::FtServer(Server::sockets_refernce sockets) {
 	managed_fds masterread, masterwrite, fdread, fdwrite;
-	ManagedFdsSets	fds_sets(masterread, masterwrite, fdread, fdwrite);
+	manageds_fds_sets fds_sets(masterread, masterwrite, fdread, fdwrite);
 	int highest_fd;
 
 	highest_fd = sockets_to_masterread(sockets, masterread);

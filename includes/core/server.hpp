@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:22:43 by msalena           #+#    #+#             */
-/*   Updated: 2023/01/29 21:32:51 by msalena          ###   ########.fr       */
+/*   Updated: 2023/02/23 18:23:41 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ public:
 private:
 
 	/*
-	 * Returns:		created fd number
+	 * Returns:		iterator to created fd
 	 * Exception:	throws custom exception if 'accept' function retuns error
 	 */
 	fds_iter CreateFd_(sock_obj_reference socket);
@@ -105,6 +105,7 @@ public:
 	typedef Sockets			sockets;
 	typedef sockets&		sockets_refernce;
 	typedef ManagedFds		managed_fds;
+	typedef ManagedFdsSets	manageds_fds_sets;
 	typedef CoreException	except;
 
 	/*
@@ -117,7 +118,7 @@ public:
 private:
 	FdsOpener		opener;
 	RequestsReader	reader;
-	AnswersSender	sender;
+	//AnswersSender	sender;
 } ;
 
 

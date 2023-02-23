@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 17:42:25 by msalena           #+#    #+#             */
-/*   Updated: 2023/01/28 14:45:10 by msalena          ###   ########.fr       */
+/*   Updated: 2023/02/23 18:50:14 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,24 @@ int SocketFdCreator::CreateSocketFd(SocketFdCreator::const_server_type_reference
 	int 					created_socket;
 
 	FillingInfoStruct_(hints, &ai, socket_inform);
+	/*
+	struct addrinfo {
+		int	ai_flags;
+		int	ai_family;
+		int	ai_socktype;
+		int	ai_protocol;
+		socklen_t ai_addrlen;
+		char	*ai_canonname;
+		struct	sockaddr *ai_addr;
+		struct	addrinfo *ai_next;
+		};
+	*/
+	std::cout << "ai_flag: " << ai->ai_flags << std::endl
+		<< "ai_family: " << ai->ai_family << std::endl
+		<< "ai_socktype: " << ai->ai_socktype << std::endl
+		<< "ai_protocol: " << ai->ai_protocol << std::endl
+		<< "ai_protocol: " << ai->ai_next << std::endl;
+		
 	created_socket = BindingSocket_(ai);
 	freeaddrinfo(ai);
 	DoSocketListening_(created_socket);
@@ -35,8 +53,8 @@ void SocketFdCreator::FillingInfoStruct_(SocketFdCreator::struct_addrinfo_refere
 	// ai_socktype = 0 -> every socket type
 	hints.ai_socktype = 0;
 	if (getaddrinfo(
-			socket_inform.getHost().toCharArray(), 
-			socket_inform.getPort().toCharArray(), 
+			socket_inform.getHost().toCharArray().getData(), 
+			socket_inform.getPort().toCharArray().getData(), 
 			&hints, ai
 		) != 0){
 		throw except("CREATE_SOCKET_ERROR: Failed creating socket info struct", EXC_ARGS);
@@ -67,7 +85,7 @@ int SocketFdCreator::BindingSocket_(SocketFdCreator::struct_addrinfo_pointer ai)
 		break ;
 	}
 	if (iterable == NULL) {
-		throw except("CREATE_SOCKET_ERROR: Failed binding", EXC_ARGS);
+		throw except("CREATE_SOCKET_ERROR: Failed binding: " + std::string(strerror(errno)), EXC_ARGS);
 	}
 	return socket_fd;
 }

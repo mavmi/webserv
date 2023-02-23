@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:23:44 by msalena           #+#    #+#             */
-/*   Updated: 2023/01/29 21:46:15 by msalena          ###   ########.fr       */
+/*   Updated: 2023/02/23 15:40:34 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,12 @@ namespace CORE{
 
 // MANAGED_FDS_SETS IMPLEMENTATION
 
-ManagedFdsSets::ManagedFdsSets(ManagedFdsSets::managed_fds mread, ManagedFdsSets::managed_fds mwrite,
-						ManagedFdsSets::managed_fds fread, ManagedFdsSets::managed_fds fwrite)
-						: masterread(mread), masterwrite(mwrite), fdread(fread), fdwrite(fwrite) { }
+ManagedFdsSets::ManagedFdsSets(ManagedFdsSets::managed_fds_reference mread, 
+						ManagedFdsSets::managed_fds_reference mwrite,
+						ManagedFdsSets::managed_fds_reference fread, 
+						ManagedFdsSets::managed_fds_reference fwrite)
+						: masterread(mread), masterwrite(mwrite), 
+						fdread(fread), fdwrite(fwrite) { }
 
 
 // OBJECT_REFERENCE_PAIR IMPLEMENTATION
@@ -58,7 +61,7 @@ FdReferencePair::FdReferencePair(FdReferencePair::fds_reference fds_array,
 
 FdReferencePair::~FdReferencePair(void) { }
 
-FdReferencePair::fd_bytes_container_reference GetRequestMessageReference(void) {
+FdReferencePair::fd_bytes_container_reference FdReferencePair::GetRequestMessageReference(void) {
 	return ((*(fd_pair.second)).GetRequestMessageReference());
 }
 
@@ -97,12 +100,12 @@ ManagedFds& ManagedFds::operator=(const ManagedFds& another) {
 	return *this;
 }
 
-void ManagedFds::AddFd(int fd, fd_pair_class fd_pair_obj) {
-	FD_SET(fd, &managed_fds);
+void ManagedFds::AddFd(ManagedFds::fd_pair fd_pair_obj) {
+	FD_SET(fd_pair_obj.first, &managed_fds);
 	managed_fds_array.push_back(fd_pair_obj);
 }
 
-ManagedFds::fds_iter ManagedFds::DeleteFd(int fd) {
+ManagedFds::fds_set_iter ManagedFds::DeleteFd(int fd) {
 	FD_CLR(fd, &managed_fds);
 	return (DeleteFdFromArray_(fd));
 }
@@ -156,7 +159,7 @@ ManagedFds::fds_set_iter ManagedFds::FindFdInArray(int fd) {
 	return (managed_fds_array.end());
 }
 
-ManagedFds::fds_iter ManagedFds::DeleteFdFromArray_(int fd) {
+ManagedFds::fds_set_iter ManagedFds::DeleteFdFromArray_(int fd) {
 	fds_set_iter	findin_fd_iter;
 
 	findin_fd_iter = FindFdInArray(fd);

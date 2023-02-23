@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:22:27 by msalena           #+#    #+#             */
-/*   Updated: 2023/01/28 14:44:57 by msalena          ###   ########.fr       */
+/*   Updated: 2023/02/23 18:01:48 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ public:
 	typedef struct addrinfo								struct_addrinfo;
 	typedef struct_addrinfo*							struct_addrinfo_pointer;
 	typedef struct_addrinfo&							struct_addrinfo_reference;
-	typedef wsrv::Configuration::ServerType	server_type;
+	typedef wsrv::Configuration::ServerType				server_type;
 	typedef server_type&								server_type_reference;
 	typedef const server_type&							const_server_type_reference;
 	typedef CoreException								except;

@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:23:10 by msalena           #+#    #+#             */
-/*   Updated: 2023/01/27 17:56:03 by msalena          ###   ########.fr       */
+/*   Updated: 2023/02/23 15:26:52 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #pragma once
 
 #include "../sockets.hpp"
+#include "../server.hpp"
 #include "../managed_fds.hpp"
 #include "../../utils/utils.hpp"
 

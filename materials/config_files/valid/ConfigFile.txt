@@ -1,6 +1,6 @@
 {
     port: 443;        
-    host: 192.168.0.1;
+    host: 192.168.31.255;
     server_name:     DEFAULT_SERVER;
     error_pages:     path1, path2;
     body_size:       4096;

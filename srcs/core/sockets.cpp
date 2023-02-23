@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:23:34 by msalena           #+#    #+#             */
-/*   Updated: 2023/01/29 21:42:05 by msalena          ###   ########.fr       */
+/*   Updated: 2023/02/23 18:27:09 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,11 +129,11 @@ Fds::fd_array_iter Fds::GetFdIter_(int fd){
 
 //SOCKET_OBJ IMPLEMENTATION
 
-SocketObj::SocketObj(SocketObj::const_server_type_reference server_info)
+SocketObj::SocketObj(SocketObj::server_type_pointer server_info)
 	: socket_fd(-1), server_info(server_info) {
 		SocketFdCreator socker_creator;
 
-		this->socket_fd = socker_creator.CreateSocketFd(server_info);
+		this->socket_fd = socker_creator.CreateSocketFd(*server_info);
 }
 
 SocketObj::SocketObj(const SocketObj& another)
@@ -142,12 +142,17 @@ SocketObj::SocketObj(const SocketObj& another)
 
 SocketObj::~SocketObj(void) { }
 
+SocketObj& SocketObj::operator=(const SocketObj& another) {
+	server_info = another.server_info;
+	return *this;
+}
+
 int SocketObj::GetSocketFd(void) const {
 	return socket_fd;
 }
 
-SocketObj::fds_array_reference SocketObj::GetFdsArrayReference(void) {
-	return (related_fds.GetFdsReference());
+SocketObj::fds_set_reference SocketObj::GetFdsSetReference(void) {
+	return (related_fds);
 }
 
  SocketObj::fd_obj SocketObj::GetBindingFd(int fd) {
@@ -155,7 +160,7 @@ SocketObj::fds_array_reference SocketObj::GetFdsArrayReference(void) {
 }
 
 SocketObj::const_server_type_reference SocketObj::GetServerInfo(void) {
-	return server_info;
+	return *server_info;
 }
 
 
@@ -240,7 +245,7 @@ Sockets create_sockets(const wsrv::Configuration& servers) {
 			counter < last_num;
 			++counter
 		) {
-		socket_obj new_socket(servers_array.at(counter));
+		socket_obj new_socket(&(servers_array.at(counter)));
 
 		sockets_array.AddSocket(new_socket);
 	}
