@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:23:44 by msalena           #+#    #+#             */
-/*   Updated: 2023/02/25 21:47:26 by msalena          ###   ########.fr       */
+/*   Updated: 2023/02/25 22:32:07 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ FdReferencePair::fd_bytes_container_reference FdReferencePair::GetRequestMessage
 	return ((*(fd_pair.second)).GetRequestMessageReference());
 }
 
-void FdReferencePair::DeleteObj(void) {
+void FdReferencePair::DeleteFd(void) {
 	fds_reference	array_reference = fd_pair.first;
 	fds_iter		fd_it = fd_pair.second;
 
@@ -65,12 +65,13 @@ void FdReferencePair::DeleteObj(void) {
 	}
 }
 
-FdReferencePair::fds_iter FdReferencePair::GetFdIter(void){
-	return (fd_pair.second);
+FdReferencePair::pair_reference FdReferencePair::FdPairReference(void){
+	return (fd_pair);
 }
 
-FdReferencePair::fds_iter FdReferencePair::GetFdsEnd(void){
-	return (fd_pair.first.End());
+
+FdReferencePair::fds_iter FdReferencePair::GetFdIter(void){
+	return (fd_pair.second);
 }
 
 FdReferencePair::OBJECT_TYPE FdReferencePair::ObjectType(void) {
@@ -154,17 +155,6 @@ ManagedFds::fds_set_iter ManagedFds::FindFdInArray(int fd) {
 		}
 	}
 	return (managed_fds_array.end());
-}
-
-ManagedFds::fds_iter ManagedFds::FindFdIterator(int fd) {
-	for (fds_set_iter it = managed_fds_array.begin();
-			it != managed_fds_array.end();
-			++it){
-		if ((*it).first == fd) {
-			return ((*it).second.GetFdIter());
-		}
-	}
-	return ((*managed_fds_array.begin()).second.GetFdIter());
 }
 
 ManagedFds::fds_set_iter ManagedFds::DeleteFdFromArray_(int fd) {

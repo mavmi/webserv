@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:22:43 by msalena           #+#    #+#             */
-/*   Updated: 2023/02/25 21:50:40 by msalena          ###   ########.fr       */
+/*   Updated: 2023/02/25 22:09:06 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ public:
 	typedef Fds::fd_array_iter			fds_iter;
 	typedef ManagedFds					managed_fds;
 	typedef ManagedFds&					managed_fds_reference;
+	typedef managed_fds::fds_set_iter	fds_set_iter;
 	typedef CoreException				except;
 
 	/*
@@ -97,7 +98,7 @@ private:
 	 */
 	fds_iter CreateFd_(sockets_iter it_socket);
 	
-	void ClientCommunication_(managed_fds_reference masterread, 
+	void RecvRequest_(managed_fds_reference masterread, 
 							managed_fds_reference masterwrite,
 							int current_fd);
 } ;

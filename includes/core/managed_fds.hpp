@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:22:49 by msalena           #+#    #+#             */
-/*   Updated: 2023/02/25 21:28:26 by msalena          ###   ########.fr       */
+/*   Updated: 2023/02/25 22:32:07 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ public:
 	typedef fds&								fds_reference;
 	typedef fds::fd_array_iter					fds_iter;
 	typedef std::pair<fds_reference, fds_iter>	refer_iter_pair;
+	typedef refer_iter_pair&					pair_reference;
 
 	FdReferencePair(fds_reference fds_array, fds_iter fd_iter);
 	~FdReferencePair(void);
@@ -84,10 +85,10 @@ public:
 
 	fds_iter GetFdIter(void);
 
-	fds_iter GetFdsEnd(void);
-
 	// After deleting fd_pair.second keeps iterator to the end() or fds_array
-	void DeleteObj(void);
+	void DeleteFd(void);
+
+	pair_reference FdPairReference(void);
 
 	// Return:	enum type of object - FD
 	OBJECT_TYPE	ObjectType(void);
@@ -182,13 +183,6 @@ public:
 	 *	- end() iterator if fd isn't in set
 	 */
 	fds_set_iter FindFdInArray(int fd);
-
-	/*
-	 * Return:
-	 *	- iterator to finding fd in array
-	 *	- end() iterator if fd isn't in set
-	 */
-	fds_iter FindFdIterator(int fd);
 protected:
 	fd_set_type	managed_fds;
 	sockets_set	managed_sockets_array;

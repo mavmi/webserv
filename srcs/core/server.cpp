@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:22:02 by msalena           #+#    #+#             */
-/*   Updated: 2023/02/25 21:53:20 by msalena          ###   ########.fr       */
+/*   Updated: 2023/02/25 22:35:42 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,32 +54,36 @@ Server::fds_iter Server::CreateFd_(Server::sockets_iter it_socket) {
 }
 
 
-void Server::ClientCommunication_(Server::managed_fds_reference masterread, 
-								Server::managed_fds_reference masterwrite,
-								int current_fd){	
+void Server::RecvRequest_(Server::managed_fds_reference masterread, 
+						Server::managed_fds_reference masterwrite,
+						int current_fd){	
 	int readed_nbytes;
 	char buf[wsrv::utils::BUFFER_SIZE];
+	fds_set_iter it_current_fd;
 
-	if ((readed_nbytes = recv(current_fd, buf, sizeof(buf), 0)) <= 0) {
-		masterread.DeleteFd(current_fd);
-		// client sent all and/or closed connection
-		if (readed_nbytes == 0) {
-			//masterwrite.AddFd(current_fd);
-			for (std::vector<char*>::iterator ti = (*masterread.FindFdIterator(current_fd)).GetRequestMessageReference().bytesContainer.begin();
-				ti != (*masterread.FindFdIterator(current_fd)).GetRequestMessageReference().bytesContainer.end();
-				++ti){
-				std::cout << (*ti) << std::endl;
-			}
+	it_current_fd = masterread.FindFdInArray(current_fd);
+	// if fd in opended fds for clients-connection
+	if ((*it_current_fd).second.GetFdIter() != (*it_current_fd).second.FdPairReference().first.End()){
+		readed_nbytes = recv(current_fd, buf, sizeof(buf), 0);
+		if (readed_nbytes > 0) {
+			(*it_current_fd).second.GetRequestMessageReference().pushBack(buf);
 		} else {
-			//(*it).second.DeleteObj();
-			throw except("RECV_FAILD: invalid readed_count", EXC_ARGS);
+			if (readed_nbytes == 0){
+				masterwrite.AddFd((*it_current_fd));
+				// for (std::vector<char*>::iterator ti = (*it_current_fd).second.GetRequestMessageReference().bytesContainer.begin();
+				// 	ti != (*it_current_fd).second.GetRequestMessageReference().bytesContainer.end();
+				// 	++ti){
+				// 	std::cout << (*ti) << std::endl;
+				// }
+			} else {
+				(*it_current_fd).second.DeleteFd();
+			}
+			masterread.DeleteFd(current_fd);
 		}
-		
 	} else {
-		fds_iter it_current_fd = masterread.FindFdIterator(current_fd);
-		
-		(*it_current_fd).GetRequestMessageReference().pushBack(buf);
-		//std::cout << buf << std::endl;
+		masterread.DeleteFd(current_fd);
+		(*it_current_fd).second.DeleteFd();
+		throw except("RECV_FAILD: current_fd not in array fds of client-connection", EXC_ARGS);
 	}
 }
 
@@ -113,7 +117,7 @@ void Server::FtServer(Server::sockets_refernce sockets) {
 					}
 				} else { // If it's opened fd for client-connection
 					try {
-						ClientCommunication_(masterread, masterwrite, i);
+						RecvRequest_(masterread, masterwrite, i);
 					} catch(except& e) {
 						continue;
 					}
