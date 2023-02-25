@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:22:43 by msalena           #+#    #+#             */
-/*   Updated: 2023/02/23 18:23:41 by msalena          ###   ########.fr       */
+/*   Updated: 2023/02/25 21:50:40 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,49 +41,9 @@ public:
 	typedef ManagedFds						managed_fds;
 	typedef managed_fds&					managed_fds_reference;
 	typedef managed_fds::fds_set_iter		managed_fds_array_iter;
-	typedef ManagedFdsSets					managed_fds_sets;
-	typedef managed_fds_sets&				managed_fds_sets_reference;
 	typedef struct sockaddr*				sockaddr_pointer;
 	typedef CoreException					except;
 } ;
-
-// FdsOpener class is describing opening new fds for every client
-class FdsOpener : public WorkWithFds {
-public:
-
-	/*
-	* Opens fds for every clients requests
-	*
-	* Return:		new number of largest fd number
-	* Exception:	throws custom exception if couldn't open fd
-	*/
-	int OpenFds(sockets_reference sockets, int highest_fd,
-			managed_fds_sets_reference fds_sets);
-private:
-
-	/*
-	 * Returns:		iterator to created fd
-	 * Exception:	throws custom exception if 'accept' function retuns error
-	 */
-	fds_iter CreateFd_(sock_obj_reference socket);
-} ;
-
-
-// RequestsReader class is describing reading requests from the clients
-class RequestsReader : public WorkWithFds{
-public:
-
-	/*
-	* Reads and saves rerquests messages from clients
-	*
-	*
-	*/
-	void ReadRequests(managed_fds_sets_reference fd_sets);
-private:
-	void SafeRequestMessage_(int readed_count, char* buf, managed_fds_array_iter it,
-						managed_fds_sets_reference fds_sets);
-} ;
-
 
 // AnswersSender class is describing sending answers to the clients
 class AnswersSender : public WorkWithFds{
@@ -102,11 +62,15 @@ private:
 
 class Server {
 public:
-	typedef Sockets			sockets;
-	typedef sockets&		sockets_refernce;
-	typedef ManagedFds		managed_fds;
-	typedef ManagedFdsSets	manageds_fds_sets;
-	typedef CoreException	except;
+	typedef Sockets						sockets;
+	typedef sockets&					sockets_refernce;
+	typedef Sockets::sock_array_iter	sockets_iter;
+	typedef struct sockaddr*			sockaddr_pointer;
+	typedef FdObj						fd_obj;
+	typedef Fds::fd_array_iter			fds_iter;
+	typedef ManagedFds					managed_fds;
+	typedef ManagedFds&					managed_fds_reference;
+	typedef CoreException				except;
 
 	/*
 	* Realization of server which works using 'select'.
@@ -116,9 +80,26 @@ public:
 	*/
 	void FtServer(sockets_refernce sockets);
 private:
-	FdsOpener		opener;
-	RequestsReader	reader;
 	//AnswersSender	sender;
+
+	/*
+	* Opens fd for clients request
+	*
+	* Return:		new number of largest fd number
+	* Exception:	throws custom exception if couldn't open fd
+	*/
+	int OpenFd_(sockets_iter it_socket, managed_fds_reference masterread, 
+				int highest_fd);
+	
+	/*
+	 * Returns:		iterator to created fd
+	 * Exception:	throws custom exception if 'accept' function retuns error
+	 */
+	fds_iter CreateFd_(sockets_iter it_socket);
+	
+	void ClientCommunication_(managed_fds_reference masterread, 
+							managed_fds_reference masterwrite,
+							int current_fd);
 } ;
 
 

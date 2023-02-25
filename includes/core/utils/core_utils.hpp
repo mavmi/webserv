@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server_utils.hpp                                   :+:      :+:    :+:   */
+/*   core_utils.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:23:10 by msalena           #+#    #+#             */
-/*   Updated: 2023/02/23 15:26:52 by msalena          ###   ########.fr       */
+/*   Updated: 2023/02/25 19:32:01 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,5 @@ namespace CORE {
  */
 int sockets_to_masterread(Sockets& sockets, ManagedFds& masterread);
 
-void close_delete_fd(RequestsReader::managed_fds_array_iter it,
-				RequestsReader::managed_fds_sets_reference fds_sets);
-
+Sockets create_sockets(const wsrv::Configuration& servers, Sockets& sockets_array);
 }

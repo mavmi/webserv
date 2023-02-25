@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:22:49 by msalena           #+#    #+#             */
-/*   Updated: 2023/02/23 18:14:43 by msalena          ###   ########.fr       */
+/*   Updated: 2023/02/25 21:28:26 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,10 @@ public:
 
 	fd_bytes_container_reference GetRequestMessageReference(void);
 
+	fds_iter GetFdIter(void);
+
+	fds_iter GetFdsEnd(void);
+
 	// After deleting fd_pair.second keeps iterator to the end() or fds_array
 	void DeleteObj(void);
 
@@ -143,7 +147,7 @@ public:
 	bool IsFdInSet(int fd);
 
 	// Returns:	address of managed_fds fd_set
-	fd_set_pointer GetManagedFds(void);
+	fd_set_pointer GetManagedFdsAddress(void);
 
 	/*
 	 * Return:
@@ -174,10 +178,17 @@ public:
 
 	/*
 	 * Return:
-	 *	- iterator to finding fd in array
+	 *	- iterator to finding pair<fd, fd_pair_class> in array
 	 *	- end() iterator if fd isn't in set
 	 */
 	fds_set_iter FindFdInArray(int fd);
+
+	/*
+	 * Return:
+	 *	- iterator to finding fd in array
+	 *	- end() iterator if fd isn't in set
+	 */
+	fds_iter FindFdIterator(int fd);
 protected:
 	fd_set_type	managed_fds;
 	sockets_set	managed_sockets_array;
@@ -198,19 +209,4 @@ protected:
 	 */
 	fds_set_iter DeleteFdFromArray_(int fd);
 } ;
-
-struct ManagedFdsSets {
-public:
-	typedef ManagedFds		managed_fds;
-	typedef managed_fds&	managed_fds_reference;
-
-	ManagedFdsSets(managed_fds_reference mread, managed_fds_reference mwrite,
-				managed_fds_reference fread, managed_fds_reference fwrite);
-
-	managed_fds_reference	masterread;
-	managed_fds_reference	masterwrite;
-	managed_fds_reference	fdread;
-	managed_fds_reference	fdwrite;
-};
-
 }

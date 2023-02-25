@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:23:44 by msalena           #+#    #+#             */
-/*   Updated: 2023/02/23 15:40:34 by msalena          ###   ########.fr       */
+/*   Updated: 2023/02/25 21:47:26 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,6 @@
 #include "../../includes/core/managed_fds.hpp"
 
 namespace CORE{
-
-// MANAGED_FDS_SETS IMPLEMENTATION
-
-ManagedFdsSets::ManagedFdsSets(ManagedFdsSets::managed_fds_reference mread, 
-						ManagedFdsSets::managed_fds_reference mwrite,
-						ManagedFdsSets::managed_fds_reference fread, 
-						ManagedFdsSets::managed_fds_reference fwrite)
-						: masterread(mread), masterwrite(mwrite), 
-						fdread(fread), fdwrite(fwrite) { }
-
 
 // OBJECT_REFERENCE_PAIR IMPLEMENTATION
 
@@ -75,10 +65,17 @@ void FdReferencePair::DeleteObj(void) {
 	}
 }
 
+FdReferencePair::fds_iter FdReferencePair::GetFdIter(void){
+	return (fd_pair.second);
+}
+
+FdReferencePair::fds_iter FdReferencePair::GetFdsEnd(void){
+	return (fd_pair.first.End());
+}
+
 FdReferencePair::OBJECT_TYPE FdReferencePair::ObjectType(void) {
 	return (type);
 }
-
 
 
 // MANAGED_FDS INITIALIZATION
@@ -117,7 +114,7 @@ bool ManagedFds::IsFdInSet(int fd) {
 	return (is_in_set);
 }
 
-ManagedFds::fd_set_pointer ManagedFds::GetManagedFds(void) {
+ManagedFds::fd_set_pointer ManagedFds::GetManagedFdsAddress(void) {
 	return (&managed_fds);
 }
 
@@ -157,6 +154,17 @@ ManagedFds::fds_set_iter ManagedFds::FindFdInArray(int fd) {
 		}
 	}
 	return (managed_fds_array.end());
+}
+
+ManagedFds::fds_iter ManagedFds::FindFdIterator(int fd) {
+	for (fds_set_iter it = managed_fds_array.begin();
+			it != managed_fds_array.end();
+			++it){
+		if ((*it).first == fd) {
+			return ((*it).second.GetFdIter());
+		}
+	}
+	return ((*managed_fds_array.begin()).second.GetFdIter());
 }
 
 ManagedFds::fds_set_iter ManagedFds::DeleteFdFromArray_(int fd) {

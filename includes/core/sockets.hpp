@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:22:57 by msalena           #+#    #+#             */
-/*   Updated: 2023/02/23 21:35:33 by msalena          ###   ########.fr       */
+/*   Updated: 2023/02/25 21:43:46 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,7 +210,7 @@ public:
 	 * Return:		copy of socket object
 	 * Exception:	throws custom exception if there is not socket_fd in listening sockets
 	 */
-	sock_obj GetSocket(int socket_fd);
+	sock_array_iter FindSocketInArray(int socket_fd);
 
 
 	void AddSocket(sock_obj added_socket);
@@ -242,8 +242,5 @@ private:
 	 */
 	sock_array_iter IsSocketInSet_(int socket_fd);
 };
-
-
-Sockets create_sockets(const wsrv::Configuration& servers);
 
 }

@@ -14,7 +14,7 @@ HDRS_CONFIG			=	configuration_host.hpp configuration_port.hpp configuration.hpp 
 HDRS_HTTP_HEADERS	=	common_headers.hpp general_headers.hpp headers_abstract_parent.hpp request_headers.hpp request_status_line.hpp response_headers.hpp response_status_line.hpp status_line_abstract_parent.hpp utils.hpp
 HDRS_HTTP_REQ		=	http_request.hpp http_request_parser.hpp utils.hpp
 HDRS_HTTP_RES		=	http_response.hpp utils.hpp
-HDRS_CORE			=	managed_fds.hpp server.hpp socket_creator.hpp sockets.hpp utils/core_exception.hpp utils/server_utils.hpp
+HDRS_CORE			=	managed_fds.hpp server.hpp socket_creator.hpp sockets.hpp utils/core_exception.hpp utils/core_utils.hpp
 
 ### sources ###
 SRCS_UTILS			=	container.cpp exceptions.cpp parser_abstract_parent.cpp utils.cpp wrapper.cpp
@@ -22,7 +22,7 @@ SRCS_CONFIG			=	configuration.cpp configuration_host.cpp configuration_port.cpp 
 SRCS_HTTP_HEADERS	=	common_headers.cpp general_headers.cpp headers_abstract_parent.cpp request_headers.cpp request_status_line.cpp response_headers.cpp response_status_line.cpp status_line_abstract_parent.cpp
 SRCS_HTTP_REQ		=	http_request.cpp http_request_parser.cpp utils.cpp
 SRCS_HTTP_RES		=	http_response.cpp
-SRCS_CORE			=	managed_fds.cpp server.cpp socket_creator.cpp sockets.cpp utils/core_exception.cpp utils/server_utils.cpp
+SRCS_CORE			=	managed_fds.cpp server.cpp socket_creator.cpp sockets.cpp utils/core_exception.cpp utils/core_utils.cpp
 
 ### objects ###
 OBJS_UTILS			=	$(SRCS_UTILS:.cpp=.o)
@@ -116,7 +116,7 @@ TEST_DEPEN	=	$(addprefix $(TMP_FILES_DIR)/, $(TEST_SRCS:.cpp=.d))
 ### RULES ###
 #############
 CC			=	c++
-GCC			=	$(CC) -Wall -Wextra -Werror -std=c++98 -MMD -g -fsanitize=undefined
+GCC			=	$(CC) -Wall -Wextra -std=c++98 -MMD -g -fsanitize=undefined
 
 
 # $@					$<

@@ -6,52 +6,42 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:22:02 by msalena           #+#    #+#             */
-/*   Updated: 2023/02/23 22:30:58 by msalena          ###   ########.fr       */
+/*   Updated: 2023/02/25 21:53:20 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "../../includes/core/server.hpp"
 #include "../../includes/core/sockets.hpp"
-#include "../../includes/core/utils/server_utils.hpp"
+#include "../../includes/core/utils/core_utils.hpp"
 
 
 namespace CORE{
 
 // FDS_OPENER IMPLEMENTATION
 
-int FdsOpener::OpenFds(FdsOpener::sockets_reference sockets, int highest_fd,
-					FdsOpener::managed_fds_sets_reference fds_sets){
-	for(sock_iter it = sockets.Begin();
-		it != sockets.End();
-		++it){
-		fds_iter new_fd_it;
 
-		if(fds_sets.fdread.IsFdInSet((*it).GetSocketFd())){
-			try {
-				new_fd_it = CreateFd_((*it));
-			} catch (except& e) {
-				continue;
-			}
-			fds_sets.masterread.AddFd(
-				(*new_fd_it).GetFd(),
-				(*it).GetFdsSetReference(),
-				new_fd_it
-			);
-			if ((*new_fd_it).GetFd() > highest_fd){
-				highest_fd = (*new_fd_it).GetFd();
-			}
-		}
+int Server::OpenFd_(Server::sockets_iter it_socket, Server::managed_fds_reference masterread, 
+					int highest_fd){
+	fds_iter it_fd = CreateFd_(it_socket);
+	
+	masterread.AddFd(
+		(*it_fd).GetFd(),
+		(*it_socket).GetFdsSetReference(),
+		it_fd
+	);
+	if ((*it_fd).GetFd() > highest_fd) {
+		highest_fd = (*it_fd).GetFd();
 	}
 	return (highest_fd);
 }
 
-FdsOpener::fds_iter FdsOpener::CreateFd_(FdsOpener::sock_obj_reference socket) {
+Server::fds_iter Server::CreateFd_(Server::sockets_iter it_socket) {
 	fd_obj tmp_fd;
-
+	
 	tmp_fd.SetFd(
 		accept(
-			socket.GetSocketFd(),
+			(*it_socket).GetSocketFd(),
 			(sockaddr_pointer)(tmp_fd.GetClientInformStruct()),
 			tmp_fd.ClientInformStructLen()
 		)
@@ -60,54 +50,36 @@ FdsOpener::fds_iter FdsOpener::CreateFd_(FdsOpener::sock_obj_reference socket) {
 		throw except("ACCEPR_FAILD: Fd wasn't created for client", EXC_ARGS);
 	}
 	fcntl(tmp_fd.GetFd(), F_SETFL, O_NONBLOCK); //do new_fd nonblocking the program
-	return (socket.AddRelatedFd(tmp_fd));
+	return ((*it_socket).AddRelatedFd(tmp_fd));
 }
 
 
-// REQUESTS_READER IMPLEMENTATION
+void Server::ClientCommunication_(Server::managed_fds_reference masterread, 
+								Server::managed_fds_reference masterwrite,
+								int current_fd){	
+	int readed_nbytes;
+	char buf[wsrv::utils::BUFFER_SIZE];
 
-void RequestsReader::ReadRequests(RequestsReader::managed_fds_sets_reference fds_sets) {
-
-	for (managed_fds_array_iter it = fds_sets.fdread.BeginFd();
-			it != fds_sets.fdread.EndFd();
-			++it){
-		int tmp_fd = (*it).first;
-
-		if (fds_sets.fdread.IsFdInSet(tmp_fd)) {
-			char	buf[2048];
-			ssize_t	readed_count = 0;
-
-			readed_count = recv(tmp_fd, buf, sizeof(buf), 0);
-			try {
-				SafeRequestMessage_(tmp_fd, buf, it, fds_sets);
-			} catch(except& e) {
-				continue;
+	if ((readed_nbytes = recv(current_fd, buf, sizeof(buf), 0)) <= 0) {
+		masterread.DeleteFd(current_fd);
+		// client sent all and/or closed connection
+		if (readed_nbytes == 0) {
+			//masterwrite.AddFd(current_fd);
+			for (std::vector<char*>::iterator ti = (*masterread.FindFdIterator(current_fd)).GetRequestMessageReference().bytesContainer.begin();
+				ti != (*masterread.FindFdIterator(current_fd)).GetRequestMessageReference().bytesContainer.end();
+				++ti){
+				std::cout << (*ti) << std::endl;
 			}
+		} else {
+			//(*it).second.DeleteObj();
+			throw except("RECV_FAILD: invalid readed_count", EXC_ARGS);
 		}
-	}
-}
-
-void RequestsReader::SafeRequestMessage_(int readed_count, char* buf,
-									RequestsReader::managed_fds_array_iter it,
-									RequestsReader::managed_fds_sets_reference fds_sets) {
-	if (readed_count > 0) {
-		(*it).second.GetRequestMessageReference().pushBack(buf);
-		//PRINT REQUEST
-		/*
-		for (std::vector<char*>::iterator ti = (*it).second.GetRequestMessageReference().bytesContainer.begin();
-			ti != (*it).second.GetRequestMessageReference().bytesContainer.end();
-			++ti){
-			std::cout << (*ti) << std::endl;
-		}
-		*/
-	} else if (readed_count == 0) {
-		// in this place: i should send to pasring
-
-		fds_sets.masterread.DeleteFd((*it).first);
-		fds_sets.masterwrite.AddFd((*it));
+		
 	} else {
-		close_delete_fd(it, fds_sets);
-		throw except("RECV_FAILD: invalid readed_count", EXC_ARGS);
+		fds_iter it_current_fd = masterread.FindFdIterator(current_fd);
+		
+		(*it_current_fd).GetRequestMessageReference().pushBack(buf);
+		//std::cout << buf << std::endl;
 	}
 }
 
@@ -116,48 +88,47 @@ void RequestsReader::SafeRequestMessage_(int readed_count, char* buf,
 
 void Server::FtServer(Server::sockets_refernce sockets) {
 	managed_fds masterread, masterwrite, fdread, fdwrite;
-	manageds_fds_sets fds_sets(masterread, masterwrite, fdread, fdwrite);
 	int highest_fd;
 
 	highest_fd = sockets_to_masterread(sockets, masterread);
-	//Print all sockets
-	/*
-	for(Sockets::sock_array_iter it = sockets.Begin();
-		it != sockets.End();
-		++it){
-		std::cout << (*it).GetSocketFd() << std::endl;
-	}
-	*/
-	while(highest_fd){
+	while (highest_fd) {
 		fdread = masterread;
 		fdwrite = masterwrite;
-		//Print sets
-		/*
-		for(ManagedFds::fds_set_iter it = masterwrite.BeginFd();
-			it != fdwrite.EndFd();
-			++it){
-			std::cout << (*it).first << std::endl;
-		}
-		*/
 		if(select(
 			(highest_fd + 1),
-			fdread.GetManagedFds(),
-			fdwrite.GetManagedFds(),
-			0, 0
+			fdread.GetManagedFdsAddress(),
+			fdwrite.GetManagedFdsAddress(),
+			NULL, NULL
 		) == -1){
 			continue;
 		}
-		highest_fd = opener.OpenFds(sockets, highest_fd, fds_sets);
-		reader.ReadRequests(fds_sets);
-		//sender.send_answer(sockets, fdwrite, masterwrite);
-	}
+		for(int i = 0; i <= highest_fd; i++) {
+			if (fdread.IsFdInSet(i)) {
+				sockets_iter it_socket = sockets.FindSocketInArray(i);
+				if (it_socket != sockets.End()) { // If it's socket's fd
+					try {
+						highest_fd = OpenFd_(it_socket, masterread, highest_fd);
+					} catch(except& e) {
+						continue;
+					}
+				} else { // If it's opened fd for client-connection
+					try {
+						ClientCommunication_(masterread, masterwrite, i);
+					} catch(except& e) {
+						continue;
+					}
+				} 
+			} 
+		}
+	} 
 }
 
 
 void start_server(const wsrv::Configuration& configs) {
-	Sockets	sockets(create_sockets(configs));
+	Sockets	sockets;
 	Server	launch_server;
-
+	
+	create_sockets(configs, sockets);
 	launch_server.FtServer(sockets);
 }
 

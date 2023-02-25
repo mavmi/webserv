@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:23:34 by msalena           #+#    #+#             */
-/*   Updated: 2023/02/23 21:35:48 by msalena          ###   ########.fr       */
+/*   Updated: 2023/02/25 21:43:30 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ FdObj::clientaddr_struct_len_pointer FdObj::ClientInformStructLen(void) {
 FdObj::bytes_container_reference FdObj::GetRequestMessageReference(void) {
 	return (request_message);
 }
+
 
 //FDS IMPLEMENTATION
 
@@ -185,14 +186,8 @@ Sockets::sock_array_reference Sockets::GetSocketsReference(void) {
 	return (sockets);
 }
 
-Sockets::sock_obj Sockets::GetSocket(int socket_fd) {
-	sock_array_iter it;
-
-	it = GetSocketIter_(socket_fd);
-	if (it == sockets.end()){
-		throw except("SOCKET_NOT_FOUND: Couldn't return passed socket fd", EXC_ARGS);
-	}
-	return (*it);
+Sockets::sock_array_iter Sockets::FindSocketInArray(int socket_fd) {
+	return (GetSocketIter_(socket_fd));
 }
 
 
@@ -224,32 +219,6 @@ Sockets::sock_array_iter Sockets::GetSocketIter_(int socket_fd) {
 		}
 	}
 	return (end);
-}
-
-
-
-// FUNCTIONS IMPLEMENTATION
-
-Sockets create_sockets(const wsrv::Configuration& servers) {
-	typedef Sockets									sockets;
-	typedef SocketObj								socket_obj;
-	typedef wsrv::Configuration						configuration;
-	typedef configuration::ServersContainerType		servers_container;
-	typedef servers_container::SizeType				servers_size;
-	typedef const servers_container&				const_servers_container_reference;
-
-	sockets								sockets_array;
-	const_servers_container_reference	servers_array = servers.getServers();
-
-	for (servers_size counter = 0, last_num = servers.getServersCount();
-			counter < last_num;
-			++counter
-		) {
-		socket_obj new_socket(&(servers_array.at(counter)));
-
-		sockets_array.AddSocket(new_socket);
-	}
-	return (sockets_array);
 }
 
 }

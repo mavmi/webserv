@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server_utils.cpp                                   :+:      :+:    :+:   */
+/*   core_utils.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:23:53 by msalena           #+#    #+#             */
-/*   Updated: 2023/02/23 18:27:00 by msalena          ###   ########.fr       */
+/*   Updated: 2023/02/25 21:42:00 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
-#include "../../../includes/core/utils/server_utils.hpp"
+#include "../../../includes/core/utils/core_utils.hpp"
 
 
 namespace CORE{
@@ -34,11 +34,24 @@ int sockets_to_masterread(Sockets& sockets, ManagedFds& masterread){
 	return (highest_fd);
 }
 
-void close_delete_fd(RequestsReader::managed_fds_array_iter it,
-				RequestsReader::managed_fds_sets_reference fds_sets) {
-	(*it).second.DeleteObj();
-	fds_sets.masterread.DeleteFd((*it).first);
-	fds_sets.fdread.DeleteFd((*it).first);
+Sockets create_sockets(const wsrv::Configuration& servers, Sockets& sockets_array) {
+	typedef SocketObj								socket_obj;
+	typedef wsrv::Configuration						configuration;
+	typedef configuration::ServersContainerType		servers_container;
+	typedef servers_container::SizeType				servers_size;
+	typedef const servers_container&				const_servers_container_reference;
+
+	const_servers_container_reference	servers_array = servers.getServers();
+
+	for (servers_size counter = 0, last_num = servers.getServersCount();
+			counter < last_num;
+			++counter
+		) {
+		socket_obj new_socket(&(servers_array.at(counter)));
+
+		sockets_array.AddSocket(new_socket);
+	}
+	return (sockets_array);
 }
 
 }

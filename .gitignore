@@ -6,8 +6,7 @@
 *.exe
 webserv
 webserv_test
-**/tmp_test.cpp
-tmp_files/
+**/tmp*
 
 !.gitignore
 !.gitkeep
