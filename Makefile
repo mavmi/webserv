@@ -116,7 +116,7 @@ TEST_DEPEN	=	$(addprefix $(TMP_FILES_DIR)/, $(TEST_SRCS:.cpp=.d))
 ### RULES ###
 #############
 CC			=	c++
-GCC			=	$(CC) -Wall -Wextra -std=c++98 -MMD -g -fsanitize=undefined
+GCC			=	$(CC) -Wall -Wextra -Werror -std=c++98 -MMD -g -fsanitize=undefined
 
 
 # $@					$<

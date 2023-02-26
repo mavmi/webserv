@@ -117,8 +117,10 @@ public:
     BytesContainer& operator=(const BytesContainer& other);
 
     void pushBack(const std::string& line);
+    void pushBack(char* buf, int bufSize);
 
-    std::vector<char*> bytesContainer;
+    // std::vector<char*> bytesContainer;
+    std::vector<std::string> bytesContainer;
     const size_t bufferSize;
     size_t lastSize;
 

@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:22:43 by msalena           #+#    #+#             */
-/*   Updated: 2023/02/25 22:09:06 by msalena          ###   ########.fr       */
+/*   Updated: 2023/02/26 12:47:53 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,41 +23,6 @@
 
 
 namespace CORE{
-
-/*
- * WorkWithFds class is the Parent for FdsOpener,
- * RequestsReader and AnswersSender classes
- */
-class WorkWithFds {
-public:
-	typedef Sockets							sockets;
-	typedef sockets&						sockets_reference;
-	typedef sockets::sock_array_iter		sock_iter;
-	typedef sockets::sock_obj				sock_obj;
-	typedef sock_obj&						sock_obj_reference;
-	typedef FdObj							fd_obj;
-	typedef Fds								fds;
-	typedef Fds::fd_array_iter				fds_iter;
-	typedef ManagedFds						managed_fds;
-	typedef managed_fds&					managed_fds_reference;
-	typedef managed_fds::fds_set_iter		managed_fds_array_iter;
-	typedef struct sockaddr*				sockaddr_pointer;
-	typedef CoreException					except;
-} ;
-
-// AnswersSender class is describing sending answers to the clients
-class AnswersSender : public WorkWithFds{
-public:
-
-	/*
-	* Sends answering messages to clients
-	*
-	* Return:	size of readed bytes
-	*/
-	//int send_answer(Socket& sockets, ManagedFds& fdwrite,
-	//					ManagedFds& masterwrite);
-private:
-} ;
 
 
 class Server {

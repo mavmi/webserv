@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:22:02 by msalena           #+#    #+#             */
-/*   Updated: 2023/02/25 22:35:42 by msalena          ###   ########.fr       */
+/*   Updated: 2023/02/26 16:48:22 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,9 @@ void Server::FtServer(Server::sockets_refernce sockets) {
 						continue;
 					}
 				} 
-			} 
+			} else if (fdwrite.IsFdInSet(i)) {
+				
+			}
 		}
 	} 
 }
