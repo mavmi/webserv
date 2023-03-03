@@ -1,5 +1,8 @@
 #pragma once
 
+#include <fstream>
+#include <sys/stat.h>
+
 #include "utils.hpp"
 #include "../http_headers/response_status_line.hpp"
 #include "../http_headers/general_headers.hpp"
@@ -48,6 +51,8 @@ public:
     const std::vector<std::string>& getMessage() const;
 
     MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer toBytes();
+
+    bool setupFile(const std::string& filePath);
 
 private:
     MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseStatusLine responseStatusLine_;

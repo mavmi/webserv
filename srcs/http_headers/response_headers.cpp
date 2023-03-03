@@ -23,7 +23,7 @@ namespace MAIN_NAMESPACE{
 namespace HTTP_HEADERS_NAMESPACE{
 HttpResponseHeaders::HttpResponseHeaders(const StatusLineAbstractParent& statusLine)
     : HttpCommonHeaders(statusLine) {
-
+    setServer();
 }
 HttpResponseHeaders::HttpResponseHeaders(const HttpResponseHeaders& other)
     : HttpCommonHeaders(other.statusLine_) {
@@ -183,6 +183,11 @@ const HttpResponseHeaders::RetryAfterType& HttpResponseHeaders::getRetryAfter() 
     HANDLE_EXC_END
 }
 
+void HttpResponseHeaders::setServer(){
+    throwOnDone_();
+    checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
+    server_.set("webserv");
+}
 void HttpResponseHeaders::setServer(const ServerType& server){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);

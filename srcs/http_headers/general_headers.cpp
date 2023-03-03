@@ -71,6 +71,13 @@ const HttpGeneralHeaders::ConnectionType& HttpGeneralHeaders::getConnection() co
     HANDLE_EXC_END
 }
 
+void HttpGeneralHeaders::setDate(){
+    throwOnDone_();
+    checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
+
+    std::time_t t = std::time(NULL);
+    date_.set(generateDate_(std::localtime(&t)));
+}
 void HttpGeneralHeaders::setDate(const DateType& date){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);

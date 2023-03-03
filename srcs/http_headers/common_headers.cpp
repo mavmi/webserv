@@ -215,6 +215,11 @@ const HttpCommonHeaders::ExpiresType& HttpCommonHeaders::getExpires() const{
     HANDLE_EXC_END
 }
 
+void HttpCommonHeaders::setLastModified(std::tm* time){
+    throwOnDone_();
+    checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
+    lastModified_.set(generateDate_(time));
+}
 void HttpCommonHeaders::setLastModified(const LastModifiedType& lastModified){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);

@@ -1,4 +1,4 @@
-#include "../includes/test.hpp"
+#include "../include/test.hpp"
 
 void test::CONFIGURATION_HOST_TESTS(){
     ___HEADER___
@@ -122,7 +122,7 @@ void test::CONFIGURATION_FILES_TESTS(){
     {
         wsrv::Parser parser;
         try {
-            parser.parseFile("ConfigFiles/valid/1.txt");
+            parser.parseFile("materials/config_files/valid/1.txt");
         } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::Exception& e){
             std::cerr << e.what() << std::endl;
             assert(false);
@@ -171,7 +171,7 @@ void test::CONFIGURATION_FILES_TESTS(){
     {
         wsrv::Parser parser;
         try {
-            parser.parseFile("ConfigFiles/valid/2.txt");
+            parser.parseFile("materials/config_files/valid/2.txt");
         } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::Exception& e){
             std::cerr << e.what() << std::endl;
             assert(false);
@@ -480,7 +480,7 @@ void test::HTTP_REQUEST_FILE_TEST(){
     // read http request file
     {
 
-        int fileFd = open("/home/username/Desktop/webserv/test/httpRequest.txt", O_RDONLY);
+        int fileFd = open("/Users/pmaryjo/Desktop/webserv/test/httpRequest.txt", O_RDONLY);
         if (fileFd == -1){
             std::cerr << "Cannot open file" << std::endl;
             exit(1);

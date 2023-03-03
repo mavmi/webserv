@@ -52,5 +52,99 @@ void HttpHeadersAbstractParent::checkVersion_(HttpVersionType version){
         }
     }
 }
+
+HttpHeadersAbstractParent::DateType HttpHeadersAbstractParent::generateDate_(std::tm* time) const {
+    std::string result;
+
+    switch (time->tm_wday){
+        case 0:
+            result += "Sun";
+            break;
+        case 1:
+            result += "Mon";
+            break;
+        case 2:
+            result += "Tues";
+            break;
+        case 3:
+            result += "Wed";
+            break;
+        case 4:
+            result += "Thurs";
+            break;
+        case 5:
+            result += "Fri";
+            break;
+        case 6:
+            result += "Sat";
+            break;
+    }
+    result += ", ";
+
+    result += MAIN_NAMESPACE::UTILS_NAMESPACE::utilsNumToString(time->tm_mday);
+    result += " ";
+
+    switch (time->tm_mon){
+        case 0:
+            result += "Jan";
+            break;
+        case 1:
+            result += "Feb";
+            break;
+        case 2:
+            result += "Mar";
+            break;
+        case 3:
+            result += "Apr";
+            break;
+        case 4:
+            result += "May";
+            break;
+        case 5:
+            result += "Jun";
+            break;
+        case 6:
+            result += "Jul";
+            break;
+        case 7:
+            result += "Aug";
+            break;
+        case 8:
+            result += "Sep";
+            break;
+        case 9:
+            result += "Oct";
+            break;
+        case 10:
+            result += "Nov";
+            break;
+        case 11:
+            result += "Dec";
+            break;
+    }
+    result += " ";
+
+    result += MAIN_NAMESPACE::UTILS_NAMESPACE::utilsNumToString(1900 + time->tm_year);
+    result += " ";
+    
+    int tmp;
+
+    tmp = time->tm_hour;
+    if (tmp < 10) result += "0";
+    result += MAIN_NAMESPACE::UTILS_NAMESPACE::utilsNumToString(tmp);
+    result += ":";
+
+    tmp = time->tm_min;
+    if (tmp < 10) result += "0";
+    result += MAIN_NAMESPACE::UTILS_NAMESPACE::utilsNumToString(tmp);
+    result += ":";
+
+    tmp = time->tm_sec;
+    if (tmp < 10) result += "0";
+    result += MAIN_NAMESPACE::UTILS_NAMESPACE::utilsNumToString(tmp);
+    result += " GMT";
+
+    return result;
+}
 }
 }

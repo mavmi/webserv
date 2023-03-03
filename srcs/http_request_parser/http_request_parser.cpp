@@ -88,41 +88,41 @@ bool HttpRequestParser::isLineEmpty_(const std::string& line){
 }
 
 std::vector<std::string> HttpRequestParser::parseBuffer_(const MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer& buffer){
-    // int startPoint;
-    // bool isLastFinished = true;
-    // const char newLine = '\n';
-    // std::vector<std::string> result;
+    int startPoint;
+    bool isLastFinished = true;
+    const char newLine = '\n';
+    std::vector<std::string> result;
 
-    // for (size_t i = 0; i < buffer.bytesContainer.size(); i++){
-    //     startPoint = 0;
-    //     while (true){
-    //         int newLinePos = find_(
-    //             buffer.bytesContainer[i],
-    //             startPoint,
-    //             i + 1 == buffer.bytesContainer.size() ? buffer.lastSize : buffer.bufferSize,
-    //             newLine
-    //         );
+    for (size_t i = 0; i < buffer.bytesContainer.size(); i++){
+        startPoint = 0;
+        while (true){
+            int newLinePos = find_(
+                buffer.bytesContainer[i],
+                startPoint,
+                i + 1 == buffer.bytesContainer.size() ? buffer.lastSize : buffer.bufferSize,
+                newLine
+            );
             
-    //         int endPoint = newLinePos == -1 ? (i + 1 == buffer.bytesContainer.size() ? buffer.lastSize : buffer.bufferSize) : newLinePos;
-    //         std::string substr(
-    //             buffer.bytesContainer[i] + startPoint,
-    //             endPoint - startPoint
-    //         );
+            int endPoint = newLinePos == -1 ? (i + 1 == buffer.bytesContainer.size() ? buffer.lastSize : buffer.bufferSize) : newLinePos;
+            std::string substr(
+                buffer.bytesContainer[i] + startPoint,
+                endPoint - startPoint
+            );
 
-    //         if (isLastFinished) result.push_back(substr);
-    //         else result.back().append(substr);
+            if (isLastFinished) result.push_back(substr);
+            else result.back().append(substr);
 
-    //         if (newLinePos == -1) {
-    //             isLastFinished = false;
-    //             break;
-    //         } else {
-    //             isLastFinished = true;
-    //         }
-    //         startPoint = endPoint + 1;
-    //     }
-    // }
+            if (newLinePos == -1) {
+                isLastFinished = false;
+                break;
+            } else {
+                isLastFinished = true;
+            }
+            startPoint = endPoint + 1;
+        }
+    }
 
-    // return result;
+    return result;
 }
 void HttpRequestParser::parseStatusLine_(const std::string& line){
     std::vector<std::string> splitedLine = split_(line, ' ');

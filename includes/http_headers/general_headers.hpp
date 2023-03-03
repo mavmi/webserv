@@ -1,5 +1,7 @@
 #pragma once
 
+#include <ctime>
+
 #include "utils.hpp"
 #include "headers_abstract_parent.hpp"
 
@@ -29,7 +31,6 @@ public:
     typedef MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_VERSION   HttpVersionType;
     typedef std::string                                     CacheControlType;
     typedef std::string                                     ConnectionType;
-    typedef std::string                                     DateType;
     typedef std::string                                     MimeVersionType;
     typedef std::string                                     PragmaType;
     typedef std::string                                     TrailerType;
@@ -52,6 +53,7 @@ public:
     ConnectionType& getConnection();
     const ConnectionType& getConnection() const;
 
+    void setDate();
     void setDate(const DateType& date);
     DateType& getDate();
     const DateType& getDate() const;

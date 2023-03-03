@@ -81,6 +81,7 @@ public:
     RetryAfterType& getRetryAfter();
     const RetryAfterType& getRetryAfter() const;
 
+    void setServer();
     void setServer(const ServerType& server);
     ServerType& getServer();
     const ServerType& getServer() const;

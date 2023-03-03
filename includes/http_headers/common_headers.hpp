@@ -37,7 +37,7 @@ public:
     typedef std::string                     ContentVersionType;
     typedef std::string                     DerivedFromType;
     typedef std::string                     ExpiresType;
-    typedef std::string                     LastModifiedType;
+    typedef DateType                        LastModifiedType;
     typedef std::string                     LinkType;
     typedef std::string                     TitleType;
 
@@ -91,6 +91,7 @@ public:
     ExpiresType& getExpires();
     const ExpiresType& getExpires() const;
 
+    void setLastModified(std::tm* time);
     void setLastModified(const LastModifiedType& lastModified);
     LastModifiedType& getLastModified();
     const LastModifiedType& getLastModified() const;

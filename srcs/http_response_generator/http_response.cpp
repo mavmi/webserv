@@ -263,4 +263,28 @@ MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer HttpResponse::toBytes(){
 
     return result;
 }
+
+bool HttpResponse::setupFile(const std::string& filePath){
+    struct stat buf;
+    std::fstream inputFile;
+    inputFile.open(filePath, std::ios::in | std::ios::binary);
+
+    // Get info about file
+    if (!inputFile.is_open() || stat(filePath.c_str(), &buf) != 0){
+        return false;
+    }
+
+    // Last modified
+    responseHeaders_.setLastModified(std::localtime(&buf.st_mtimespec.tv_sec));
+    // Content length
+    responseHeaders_.setContentLength(MAIN_NAMESPACE::UTILS_NAMESPACE::utilsNumToString(buf.st_size));
+    // Fill file's data
+    message_.clear();
+    std::string fileLine;
+    while (std::getline(inputFile, fileLine)){
+        message_.push_back(fileLine);
+    }
+
+    return true;
+}
 }
