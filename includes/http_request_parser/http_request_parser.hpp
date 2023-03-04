@@ -50,7 +50,7 @@ private:
     int find_(char* arr, int startPoint, int size, char c);
     bool isLineEmpty_(const std::string& line);
 
-    std::vector<std::string> parseBuffer_(const MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer& buffer);
+    // std::vector<std::string> parseBuffer_(const MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer& buffer);
     void parseStatusLine_(const std::string& line);
     void parseHeader_(const std::string& line);
 };

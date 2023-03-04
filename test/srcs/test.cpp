@@ -486,38 +486,39 @@ void test::HTTP_REQUEST_FILE_TEST(){
             exit(1);
         }
 
+        srand(time(NULL));
         while(true){
-            char* buffer = new char [content.bufferSize];
-            size_t readCount = static_cast<size_t>(read(fileFd, buffer, content.bufferSize));
-            content.bytesContainer.push_back(buffer);
-            if (readCount < content.bufferSize){
-                content.lastSize = readCount;
-                break;
-            }
+            const int bufferSize = rand() % 100 + 6;
+            char* buffer = new char[bufferSize];
+            size_t readCount = static_cast<size_t>(read(fileFd, buffer, bufferSize));
+            if (readCount <= 0) break;
+            content.pushBack(buffer, readCount);
         }
 
         std::cout << test_utils::getColor(test_utils::CYAN) << "\n\tHTTP request file content:" << std::endl;
         std::cout << "\t==========================" << std::endl;
-        for (size_t i = 0; i < content.bytesContainer.size(); i++){
-            for (size_t j = 0; j < (i + 1 == content.bytesContainer.size() ? content.lastSize : content.bufferSize); j++){
-                std::cout << content.bytesContainer[i][j];
+        const std::vector<std::string>& strings = content.getData();
+        for (size_t i = 0; i < strings.size(); i++){
+            const std::string& line = strings.at(i);
+            for (size_t i = 0; i < line.size(); i++){
+                std::cout << line.at(i);
             }
+            std::cout << '|' << std::endl;
         }
         std::cout << "\n\t==========================\n" << test_utils::getColor(test_utils::DEFAULT) << std::endl;
     }
 
     try{
         wsrv::http_request::HttpRequestParser httpRequestParser;
-        wsrv::http_request::HttpRequest httpRequest = httpRequestParser.parseHttpRequest(content);
+        const wsrv::http_request::HttpRequest& httpRequest = httpRequestParser.parseHttpRequest(content);
 
         const wsrv::http_headers::HttpRequestStatusLine& statusLine = httpRequest.getStatusLine();
         assert(statusLine.getHttpVersion() == wsrv::utils::HTTP_1_1);
         assert(statusLine.getMethod() == wsrv::utils::POST);
         assert(statusLine.getUrl() == "/cgi-bin/process.cgi");
-
         const wsrv::http_headers::HttpGeneralHeaders& generalHeaders = httpRequest.getGeneralHeaders();
         assert(generalHeaders.getConnection() == " Keep-Alive");
-        
+
         const wsrv::http_headers::HttpRequestHeaders& requestHeaders = httpRequest.getRequestHeaders();
         assert(requestHeaders.getHost() == " www.tutorialspoint.com");
         assert(requestHeaders.getContentType() == " text/xml; charset=utf-8");

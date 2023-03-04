@@ -10,12 +10,6 @@ const wsrv::Configuration& parseConfig(int argc, char** argv, wsrv::Parser& pars
 
 #include <sys/stat.h>
 int main(int argc, char** argv){    
-    // struct stat buf;
-    // stat(std::string("/Users/pmaryjo/Desktop/1.png").c_str(), &buf);
-    // buf.
-    // exit(0);
-
-
     (void)argc; (void)argv;
 
     wsrv::utils::utilsCheckArgsCount(argc);

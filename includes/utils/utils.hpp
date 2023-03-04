@@ -109,6 +109,8 @@ Type        utilsStringToNum(const std::string& str){
 
 class BytesContainer{
 public:
+    typedef std::vector<std::string> BytesContainerType;
+
     BytesContainer();
     BytesContainer(const BytesContainer& other);
     ~BytesContainer();
@@ -116,17 +118,14 @@ public:
     BytesContainer& operator=(const BytesContainer& other);
 
     void pushBack(const std::string& line);
-    void pushBack(char* buf, int bufSize);
+    void pushBack(char* buffer, int bufferSize);
 
-    std::vector<char*> bytesContainer;
-    // std::vector<std::string> bytesContainer;
-    const size_t bufferSize;
-    size_t lastSize;
+    const BytesContainerType& getData() const;
 
 private:
-    void cpy_(const BytesContainer& other);
-    char* realloc_(char* buffer, size_t bufferSize);
-    void free_();
+    bool r_;
+    bool n_;
+    BytesContainerType bytesContainer_;
 
 };
 

@@ -115,68 +115,48 @@ const char* utilsStringToCharArray(const std::string& str){
 namespace MAIN_NAMESPACE{
 namespace UTILS_NAMESPACE{
 BytesContainer::BytesContainer()
-    : bytesContainer(std::vector<char*>()),
-        bufferSize(BUFFER_SIZE),
-        lastSize(0) {
+    : r_(false), n_(false),
+        bytesContainer_(BytesContainerType()){
     
 }
 BytesContainer::BytesContainer(const BytesContainer& other)
-    : bufferSize(BUFFER_SIZE) {
-    cpy_(other);
+    : r_(false), n_(false),
+        bytesContainer_(other.bytesContainer_) {
+    
 }
 BytesContainer::~BytesContainer(){
-    free_();
+    
 }
 
 BytesContainer& BytesContainer::operator=(const BytesContainer& other){
-    free_();
-    cpy_(other);
+    r_ = other.r_;
+    n_ = other.n_;
+    bytesContainer_ = other.bytesContainer_;
     return *this;
 }
 
 void BytesContainer::pushBack(const std::string& line){
-    if (lastSize == bufferSize || bytesContainer.empty()){
-        lastSize = 0;
-        bytesContainer.push_back(new char[bufferSize]);
-    }
+    bytesContainer_.push_back(line);
+}
+void BytesContainer::pushBack(char* buffer, int bufferSize){
+    if (!buffer || bufferSize <= 0) return;
 
-    size_t i = 0;
-    while (true){
-        while (i < line.size() && lastSize < bufferSize){
-            bytesContainer.back()[lastSize++] = line.at(i++);
+    for (int i = 0; i < bufferSize; i++){
+        char curChar = buffer[i];
+
+        if (!bytesContainer_.size() || (/*r_ && */n_)) {
+            bytesContainer_.push_back(std::string());
+            r_ = n_ = false;
         }
 
-        if (i == line.size()) {
-            break;
-        }
-
-        lastSize = 0;
-        bytesContainer.push_back(new char[bufferSize]);
+        if (curChar == '\r') r_ = true;
+        else if (curChar == '\n') n_ = true;
+        else bytesContainer_.back() += curChar;
     }
 }
 
-void BytesContainer::cpy_(const BytesContainer& other){
-    if (other.bytesContainer.size()){
-        for (size_t i = 0; i + 1 < other.bytesContainer.size(); i++){
-            bytesContainer.push_back(realloc_(other.bytesContainer.at(i), other.bufferSize));
-        }
-        bytesContainer.push_back(realloc_(other.bytesContainer.back(), other.lastSize));
-    }
-    lastSize = other.lastSize;
-}
-char* BytesContainer::realloc_(char* buffer, size_t bufferSize){
-    char* newBuffer = new char[bufferSize];
-
-    for (size_t i = 0; i < bufferSize; i++){
-        newBuffer[i] = buffer[i];
-    }
-
-    return newBuffer;
-}
-void BytesContainer::free_(){
-    for (size_t i = 0; i < bytesContainer.size(); i++){
-        delete[] bytesContainer.at(i);
-    }
+const BytesContainer::BytesContainerType& BytesContainer::getData() const{
+    return bytesContainer_;
 }
 }
 }

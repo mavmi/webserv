@@ -1,4 +1,5 @@
 #include "../../includes/http_request_parser/http_request_parser.hpp"
+// #include "http_request_parser.hpp"
 
 namespace MAIN_NAMESPACE{
 namespace HTTP_REQUEST_PARS_NAMESPACE{
@@ -38,7 +39,8 @@ HttpRequestParser& HttpRequestParser::operator=(const HttpRequestParser& other){
 }
 
 const HttpRequest& HttpRequestParser::parseHttpRequest(const MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer& buffer){
-    std::vector<std::string> content = parseBuffer_(buffer);
+    // std::vector<std::string> content = parseBuffer_(buffer);
+    const std::vector<std::string>& content = buffer.getData();
     if (content.size() < 2) throw ExceptionType("HTTP request doesn't contain headers");
 
     parseStatusLine_(content.at(0));
@@ -87,7 +89,7 @@ bool HttpRequestParser::isLineEmpty_(const std::string& line){
     return true;
 }
 
-std::vector<std::string> HttpRequestParser::parseBuffer_(const MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer& buffer){
+/*std::vector<std::string> HttpRequestParser::parseBuffer_(const MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer& buffer){
     int startPoint;
     bool isLastFinished = true;
     const char newLine = '\n';
@@ -123,8 +125,14 @@ std::vector<std::string> HttpRequestParser::parseBuffer_(const MAIN_NAMESPACE::U
     }
 
     return result;
-}
-void HttpRequestParser::parseStatusLine_(const std::string& line){
+}*/
+
+/*std::vector<std::string> HttpRequestParser::parseBuffer_(const MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer &buffer)
+{
+    return std::vector<std::string>();
+}*/
+void HttpRequestParser::parseStatusLine_(const std::string &line)
+{
     std::vector<std::string> splitedLine = split_(line, ' ');
     size_t splitedLineSize = splitedLine.size();
     if (splitedLineSize < 2 || splitedLineSize > 3) throw ExceptionType("Status line got invalid number of arguments", EXC_ARGS);

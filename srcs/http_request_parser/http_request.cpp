@@ -15,7 +15,8 @@ HttpRequest::HttpRequest(const HttpRequest& other)
         httpGeneralHeaders_(MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeaders(httpRequestStatusLine_)),
         httpRequestHeaders_(MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpRequestHeaders(httpRequestStatusLine_)),
         httpRequestContent_(std::vector<std::string>()) {
-    
+    httpGeneralHeaders_ = other.httpGeneralHeaders_;
+    httpRequestHeaders_ = other.httpRequestHeaders_;
 }
 
 HttpRequest::~HttpRequest(){}
