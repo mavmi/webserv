@@ -497,7 +497,7 @@ void test::HTTP_REQUEST_FILE_TEST(){
 
         std::cout << test_utils::getColor(test_utils::CYAN) << "\n\tHTTP request file content:" << std::endl;
         std::cout << "\t==========================" << std::endl;
-        const std::vector<std::string>& strings = content.getData();
+        const std::vector<std::string>& strings = content.getLines();
         for (size_t i = 0; i < strings.size(); i++){
             const std::string& line = strings.at(i);
             for (size_t i = 0; i < line.size(); i++){
@@ -522,7 +522,7 @@ void test::HTTP_REQUEST_FILE_TEST(){
         const wsrv::http_headers::HttpRequestHeaders& requestHeaders = httpRequest.getRequestHeaders();
         assert(requestHeaders.getHost() == " www.tutorialspoint.com");
         assert(requestHeaders.getContentType() == " text/xml; charset=utf-8");
-        assert(requestHeaders.getContentLength() == " length");
+        assert(requestHeaders.getContentLength() == " 93");
         assert(requestHeaders.getAcceptLanguage() == " en-us");
         assert(requestHeaders.getAcceptEncoding() == " gzip, deflate");
 

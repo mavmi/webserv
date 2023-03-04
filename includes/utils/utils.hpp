@@ -17,7 +17,7 @@
 namespace MAIN_NAMESPACE{
 namespace UTILS_NAMESPACE{
 
-const size_t BUFFER_SIZE = 1048;
+const size_t BUFFER_SIZE = 1024;
 const std::string DEFAULT_SERVER_PATH = "DefaultServer";
 const std::string DEFAULT_SERVER_CONFIG_FILE_PATH = "materials/config_files/valid/ConfigFile.txt";
 
@@ -120,11 +120,15 @@ public:
     void pushBack(const std::string& line);
     void pushBack(char* buffer, int bufferSize);
 
-    const BytesContainerType& getData() const;
+    const BytesContainerType& getLines() const;
+    int checkIfEnd(int bufferSize);
 
 private:
     bool r_;
     bool n_;
+    int content_;
+    size_t lineToCheck_;
+    size_t contentLength_;
     BytesContainerType bytesContainer_;
 
 };
@@ -158,6 +162,5 @@ private:
     char* stringToCharArr_(const std::string& str);
 
 };
-
 }
 }

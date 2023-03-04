@@ -40,7 +40,7 @@ HttpRequestParser& HttpRequestParser::operator=(const HttpRequestParser& other){
 
 const HttpRequest& HttpRequestParser::parseHttpRequest(const MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer& buffer){
     // std::vector<std::string> content = parseBuffer_(buffer);
-    const std::vector<std::string>& content = buffer.getData();
+    const std::vector<std::string>& content = buffer.getLines();
     if (content.size() < 2) throw ExceptionType("HTTP request doesn't contain headers");
 
     parseStatusLine_(content.at(0));

@@ -66,15 +66,15 @@ void Server::RecvRequest_(Server::managed_fds_reference masterread,
 	if ((*it_current_fd).second.GetFdIter() != (*it_current_fd).second.FdPairReference().first.End()){
 		readed_nbytes = recv(current_fd, buf, sizeof(buf), 0);
 		if (readed_nbytes > 0) {
-			(*it_current_fd).second.GetRequestMessageReference().pushBack(buf);
+			(*it_current_fd).second.GetRequestMessageReference().pushBack(buf, readed_nbytes);
 		} else {
 			if (readed_nbytes == 0){
 				masterwrite.AddFd((*it_current_fd));
-				// for (std::vector<char*>::iterator ti = (*it_current_fd).second.GetRequestMessageReference().bytesContainer.begin();
-				// 	ti != (*it_current_fd).second.GetRequestMessageReference().bytesContainer.end();
-				// 	++ti){
-				// 	std::cout << (*ti) << std::endl;
-				// }
+				for (std::vector<std::string>::const_iterator ti = (*it_current_fd).second.GetRequestMessageReference().getLines().begin();
+					ti != (*it_current_fd).second.GetRequestMessageReference().getLines().end();
+					++ti){
+					std::cout << (*ti) << std::endl;
+				}
 			} else {
 				(*it_current_fd).second.DeleteFd();
 			}
