@@ -3,7 +3,7 @@
     server_name:     SERVER_NAME;
     error_pages:     path1,path2;
     body_size:       123456789;
-    
+
     [
         methods:             GET,POST,DELETE;
         redir:               path3;
@@ -14,3 +14,4 @@
         cgi_bin:             path7;
     ]
 }
+

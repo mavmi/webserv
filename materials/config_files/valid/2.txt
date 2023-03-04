@@ -3,7 +3,7 @@
 
     error_pages:     path1,path2,   path3;
     body_size:       1223334444;
-    
+
     [
         methods:             GET,POST,DELETE;
         redir:               PATH1;

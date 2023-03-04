@@ -144,7 +144,7 @@ void BytesContainer::pushBack(char* buffer, int bufferSize){
     for (int i = 0; i < bufferSize; i++){
         char curChar = buffer[i];
 
-        if (!bytesContainer_.size() || (/*r_ && */n_)) {
+        if (!bytesContainer_.size() || (r_ && n_)) {
             bytesContainer_.push_back(std::string());
             r_ = n_ = false;
         }
