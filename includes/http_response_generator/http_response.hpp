@@ -52,7 +52,7 @@ public:
 
     MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer toBytes();
 
-    bool setupFile(const std::string& filePath);
+    bool setupFile(const std::string& filePath, const std::string& errFilePath);
 
 private:
     MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseStatusLine responseStatusLine_;

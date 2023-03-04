@@ -264,14 +264,18 @@ MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer HttpResponse::toBytes(){
     return result;
 }
 
-bool HttpResponse::setupFile(const std::string& filePath){
+bool HttpResponse::setupFile(const std::string& filePath, const std::string& errFilePath){
     struct stat buf;
     std::fstream inputFile;
-    inputFile.open(filePath, std::ios::in | std::ios::binary);
 
     // Get info about file
+    inputFile.open(filePath, std::ios::in | std::ios::binary);
     if (!inputFile.is_open() || stat(filePath.c_str(), &buf) != 0){
-        return false;
+        inputFile.close();
+        inputFile.open(errFilePath);
+        if (!inputFile.is_open() || stat(errFilePath.c_str(), &buf) != 0){
+            return false;
+        }
     }
 
     // Last modified
