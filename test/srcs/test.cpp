@@ -487,13 +487,17 @@ void test::HTTP_REQUEST_FILE_TEST(){
         }
 
         srand(time(NULL));
+        int lastReturn = 1, curReturn;
         while(true){
-            const int bufferSize = rand() % 100 + 6;
+            const int bufferSize = rand() % 400 + 1;
             char* buffer = new char[bufferSize];
             size_t readCount = static_cast<size_t>(read(fileFd, buffer, bufferSize));
             if (readCount <= 0) break;
-            content.pushBack(buffer, readCount);
+            curReturn = content.pushBack(buffer, readCount);
+            assert(lastReturn == 1);
+            lastReturn = curReturn;
         }
+        assert(lastReturn == 0);
 
         std::cout << test_utils::getColor(test_utils::CYAN) << "\n\tHTTP request file content:" << std::endl;
         std::cout << "\t==========================" << std::endl;

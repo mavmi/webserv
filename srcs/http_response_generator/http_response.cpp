@@ -291,4 +291,97 @@ bool HttpResponse::setupFile(const std::string& filePath, const std::string& err
 
     return true;
 }
+
+std::string HttpResponse::parseFileSignature_() const{
+    static bool init = false;
+    static std::vector<std::string> extensions;
+    static std::vector< std::vector<char> > signatures;
+
+    if (!init){
+        init = true;
+
+        {
+            extensions.push_back("image/jpeg");
+            signatures.push_back(std::vector<char>());
+            signatures.back().push_back(0xFF);
+            signatures.back().push_back(0xD8);
+            signatures.back().push_back(0xFF);
+            signatures.back().push_back(0xE0);
+            signatures.back().push_back(0x00);
+            signatures.back().push_back(0x10);
+            signatures.back().push_back(0x4A);
+            signatures.back().push_back(0x46);
+            signatures.back().push_back(0x49);
+            signatures.back().push_back(0x46);
+            signatures.back().push_back(0x00);
+            signatures.back().push_back(0x01);
+        }
+        {
+            extensions.push_back("image/jpeg");
+            signatures.push_back(std::vector<char>());
+            signatures.back().push_back(0xFF);
+            signatures.back().push_back(0xD8);
+            signatures.back().push_back(0xFF);
+            signatures.back().push_back(0xEE);
+        }
+        {
+            extensions.push_back("image/jpeg");
+            signatures.push_back(std::vector<char>());
+            signatures.back().push_back(0xFF);
+            signatures.back().push_back(0xD8);
+            signatures.back().push_back(0xFF);
+            signatures.back().push_back(0xE0);
+        }
+        {
+            extensions.push_back("image/png");
+            signatures.push_back(std::vector<char>());
+            signatures.back().push_back(0x89);
+            signatures.back().push_back(0x50);
+            signatures.back().push_back(0x4E);
+            signatures.back().push_back(0x47);
+            signatures.back().push_back(0x0D);
+            signatures.back().push_back(0x0A);
+            signatures.back().push_back(0x1A);
+            signatures.back().push_back(0x0A);
+        }
+        {
+            extensions.push_back("video/mp4");
+            signatures.push_back(std::vector<char>());
+            signatures.back().push_back(0x66);
+            signatures.back().push_back(0x74);
+            signatures.back().push_back(0x79);
+            signatures.back().push_back(0x70);
+            signatures.back().push_back(0x69);
+            signatures.back().push_back(0x73);
+            signatures.back().push_back(0x6F);
+            signatures.back().push_back(0x6D);
+        }
+        {
+            extensions.push_back("audio/mpeg");
+            signatures.push_back(std::vector<char>());
+            signatures.back().push_back(0x49);
+            signatures.back().push_back(0x44);
+            signatures.back().push_back(0x33);
+        }
+    }
+
+    for (size_t i_sig = 0; i_sig < signatures.size(); i_sig++){
+        for (size_t j_msg = 0, j = 0, i = 0; j_msg < message_.size() && i < signatures.at(i_sig).size(); i++){
+            if (message_.at(j_msg).at(j) != signatures.at(i_sig).at(i)){
+                break;
+            } else if (i + 1 == signatures.at(i_sig).size()){
+                return extensions.at(i_sig);
+            }
+
+            if (j + 1 == message_.at(j_msg).size()) {
+                j_msg++;
+                j = 0;
+            } else {
+                j++;
+            }
+        }
+    }
+
+    return "";
+}
 }

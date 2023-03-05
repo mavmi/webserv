@@ -60,5 +60,7 @@ private:
     MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeaders responseHeaders_;
     std::vector<std::string> message_;
 
+    std::string parseFileSignature_() const;
+
 };
 }

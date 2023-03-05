@@ -111,6 +111,9 @@ class BytesContainer{
 public:
     typedef std::vector<std::string> BytesContainerType;
 
+    const static int continue_ = 1;
+    const static int end_ = 0;
+
     BytesContainer();
     BytesContainer(const BytesContainer& other);
     ~BytesContainer();
@@ -118,17 +121,16 @@ public:
     BytesContainer& operator=(const BytesContainer& other);
 
     void pushBack(const std::string& line);
-    void pushBack(char* buffer, int bufferSize);
+    int pushBack(char* buffer, int bufferSize);
 
     const BytesContainerType& getLines() const;
-    int checkIfEnd(int bufferSize);
 
 private:
     bool r_;
     bool n_;
     int content_;
-    size_t lineToCheck_;
     size_t contentLength_;
+    std::string tmpLine_;
     BytesContainerType bytesContainer_;
 
 };

@@ -117,7 +117,6 @@ namespace UTILS_NAMESPACE{
 BytesContainer::BytesContainer()
     : r_(false), n_(false),
         content_(-1),
-        lineToCheck_(0),
         contentLength_(0),
         bytesContainer_(BytesContainerType()){
     
@@ -125,7 +124,6 @@ BytesContainer::BytesContainer()
 BytesContainer::BytesContainer(const BytesContainer& other)
     : r_(other.r_), n_(other.n_),
         content_(other.content_),
-        lineToCheck_(other.lineToCheck_),
         contentLength_(other.contentLength_),
         bytesContainer_(other.bytesContainer_) {
     
@@ -138,7 +136,6 @@ BytesContainer& BytesContainer::operator=(const BytesContainer& other){
     r_ = other.r_;
     n_ = other.n_;
     content_ = other.content_;
-    lineToCheck_ = other.lineToCheck_;
     contentLength_ = other.contentLength_;
     bytesContainer_ = other.bytesContainer_;
     return *this;
@@ -147,55 +144,48 @@ BytesContainer& BytesContainer::operator=(const BytesContainer& other){
 void BytesContainer::pushBack(const std::string& line){
     bytesContainer_.push_back(line);
 }
-void BytesContainer::pushBack(char* buffer, int bufferSize){
-    if (!buffer || bufferSize <= 0) return;
+int BytesContainer::pushBack(char* buffer, int bufferSize){
+    if (!buffer || bufferSize <= 0) return end_;
 
     for (int i = 0; i < bufferSize; i++){
         char curChar = buffer[i];
 
-        if (!bytesContainer_.size() || (r_ && n_)) {
-            // std::cerr << "\t" << checkIfEnd(bufferSize) << std::endl;
-            bytesContainer_.push_back(std::string());
+        if (r_ && n_) {
+            if (!tmpLine_.size()){
+                content_ = contentLength_ != 0;
+                if (!content_) return end_;
+            } else if (tmpLine_.size() > 16 && tmpLine_.substr(0, 16) == "Content-Length: "){
+                contentLength_ = utilsStringToNum<size_t>(tmpLine_.substr(16, tmpLine_.size() - 16));
+            }
+
+            bytesContainer_.push_back(tmpLine_);
+            tmpLine_ = std::string();
             r_ = n_ = false;
         }
 
         if (curChar == '\r') r_ = true;
         else if (curChar == '\n') n_ = true;
-        else bytesContainer_.back() += curChar;
+        else {
+            if (content_ == 1) {
+                if (contentLength_) {
+                    tmpLine_ += curChar;
+                    contentLength_--;
+                }
+                if (!contentLength_){
+                    bytesContainer_.push_back(tmpLine_);
+                    return end_;
+                }
+            } else if (content_ == -1) {
+                tmpLine_ += curChar;
+            }
+        }
     }
 
-    checkIfEnd(bufferSize);
+    return (content_) ? continue_ : end_;
 }
 
 const BytesContainer::BytesContainerType& BytesContainer::getLines() const{
     return bytesContainer_;
-}
-
-int BytesContainer::checkIfEnd(int bufferSize){
-    const int end_ = 0, continue_ = 1;
-    const size_t headerNameLength = 16;
-
-    // Skip first non-finished line
-    if (bytesContainer_.size() <= 1) return continue_;
-    const std::string& lastLine = bytesContainer_.back();
-
-    // Get content length and continue
-    if (lastLine.substr(0, headerNameLength) == "Content-Length: "){
-        contentLength_ = utilsStringToNum<size_t>(lastLine.substr(headerNameLength, lastLine.size() - headerNameLength));
-        return continue_;
-    }
-
-    // Check if there is file to read
-    if (!lastLine.size()) content_ = contentLength_ != 0;
-
-    // Read content's block
-    if (content_ == 1){
-        size_t bufferSizeSt = static_cast<size_t>(bufferSize);
-        contentLength_ = (contentLength_ >= bufferSizeSt) ? contentLength_ - bufferSizeSt : 0;
-        content_ = contentLength_ != 0;
-    }
-
-    return (content_) ? continue_ : end_;
 }
 }
 }
