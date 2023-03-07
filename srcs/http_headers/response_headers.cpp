@@ -167,6 +167,16 @@ const HttpResponseHeaders::PublicType& HttpResponseHeaders::getPublic() const{
     HANDLE_EXC_END
 }
 
+void HttpResponseHeaders::setRetryAfter(){
+    throwOnDone_();
+    checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
+
+    std::time_t t = std::time(NULL);
+    std::tm* time = std::localtime(&t);
+    time->tm_sec += 3;
+    mktime(time);
+    retryAfter_.set(generateDate_(time));
+}
 void HttpResponseHeaders::setRetryAfter(const RetryAfterType& retryAfter){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
@@ -186,7 +196,7 @@ const HttpResponseHeaders::RetryAfterType& HttpResponseHeaders::getRetryAfter() 
 void HttpResponseHeaders::setServer(){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
-    server_.set("webserv");
+    server_.set("wsrv by pmalena & msaryjo");
 }
 void HttpResponseHeaders::setServer(const ServerType& server){
     throwOnDone_();

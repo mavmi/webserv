@@ -141,21 +141,32 @@ BytesContainer& BytesContainer::operator=(const BytesContainer& other){
     return *this;
 }
 
+void BytesContainer::pushBack(char c){
+    if (!bytesContainer_.size()){
+        bytesContainer_.push_back(std::string());
+    }
+    bytesContainer_.back().push_back(c);
+}
 void BytesContainer::pushBack(const std::string& line){
     bytesContainer_.push_back(line);
 }
 int BytesContainer::pushBack(char* buffer, int bufferSize){
     if (!buffer || bufferSize <= 0) return end_;
 
+    const std::string clLine = "Content-Length: ";
+    const size_t clLineSize = clLine.size();
     for (int i = 0; i < bufferSize; i++){
         char curChar = buffer[i];
 
         if (r_ && n_) {
             if (!tmpLine_.size()){
                 content_ = contentLength_ != 0;
-                if (!content_) return end_;
-            } else if (tmpLine_.size() > 16 && tmpLine_.substr(0, 16) == "Content-Length: "){
-                contentLength_ = utilsStringToNum<size_t>(tmpLine_.substr(16, tmpLine_.size() - 16));
+                if (!content_) {
+                    bytesContainer_.push_back(tmpLine_);
+                    return end_;
+                };
+            } else if (tmpLine_.size() > clLineSize && tmpLine_.substr(0, clLineSize) == clLine){
+                contentLength_ = utilsStringToNum<size_t>(tmpLine_.substr(clLineSize, tmpLine_.size() - clLineSize));
             }
 
             bytesContainer_.push_back(tmpLine_);

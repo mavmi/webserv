@@ -47,20 +47,28 @@ public:
     MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeaders& getResponseHeaders();
     const MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeaders& getResponseHeaders() const;
 
-    std::vector<std::string>& getMessage();
-    const std::vector<std::string>& getMessage() const;
+    std::vector<char>& getMessage();
+    const std::vector<char>& getMessage() const;
 
     MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer toBytes();
 
+    void setDate();
+    void setRetryAfter();
+    void setStatusLine(
+                MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::StatusLineAbstractParent::HttpVersionType httpVersion,
+                MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseStatusLine::StatusCodeType statusCode,
+                MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseStatusLine::MessageType message
+            );
     bool setupFile(const std::string& filePath, const std::string& errFilePath);
 
 private:
     MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseStatusLine responseStatusLine_;
     MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeaders generalHeaders_;
     MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeaders responseHeaders_;
-    std::vector<std::string> message_;
+    std::vector<char> message_;
 
-    std::string parseFileSignature_() const;
+    std::string parseFileSignature_(const std::string& fileName) const;
+    std::string parseFileExtension_(const std::string& fileName) const;
 
 };
 }

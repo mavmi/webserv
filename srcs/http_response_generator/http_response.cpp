@@ -22,7 +22,7 @@ HttpResponse::HttpResponse()
     : responseStatusLine_(MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseStatusLine()),
         generalHeaders_(MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeaders(responseStatusLine_)),
         responseHeaders_(MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeaders(responseStatusLine_)),
-        message_(std::vector<std::string>()) {
+        message_(std::vector<char>()) {
 
 }
 HttpResponse::HttpResponse(const HttpResponse& other)
@@ -64,10 +64,10 @@ const MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeaders& HttpResponse:
     return responseHeaders_;
 }
 
-std::vector<std::string>& HttpResponse::getMessage(){
+std::vector<char>& HttpResponse::getMessage(){
     return message_;
 }
-const std::vector<std::string>& HttpResponse::getMessage() const{
+const std::vector<char>& HttpResponse::getMessage() const{
     return message_;
 }
 
@@ -264,15 +264,33 @@ MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer HttpResponse::toBytes(){
     return result;
 }
 
+void HttpResponse::setDate(){
+    generalHeaders_.setDate();
+}
+void HttpResponse::setRetryAfter(){
+    responseHeaders_.setRetryAfter();
+}
+void HttpResponse::setStatusLine(
+            MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::StatusLineAbstractParent::HttpVersionType httpVersion,
+            MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseStatusLine::StatusCodeType statusCode,
+            MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::
+            HttpResponseStatusLine::MessageType message
+        ){
+    responseStatusLine_.setHttpVersion(httpVersion);
+    responseStatusLine_.setStatusCode(statusCode);
+    responseStatusLine_.setMessage(message);
+}
 bool HttpResponse::setupFile(const std::string& filePath, const std::string& errFilePath){
     struct stat buf;
     std::fstream inputFile;
+    const std::string* file = &filePath;
 
     // Get info about file
     inputFile.open(filePath, std::ios::in | std::ios::binary);
     if (!inputFile.is_open() || stat(filePath.c_str(), &buf) != 0){
         inputFile.close();
         inputFile.open(errFilePath);
+        file = &errFilePath;
         if (!inputFile.is_open() || stat(errFilePath.c_str(), &buf) != 0){
             return false;
         }
@@ -282,17 +300,28 @@ bool HttpResponse::setupFile(const std::string& filePath, const std::string& err
     responseHeaders_.setLastModified(std::localtime(&buf.st_mtimespec.tv_sec));
     // Content length
     responseHeaders_.setContentLength(MAIN_NAMESPACE::UTILS_NAMESPACE::utilsNumToString(buf.st_size));
-    // Fill file's data
-    message_.clear();
-    std::string fileLine;
-    while (std::getline(inputFile, fileLine)){
-        message_.push_back(fileLine);
+    // Save file's data
+    {
+        message_.clear();
+
+        const size_t bufferSize = 256;
+        char *buffer = new char[bufferSize];
+
+        while (inputFile.read(buffer, bufferSize)){
+            for (int i = 0; i < inputFile.gcount(); i++){
+                message_.push_back(buffer[i]);
+            }
+        }
+
+        delete[] buffer;
     }
+    // Content type
+    responseHeaders_.setContentType(parseFileSignature_(*file));
 
     return true;
 }
 
-std::string HttpResponse::parseFileSignature_() const{
+std::string HttpResponse::parseFileSignature_(const std::string& fileName) const{
     static bool init = false;
     static std::vector<std::string> extensions;
     static std::vector< std::vector<char> > signatures;
@@ -363,23 +392,36 @@ std::string HttpResponse::parseFileSignature_() const{
             signatures.back().push_back(0x44);
             signatures.back().push_back(0x33);
         }
+        {
+            extensions.push_back("text/html");
+            signatures.push_back(std::vector<char>());
+            signatures.back().push_back(0x3C);
+            signatures.back().push_back(0x68);
+            signatures.back().push_back(0x74);
+            signatures.back().push_back(0x6D);
+            signatures.back().push_back(0x6C);
+        }
     }
 
-    for (size_t i_sig = 0; i_sig < signatures.size(); i_sig++){
-        for (size_t j_msg = 0, j = 0, i = 0; j_msg < message_.size() && i < signatures.at(i_sig).size(); i++){
-            if (message_.at(j_msg).at(j) != signatures.at(i_sig).at(i)){
-                break;
-            } else if (i + 1 == signatures.at(i_sig).size()){
-                return extensions.at(i_sig);
-            }
+    for (size_t sig_i = 0; sig_i < signatures.size(); sig_i++){
+        const std::vector<char>& signature = signatures.at(sig_i);
 
-            if (j + 1 == message_.at(j_msg).size()) {
-                j_msg++;
-                j = 0;
-            } else {
-                j++;
-            }
+        if (message_.size() < signature.size()) continue;
+        for (size_t j = 0, i = 0; i < signature.size(); i++, j++){
+            if (message_[j] != signature[i]) break;
+            else if (i + 1 == signature.size()) return extensions.at(sig_i);
         }
+    };
+
+    return parseFileExtension_(fileName);
+}
+std::string HttpResponse::parseFileExtension_(const std::string& fileName) const{
+    size_t dotPos = fileName.rfind('.');
+    if (dotPos == std::string::npos) return "";
+
+    const std::string ext = fileName.substr(dotPos + 1, fileName.size() - dotPos - 1);
+    if (ext == ".js"){
+        return "text/javascript";
     }
 
     return "";

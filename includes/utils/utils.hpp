@@ -120,6 +120,7 @@ public:
 
     BytesContainer& operator=(const BytesContainer& other);
 
+    void pushBack(char c);
     void pushBack(const std::string& line);
     int pushBack(char* buffer, int bufferSize);
 

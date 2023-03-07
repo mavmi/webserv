@@ -34,7 +34,7 @@ public:
     typedef std::string                     LocationType;
     typedef std::string                     ProxyAuthenticateType;
     typedef std::string                     PublicType;
-    typedef std::string                     RetryAfterType;
+    typedef DateType                        RetryAfterType;
     typedef std::string                     ServerType;
     typedef std::string                     VaryType;
     typedef std::string                     WWWAuthenticateType;
@@ -77,6 +77,7 @@ public:
     PublicType& getPublic();
     const PublicType& getPublic() const;
 
+    void setRetryAfter();
     void setRetryAfter(const RetryAfterType& retryAfter);
     RetryAfterType& getRetryAfter();
     const RetryAfterType& getRetryAfter() const;
