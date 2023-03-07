@@ -1,0 +1,161 @@
+NAME		=	webserv
+TEST_NAME	=	$(NAME)_test
+
+#######################
+### WEBSERV SOURCES ###
+#######################
+
+### .o & .d ###
+TMP_FILES_DIR		=	tmp_files
+
+### headers ###
+HDRS_UTILS			=	container.hpp exceptions.hpp parser_abstract_parent.hpp utils.hpp wrapper.hpp
+HDRS_CONFIG			=	configuration_host.hpp configuration_port.hpp configuration.hpp parser.hpp route_configuration.hpp server_configuration.hpp utils.hpp
+HDRS_HTTP_HEADERS	=	common_headers.hpp general_headers.hpp headers_abstract_parent.hpp request_headers.hpp request_status_line.hpp response_headers.hpp response_status_line.hpp status_line_abstract_parent.hpp utils.hpp
+HDRS_HTTP_REQ		=	http_request.hpp http_request_parser.hpp utils.hpp
+HDRS_HTTP_RES		=	http_response.hpp utils.hpp
+HDRS_CORE			=	managed_fds.hpp server.hpp socket_creator.hpp sockets.hpp utils/core_exception.hpp utils/core_utils.hpp
+
+### sources ###
+SRCS_UTILS			=	container.cpp exceptions.cpp parser_abstract_parent.cpp utils.cpp wrapper.cpp
+SRCS_CONFIG			=	configuration.cpp configuration_host.cpp configuration_port.cpp parser.cpp route_configuration.cpp server_configuration.cpp utils.cpp
+SRCS_HTTP_HEADERS	=	common_headers.cpp general_headers.cpp headers_abstract_parent.cpp request_headers.cpp request_status_line.cpp response_headers.cpp response_status_line.cpp status_line_abstract_parent.cpp utils.cpp
+SRCS_HTTP_REQ		=	http_request.cpp http_request_parser.cpp utils.cpp
+SRCS_HTTP_RES		=	http_response.cpp
+SRCS_CORE			=	managed_fds.cpp server.cpp socket_creator.cpp sockets.cpp utils/core_exception.cpp utils/core_utils.cpp
+
+### objects ###
+OBJS_UTILS			=	$(SRCS_UTILS:.cpp=.o)
+OBJS_CONFIG			=	$(SRCS_CONFIG:.cpp=.o)
+OBJS_HTTP_HEADERS	=	$(SRCS_HTTP_HEADERS:.cpp=.o)
+OBJS_HTTP_REQ		=	$(SRCS_HTTP_REQ:.cpp=.o)
+OBJS_HTTP_RES		=	$(SRCS_HTTP_RES:.cpp=.o)
+OBJS_CORE			=	$(SRCS_CORE:.cpp=.o)
+
+### dependencies ###
+DEPEN_UTILS			=	$(SRCS_UTILS:.cpp=.d)
+DEPEN_CONFIG		=	$(SRCS_CONFIG:.cpp=.d)
+DEPEN_HTTP_HEADERS	=	$(SRCS_HTTP_HEADERS:.cpp=.d)
+DEPEN_HTTP_REQ		=	$(SRCS_HTTP_REQ:.cpp=.d)
+DEPEN_HTTP_RES		=	$(SRCS_HTTP_RES:.cpp=.d)
+DEPEN_CORE			=	$(SRCS_CORE:.cpp=.d)
+
+### directories ###
+HDRS_DIR			=	includes
+HDRS_UTILS_DIR		=	$(HDRS_DIR)/utils
+HDRS_CONFIG_DIR		=	$(HDRS_DIR)/configurations
+HDRS_HTTP_HEAD_DIR	=	$(HDRS_DIR)/http_headers
+HDRS_HTTP_REQ_DIR	=	$(HDRS_DIR)/http_request_parser
+HDRS_HTTP_RES_DIR	=	$(HDRS_DIR)/http_response_generator
+HDRS_CORE_DIR		=	$(HDRS_DIR)/core
+
+SRCS_DIR			=	srcs
+SRCS_UTILS_DIR		=	$(SRCS_DIR)/utils
+SRCS_CONFIG_DIR		=	$(SRCS_DIR)/configurations
+SRCS_HTTP_HEAD_DIR	=	$(SRCS_DIR)/http_headers
+SRCS_HTTP_REQ_DIR	=	$(SRCS_DIR)/http_request_parser
+SRCS_HTTP_RES_DIR	=	$(SRCS_DIR)/http_response_generator
+SRCS_CORE_DIR		=	$(SRCS_DIR)/core
+
+### main.cpp ###
+MAIN_SRC		=	$(SRCS_DIR)/main.cpp
+MAIN_OBJ		=	$(addprefix $(TMP_FILES_DIR)/, $(MAIN_SRC:.cpp=.o))
+MAIN_DEPEN		=	$(addprefix $(TMP_FILES_DIR)/, $(MAIN_SRC:.cpp=.d))
+
+### result values ###
+HDRS		=	$(addprefix $(HDRS_UTILS_DIR)/, $(HDRS_UTILS))\
+					$(addprefix $(HDRS_CONFIG_DIR)/, $(HDRS_CONFIG))\
+					$(addprefix $(HDRS_HTTP_HEAD_DIR)/, $(HDRS_HTTP_HEADERS))\
+					$(addprefix $(HDRS_HTTP_REQ_DIR)/, $(HDRS_HTTP_REQ))\
+					$(addprefix $(HDRS_HTTP_RES_DIR)/, $(HDRS_HTTP_RES))\
+					$(addprefix $(HDRS_CORE_DIR)/, $(HDRS_CORE))
+SRCS		=	$(addprefix $(SRCS_UTILS_DIR)/, $(SRCS_UTILS))\
+					$(addprefix $(SRCS_CONFIG_DIR)/, $(SRCS_CONFIG))\
+					$(addprefix $(SRCS_HTTP_HEAD_DIR)/, $(SRCS_HTTP_HEADERS))\
+					$(addprefix $(SRCS_HTTP_REQ_DIR)/, $(SRCS_HTTP_REQ))\
+					$(addprefix $(SRCS_HTTP_RES_DIR)/, $(SRCS_HTTP_RES))\
+					$(addprefix $(SRCS_CORE_DIR)/, $(SRCS_CORE))
+OBJS		=	$(addprefix $(TMP_FILES_DIR)/, $(SRCS:.cpp=.o))
+DEPEN		=	$(addprefix $(TMP_FILES_DIR)/, $(SRCS:.cpp=.d))
+
+####################
+### TEST SOURCES ###
+####################
+
+### headers ###
+TEST_HDRS_test	=	test.hpp test_utils.hpp
+
+### sources ###
+TEST_SRCS_test	=	test.cpp test_utils.cpp
+
+### objects ###
+TEST_OBJS_test	=	$(TEST_SRCS_test:.cpp=.o)
+
+### dependencies ###
+TEST_DEPEN_test	=	$(TEST_SRCS_test:.cpp=.d)
+
+### directories ###
+TEST_DIR		=	test
+
+TEST_HDRS_DIR	=	$(TEST_DIR)/include
+TEST_SRCS_DIR	=	$(TEST_DIR)/srcs
+
+### main.cpp ###
+TEST_MAIN		=	$(TEST_SRCS_DIR)/main.cpp
+TEST_MAIN_OBJ	=	$(addprefix $(TMP_FILES_DIR)/, $(TEST_MAIN:.cpp=.o))
+TEST_MAIN_DEPEN	=	$(addprefix $(TMP_FILES_DIR)/, $(TEST_MAIN:.cpp=.d))
+
+### result values ###
+TEST_HDRS	=	$(addprefix $(TEST_HDRS_DIR)/, $(TEST_HDRS_test))
+TEST_SRCS	=	$(addprefix $(TEST_SRCS_DIR)/, $(TEST_SRCS_test))
+TEST_OBJS	=	$(addprefix $(TMP_FILES_DIR)/, $(TEST_SRCS:.cpp=.o))
+TEST_DEPEN	=	$(addprefix $(TMP_FILES_DIR)/, $(TEST_SRCS:.cpp=.d))
+
+
+#############
+### RULES ###
+#############
+CC			=	c++
+GCC			=	$(CC) -Wall -Wextra -Werror -std=c++98 -MMD -g -fsanitize=undefined
+
+
+# $@					$<
+$(TMP_FILES_DIR)/%.o:	%.cpp $(TEST_HDRS) $(HDRS)
+						@mkdir -p $(dir $@)
+						$(GCC) -c -o $@ $<
+
+all:					$(NAME)
+
+$(NAME):				$(OBJS) $(MAIN_OBJ) Makefile
+						$(GCC) $(OBJS) $(MAIN_OBJ) -o $(NAME)
+						
+clean:			
+						@rm -rf $(TMP_FILES_DIR)
+
+fclean:					clean
+						@rm -f $(NAME) $(TEST_NAME)
+
+re:						fclean all
+
+test:					$(OBJS) $(TEST_OBJS) $(TEST_MAIN_OBJ)
+						@mkdir -p $(dir $@)
+						$(GCC) $(OBJS) $(TEST_OBJS) $(TEST_MAIN_OBJ) -o $(TEST_NAME)
+
+run_with_leaks:			$(NAME)
+						leaks --atExit -- ./$(NAME)
+
+run_tests_with_leaks:	test
+						leaks --atExit -- ./$(TEST_NAME)
+
+doNotForgetToDelete:
+						$(eval wsrv_dir:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST)))))
+
+						@echo '\033[0;31m' &&\
+							grep -r --include "*.hpp" --include "*.cpp"\
+								'[Н,н][Е,е]\s*[З,з][А,а][Б,б][Ы,ы][Т,т][Ь,ь]\s*[У,у][Д,д][А,а][Л,л][И,и][Т,т][Ь,ь]'\
+							$(wsrv_dir);\
+							echo '\033[0m'
+			
+-include $(DEPEN)
+
+.PHONY: all clean fclean re test doNotForgetToDelete run_with_leaks run_tests_with_leaks

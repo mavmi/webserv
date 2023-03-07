@@ -1,0 +1,12 @@
+.*
+*.o
+*.a
+*.d
+*.out
+*.exe
+webserv
+webserv_test
+**/tmp*
+
+!.gitignore
+!.gitkeep
