@@ -280,33 +280,31 @@ void HttpResponse::setStatusLine(
     responseStatusLine_.setStatusCode(statusCode);
     responseStatusLine_.setMessage(message);
 }
-bool HttpResponse::setupFile(const std::string& filePath, const std::string& errFilePath){
+bool HttpResponse::setupFile(const std::string& filePath){
     struct stat buf;
     std::fstream inputFile;
-    const std::string* file = &filePath;
 
     // Get info about file
     inputFile.open(filePath, std::ios::in | std::ios::binary);
     if (!inputFile.is_open() || stat(filePath.c_str(), &buf) != 0){
         inputFile.close();
-        inputFile.open(errFilePath);
-        file = &errFilePath;
-        if (!inputFile.is_open() || stat(errFilePath.c_str(), &buf) != 0){
-            return false;
-        }
+        return setupFileOnError();
     }
 
-    // Last modified
-    responseHeaders_.setLastModified(std::localtime(&buf.st_mtimespec.tv_sec));
-    // Content length
-    responseHeaders_.setContentLength(MAIN_NAMESPACE::UTILS_NAMESPACE::utilsNumToString(buf.st_size));
+    try {
+        // Last modified
+        responseHeaders_.setLastModified(std::localtime(&buf.st_mtimespec.tv_sec));
+        // Content length
+        responseHeaders_.setContentLength(MAIN_NAMESPACE::UTILS_NAMESPACE::utilsNumToString(buf.st_size));
+    } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::Exception&){
+        return setupFileOnError();
+    }
     // Save file's data
     {
-        message_.clear();
-
         const size_t bufferSize = 256;
         char *buffer = new char[bufferSize];
 
+        message_.clear();
         while (inputFile.read(buffer, bufferSize)){
             for (int i = 0; i < inputFile.gcount(); i++){
                 message_.push_back(buffer[i]);
@@ -315,12 +313,34 @@ bool HttpResponse::setupFile(const std::string& filePath, const std::string& err
 
         delete[] buffer;
     }
-    // Content type
-    responseHeaders_.setContentType(parseFileSignature_(*file));
+
+    try {
+        // Content type
+        responseHeaders_.setContentType(parseFileSignature_(filePath));
+    } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::Exception&){
+        return setupFileOnError();
+    }
 
     return true;
 }
 
+bool HttpResponse::setupFileOnError(){
+    static const std::string errorContent = "<html><body><h1>Error</h1></body></html>";
+
+    try{
+        std::time_t t = std::time(NULL);
+        std::tm* timeNow = std::localtime(&t);
+
+        responseHeaders_.setLastModified(timeNow);
+        responseHeaders_.setContentLength(MAIN_NAMESPACE::UTILS_NAMESPACE::utilsNumToString<size_t>(errorContent.size()));
+
+        message_.clear();
+        for (size_t i = 0; i < errorContent.size(); i++) message_.push_back(errorContent[i]);
+        responseHeaders_.setContentType("text/html");
+    } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::Exception&){}
+
+    return false;
+}
 std::string HttpResponse::parseFileSignature_(const std::string& fileName) const{
     static bool init = false;
     static std::vector<std::string> extensions;
@@ -424,6 +444,6 @@ std::string HttpResponse::parseFileExtension_(const std::string& fileName) const
         return "text/javascript";
     }
 
-    return "";
+    throw ExceptionType("Unknown file extension");
 }
 }

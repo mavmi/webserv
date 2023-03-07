@@ -59,7 +59,7 @@ public:
                 MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseStatusLine::StatusCodeType statusCode,
                 MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseStatusLine::MessageType message
             );
-    bool setupFile(const std::string& filePath, const std::string& errFilePath);
+    bool setupFile(const std::string& filePath);
 
 private:
     MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseStatusLine responseStatusLine_;
@@ -67,6 +67,7 @@ private:
     MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeaders responseHeaders_;
     std::vector<char> message_;
 
+    bool setupFileOnError();
     std::string parseFileSignature_(const std::string& fileName) const;
     std::string parseFileExtension_(const std::string& fileName) const;
 
