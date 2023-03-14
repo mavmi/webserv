@@ -35,6 +35,7 @@ public:
 	typedef Fds::fd_array_iter			fds_iter;
 	typedef ManagedFds					managed_fds;
 	typedef ManagedFds&					managed_fds_reference;
+	typedef managed_fds::fd_pair_class&	managed_fd_pair_class_reference;
 	typedef managed_fds::fds_set_iter	fds_set_iter;
 	typedef CoreException				except;
 
@@ -54,18 +55,20 @@ private:
 	* Return:		new number of largest fd number
 	* Exception:	throws custom exception if couldn't open fd
 	*/
-	int OpenFd_(sockets_iter it_socket, managed_fds_reference masterread, 
+	int OpenFd_(sockets_iter it_socket, managed_fds_reference masterread,
 				int highest_fd);
-	
+
 	/*
 	 * Returns:		iterator to created fd
 	 * Exception:	throws custom exception if 'accept' function retuns error
 	 */
 	fds_iter CreateFd_(sockets_iter it_socket);
-	
-	void RecvRequest_(managed_fds_reference masterread, 
+
+	void RecvRequest_(managed_fds_reference masterread,
 							managed_fds_reference masterwrite,
 							int current_fd);
+
+	int RecvReceving_(managed_fd_pair_class_reference it_current_fd);
 } ;
 
 

@@ -21,10 +21,10 @@ namespace CORE{
 // FDS_OPENER IMPLEMENTATION
 
 
-int Server::OpenFd_(Server::sockets_iter it_socket, Server::managed_fds_reference masterread, 
+int Server::OpenFd_(Server::sockets_iter it_socket, Server::managed_fds_reference masterread,
 					int highest_fd){
 	fds_iter it_fd = CreateFd_(it_socket);
-	
+
 	masterread.AddFd(
 		(*it_fd).GetFd(),
 		(*it_socket).GetFdsSetReference(),
@@ -38,7 +38,7 @@ int Server::OpenFd_(Server::sockets_iter it_socket, Server::managed_fds_referenc
 
 Server::fds_iter Server::CreateFd_(Server::sockets_iter it_socket) {
 	fd_obj tmp_fd;
-	
+
 	tmp_fd.SetFd(
 		accept(
 			(*it_socket).GetSocketFd(),
@@ -53,10 +53,19 @@ Server::fds_iter Server::CreateFd_(Server::sockets_iter it_socket) {
 	return ((*it_socket).AddRelatedFd(tmp_fd));
 }
 
+int Server::RecvReceving_(Server::managed_fd_pair_class_reference fd_pair){
+	int push_result;
 
-void Server::RecvRequest_(Server::managed_fds_reference masterread, 
+	push_result = fd_pair.GetRequestMessageReference().pushBack(buf, readed_nbytes);
+	if (push_result == 0){
+		response_generator(fd_pair)
+	}
+	return push_result;
+}
+
+void Server::RecvRequest_(Server::managed_fds_reference masterread,
 						Server::managed_fds_reference masterwrite,
-						int current_fd){	
+						int current_fd){
 	int readed_nbytes;
 	char buf[wsrv::utils::BUFFER_SIZE];
 	fds_set_iter it_current_fd;
@@ -121,19 +130,19 @@ void Server::FtServer(Server::sockets_refernce sockets) {
 					} catch(except& e) {
 						continue;
 					}
-				} 
+				}
 			} else if (fdwrite.IsFdInSet(i)) {
-				
+
 			}
 		}
-	} 
+	}
 }
 
 
 void start_server(const wsrv::Configuration& configs) {
 	Sockets	sockets;
 	Server	launch_server;
-	
+
 	create_sockets(configs, sockets);
 	launch_server.FtServer(sockets);
 }

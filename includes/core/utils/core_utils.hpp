@@ -28,5 +28,13 @@ namespace CORE {
  */
 int sockets_to_masterread(Sockets& sockets, ManagedFds& masterread);
 
-Sockets create_sockets(const wsrv::Configuration& servers, Sockets& sockets_array);
+/*
+ * Create sockets for every server from config
+ */
+void create_sockets(const wsrv::Configuration& servers, Sockets& sockets_array);
+
+/*
+ * Generate the response for current fd
+ */
+void response_generator(wsrv::FdReferencePair& current_fd_pair);
 }

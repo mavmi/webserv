@@ -34,7 +34,7 @@ int sockets_to_masterread(Sockets& sockets, ManagedFds& masterread){
 	return (highest_fd);
 }
 
-Sockets create_sockets(const wsrv::Configuration& servers, Sockets& sockets_array) {
+void create_sockets(const wsrv::Configuration& servers, Sockets& sockets_array) {
 	typedef SocketObj								socket_obj;
 	typedef wsrv::Configuration						configuration;
 	typedef configuration::ServersContainerType		servers_container;
@@ -51,7 +51,14 @@ Sockets create_sockets(const wsrv::Configuration& servers, Sockets& sockets_arra
 
 		sockets_array.AddSocket(new_socket);
 	}
-	return (sockets_array);
+}
+
+void response_generator(FdReferencePair& current_fd_pair){
+	http_request::HttpRequest request(current_fd_pair.GetRequestMessageReference());
+	http_responce::HttpResponse	response;
+
+	response.setData();
+	//difference implementation because of GET/POST/DELETE
 }
 
 }
