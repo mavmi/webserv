@@ -11,7 +11,6 @@
 #define CONFIG_NAMESPACE                configuration
 #define HTTP_HEADERS_NAMESPACE          http_headers
 #define HTTP_REQUEST_PARS_NAMESPACE     http_request
-#define HTTP_RESPONSE_GENER_NAMESPACE   http_response
 #define UTILS_NAMESPACE                 utils
 
 namespace MAIN_NAMESPACE{
