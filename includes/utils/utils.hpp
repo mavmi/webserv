@@ -108,8 +108,6 @@ Type        utilsStringToNum(const std::string& str){
 
 class BytesContainer{
 public:
-    typedef std::vector<std::string> BytesContainerType;
-
     const static int continue_ = 1;
     const static int end_ = 0;
 
@@ -123,7 +121,8 @@ public:
     void pushBack(const std::string& line);
     int pushBack(char* buffer, int bufferSize);
 
-    const BytesContainerType& getLines() const;
+    const std::vector<std::string>& getLines() const;
+    char* toBytes() const;
 
 private:
     bool r_;
@@ -131,7 +130,7 @@ private:
     int content_;
     size_t contentLength_;
     std::string tmpLine_;
-    BytesContainerType bytesContainer_;
+    std::vector<std::string> bytesContainer_;
 
 };
 

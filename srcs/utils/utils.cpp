@@ -118,7 +118,7 @@ BytesContainer::BytesContainer()
     : r_(false), n_(false),
         content_(-1),
         contentLength_(0),
-        bytesContainer_(BytesContainerType()){
+        bytesContainer_(std::vector<std::string>()){
     
 }
 BytesContainer::BytesContainer(const BytesContainer& other)
@@ -195,8 +195,25 @@ int BytesContainer::pushBack(char* buffer, int bufferSize){
     return (content_) ? continue_ : end_;
 }
 
-const BytesContainer::BytesContainerType& BytesContainer::getLines() const{
+const std::vector<std::string>& BytesContainer::getLines() const{
     return bytesContainer_;
+}
+char* BytesContainer::toBytes() const{
+    size_t size = 0;
+    for (size_t i = 0; i < bytesContainer_.size(); i++){
+        size += bytesContainer_[i].size();
+    }
+
+    char* arr = new char[size];
+    size_t i = 0;
+    for (size_t iter = 0; iter < bytesContainer_.size(); iter++){
+        const std::string& curLine = bytesContainer_[iter];
+        for (size_t j = 0; j < curLine.size();){
+            arr[i++] = curLine.at(j++);
+        }
+    }
+
+    return arr;
 }
 }
 }
