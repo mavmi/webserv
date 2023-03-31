@@ -26,18 +26,6 @@ protected:
 class HttpResponseHeaders : public HttpCommonHeaders{
 public:
     typedef HttpResponseHeadersException    ExceptionType;
-    typedef std::string                     AcceptRangesType;
-    typedef std::string                     AgeType;
-    typedef std::string                     AllowType;
-    typedef std::string                     AlternatesType;
-    typedef std::string                     ETagType;
-    typedef std::string                     LocationType;
-    typedef std::string                     ProxyAuthenticateType;
-    typedef std::string                     PublicType;
-    typedef DateType                        RetryAfterType;
-    typedef std::string                     ServerType;
-    typedef std::string                     VaryType;
-    typedef std::string                     WWWAuthenticateType;
 
     HttpResponseHeaders(const StatusLineAbstractParent& statusLine);
     HttpResponseHeaders(const HttpResponseHeaders& other);
@@ -45,69 +33,69 @@ public:
 
     HttpResponseHeaders& operator=(const HttpResponseHeaders& other);
 
-    void setAcceptRanges(const AcceptRangesType& acceptRange);
-    AcceptRangesType& getAcceptRanges();
-    const AcceptRangesType& getAcceptRanges() const;
+    void setAcceptRanges(const std::string& acceptRange);
+    std::string& getAcceptRanges();
+    const std::string& getAcceptRanges() const;
 
-    void setAge(const AgeType& age);
-    AgeType& getAge();
-    const AgeType& getAge() const;
+    void setAge(const std::string& age);
+    std::string& getAge();
+    const std::string& getAge() const;
 
-    void setAllow(const AllowType& allow);
-    AllowType& getAllow();
-    const AllowType& getAllow() const;
+    void setAllow(const std::string& allow);
+    std::string& getAllow();
+    const std::string& getAllow() const;
 
-    void setAlternates(const AlternatesType& alternates);
-    AlternatesType& getAlternates();
-    const AlternatesType& getAlternates() const;
+    void setAlternates(const std::string& alternates);
+    std::string& getAlternates();
+    const std::string& getAlternates() const;
 
-    void setETag(const ETagType& etag);
-    ETagType& getETag();
-    const ETagType& getETag() const;
+    void setETag(const std::string& etag);
+    std::string& getETag();
+    const std::string& getETag() const;
 
-    void setLocation(const LocationType& location);
-    LocationType& getLocation();
-    const LocationType& getLocation() const;
+    void setLocation(const std::string& location);
+    std::string& getLocation();
+    const std::string& getLocation() const;
 
-    void setProxyAuthenticate(const ProxyAuthenticateType& proxyAuthenticate);
-    ProxyAuthenticateType& getProxyAuthenticate();
-    const ProxyAuthenticateType& getProxyAuthenticate() const;
+    void setProxyAuthenticate(const std::string& proxyAuthenticate);
+    std::string& getProxyAuthenticate();
+    const std::string& getProxyAuthenticate() const;
 
-    void setPublic(const PublicType& Public);
-    PublicType& getPublic();
-    const PublicType& getPublic() const;
+    void setPublic(const std::string& Public);
+    std::string& getPublic();
+    const std::string& getPublic() const;
 
     void setRetryAfter();
-    void setRetryAfter(const RetryAfterType& retryAfter);
-    RetryAfterType& getRetryAfter();
-    const RetryAfterType& getRetryAfter() const;
+    void setRetryAfter(const std::string& retryAfter);
+    std::string& getRetryAfter();
+    const std::string& getRetryAfter() const;
 
     void setServer();
-    void setServer(const ServerType& server);
-    ServerType& getServer();
-    const ServerType& getServer() const;
+    void setServer(const std::string& server);
+    std::string& getServer();
+    const std::string& getServer() const;
 
-    void setVary(const VaryType& vary);
-    VaryType& getVary();
-    const VaryType& getVary() const;
+    void setVary(const std::string& vary);
+    std::string& getVary();
+    const std::string& getVary() const;
 
-    void setWWWAuthenticate(const WWWAuthenticateType& wwwAuthenticate);
-    WWWAuthenticateType& getWWWAuthenticate();
-    const WWWAuthenticateType& getWWWAuthenticate() const;
+    void setWWWAuthenticate(const std::string& wwwAuthenticate);
+    std::string& getWWWAuthenticate();
+    const std::string& getWWWAuthenticate() const;
 
 private:
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<AcceptRangesType> acceptRange_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<AgeType> age_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<AllowType> allow_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<AlternatesType> alternates_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ETagType> etag_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<LocationType> location_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ProxyAuthenticateType> proxyAuthenticate_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PublicType> public_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<RetryAfterType> retryAfter_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ServerType> server_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<VaryType> vary_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<WWWAuthenticateType> wwwAuthenticate_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> acceptRange_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> age_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> allow_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> alternates_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> etag_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> location_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> proxyAuthenticate_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> public_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> retryAfter_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> server_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> vary_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> wwwAuthenticate_;
 
     void deleteData_();
     void copyData_(const ParserAbstractParent& o);

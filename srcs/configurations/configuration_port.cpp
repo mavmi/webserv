@@ -6,7 +6,7 @@ namespace CONFIG_NAMESPACE{
 ConfigurationPort::ConfigurationPort(){
     port_ = 0;
 }
-ConfigurationPort::ConfigurationPort(NumericValueType port){
+ConfigurationPort::ConfigurationPort(uint16_t port){
     port_ = port;
 }
 ConfigurationPort::ConfigurationPort(const ConfigurationPort& other){
@@ -37,11 +37,11 @@ bool ConfigurationPort::operator>=(const ConfigurationPort& other) const {
     return port_ >= other.port_;
 }
 
-ConfigurationPort::NumericValueType ConfigurationPort::toNum() const{
+uint16_t ConfigurationPort::toNum() const{
     return port_;
 }
 std::string ConfigurationPort::toString() const{
-    return MAIN_NAMESPACE::UTILS_NAMESPACE::utilsNumToString<NumericValueType>(port_);
+    return MAIN_NAMESPACE::UTILS_NAMESPACE::utilsNumToString<uint16_t>(port_);
 }
 MAIN_NAMESPACE::UTILS_NAMESPACE::ArrayContainer ConfigurationPort::toCharArray() const{
     return MAIN_NAMESPACE::UTILS_NAMESPACE::ArrayContainer::fromString(toString());

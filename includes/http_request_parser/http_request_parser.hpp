@@ -29,9 +29,6 @@ protected:
 
 class HttpRequestParser{
 public:
-    typedef size_t                      SizeType;
-    typedef char*                       BufferType;
-    typedef std::vector<BufferType>     BufferContainerType;
     typedef HttpRequestParserException  ExceptionType;
 
     HttpRequestParser();

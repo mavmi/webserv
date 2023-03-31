@@ -39,33 +39,33 @@ HttpGeneralHeaders& HttpGeneralHeaders::operator=(const HttpGeneralHeaders& othe
     return *this;
 }
 
-void HttpGeneralHeaders::setCacheControl(const CacheControlType& cacheControl){
+void HttpGeneralHeaders::setCacheControl(const std::string& cacheControl){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
     cacheControl_.set(cacheControl);
 }
-HttpGeneralHeaders::CacheControlType& HttpGeneralHeaders::getCacheControl(){
+std::string& HttpGeneralHeaders::getCacheControl(){
     HANDLE_EXC_BEGIN
         return cacheControl_.get();
     HANDLE_EXC_END
 }
-const HttpGeneralHeaders::CacheControlType& HttpGeneralHeaders::getCacheControl() const{
+const std::string& HttpGeneralHeaders::getCacheControl() const{
     HANDLE_EXC_BEGIN
         return cacheControl_.get();
     HANDLE_EXC_END
 }
 
-void HttpGeneralHeaders::setConnection(const ConnectionType& connection){
+void HttpGeneralHeaders::setConnection(const std::string& connection){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
     connection_.set(connection);
 }
-HttpGeneralHeaders::ConnectionType& HttpGeneralHeaders::getConnection(){
+std::string& HttpGeneralHeaders::getConnection(){
     HANDLE_EXC_BEGIN
         return connection_.get();
     HANDLE_EXC_END
 }
-const HttpGeneralHeaders::ConnectionType& HttpGeneralHeaders::getConnection() const{
+const std::string& HttpGeneralHeaders::getConnection() const{
     HANDLE_EXC_BEGIN
         return connection_.get();
     HANDLE_EXC_END
@@ -78,145 +78,145 @@ void HttpGeneralHeaders::setDate(){
     std::time_t t = std::time(NULL);
     date_.set(generateDate_(std::localtime(&t)));
 }
-void HttpGeneralHeaders::setDate(const DateType& date){
+void HttpGeneralHeaders::setDate(const std::string& date){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
     date_.set(date);
 }
-HttpGeneralHeaders::DateType& HttpGeneralHeaders::getDate(){
+std::string& HttpGeneralHeaders::getDate(){
     HANDLE_EXC_BEGIN
         return date_.get();
     HANDLE_EXC_END
 }
-const HttpGeneralHeaders::DateType& HttpGeneralHeaders::getDate() const{
+const std::string& HttpGeneralHeaders::getDate() const{
     HANDLE_EXC_BEGIN
         return date_.get();
     HANDLE_EXC_END
 }
 
-void HttpGeneralHeaders::setMimeVersion(const MimeVersionType& mimeVersion){
+void HttpGeneralHeaders::setMimeVersion(const std::string& mimeVersion){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::MIME);
     mimeVersion_.set(mimeVersion);
 }
-HttpGeneralHeaders::MimeVersionType& HttpGeneralHeaders::getMimeVersion(){
+std::string& HttpGeneralHeaders::getMimeVersion(){
     HANDLE_EXC_BEGIN
         return mimeVersion_.get();
     HANDLE_EXC_END
 }
-const HttpGeneralHeaders::MimeVersionType& HttpGeneralHeaders::getMimeVersion() const{
+const std::string& HttpGeneralHeaders::getMimeVersion() const{
     HANDLE_EXC_BEGIN
         return mimeVersion_.get();
     HANDLE_EXC_END
 }
 
-void HttpGeneralHeaders::setPragma(const PragmaType& pragma){
+void HttpGeneralHeaders::setPragma(const std::string& pragma){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
     pragma_.set(pragma);
 }
-HttpGeneralHeaders::PragmaType& HttpGeneralHeaders::getPragma(){
+std::string& HttpGeneralHeaders::getPragma(){
     HANDLE_EXC_BEGIN
         return pragma_.get();
     HANDLE_EXC_END
 }
-const HttpGeneralHeaders::PragmaType& HttpGeneralHeaders::getPragma() const{
+const std::string& HttpGeneralHeaders::getPragma() const{
     HANDLE_EXC_BEGIN
         return pragma_.get();
     HANDLE_EXC_END
 }
 
-void HttpGeneralHeaders::setTrailer(const TrailerType& trailer){
+void HttpGeneralHeaders::setTrailer(const std::string& trailer){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1v2);
     trailer_.set(trailer);
 }
-HttpGeneralHeaders::TrailerType& HttpGeneralHeaders::getTrailer(){
+std::string& HttpGeneralHeaders::getTrailer(){
     HANDLE_EXC_BEGIN
         return trailer_.get();
     HANDLE_EXC_END
 }
-const HttpGeneralHeaders::TrailerType& HttpGeneralHeaders::getTrailer() const{
+const std::string& HttpGeneralHeaders::getTrailer() const{
     HANDLE_EXC_BEGIN
         return trailer_.get();
     HANDLE_EXC_END
 }
 
-void HttpGeneralHeaders::setTransferEncoding(const TransferEncodingType& transferEncoding){
+void HttpGeneralHeaders::setTransferEncoding(const std::string& transferEncoding){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
     transferEncoding_.set(transferEncoding);
 }
-HttpGeneralHeaders::TransferEncodingType& HttpGeneralHeaders::getTransferEncoding(){
+std::string& HttpGeneralHeaders::getTransferEncoding(){
     HANDLE_EXC_BEGIN
         return transferEncoding_.get();
     HANDLE_EXC_END
 }
-const HttpGeneralHeaders::TransferEncodingType& HttpGeneralHeaders::getTransferEncoding() const{
+const std::string& HttpGeneralHeaders::getTransferEncoding() const{
     HANDLE_EXC_BEGIN
         return transferEncoding_.get();
     HANDLE_EXC_END
 }
 
-void HttpGeneralHeaders::setUpgrade(const UpgradeType& upgrade){
+void HttpGeneralHeaders::setUpgrade(const std::string& upgrade){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
     upgrade_.set(upgrade);
 }
-HttpGeneralHeaders::UpgradeType& HttpGeneralHeaders::getUpgrade(){
+std::string& HttpGeneralHeaders::getUpgrade(){
     HANDLE_EXC_BEGIN
         return upgrade_.get();
     HANDLE_EXC_END
 }
-const HttpGeneralHeaders::UpgradeType& HttpGeneralHeaders::getUpgrade() const{
+const std::string& HttpGeneralHeaders::getUpgrade() const{
     HANDLE_EXC_BEGIN
         return upgrade_.get();
     HANDLE_EXC_END
 }
 
-void HttpGeneralHeaders::setVia(const ViaType& via){
+void HttpGeneralHeaders::setVia(const std::string& via){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
     via_.set(via);
 }
-HttpGeneralHeaders::ViaType& HttpGeneralHeaders::getVia(){
+std::string& HttpGeneralHeaders::getVia(){
     HANDLE_EXC_BEGIN
         return via_.get();
     HANDLE_EXC_END
 }
-const HttpGeneralHeaders::ViaType& HttpGeneralHeaders::getVia() const{
+const std::string& HttpGeneralHeaders::getVia() const{
     HANDLE_EXC_BEGIN
         return via_.get();
     HANDLE_EXC_END
 }
 
-void HttpGeneralHeaders::setWarning(const WarningType& warning){
+void HttpGeneralHeaders::setWarning(const std::string& warning){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
     warning_.set(warning);
 }
-HttpGeneralHeaders::WarningType& HttpGeneralHeaders::getWarning(){
+std::string& HttpGeneralHeaders::getWarning(){
     HANDLE_EXC_BEGIN
         return warning_.get();
     HANDLE_EXC_END
 }
-const HttpGeneralHeaders::WarningType& HttpGeneralHeaders::getWarning() const{
+const std::string& HttpGeneralHeaders::getWarning() const{
     HANDLE_EXC_BEGIN
         return warning_.get();
     HANDLE_EXC_END
 }
 
 void HttpGeneralHeaders::deleteData_(){
-    cacheControl_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<CacheControlType>();
-    connection_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ConnectionType>();
-    date_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<DateType>();
-    mimeVersion_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<MimeVersionType>();
-    pragma_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PragmaType>();
-    trailer_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<TrailerType>();
-    transferEncoding_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<TransferEncodingType>();
-    upgrade_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<UpgradeType>();
-    via_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ViaType>();
-    warning_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<WarningType>();
+    cacheControl_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    connection_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    date_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    mimeVersion_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    pragma_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    trailer_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    transferEncoding_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    upgrade_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    via_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    warning_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
 }
 void HttpGeneralHeaders::copyData_(const ParserAbstractParent& o){
     const HttpGeneralHeaders& other = dynamic_cast<const HttpGeneralHeaders&>(o);

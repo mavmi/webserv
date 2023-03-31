@@ -9,10 +9,8 @@ namespace CONFIG_NAMESPACE{
 
 class ConfigurationPort{
 public:
-    typedef uint16_t    NumericValueType;
-
     ConfigurationPort();
-    ConfigurationPort(NumericValueType port);
+    ConfigurationPort(uint16_t port);
     ConfigurationPort(const ConfigurationPort& other);
 
     ConfigurationPort& operator=(const ConfigurationPort& other);
@@ -24,12 +22,12 @@ public:
     bool operator>(const ConfigurationPort& other) const;
     bool operator>=(const ConfigurationPort& other) const;
 
-    NumericValueType toNum() const;
+    uint16_t toNum() const;
     std::string toString() const;
     MAIN_NAMESPACE::UTILS_NAMESPACE::ArrayContainer toCharArray() const;
 
 private:
-    NumericValueType port_;
+    uint16_t port_;
 
 };
 

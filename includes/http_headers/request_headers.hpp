@@ -26,26 +26,6 @@ protected:
 class HttpRequestHeaders : public HttpCommonHeaders{
 public:
     typedef HttpRequestHeadersException                     ExceptionType;
-    typedef MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_VERSION   HttpVersionType;
-    typedef std::string                                     AcceptType;
-    typedef std::string                                     AcceptCharsetType;
-    typedef std::string                                     AcceptEncodingType;
-    typedef std::string                                     AcceptLanguageType;
-    typedef std::string                                     AuthorizationType;
-    typedef std::string                                     ExpectType;
-    typedef std::string                                     FromType;
-    typedef std::string                                     HostType;
-    typedef std::string                                     IfMatchType;
-    typedef std::string                                     IfModifiedSinceType;
-    typedef std::string                                     IfNoneMatchType;
-    typedef std::string                                     IfRangeType;
-    typedef std::string                                     IfUnmodifiedSinceType;
-    typedef std::string                                     MaxForwardsType;
-    typedef std::string                                     ProxyAuthorizationType;
-    typedef std::string                                     RangeType;
-    typedef std::string                                     RefererType;
-    typedef std::string                                     TEType;
-    typedef std::string                                     UserAgentType;
 
     HttpRequestHeaders(const StatusLineAbstractParent& statusLine);
     HttpRequestHeaders(const HttpRequestHeaders& other);
@@ -53,102 +33,102 @@ public:
 
     HttpRequestHeaders& operator=(const HttpRequestHeaders& other);
 
-    void setAccept(const AcceptType& accept);
-    AcceptType& getAccept();
-    const AcceptType& getAccept() const;
+    void setAccept(const std::string& accept);
+    std::string& getAccept();
+    const std::string& getAccept() const;
 
-    void setAcceptCharset(const AcceptCharsetType& acceptCharset);
-    AcceptCharsetType& getAcceptCharset();
-    const AcceptCharsetType& getAcceptCharset() const;
+    void setAcceptCharset(const std::string& acceptCharset);
+    std::string& getAcceptCharset();
+    const std::string& getAcceptCharset() const;
 
-    void setAcceptEncoding(const AcceptEncodingType& acceptEncoding);
-    AcceptEncodingType& getAcceptEncoding();
-    const AcceptEncodingType& getAcceptEncoding() const;
+    void setAcceptEncoding(const std::string& acceptEncoding);
+    std::string& getAcceptEncoding();
+    const std::string& getAcceptEncoding() const;
 
-    void setAcceptLanguage(const AcceptLanguageType& acceptLanguage);
-    AcceptLanguageType& getAcceptLanguage();
-    const AcceptLanguageType& getAcceptLanguage() const;
+    void setAcceptLanguage(const std::string& acceptLanguage);
+    std::string& getAcceptLanguage();
+    const std::string& getAcceptLanguage() const;
 
-    void setAuthorization(const AuthorizationType& authorization);
-    AuthorizationType& getAuthorization();
-    const AuthorizationType& getAuthorization() const;
+    void setAuthorization(const std::string& authorization);
+    std::string& getAuthorization();
+    const std::string& getAuthorization() const;
 
-    void setExpect(const ExpectType& expect);
-    ExpectType& getExpect();
-    const ExpectType& getExpect() const;
+    void setExpect(const std::string& expect);
+    std::string& getExpect();
+    const std::string& getExpect() const;
 
-    void setFrom(const FromType& from);
-    FromType& getFrom();
-    const FromType& getFrom() const;
+    void setFrom(const std::string& from);
+    std::string& getFrom();
+    const std::string& getFrom() const;
 
-    void setHost(const HostType& host);
-    HostType& getHost();
-    const HostType& getHost() const;
+    void setHost(const std::string& host);
+    std::string& getHost();
+    const std::string& getHost() const;
 
-    void setIfMatch(const IfMatchType& ifMatch);
-    IfMatchType& getIfMatch();
-    const IfMatchType& getIfMatch() const;
+    void setIfMatch(const std::string& ifMatch);
+    std::string& getIfMatch();
+    const std::string& getIfMatch() const;
 
-    void setIfModifiedSince(const IfModifiedSinceType& ifModifiedSince);
-    IfModifiedSinceType& getIfModifiedSince();
-    const IfModifiedSinceType& getIfModifiedSince() const;
+    void setIfModifiedSince(const std::string& ifModifiedSince);
+    std::string& getIfModifiedSince();
+    const std::string& getIfModifiedSince() const;
 
-    void setIfNoneMatch(const IfNoneMatchType& ifNoneMatch);
-    IfNoneMatchType& getIfNoneMatch();
-    const IfNoneMatchType& getIfNoneMatch() const;
+    void setIfNoneMatch(const std::string& ifNoneMatch);
+    std::string& getIfNoneMatch();
+    const std::string& getIfNoneMatch() const;
 
-    void setIfRange(const IfRangeType& ifRange);
-    IfRangeType& getIfRange();
-    const IfRangeType& getIfRange() const;
+    void setIfRange(const std::string& ifRange);
+    std::string& getIfRange();
+    const std::string& getIfRange() const;
 
-    void setIfUnmodifiedSince(const IfUnmodifiedSinceType& ifUnmodifiedSince);
-    IfUnmodifiedSinceType& getIfUnmodifiedSince();
-    const IfUnmodifiedSinceType& getIfUnmodifiedSince() const;
+    void setIfUnmodifiedSince(const std::string& ifUnmodifiedSince);
+    std::string& getIfUnmodifiedSince();
+    const std::string& getIfUnmodifiedSince() const;
 
-    void setMaxForwards(const MaxForwardsType& maxForwards);
-    MaxForwardsType& getMaxForwards();
-    const MaxForwardsType& getMaxForwards() const;
+    void setMaxForwards(const std::string& maxForwards);
+    std::string& getMaxForwards();
+    const std::string& getMaxForwards() const;
 
-    void setProxyAuthorization(const ProxyAuthorizationType& proxyAuthorization);
-    ProxyAuthorizationType& getProxyAuthorization();
-    const ProxyAuthorizationType& getProxyAuthorization() const;
+    void setProxyAuthorization(const std::string& proxyAuthorization);
+    std::string& getProxyAuthorization();
+    const std::string& getProxyAuthorization() const;
 
-    void setRange(const RangeType& range);
-    RangeType& getRange();
-    const RangeType& getRange() const;
+    void setRange(const std::string& range);
+    std::string& getRange();
+    const std::string& getRange() const;
 
-    void setReferer(const RefererType& refer);
-    RefererType& getReferer();
-    const RefererType& getReferer() const;
+    void setReferer(const std::string& refer);
+    std::string& getReferer();
+    const std::string& getReferer() const;
 
-    void setTE(const TEType& TE);
-    TEType& getTE();
-    const TEType& getTE() const;
+    void setTE(const std::string& TE);
+    std::string& getTE();
+    const std::string& getTE() const;
 
-    void setUserAgent(const UserAgentType& userAgent);
-    UserAgentType& getUserAgent();
-    const UserAgentType& getUserAgent() const;
+    void setUserAgent(const std::string& userAgent);
+    std::string& getUserAgent();
+    const std::string& getUserAgent() const;
 
 private:
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<AcceptType> accept_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<AcceptCharsetType> acceptCharset_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<AcceptEncodingType> acceptEncoding_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<AcceptLanguageType> acceptLanguage_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<AuthorizationType> authorization_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ExpectType> expect_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<FromType> from_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<HostType> host_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<IfMatchType> ifMatch_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<IfModifiedSinceType> ifModifiedSince_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<IfNoneMatchType> ifNoneMatch_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<IfRangeType> ifRange_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<IfUnmodifiedSinceType> ifUnmodifiedSince_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<MaxForwardsType> maxForwards_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ProxyAuthorizationType> proxyAuthorization_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<RangeType> range_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<RefererType> referer_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<TEType> TE_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<UserAgentType> userAgent_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> accept_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> acceptCharset_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> acceptEncoding_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> acceptLanguage_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> authorization_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> expect_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> from_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> host_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> ifMatch_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> ifModifiedSince_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> ifNoneMatch_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> ifRange_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> ifUnmodifiedSince_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> maxForwards_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> proxyAuthorization_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> range_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> referer_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> TE_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> userAgent_;
 
     void deleteData_();
     void copyData_(const ParserAbstractParent& o);

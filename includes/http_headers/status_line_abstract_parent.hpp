@@ -24,14 +24,13 @@ protected:
 class StatusLineAbstractParent : public MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent{
 public:
     typedef StatusLineAbstractParentException               ExceptionType;
-    typedef MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_VERSION   HttpVersionType;
 
-    void setHttpVersion(HttpVersionType httpVersion);
-    HttpVersionType& getHttpVersion();
-    const HttpVersionType& getHttpVersion() const;
+    void setHttpVersion(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_VERSION httpVersion);
+    MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_VERSION& getHttpVersion();
+    const MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_VERSION& getHttpVersion() const;
 
 protected:
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<HttpVersionType> httpVersion_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_VERSION> httpVersion_;
 
     StatusLineAbstractParent();
     StatusLineAbstractParent(const StatusLineAbstractParent& other);

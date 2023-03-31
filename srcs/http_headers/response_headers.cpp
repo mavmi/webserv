@@ -39,129 +39,129 @@ HttpResponseHeaders& HttpResponseHeaders::operator=(const HttpResponseHeaders& o
     return *this;
 }
 
-void HttpResponseHeaders::setAcceptRanges(const AcceptRangesType& acceptRange){
+void HttpResponseHeaders::setAcceptRanges(const std::string& acceptRange){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
     acceptRange_.set(acceptRange);
 }
-HttpResponseHeaders::AcceptRangesType& HttpResponseHeaders::getAcceptRanges(){
+std::string& HttpResponseHeaders::getAcceptRanges(){
     HANDLE_EXC_BEGIN
         return acceptRange_.get();
     HANDLE_EXC_END
 }
-const HttpResponseHeaders::AcceptRangesType& HttpResponseHeaders::getAcceptRanges() const{
+const std::string& HttpResponseHeaders::getAcceptRanges() const{
     HANDLE_EXC_BEGIN
         return acceptRange_.get();
     HANDLE_EXC_END
 }
 
-void HttpResponseHeaders::setAge(const AgeType& age){
+void HttpResponseHeaders::setAge(const std::string& age){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
     age_.set(age);
 }
-HttpResponseHeaders::AgeType& HttpResponseHeaders::getAge(){
+std::string& HttpResponseHeaders::getAge(){
     HANDLE_EXC_BEGIN
         return age_.get();
     HANDLE_EXC_END
 }
-const HttpResponseHeaders::AgeType& HttpResponseHeaders::getAge() const{
+const std::string& HttpResponseHeaders::getAge() const{
     HANDLE_EXC_BEGIN
         return age_.get();
     HANDLE_EXC_END
 }
 
-void HttpResponseHeaders::setAllow(const AllowType& allow){
+void HttpResponseHeaders::setAllow(const std::string& allow){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
     allow_.set(allow);
 }
-HttpResponseHeaders::AllowType& HttpResponseHeaders::getAllow(){
+std::string& HttpResponseHeaders::getAllow(){
     HANDLE_EXC_BEGIN
         return allow_.get();
     HANDLE_EXC_END
 }
-const HttpResponseHeaders::AllowType& HttpResponseHeaders::getAllow() const{
+const std::string& HttpResponseHeaders::getAllow() const{
     HANDLE_EXC_BEGIN
         return allow_.get();
     HANDLE_EXC_END
 }
 
-void HttpResponseHeaders::setAlternates(const AlternatesType& alternates){
+void HttpResponseHeaders::setAlternates(const std::string& alternates){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
     alternates_.set(alternates);
 }
-HttpResponseHeaders::AlternatesType& HttpResponseHeaders::getAlternates(){
+std::string& HttpResponseHeaders::getAlternates(){
     HANDLE_EXC_BEGIN
         return alternates_.get();
     HANDLE_EXC_END
 }
-const HttpResponseHeaders::AlternatesType& HttpResponseHeaders::getAlternates() const{
+const std::string& HttpResponseHeaders::getAlternates() const{
     HANDLE_EXC_BEGIN
         return alternates_.get();
     HANDLE_EXC_END
 }
 
-void HttpResponseHeaders::setETag(const ETagType& etag){
+void HttpResponseHeaders::setETag(const std::string& etag){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
     etag_.set(etag);
 }
-HttpResponseHeaders::ETagType& HttpResponseHeaders::getETag(){
+std::string& HttpResponseHeaders::getETag(){
     HANDLE_EXC_BEGIN
         return etag_.get();
     HANDLE_EXC_END
 }
-const HttpResponseHeaders::ETagType& HttpResponseHeaders::getETag() const{
+const std::string& HttpResponseHeaders::getETag() const{
     HANDLE_EXC_BEGIN
         return etag_.get();
     HANDLE_EXC_END
 }
 
-void HttpResponseHeaders::setLocation(const LocationType& location){
+void HttpResponseHeaders::setLocation(const std::string& location){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
     location_.set(location);
 }
-HttpResponseHeaders::LocationType& HttpResponseHeaders::getLocation(){
+std::string& HttpResponseHeaders::getLocation(){
     HANDLE_EXC_BEGIN
         return location_.get();
     HANDLE_EXC_END
 }
-const HttpResponseHeaders::LocationType& HttpResponseHeaders::getLocation() const{
+const std::string& HttpResponseHeaders::getLocation() const{
     HANDLE_EXC_BEGIN
         return location_.get();
     HANDLE_EXC_END
 }
 
-void HttpResponseHeaders::setProxyAuthenticate(const ProxyAuthenticateType& proxyAuthenticate){
+void HttpResponseHeaders::setProxyAuthenticate(const std::string& proxyAuthenticate){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_AUTH);
     proxyAuthenticate_.set(proxyAuthenticate);
 }
-HttpResponseHeaders::ProxyAuthenticateType& HttpResponseHeaders::getProxyAuthenticate(){
+std::string& HttpResponseHeaders::getProxyAuthenticate(){
     HANDLE_EXC_BEGIN
         return proxyAuthenticate_.get();
     HANDLE_EXC_END
 }
-const HttpResponseHeaders::ProxyAuthenticateType& HttpResponseHeaders::getProxyAuthenticate() const{
+const std::string& HttpResponseHeaders::getProxyAuthenticate() const{
     HANDLE_EXC_BEGIN
         return proxyAuthenticate_.get();
     HANDLE_EXC_END
 }
 
-void HttpResponseHeaders::setPublic(const PublicType& Public){
+void HttpResponseHeaders::setPublic(const std::string& Public){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
     public_.set(Public);
 }
-HttpResponseHeaders::PublicType& HttpResponseHeaders::getPublic(){
+std::string& HttpResponseHeaders::getPublic(){
     HANDLE_EXC_BEGIN
         return public_.get();
     HANDLE_EXC_END
 }
-const HttpResponseHeaders::PublicType& HttpResponseHeaders::getPublic() const{
+const std::string& HttpResponseHeaders::getPublic() const{
     HANDLE_EXC_BEGIN
         return public_.get();
     HANDLE_EXC_END
@@ -177,17 +177,17 @@ void HttpResponseHeaders::setRetryAfter(){
     mktime(time);
     retryAfter_.set(generateDate_(time));
 }
-void HttpResponseHeaders::setRetryAfter(const RetryAfterType& retryAfter){
+void HttpResponseHeaders::setRetryAfter(const std::string& retryAfter){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
     retryAfter_.set(retryAfter);
 }
-HttpResponseHeaders::RetryAfterType& HttpResponseHeaders::getRetryAfter(){
+std::string& HttpResponseHeaders::getRetryAfter(){
     HANDLE_EXC_BEGIN
         return retryAfter_.get();
     HANDLE_EXC_END
 }
-const HttpResponseHeaders::RetryAfterType& HttpResponseHeaders::getRetryAfter() const{
+const std::string& HttpResponseHeaders::getRetryAfter() const{
     HANDLE_EXC_BEGIN
         return retryAfter_.get();
     HANDLE_EXC_END
@@ -198,67 +198,67 @@ void HttpResponseHeaders::setServer(){
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
     server_.set("wsrv by pmalena & msaryjo");
 }
-void HttpResponseHeaders::setServer(const ServerType& server){
+void HttpResponseHeaders::setServer(const std::string& server){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
     server_.set(server);
 }
-HttpResponseHeaders::ServerType& HttpResponseHeaders::getServer(){
+std::string& HttpResponseHeaders::getServer(){
     HANDLE_EXC_BEGIN
         return server_.get();
     HANDLE_EXC_END
 }
-const HttpResponseHeaders::ServerType& HttpResponseHeaders::getServer() const{
+const std::string& HttpResponseHeaders::getServer() const{
     HANDLE_EXC_BEGIN
         return server_.get();
     HANDLE_EXC_END
 }
 
-void HttpResponseHeaders::setVary(const VaryType& vary){
+void HttpResponseHeaders::setVary(const std::string& vary){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
     vary_.set(vary);
 }
-HttpResponseHeaders::VaryType& HttpResponseHeaders::getVary(){
+std::string& HttpResponseHeaders::getVary(){
     HANDLE_EXC_BEGIN
         return vary_.get();
     HANDLE_EXC_END
 }
-const HttpResponseHeaders::VaryType& HttpResponseHeaders::getVary() const{
+const std::string& HttpResponseHeaders::getVary() const{
     HANDLE_EXC_BEGIN
         return vary_.get();
     HANDLE_EXC_END
 }
 
-void HttpResponseHeaders::setWWWAuthenticate(const WWWAuthenticateType& wwwAuthenticate){
+void HttpResponseHeaders::setWWWAuthenticate(const std::string& wwwAuthenticate){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_AUTH);
     wwwAuthenticate_.set(wwwAuthenticate);
 }
-HttpResponseHeaders::WWWAuthenticateType& HttpResponseHeaders::getWWWAuthenticate(){
+std::string& HttpResponseHeaders::getWWWAuthenticate(){
     HANDLE_EXC_BEGIN
         return wwwAuthenticate_.get();
     HANDLE_EXC_END
 }
-const HttpResponseHeaders::WWWAuthenticateType& HttpResponseHeaders::getWWWAuthenticate() const{
+const std::string& HttpResponseHeaders::getWWWAuthenticate() const{
     HANDLE_EXC_BEGIN
         return wwwAuthenticate_.get();
     HANDLE_EXC_END
 }
 
 void HttpResponseHeaders::deleteData_(){
-    acceptRange_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<AcceptRangesType>();
-    age_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<AgeType>();
-    allow_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<AllowType>();
-    alternates_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<AlternatesType>();
-    etag_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ETagType>();
-    location_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<LocationType>();
-    proxyAuthenticate_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ProxyAuthenticateType>();
-    public_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PublicType>();
-    retryAfter_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<RetryAfterType>();
-    server_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ServerType>();
-    vary_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<VaryType>();
-    wwwAuthenticate_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<WWWAuthenticateType>();
+    acceptRange_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    age_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    allow_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    alternates_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    etag_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    location_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    proxyAuthenticate_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    public_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    retryAfter_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    server_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    vary_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    wwwAuthenticate_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
 }
 void HttpResponseHeaders::copyData_(const ParserAbstractParent& o){
     const HttpResponseHeaders& other = dynamic_cast<const HttpResponseHeaders&>(o);

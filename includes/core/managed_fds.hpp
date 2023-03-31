@@ -53,7 +53,7 @@ public:
 	typedef Sockets										sockets;
 	typedef sockets&									sockets_reference;
 	typedef sockets::sock_array_iter					sockets_iter;
-	typedef std::pair<sockets_reference, sockets_iter>	refer_iter_pair;
+	typedef std::pair<sockets, sockets_iter>			refer_iter_pair;
 
 	SocketReferencePair(sockets_reference sockets_array, sockets_iter socket_iter);
 	~SocketReferencePair(void);

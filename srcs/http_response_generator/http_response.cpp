@@ -271,10 +271,9 @@ void HttpResponse::setRetryAfter(){
     responseHeaders_.setRetryAfter();
 }
 void HttpResponse::setStatusLine(
-            MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::StatusLineAbstractParent::HttpVersionType httpVersion,
-            MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseStatusLine::StatusCodeType statusCode,
-            MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::
-            HttpResponseStatusLine::MessageType message
+            MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_VERSION httpVersion,
+            std::string statusCode,
+            std::string message
         ){
     responseStatusLine_.setHttpVersion(httpVersion);
     responseStatusLine_.setStatusCode(statusCode);
@@ -285,7 +284,7 @@ bool HttpResponse::setupFile(const std::string& filePath){
     std::fstream inputFile;
 
     // Get info about file
-    inputFile.open(filePath, std::ios::in | std::ios::binary);
+    inputFile.open(filePath.c_str(), std::ios::in | std::ios::binary);
     if (!inputFile.is_open() || stat(filePath.c_str(), &buf) != 0){
         inputFile.close();
         return setupFileOnError();
@@ -293,7 +292,11 @@ bool HttpResponse::setupFile(const std::string& filePath){
 
     try {
         // Last modified
+        #ifdef __APPLE__
         responseHeaders_.setLastModified(std::localtime(&buf.st_mtimespec.tv_sec));
+        #else
+        responseHeaders_.setLastModified(std::localtime(&buf.st_mtim.tv_sec));
+        #endif
         // Content length
         responseHeaders_.setContentLength(MAIN_NAMESPACE::UTILS_NAMESPACE::utilsNumToString(buf.st_size));
     } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::Exception&){

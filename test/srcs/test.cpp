@@ -113,10 +113,10 @@ void test::CONFIGURATION_HOST_TESTS(){
 void test::CONFIGURATION_FILES_TESTS(){
     ___HEADER___
 
-    typedef wsrv::Configuration::ServerType                                    Server;
-    typedef wsrv::Configuration::ServerType::RouteType                         Route;
-    typedef wsrv::Configuration::ServerType::ErrorPageType                     ErrorPage;
-    typedef wsrv::Configuration::ServerType::RouteType::MethodType             Method;
+    typedef wsrv::configuration::ServerConfiguration    Server;
+    typedef wsrv::configuration::RouteConfiguration     Route;
+    typedef std::string                                 ErrorPage;
+    typedef int                                         Method;
 
     // Valid files
     {

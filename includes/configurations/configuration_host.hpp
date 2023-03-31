@@ -26,11 +26,8 @@ protected:
 // Some of it's methods may throw ConfigurationHostException on error.
 class ConfigurationHost{
 public:
-    typedef uint8_t         ValueType;
-    typedef size_t          SizeType;
-
     ConfigurationHost();
-    ConfigurationHost(ValueType b1, ValueType b2, ValueType b3, ValueType b4);
+    ConfigurationHost(uint8_t b1, uint8_t b2, uint8_t b3, uint8_t b4);
     ConfigurationHost(const ConfigurationHost& other);
     ConfigurationHost(const std::string& hostStr);
     ~ConfigurationHost(){}
@@ -50,19 +47,19 @@ public:
     MAIN_NAMESPACE::UTILS_NAMESPACE::ArrayContainer toCharArray() const;
     // Get number from IP at specified position.
     // May throw an exception on if position is invalid.
-    ValueType at(SizeType position) const;
+    uint8_t at(size_t position) const;
 
     // Set IP number to specified position.
     // May throw an exception on if position is invalid.
-    void set(ValueType value, SizeType position);
+    void set(uint8_t value, size_t position);
 
 private:
-    const static SizeType maxSize_ = 4;
-    ValueType ip_[maxSize_];
+    const static size_t maxSize_ = 4;
+    uint8_t ip_[maxSize_];
 
     // Convert string number to VALUE_TYPE.
     // May throw exception.
-    ValueType stringToNumber_(const std::string& str) const;
+    uint8_t stringToNumber_(const std::string& str) const;
 
 };
 

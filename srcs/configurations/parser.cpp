@@ -36,12 +36,14 @@ Parser::~Parser(){}
 
 const Configuration& Parser::parseFile(const std::string& inputFile){
     typedef std::string::iterator Iterator;
+    typedef CONFIG_NAMESPACE::ServerConfiguration ServerType;
+    typedef CONFIG_NAMESPACE::RouteConfiguration RouteType;
 
     std::ifstream inputFileStream(inputFile.c_str(), std::ios::in);
     if (!inputFileStream.is_open()) throw ExceptionType("Unable to open input file: " + inputFile, EXC_ARGS);
 
     std::string line;
-    while(std::getline(inputFileStream, line)){     // it does not have whitespaces here anymore    
+    while(std::getline(inputFileStream, line)){     // it does not have whitespaces here anymore       
         if (isLineEmpty_(line)) continue;
 
         Iterator iter = line.begin();
@@ -83,9 +85,9 @@ const Configuration& Parser::parseFile(const std::string& inputFile){
                     ServerType& lastServer = getLastServer_();
                     if (lastServer.isDone()) throw MAIN_NAMESPACE::UTILS_NAMESPACE::Exception("Unable to start route: there are no unfinished servers to contain one", EXC_ARGS);
                     if (!getLastRoute_().isDone()) throw MAIN_NAMESPACE::UTILS_NAMESPACE::Exception("Unable to start route: there is unfinished one", EXC_ARGS);
-                    lastServer.addRoute(ServerType::RouteType());
+                    lastServer.addRoute(RouteType());
                 } catch (MAIN_NAMESPACE::CONFIG_NAMESPACE::ServerException&){
-                    getLastServer_().addRoute(ServerType::RouteType());
+                    getLastServer_().addRoute(RouteType());
                 } catch (ExceptionType&){
                     throw;
                 } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::Exception&){
@@ -131,7 +133,8 @@ const Configuration& Parser::parseFile(const std::string& inputFile){
 
                     while (true){
                         bool exit = false;
-                        Iterator iterBegin = std::next(substring.begin(), colonPosNum);
+                        // Iterator iterBegin = std::next(substring.begin(), colonPosNum);
+                        Iterator iterBegin = substring.begin() + colonPosNum;
                         Iterator iterEnd = iterBegin;
                         while (iterEnd != substring.end() && !isspace(*iterEnd)) iterEnd++;
                         if (iterEnd == substring.end()) break;
@@ -170,15 +173,15 @@ bool Parser::isLineEmpty_(const std::string& line) const{
     return true;
 }
 
-Parser::ServerType& Parser::getLastServer_(){
+CONFIG_NAMESPACE::ServerConfiguration& Parser::getLastServer_(){
     if (!configuration_.getServers().size()) throw ExceptionType("Servers are not defined", EXC_ARGS);
     return configuration_.getServers().back();
 }
-Parser::RouteType& Parser::getLastRoute_() {
+CONFIG_NAMESPACE::RouteConfiguration& Parser::getLastRoute_() {
     return getLastServer_().getRoutes().back();
 }
 
-Parser::MethodType Parser::stringToHttpMethod_(const std::string& str){
+MAIN_NAMESPACE::UTILS_NAMESPACE::METHOD Parser::stringToHttpMethod_(const std::string& str){
     if (str == "GET") return MAIN_NAMESPACE::UTILS_NAMESPACE::GET;
     else if (str == "POST") return MAIN_NAMESPACE::UTILS_NAMESPACE::POST;
     else if (str == "DELETE") return MAIN_NAMESPACE::UTILS_NAMESPACE::DELETE;
@@ -226,6 +229,8 @@ std::pair<std::string, std::string> Parser::split_(const std::string& str) const
     return std::make_pair(key, value);
 }
 void Parser::parseValueString_(const std::string& str){
+    typedef CONFIG_NAMESPACE::ServerConfiguration ServerType;
+
     const std::pair<std::string, std::string> key_value = split_(str);
     const std::string& key = key_value.first;
     const std::string& value = key_value.second;
@@ -235,7 +240,7 @@ void Parser::parseValueString_(const std::string& str){
     if (lastServer.isDone()) throw ExceptionType("Trying to update already finished server", EXC_ARGS);
     {
         if (key == "port"){
-            lastServer.setPort(stringToNumber_<MAIN_NAMESPACE::CONFIG_NAMESPACE::ConfigurationPort::NumericValueType>(value));
+            lastServer.setPort(stringToNumber_<uint16_t>(value));
             return;
         } else if (key == "host"){
             lastServer.setHost(value);
@@ -250,13 +255,13 @@ void Parser::parseValueString_(const std::string& str){
             }
             return;
         } else if (key == "body_size"){
-            lastServer.setBodySize(stringToNumber_<ServerType::BodySizeType>(value));
+            lastServer.setBodySize(stringToNumber_<size_t>(value));
             return;
         }
     }
     
     // Route configs parsing
-    ServerType::RouteType& lastRoute = getLastRoute_();
+    CONFIG_NAMESPACE::RouteConfiguration& lastRoute = getLastRoute_();
     if (lastRoute.isDone()) throw ExceptionType("Trying to update already finished route", EXC_ARGS);
     {
         if (key == "methods"){

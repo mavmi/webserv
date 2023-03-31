@@ -30,15 +30,8 @@ protected:
 // Method [done()] marks the server as finished. May throw an exception.
 class ServerConfiguration : public MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent{
 public:
-    typedef size_t                                                          SizeType;
-    typedef ConfigurationPort                                               PortType;
-    typedef ConfigurationHost                                               HostType;
-    typedef std::string                                                     ServerNameType;
-    typedef std::string                                                     ErrorPageType;
-    typedef MAIN_NAMESPACE::UTILS_NAMESPACE::Container<ErrorPageType>       ErrorPagesContainerType;
-    typedef SizeType                                                        BodySizeType;
-    typedef RouteConfiguration                                              RouteType;
-    typedef MAIN_NAMESPACE::UTILS_NAMESPACE::Container<RouteType>           RoutesContainerType;
+    typedef MAIN_NAMESPACE::UTILS_NAMESPACE::Container<std::string>         ErrorPagesContainerType;
+    typedef MAIN_NAMESPACE::UTILS_NAMESPACE::Container<RouteConfiguration>  RoutesContainerType;
     typedef ServerException                                                 ExceptionType;
 
     explicit ServerConfiguration();
@@ -47,45 +40,45 @@ public:
 
     ServerConfiguration& operator=(const ServerConfiguration& other);
 
-    void setPort(PortType port);
-    PortType& getPort();
-    const PortType& getPort() const;
+    void setPort(ConfigurationPort port);
+    ConfigurationPort& getPort();
+    const ConfigurationPort& getPort() const;
 
-    void setHost(const HostType& host);
-    HostType& getHost();
-    const HostType& getHost() const;
+    void setHost(const ConfigurationHost& host);
+    ConfigurationHost& getHost();
+    const ConfigurationHost& getHost() const;
 
-    void setServerName(const ServerNameType& serverName);
-    ServerNameType& getServerName();
-    const ServerNameType& getServerName() const;
+    void setServerName(const std::string& serverName);
+    std::string& getServerName();
+    const std::string& getServerName() const;
 
     void setErrorPages(const ErrorPagesContainerType& errorPages);
     ErrorPagesContainerType& getErrorPages();
     const ErrorPagesContainerType& getErrorPages() const;
-    void setErrorPage(const ErrorPageType& errorPage, SizeType position);
-    ErrorPageType& getErrorPage(SizeType position);
-    const ErrorPageType& getErrorPage(SizeType position) const;
-    void addErrorPage(const ErrorPageType& errorPage);
-    SizeType getErrorPagesCount() const;
+    void setErrorPage(const std::string& errorPage, size_t position);
+    std::string& getErrorPage(size_t position);
+    const std::string& getErrorPage(size_t position) const;
+    void addErrorPage(const std::string& errorPage);
+    size_t getErrorPagesCount() const;
 
-    void setBodySize(BodySizeType bodySize);
-    BodySizeType getBodySize() const;
+    void setBodySize(size_t bodySize);
+    size_t getBodySize() const;
 
     void setRoutes(const RoutesContainerType& routes);
     RoutesContainerType& getRoutes();
     const RoutesContainerType& getRoutes() const;
-    void setRoute(const RouteType& route, SizeType position);
-    RouteType& getRoute(SizeType position);
-    const RouteType& getRoute(SizeType position) const;
-    void addRoute(const RouteType& route);
-    SizeType getRoutesCount() const;
+    void setRoute(const RouteConfiguration& route, size_t position);
+    RouteConfiguration& getRoute(size_t position);
+    const RouteConfiguration& getRoute(size_t position) const;
+    void addRoute(const RouteConfiguration& route);
+    size_t getRoutesCount() const;
 
 private:
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PortType> port_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<HostType> host_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ServerNameType> serverName_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ConfigurationPort> port_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ConfigurationHost> host_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> serverName_;
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ErrorPagesContainerType> errorPages_;
-    BodySizeType bodySize_;
+    size_t bodySize_;
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<RoutesContainerType> routes_;
     
     void deleteData_();

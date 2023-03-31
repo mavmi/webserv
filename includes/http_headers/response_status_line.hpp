@@ -24,9 +24,7 @@ protected:
 
 class HttpResponseStatusLine : public StatusLineAbstractParent{
 public:
-    typedef HttpResponseStatusLineException                 ExceptionType;
-    typedef std::string                                     StatusCodeType;
-    typedef std::string                                     MessageType;
+    typedef HttpResponseStatusLineException ExceptionType;
 
     HttpResponseStatusLine();
     HttpResponseStatusLine(const HttpResponseStatusLine& other);
@@ -34,17 +32,17 @@ public:
 
     HttpResponseStatusLine& operator=(const HttpResponseStatusLine& other);
 
-    void setStatusCode(StatusCodeType statusCode);
-    StatusCodeType& getStatusCode();
-    const StatusCodeType& getStatusCode() const;
+    void setStatusCode(std::string statusCode);
+    std::string& getStatusCode();
+    const std::string& getStatusCode() const;
 
-    void setMessage(MessageType message);
-    MessageType& getMessage();
-    const MessageType& getMessage() const;
+    void setMessage(std::string message);
+    std::string& getMessage();
+    const std::string& getMessage() const;
 
 private:
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<StatusCodeType> statusCode_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<MessageType> message_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> statusCode_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> message_;
 
     void deleteData_();
     void copyData_(const MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent& o);

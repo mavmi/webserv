@@ -55,9 +55,9 @@ public:
     void setDate();
     void setRetryAfter();
     void setStatusLine(
-                MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::StatusLineAbstractParent::HttpVersionType httpVersion,
-                MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseStatusLine::StatusCodeType statusCode,
-                MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseStatusLine::MessageType message
+                MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_VERSION httpVersion,
+                std::string statusCode,
+                std::string message
             );
     bool setupFile(const std::string& filePath);
 

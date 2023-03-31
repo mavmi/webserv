@@ -29,7 +29,7 @@ public:
     typedef MAIN_NAMESPACE::CONFIG_NAMESPACE::ServerConfiguration                               ServerType;
     typedef MAIN_NAMESPACE::UTILS_NAMESPACE::Container<ServerType>                              ServersContainerType;
     typedef ConfigurationException                                                              ExceptionType;
-    typedef std::pair<ServerType::HostType, ServerType::PortType>                               HostPortPairType;
+    typedef std::pair<CONFIG_NAMESPACE::ConfigurationHost, CONFIG_NAMESPACE::ConfigurationPort> HostPortPairType;
     typedef std::set<HostPortPairType>                                                          HostPortPairsContainerType;
     typedef MAIN_NAMESPACE::UTILS_NAMESPACE::METHOD                                             MethodType;
 
@@ -47,9 +47,9 @@ public:
     HostPortPairsContainerType& getHostPortPairs();
     const HostPortPairsContainerType& getHostPortPairs() const;
     
-    const ServerType& getServer(ServerType::PortType port) const;
-    const ServerType& getServer(const ServerType::HostType& host) const;
-    const ServerType& getServer(ServerType::PortType port, const ServerType::HostType& host) const;
+    const ServerType& getServer(CONFIG_NAMESPACE::ConfigurationPort port) const;
+    const ServerType& getServer(const CONFIG_NAMESPACE::ConfigurationHost& host) const;
+    const ServerType& getServer(CONFIG_NAMESPACE::ConfigurationPort port, const CONFIG_NAMESPACE::ConfigurationHost& host) const;
 
 private:
     ServersContainerType servers_;

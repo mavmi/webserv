@@ -38,31 +38,31 @@ HttpRequestStatusLine& HttpRequestStatusLine::operator=(const HttpRequestStatusL
     return *this;    
 }
 
-void HttpRequestStatusLine::setMethod(MethodType method){
+void HttpRequestStatusLine::setMethod(MAIN_NAMESPACE::UTILS_NAMESPACE::METHOD method){
     throwOnDone_();
     method_.set(method);
 }
-HttpRequestStatusLine::MethodType& HttpRequestStatusLine::getMethod(){
+MAIN_NAMESPACE::UTILS_NAMESPACE::METHOD& HttpRequestStatusLine::getMethod(){
     HANDLE_EXC_BEGIN
         return method_.get();
     HANDLE_EXC_END
 }
-const HttpRequestStatusLine::MethodType& HttpRequestStatusLine::getMethod() const{
+const MAIN_NAMESPACE::UTILS_NAMESPACE::METHOD& HttpRequestStatusLine::getMethod() const{
     HANDLE_EXC_BEGIN
         return method_.get();
     HANDLE_EXC_END
 }
 
-void HttpRequestStatusLine::setUrl(const UrlType& url){
+void HttpRequestStatusLine::setUrl(const std::string& url){
     throwOnDone_();
     url_.set(url);
 }
-HttpRequestStatusLine::UrlType& HttpRequestStatusLine::getUrl(){
+std::string& HttpRequestStatusLine::getUrl(){
     HANDLE_EXC_BEGIN
         return url_.get();
     HANDLE_EXC_END
 }
-const HttpRequestStatusLine::UrlType& HttpRequestStatusLine::getUrl() const{
+const std::string& HttpRequestStatusLine::getUrl() const{
     HANDLE_EXC_BEGIN
         return url_.get();
     HANDLE_EXC_END
@@ -70,9 +70,9 @@ const HttpRequestStatusLine::UrlType& HttpRequestStatusLine::getUrl() const{
 
 void HttpRequestStatusLine::deleteData_(){
     isDone_ = false;
-    method_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<MethodType>();
-    url_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<UrlType>();
-    httpVersion_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<HttpVersionType>();
+    method_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<MAIN_NAMESPACE::UTILS_NAMESPACE::METHOD>();
+    url_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    httpVersion_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_VERSION>();
 }
 void HttpRequestStatusLine::copyData_(const MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent& o){
     const HttpRequestStatusLine& other = dynamic_cast<const HttpRequestStatusLine&>(o);
