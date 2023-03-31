@@ -17,6 +17,8 @@
 #include "../server.hpp"
 #include "../managed_fds.hpp"
 #include "../../utils/utils.hpp"
+#include "../../http_request_parser/http_request.hpp"
+#include "../../http_response_generator/http_response.hpp"
 
 
 namespace CORE {
@@ -37,4 +39,10 @@ void create_sockets(const wsrv::Configuration& servers, Sockets& sockets_array);
  * Generate the response for current fd
  */
 void response_generator(wsrv::FdReferencePair& current_fd_pair);
+
+/*
+ * Throw exceptions if there is some problem in Server::RecvRequest_()
+ */
+void recv_throw(int is_fd_in_set);
+
 }

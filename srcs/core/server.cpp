@@ -21,9 +21,10 @@ namespace CORE{
 // FDS_OPENER IMPLEMENTATION
 
 
-int Server::OpenFd_(Server::sockets_iter it_socket, Server::managed_fds_reference masterread,
-					int highest_fd){
-	fds_iter it_fd = CreateFd_(it_socket);
+int Server::OpenFd_(Server::sockets_iter it_socket,
+				Server::managed_fds_reference masterread,
+				int highest_fd){
+	fd_iter it_fd = CreateFd_(it_socket);
 
 	masterread.AddFd(
 		(*it_fd).GetFd(),
@@ -36,7 +37,7 @@ int Server::OpenFd_(Server::sockets_iter it_socket, Server::managed_fds_referenc
 	return (highest_fd);
 }
 
-Server::fds_iter Server::CreateFd_(Server::sockets_iter it_socket) {
+Server::fd_iter Server::CreateFd_(Server::sockets_iter it_socket) {
 	fd_obj tmp_fd;
 
 	tmp_fd.SetFd(
@@ -53,48 +54,52 @@ Server::fds_iter Server::CreateFd_(Server::sockets_iter it_socket) {
 	return ((*it_socket).AddRelatedFd(tmp_fd));
 }
 
-int Server::RecvReceving_(Server::managed_fd_pair_class_reference fd_pair){
-	int push_result;
-
-	push_result = fd_pair.GetRequestMessageReference().pushBack(buf, readed_nbytes);
-	if (push_result == 0){
-		response_generator(fd_pair)
-	}
-	return push_result;
-}
-
 void Server::RecvRequest_(Server::managed_fds_reference masterread,
 						Server::managed_fds_reference masterwrite,
 						int current_fd){
-	int readed_nbytes;
+	int nbytes;
+	bool is_fd_in_set;
 	char buf[wsrv::utils::BUFFER_SIZE];
-	fds_set_iter it_current_fd;
+	fds_set_iter it_set_curretn_fd;
+	managed_fd_pair_class_reference fd_pair;
 
-	it_current_fd = masterread.FindFdInArray(current_fd);
+	it_set_curretn_fd = masterread.FindFdInArray(current_fd);
+	fd_pair = (*it_set_curretn_fd).second;
+	is_fd_in_set = fd_pair.GetFdIter() != fd_pair.FdPairReference().first.End();
+
 	// if fd in opended fds for clients-connection
-	if ((*it_current_fd).second.GetFdIter() != (*it_current_fd).second.FdPairReference().first.End()){
-		readed_nbytes = recv(current_fd, buf, sizeof(buf), 0);
-		if (readed_nbytes > 0) {
-			(*it_current_fd).second.GetRequestMessageReference().pushBack(buf, readed_nbytes);
-		} else {
-			if (readed_nbytes == 0){
-				masterwrite.AddFd((*it_current_fd));
-				for (std::vector<std::string>::const_iterator ti = (*it_current_fd).second.GetRequestMessageReference().getLines().begin();
-					ti != (*it_current_fd).second.GetRequestMessageReference().getLines().end();
-					++ti){
-					std::cout << (*ti) << std::endl;
-				}
-			} else {
-				(*it_current_fd).second.DeleteFd();
+	if (is_fd_in_set){
+		nbytes = recv(current_fd, buf, sizeof(buf), 0);
+		// if recv worked correct
+		if (nbytes >= 0) {
+			nbytes = MessageFormationToReceiveSend_(fd_pair.GetFdIter(), buf, nbytes);
+			if (!nbytes) {
+				masterwrite.AddFd((*it_set_curretn_fd));
+				masterread.DeleteFd(current_fd);
 			}
-			masterread.DeleteFd(current_fd);
+			return ;
 		}
-	} else {
+	}
+	if (!is_fd_in_set || nbytes < 0) {
 		masterread.DeleteFd(current_fd);
-		(*it_current_fd).second.DeleteFd();
-		throw except("RECV_FAILD: current_fd not in array fds of client-connection", EXC_ARGS);
+		fd_pair.DeleteFd();
+		recv_throw();
 	}
 }
+
+int Server::MessageFormationToReceiveSend_(Server::fd_iter it_current_fd,
+										char* buf, int nbytes){
+	int is_req_end;
+	fd_bytes_container_reference request_container;
+
+	request_container = (*it_current_fd).GetRequestMessageReference();
+	is_req_end = request_container.pushBack(buf, nbytes);
+	if (!is_req_end){
+		response_generator();
+	}
+	return is_req_end;
+}
+
 
 
 // SERVER IMPLEMENTATION

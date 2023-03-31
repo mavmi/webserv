@@ -45,7 +45,7 @@ SocketReferencePair::OBJECT_TYPE SocketReferencePair::ObjectType(void) {
 // FD_REFERENCE_PAIR IMPLEMENTATION
 
 FdReferencePair::FdReferencePair(FdReferencePair::fds_reference fds_array,
-							FdReferencePair::fds_iter fd_iter)
+							FdReferencePair::fd_iter fd_iter)
 							: fd_pair(fds_array, fd_iter),
 							type(FD) { }
 
@@ -57,7 +57,7 @@ FdReferencePair::fd_bytes_container_reference FdReferencePair::GetRequestMessage
 
 void FdReferencePair::DeleteFd(void) {
 	fds_reference	array_reference = fd_pair.first;
-	fds_iter		fd_it = fd_pair.second;
+	fd_iter		fd_it = fd_pair.second;
 
 	if (fd_it != array_reference.End()){
 		array_reference.DeleteFd(fd_it);
@@ -70,7 +70,7 @@ FdReferencePair::pair_reference FdReferencePair::FdPairReference(void){
 }
 
 
-FdReferencePair::fds_iter FdReferencePair::GetFdIter(void){
+FdReferencePair::fd_iter FdReferencePair::GetFdIter(void){
 	return (fd_pair.second);
 }
 
@@ -175,7 +175,7 @@ void ManagedFds::AddElemToArray_(int fd, ManagedFds::sockets_reference array_ref
 }
 
 void ManagedFds::AddElemToArray_(int fd, ManagedFds::fds_reference array_ref,
-							ManagedFds::fds_iter obj_it) {
+							ManagedFds::fd_iter obj_it) {
 	fd_pair	elem_pair(fd, fd_pair_class(array_ref, obj_it));
 
 	managed_fds_array.push_back(elem_pair);

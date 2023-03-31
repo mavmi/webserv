@@ -74,16 +74,16 @@ public:
 	typedef fd_obj::bytes_container_reference	fd_bytes_container_reference;
 	typedef Fds									fds;
 	typedef fds&								fds_reference;
-	typedef fds::fd_array_iter					fds_iter;
-	typedef std::pair<fds_reference, fds_iter>	refer_iter_pair;
+	typedef fds::fd_array_iter					fd_iter;
+	typedef std::pair<fds_reference, fd_iter>	refer_iter_pair;
 	typedef refer_iter_pair&					pair_reference;
 
-	FdReferencePair(fds_reference fds_array, fds_iter fd_iter);
+	FdReferencePair(fds_reference fds_array, fd_iter fd_iter);
 	~FdReferencePair(void);
 
 	fd_bytes_container_reference GetRequestMessageReference(void);
 
-	fds_iter GetFdIter(void);
+	fd_iter GetFdIter(void);
 
 	// After deleting fd_pair.second keeps iterator to the end() or fds_array
 	void DeleteFd(void);
@@ -107,7 +107,7 @@ public:
 	typedef socket_pair_class::sockets_reference	sockets_reference;
 	typedef fd_pair_class::fds_reference			fds_reference;
 	typedef socket_pair_class::sockets_iter			sockets_iter;
-	typedef fd_pair_class::fds_iter					fds_iter;
+	typedef fd_pair_class::fd_iter					fd_iter;
 	typedef std::pair<int, socket_pair_class>		socket_pair;
 	typedef std::pair<int, fd_pair_class>			fd_pair;
 	typedef std::vector<socket_pair>				sockets_set;
@@ -193,7 +193,7 @@ protected:
 					sockets_iter obj_it);
 
 	// Creates and adds elem to fds array
-	void AddElemToArray_(int fd, fds_reference array_ref, fds_iter obj_it);
+	void AddElemToArray_(int fd, fds_reference array_ref, fd_iter obj_it);
 
 	/*
 	 * Deletes fd from fd_array

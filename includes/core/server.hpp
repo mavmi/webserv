@@ -27,17 +27,18 @@ namespace CORE{
 
 class Server {
 public:
-	typedef Sockets						sockets;
-	typedef sockets&					sockets_refernce;
-	typedef Sockets::sock_array_iter	sockets_iter;
-	typedef struct sockaddr*			sockaddr_pointer;
-	typedef FdObj						fd_obj;
-	typedef Fds::fd_array_iter			fds_iter;
-	typedef ManagedFds					managed_fds;
-	typedef ManagedFds&					managed_fds_reference;
-	typedef managed_fds::fd_pair_class&	managed_fd_pair_class_reference;
-	typedef managed_fds::fds_set_iter	fds_set_iter;
-	typedef CoreException				except;
+	typedef Sockets								sockets;
+	typedef sockets&							sockets_refernce;
+	typedef Sockets::sock_array_iter			sockets_iter;
+	typedef struct sockaddr*					sockaddr_pointer;
+	typedef FdObj								fd_obj;
+	typedef fd_obj::bytes_container_reference	fd_bytes_container_reference;
+	typedef Fds::fd_array_iter					fd_iter;
+	typedef ManagedFds							managed_fds;
+	typedef ManagedFds&							managed_fds_reference;
+	typedef managed_fds::fd_pair_class&			managed_fd_pair_class_reference;
+	typedef managed_fds::fds_set_iter			fds_set_iter;
+	typedef CoreException						except;
 
 	/*
 	* Realization of server which works using 'select'.
@@ -47,8 +48,6 @@ public:
 	*/
 	void FtServer(sockets_refernce sockets);
 private:
-	//AnswersSender	sender;
-
 	/*
 	* Opens fd for clients request
 	*
@@ -62,13 +61,14 @@ private:
 	 * Returns:		iterator to created fd
 	 * Exception:	throws custom exception if 'accept' function retuns error
 	 */
-	fds_iter CreateFd_(sockets_iter it_socket);
+	fd_iter CreateFd_(sockets_iter it_socket);
 
 	void RecvRequest_(managed_fds_reference masterread,
 							managed_fds_reference masterwrite,
 							int current_fd);
 
-	int RecvReceving_(managed_fd_pair_class_reference it_current_fd);
+	int MessageFormationToReceiveSend_(fd_iter it_current_fd, char* buf,
+									int readed_nbytes);
 } ;
 
 

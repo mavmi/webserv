@@ -54,11 +54,22 @@ void create_sockets(const wsrv::Configuration& servers, Sockets& sockets_array) 
 }
 
 void response_generator(FdReferencePair& current_fd_pair){
-	http_request::HttpRequest request(current_fd_pair.GetRequestMessageReference());
+	http_request::HttpRequest request(
+			current_fd_pair.GetRequestMessageReference()
+		);
 	http_responce::HttpResponse	response;
 
 	response.setData();
+	response.setRetryAfter();
 	//difference implementation because of GET/POST/DELETE
+}
+
+void recv_throw(int is_fd_in_set){
+	if (!is_fd_in_set) {
+		throw except("RECV_FAILD: current_fd not in array fds of client-connection", EXC_ARGS);
+	} else {
+		throw except("RECV_FAILD: wrong answer from recv()", EXC_ARGS);
+	}
 }
 
 }
