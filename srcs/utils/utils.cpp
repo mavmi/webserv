@@ -195,6 +195,16 @@ int BytesContainer::pushBack(char* buffer, int bufferSize){
     return (content_) ? continue_ : end_;
 }
 
+size_t BytesContainer::charsCount() const{
+    size_t size = 0;
+
+    for (size_t i = 0; i < bytesContainer_.size(); i++){
+        size += bytesContainer_[i].size();
+    }
+
+    return size;
+}
+
 const std::vector<std::string>& BytesContainer::getLines() const{
     return bytesContainer_;
 }

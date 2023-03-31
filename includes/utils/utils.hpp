@@ -121,6 +121,8 @@ public:
     void pushBack(const std::string& line);
     int pushBack(char* buffer, int bufferSize);
 
+    size_t charsCount() const;
+
     const std::vector<std::string>& getLines() const;
     char* toBytes() const;
 
