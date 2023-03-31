@@ -83,6 +83,8 @@ public:
 
 	fd_bytes_container_reference GetRequestMessageReference(void);
 
+	fd_bytes_container_reference GetResponseMessageReference(void);
+
 	fd_iter GetFdIter(void);
 
 	// After deleting fd_pair.second keeps iterator to the end() or fds_array

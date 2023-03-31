@@ -59,6 +59,9 @@ FdObj::bytes_container_reference FdObj::GetRequestMessageReference(void) {
 	return (request_message);
 }
 
+FdObj::bytes_container_reference FdObj::GetResponseMessageReference(void){
+	return (response_message);
+}
 
 //FDS IMPLEMENTATION
 

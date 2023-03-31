@@ -83,8 +83,48 @@ void Server::RecvRequest_(Server::managed_fds_reference masterread,
 	if (!is_fd_in_set || nbytes < 0) {
 		masterread.DeleteFd(current_fd);
 		fd_pair.DeleteFd();
-		recv_throw();
+		recv_throw("RECV_FAILD: current_fd not in array fds of client-connection",
+			"RECV_FAILD: wrong answer from recv()");
 	}
+}
+
+void Server::SendResponse_(Server::managed_fds_reference masterwrite,
+						int current_fd) {
+	int send_nbytes;
+	bool is_fd_in_set;
+	char* response_bytes_container; //Maybe it's wrone
+	fds_set_iter it_set_curretn_fd;
+	managed_fd_pair_class_reference fd_pair;
+
+	it_set_curretn_fd = masterwrite.FindFdInArray(current_fd);
+	fd_pair = (*it_set_curretn_fd).second;
+	response_bytes_container = fd_pair.GetResponseMessageReference().toBytes();
+	is_fd_in_set = fd_pair.GetFdIter() != fd_pair.FdPairReference().first.End();
+
+	// if fd in opended fds for clients-connection
+	if (is_fd_in_set){
+		send_nbytes = send(
+				current_fd,
+				response_bytes_container,
+				sizeof(response_bytes_container),
+				0
+			);
+		if (send_nbytes == fd_pair.GetResponseMessageReference().charsCount()) {
+			masterwrite.DeleteFd(current_fd);
+			fd_pair.DeleteFd();
+			return ;
+		} else if (!send_nbytes || send_nbytes > 0) {
+			// What will we do
+			return ;
+		}
+	}
+	if (!is_fd_in_set || send_nbytes < 0) {
+		masterwrite.DeleteFd(current_fd);
+		fd_pair.DeleteFd();
+		recv_throw("SEND_FAILD: current_fd not in array fds of client-connection",
+			"SEND_FAILD: wrong answer from send()");
+	}
+
 }
 
 int Server::MessageFormationToReceiveSend_(Server::fd_iter it_current_fd,
@@ -95,7 +135,7 @@ int Server::MessageFormationToReceiveSend_(Server::fd_iter it_current_fd,
 	request_container = (*it_current_fd).GetRequestMessageReference();
 	is_req_end = request_container.pushBack(buf, nbytes);
 	if (!is_req_end){
-		response_generator();
+		response_generator(it_current_fd);
 	}
 	return is_req_end;
 }
@@ -137,7 +177,11 @@ void Server::FtServer(Server::sockets_refernce sockets) {
 					}
 				}
 			} else if (fdwrite.IsFdInSet(i)) {
-
+				try {
+					SendResponse_(masterwrite, i);
+				} catch(except& e) {
+					continue;
+				}
 			}
 		}
 	}

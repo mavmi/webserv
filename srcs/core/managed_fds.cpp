@@ -55,6 +55,10 @@ FdReferencePair::fd_bytes_container_reference FdReferencePair::GetRequestMessage
 	return ((*(fd_pair.second)).GetRequestMessageReference());
 }
 
+FdReferencePair::fd_bytes_container_reference FdReferencePair::GetResponseMessageReference(void) {
+	return((*(fd_pair.second)).GetResponseMessageReference());
+}
+
 void FdReferencePair::DeleteFd(void) {
 	fds_reference	array_reference = fd_pair.first;
 	fd_iter		fd_it = fd_pair.second;

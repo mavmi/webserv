@@ -67,6 +67,8 @@ private:
 							managed_fds_reference masterwrite,
 							int current_fd);
 
+	void SendResponse_(managed_fds_reference masterwrite, int current_fd);
+
 	int MessageFormationToReceiveSend_(fd_iter it_current_fd, char* buf,
 									int readed_nbytes);
 } ;

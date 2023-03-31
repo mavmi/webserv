@@ -38,11 +38,12 @@ void create_sockets(const wsrv::Configuration& servers, Sockets& sockets_array);
 /*
  * Generate the response for current fd
  */
-void response_generator(wsrv::FdReferencePair& current_fd_pair);
+void response_generator(wsrv::Fds::fd_array_iter current_fd_pair);
 
 /*
- * Throw exceptions if there is some problem in Server::RecvRequest_()
+ * Throw exceptions if there is some problem in Server
  */
-void recv_throw(int is_fd_in_set);
+void server_throws(int is_fd_in_set, std::string invalid_fd_msg,
+				std::string invalid_fnc_msg);
 
 }

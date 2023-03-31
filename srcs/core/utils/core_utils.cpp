@@ -53,9 +53,9 @@ void create_sockets(const wsrv::Configuration& servers, Sockets& sockets_array) 
 	}
 }
 
-void response_generator(FdReferencePair& current_fd_pair){
+void response_generator(wsrv::Fds::fd_array_iter it_current_fd){
 	http_request::HttpRequest request(
-			current_fd_pair.GetRequestMessageReference()
+			(*it_current_fd).GetRequestMessageReference()
 		);
 	http_responce::HttpResponse	response;
 
@@ -64,11 +64,12 @@ void response_generator(FdReferencePair& current_fd_pair){
 	//difference implementation because of GET/POST/DELETE
 }
 
-void recv_throw(int is_fd_in_set){
+void server_throws(int is_fd_in_set, std::string invalid_fd_msg,
+				std::string invalid_fnc_msg){
 	if (!is_fd_in_set) {
-		throw except("RECV_FAILD: current_fd not in array fds of client-connection", EXC_ARGS);
+		throw except(invalid_fd_msg, EXC_ARGS);
 	} else {
-		throw except("RECV_FAILD: wrong answer from recv()", EXC_ARGS);
+		throw except(invalid_fnc_msg, EXC_ARGS);
 	}
 }
 

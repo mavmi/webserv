@@ -68,12 +68,17 @@ public:
 	// Return:	pointer to socklen_t variable with sizeof(client_information)
 	clientaddr_struct_len_pointer ClientInformStructLen(void);
 
+	// Return:	reference to the Request BytesContainer class
 	bytes_container_reference GetRequestMessageReference(void);
+
+	// Return:	reference to the Response BytesContainer class
+	bytes_container_reference GetResponseMessageReference(void);
 private:
 	int						fd;
 	clientaddr_inform		client_information;
 	clientaddr_struct_len	client_inform_len;
 	bytes_container			request_message;
+	bytes_container			response_message;
 	// HTTP send
 };
 
