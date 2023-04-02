@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:22:02 by msalena           #+#    #+#             */
-/*   Updated: 2023/02/26 16:48:22 by msalena          ###   ########.fr       */
+/*   Updated: 2023/04/02 21:14:18 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int Server::OpenFd_(Server::sockets_iter it_socket,
 }
 
 Server::fd_iter Server::CreateFd_(Server::sockets_iter it_socket) {
-	fd_obj tmp_fd;
+	fd_obj tmp_fd(&(*it_socket));
 
 	tmp_fd.SetFd(
 		accept(
@@ -60,11 +60,9 @@ void Server::RecvRequest_(Server::managed_fds_reference masterread,
 	int nbytes;
 	bool is_fd_in_set;
 	char buf[wsrv::utils::BUFFER_SIZE];
-	fds_set_iter it_set_curretn_fd;
-	managed_fd_pair_class_reference fd_pair;
+	fds_set_iter it_set_curretn_fd = masterread.FindFdInArray(current_fd);
+	managed_fd_pair_class_reference fd_pair = (*it_set_curretn_fd).second;
 
-	it_set_curretn_fd = masterread.FindFdInArray(current_fd);
-	fd_pair = (*it_set_curretn_fd).second;
 	is_fd_in_set = fd_pair.GetFdIter() != fd_pair.FdPairReference().first.End();
 
 	// if fd in opended fds for clients-connection
@@ -83,21 +81,20 @@ void Server::RecvRequest_(Server::managed_fds_reference masterread,
 	if (!is_fd_in_set || nbytes < 0) {
 		masterread.DeleteFd(current_fd);
 		fd_pair.DeleteFd();
-		recv_throw("RECV_FAILD: current_fd not in array fds of client-connection",
+		server_throws(is_fd_in_set,
+			"RECV_FAILD: current_fd not in array fds of client-connection",
 			"RECV_FAILD: wrong answer from recv()");
 	}
 }
 
 void Server::SendResponse_(Server::managed_fds_reference masterwrite,
 						int current_fd) {
-	int send_nbytes;
+	size_t send_nbytes;
 	bool is_fd_in_set;
-	char* response_bytes_container; //Maybe it's wrone
-	fds_set_iter it_set_curretn_fd;
-	managed_fd_pair_class_reference fd_pair;
+	char* response_bytes_container; //NEED BE FREED;
+	fds_set_iter it_set_curretn_fd = masterwrite.FindFdInArray(current_fd);
+	managed_fd_pair_class_reference fd_pair = (*it_set_curretn_fd).second;
 
-	it_set_curretn_fd = masterwrite.FindFdInArray(current_fd);
-	fd_pair = (*it_set_curretn_fd).second;
 	response_bytes_container = fd_pair.GetResponseMessageReference().toBytes();
 	is_fd_in_set = fd_pair.GetFdIter() != fd_pair.FdPairReference().first.End();
 
@@ -121,8 +118,11 @@ void Server::SendResponse_(Server::managed_fds_reference masterwrite,
 	if (!is_fd_in_set || send_nbytes < 0) {
 		masterwrite.DeleteFd(current_fd);
 		fd_pair.DeleteFd();
-		recv_throw("SEND_FAILD: current_fd not in array fds of client-connection",
-			"SEND_FAILD: wrong answer from send()");
+		server_throws(
+			is_fd_in_set,
+			"SEND_FAILD: current_fd not in array fds of client-connection",
+			"SEND_FAILD: wrong answer from send()"
+		);
 	}
 
 }
@@ -130,9 +130,8 @@ void Server::SendResponse_(Server::managed_fds_reference masterwrite,
 int Server::MessageFormationToReceiveSend_(Server::fd_iter it_current_fd,
 										char* buf, int nbytes){
 	int is_req_end;
-	fd_bytes_container_reference request_container;
-
-	request_container = (*it_current_fd).GetRequestMessageReference();
+	bytes_container_reference request_container = (*it_current_fd).GetRequestMessageReference();
+	
 	is_req_end = request_container.pushBack(buf, nbytes);
 	if (!is_req_end){
 		response_generator(it_current_fd);

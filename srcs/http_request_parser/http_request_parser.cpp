@@ -39,25 +39,30 @@ HttpRequestParser& HttpRequestParser::operator=(const HttpRequestParser& other){
 }
 
 const HttpRequest& HttpRequestParser::parseHttpRequest(const MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer& buffer){
-    // std::vector<std::string> content = parseBuffer_(buffer);
-    const std::vector<std::string>& content = buffer.getLines();
-    if (content.size() < 2) throw ExceptionType("HTTP request doesn't contain headers");
+    std::string versionKostyl = "";
+    
+    try {
+        const std::vector<std::string>& content = buffer.getLines();
+        if (content.size() < 1) throw ExceptionType("HTTP request doesn't contain headers");
+        parseStatusLine_(content.at(0));
+        versionKostyl = UTILS_NAMESPACE::httpVersionToString(httpRequest_.getStatusLine().getHttpVersion());
 
-    parseStatusLine_(content.at(0));
+        size_t i = 1;
+        while (i < content.size() && !isLineEmpty_(content[i])){
+            parseHeader_(content[i++]);
+        }
+        httpRequest_.getGeneralHeaders().done();
+        httpRequest_.getRequestHeaders().done();
 
-    size_t i = 1;
-    while (i < content.size() && !isLineEmpty_(content[i])){
-        parseHeader_(content[i++]);
+        i++;
+        while (i < content.size()){
+            httpRequest_.getRequestContent().push_back(content[i++]);
+        }
+
+        return httpRequest_;
+    } catch (UTILS_NAMESPACE::Exception& e){
+        throw UTILS_NAMESPACE::Exception(e.what() + ":" + versionKostyl);
     }
-    httpRequest_.getGeneralHeaders().done();
-    httpRequest_.getRequestHeaders().done();
-
-    i++;
-    while (i < content.size()){
-        httpRequest_.getRequestContent().push_back(content[i++]);
-    }
-
-    return httpRequest_;
 }
 const HttpRequest& HttpRequestParser::getHttpRequest() const{
     return httpRequest_;
@@ -89,48 +94,6 @@ bool HttpRequestParser::isLineEmpty_(const std::string& line){
     return true;
 }
 
-/*std::vector<std::string> HttpRequestParser::parseBuffer_(const MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer& buffer){
-    int startPoint;
-    bool isLastFinished = true;
-    const char newLine = '\n';
-    std::vector<std::string> result;
-
-    for (size_t i = 0; i < buffer.bytesContainer.size(); i++){
-        startPoint = 0;
-        while (true){
-            int newLinePos = find_(
-                buffer.bytesContainer[i],
-                startPoint,
-                i + 1 == buffer.bytesContainer.size() ? buffer.lastSize : buffer.bufferSize,
-                newLine
-            );
-            
-            int endPoint = newLinePos == -1 ? (i + 1 == buffer.bytesContainer.size() ? buffer.lastSize : buffer.bufferSize) : newLinePos;
-            std::string substr(
-                buffer.bytesContainer[i] + startPoint,
-                endPoint - startPoint
-            );
-
-            if (isLastFinished) result.push_back(substr);
-            else result.back().append(substr);
-
-            if (newLinePos == -1) {
-                isLastFinished = false;
-                break;
-            } else {
-                isLastFinished = true;
-            }
-            startPoint = endPoint + 1;
-        }
-    }
-
-    return result;
-}*/
-
-/*std::vector<std::string> HttpRequestParser::parseBuffer_(const MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer &buffer)
-{
-    return std::vector<std::string>();
-}*/
 void HttpRequestParser::parseStatusLine_(const std::string &line)
 {
     std::vector<std::string> splitedLine = split_(line, ' ');

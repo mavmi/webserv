@@ -195,7 +195,6 @@ const std::string& HttpResponseHeaders::getRetryAfter() const{
 
 void HttpResponseHeaders::setServer(){
     throwOnDone_();
-    checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
     server_.set("wsrv by pmalena & msaryjo");
 }
 void HttpResponseHeaders::setServer(const std::string& server){

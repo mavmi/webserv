@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:22:43 by msalena           #+#    #+#             */
-/*   Updated: 2023/02/26 12:47:53 by msalena          ###   ########.fr       */
+/*   Updated: 2023/04/02 12:17:49 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ public:
 	typedef Sockets::sock_array_iter			sockets_iter;
 	typedef struct sockaddr*					sockaddr_pointer;
 	typedef FdObj								fd_obj;
-	typedef fd_obj::bytes_container_reference	fd_bytes_container_reference;
+	typedef fd_obj::bytes_container_reference	bytes_container_reference;
 	typedef Fds::fd_array_iter					fd_iter;
 	typedef ManagedFds							managed_fds;
 	typedef ManagedFds&							managed_fds_reference;

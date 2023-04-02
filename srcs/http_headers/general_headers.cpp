@@ -23,7 +23,7 @@ namespace MAIN_NAMESPACE{
 namespace HTTP_HEADERS_NAMESPACE{
 HttpGeneralHeaders::HttpGeneralHeaders(const StatusLineAbstractParent& statusLine)
     : HttpHeadersAbstractParent(statusLine) {
-
+    
 }
 HttpGeneralHeaders::HttpGeneralHeaders(const HttpGeneralHeaders& other)
     : ParserAbstractParent(other), HttpHeadersAbstractParent(other.statusLine_) {
@@ -220,7 +220,7 @@ void HttpGeneralHeaders::deleteData_(){
 }
 void HttpGeneralHeaders::copyData_(const ParserAbstractParent& o){
     const HttpGeneralHeaders& other = dynamic_cast<const HttpGeneralHeaders&>(o);
-    
+
     cacheControl_ = other.cacheControl_;
     connection_ = other.connection_;
     date_ = other.date_;

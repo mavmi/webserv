@@ -8,8 +8,6 @@ const wsrv::Configuration& parseConfig(int argc, char** argv, wsrv::Parser& pars
 }
 
 int main(int argc, char** argv){
-    (void)argc; (void)argv;
-
     wsrv::utils::utilsCheckArgsCount(argc);
     try {
         wsrv::Parser parser;

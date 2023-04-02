@@ -59,7 +59,7 @@ public:
                 std::string statusCode,
                 std::string message
             );
-    bool setupFile(const std::string& filePath);
+    bool setupFile(const std::string& filePath, const std::string& errFilePath);
 
 private:
     MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseStatusLine responseStatusLine_;

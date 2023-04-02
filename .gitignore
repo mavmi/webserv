@@ -1,3 +1,4 @@
+*.gch
 .*
 *.o
 *.a
@@ -7,6 +8,8 @@
 webserv
 webserv_test
 **/tmp*
+
+**/*.dSYM
 
 !.gitignore
 !.gitkeep

@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:22:49 by msalena           #+#    #+#             */
-/*   Updated: 2023/02/25 22:32:07 by msalena          ###   ########.fr       */
+/*   Updated: 2023/04/02 12:17:49 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ private:
 class FdReferencePair : public ObjectReferencePair {
 public:
 	typedef FdObj								fd_obj;
-	typedef fd_obj::bytes_container_reference	fd_bytes_container_reference;
+	typedef fd_obj::bytes_container_reference	bytes_container_reference;
 	typedef Fds									fds;
 	typedef fds&								fds_reference;
 	typedef fds::fd_array_iter					fd_iter;
@@ -81,9 +81,9 @@ public:
 	FdReferencePair(fds_reference fds_array, fd_iter fd_iter);
 	~FdReferencePair(void);
 
-	fd_bytes_container_reference GetRequestMessageReference(void);
+	bytes_container_reference GetRequestMessageReference(void);
 
-	fd_bytes_container_reference GetResponseMessageReference(void);
+	bytes_container_reference GetResponseMessageReference(void);
 
 	fd_iter GetFdIter(void);
 

@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:23:34 by msalena           #+#    #+#             */
-/*   Updated: 2023/02/25 21:43:30 by msalena          ###   ########.fr       */
+/*   Updated: 2023/04/02 16:52:52 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ namespace CORE{
 
 //FD_OBJ IMPLEMENTATION
 
-FdObj::FdObj(void) : fd(-1) {
+FdObj::FdObj(FdObj::parent_socket_pointer parent) : fd(-1), parent(parent) {
 	client_inform_len = sizeof(client_information);
 }
 
-FdObj::FdObj(int fd) : fd(fd) {
+FdObj::FdObj(int fd, FdObj::parent_socket_pointer parent) : fd(fd), parent(parent) {
 	client_inform_len = sizeof(client_information);
 }
 
@@ -33,6 +33,7 @@ FdObj::~FdObj(void) { }
 
 FdObj& FdObj::operator=(const FdObj& another) {
 	fd = another.fd;
+	parent = another.parent;
 	client_information = another.client_information;
 	client_inform_len = sizeof(client_information);
 	request_message = another.request_message;
@@ -62,6 +63,11 @@ FdObj::bytes_container_reference FdObj::GetRequestMessageReference(void) {
 FdObj::bytes_container_reference FdObj::GetResponseMessageReference(void){
 	return (response_message);
 }
+
+FdObj::const_parent_socket_config_reference FdObj::GetParentSocketConfigReference(void){
+	return parent->GetServerInfo();
+}
+
 
 //FDS IMPLEMENTATION
 
@@ -93,10 +99,10 @@ Fds::fd_array_reference Fds::GetFdsReference(void) {
 	return (fds);
 }
 
-Fds::fd_array_iter Fds::AddFd(int fd) {
-	fd_type a(fd);
-	return (fds.insert(fds.end(), a));
-}
+// Fds::fd_array_iter Fds::AddFd(int fd) {
+// 	fd_type a(fd);
+// 	return (fds.insert(fds.end(), a));
+// }
 
 Fds::fd_array_iter Fds::AddFd(Fds::fd_type_reference fd) {
 	return (fds.insert(fds.end(), fd));

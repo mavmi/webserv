@@ -23,7 +23,7 @@ HttpResponse::HttpResponse()
         generalHeaders_(MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeaders(responseStatusLine_)),
         responseHeaders_(MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeaders(responseStatusLine_)),
         message_(std::vector<char>()) {
-
+            
 }
 HttpResponse::HttpResponse(const HttpResponse& other)
     : responseStatusLine_(other.responseStatusLine_),
@@ -279,15 +279,23 @@ void HttpResponse::setStatusLine(
     responseStatusLine_.setStatusCode(statusCode);
     responseStatusLine_.setMessage(message);
 }
-bool HttpResponse::setupFile(const std::string& filePath){
+bool HttpResponse::setupFile(const std::string& filePath, const std::string& errFilePath){
     struct stat buf;
-    std::fstream inputFile;
+    std::fstream inputStream;
+    const std::string* workingFile = NULL;
 
     // Get info about file
-    inputFile.open(filePath.c_str(), std::ios::in | std::ios::binary);
-    if (!inputFile.is_open() || stat(filePath.c_str(), &buf) != 0){
-        inputFile.close();
-        return setupFileOnError();
+    inputStream.open(filePath.c_str(), std::ios::in | std::ios::binary);
+    if (!inputStream.is_open() || stat(filePath.c_str(), &buf) != 0){
+        inputStream.open(errFilePath.c_str(), std::ios::in | std::ios::binary);
+        if (!inputStream.is_open() || stat(errFilePath.c_str(), &buf) != 0){
+            inputStream.close();
+            return setupFileOnError();
+        } else {
+            workingFile = &errFilePath;
+        }
+    } else {
+        workingFile = &filePath;
     }
 
     try {
@@ -308,8 +316,8 @@ bool HttpResponse::setupFile(const std::string& filePath){
         char *buffer = new char[bufferSize];
 
         message_.clear();
-        while (inputFile.read(buffer, bufferSize)){
-            for (int i = 0; i < inputFile.gcount(); i++){
+        while (inputStream.read(buffer, bufferSize)){
+            for (int i = 0; i < inputStream.gcount(); i++){
                 message_.push_back(buffer[i]);
             }
         }
@@ -319,7 +327,7 @@ bool HttpResponse::setupFile(const std::string& filePath){
 
     try {
         // Content type
-        responseHeaders_.setContentType(parseFileSignature_(filePath));
+        responseHeaders_.setContentType(parseFileSignature_(*workingFile));
     } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::Exception&){
         return setupFileOnError();
     }

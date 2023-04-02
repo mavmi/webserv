@@ -17,7 +17,7 @@
 #include "../server.hpp"
 #include "../managed_fds.hpp"
 #include "../../utils/utils.hpp"
-#include "../../http_request_parser/http_request.hpp"
+#include "../../http_request_parser/http_request_parser.hpp"
 #include "../../http_response_generator/http_response.hpp"
 
 
@@ -34,6 +34,18 @@ int sockets_to_masterread(Sockets& sockets, ManagedFds& masterread);
  * Create sockets for every server from config
  */
 void create_sockets(const wsrv::Configuration& servers, Sockets& sockets_array);
+
+/*
+ * Return:	a path to the error file with 'statusCode' name 
+ */
+std::string getErrorFile(const std::string& statusCode,
+	const wsrv::configuration::ServerConfiguration::ErrorPagesContainerType& errorFiles);
+
+/*
+ * Generate the response when the request is invalid
+ */
+void invalid_request(wsrv::Fds::fd_array_iter it_current_fd, HttpResponse& response,
+				utils::Exception& e);
 
 /*
  * Generate the response for current fd

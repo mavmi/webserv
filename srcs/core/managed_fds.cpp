@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:23:44 by msalena           #+#    #+#             */
-/*   Updated: 2023/02/25 22:32:07 by msalena          ###   ########.fr       */
+/*   Updated: 2023/04/02 12:17:49 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,11 @@ FdReferencePair::FdReferencePair(FdReferencePair::fds_reference fds_array,
 
 FdReferencePair::~FdReferencePair(void) { }
 
-FdReferencePair::fd_bytes_container_reference FdReferencePair::GetRequestMessageReference(void) {
+FdReferencePair::bytes_container_reference FdReferencePair::GetRequestMessageReference(void) {
 	return ((*(fd_pair.second)).GetRequestMessageReference());
 }
 
-FdReferencePair::fd_bytes_container_reference FdReferencePair::GetResponseMessageReference(void) {
+FdReferencePair::bytes_container_reference FdReferencePair::GetResponseMessageReference(void) {
 	return((*(fd_pair.second)).GetResponseMessageReference());
 }
 
