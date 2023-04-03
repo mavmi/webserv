@@ -156,7 +156,7 @@ int BytesContainer::pushBack(char* buffer, int bufferSize){
     const std::string clLine = "Content-Length: ";
     const size_t clLineSize = clLine.size();
     for (int i = 0; i <= bufferSize; i++){
-        char curChar = buffer[i];
+        char curChar = (i != bufferSize) ? buffer[i] : 0;
 
         if (r_ && n_) {
             if (!tmpLine_.size()){
