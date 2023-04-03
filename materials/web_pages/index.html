@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8"/>
+		<title>Webserv_42</title>
+		<style>
+			body {
+				padding-left: 40px;
+				background-image: url("imgs/back_index.jpg");
+				background-repeat: no-repeat;
+				background-attachment: fixed;
+				background-size: 100% 100%
+			}
+			.horizontal_line {
+				width: 90%;
+				border-top: 3px double rgb(78, 77, 77);
+				margin: auto
+			}
+		</style>
+	</head>
+	<body>
+		<h1 id="position" align="center"><font size="10px">Welcome to wsrv!</font></h1>
+		<p id="position" align="center"><font size="5px">This is own HTTP server which can be tested with a real browser or curl.</font></p>
+		<div class="horizontal_line"></div>
+		<br>
+		<p id="position">
+			<font size="4px">
+				<tt>
+					If you see this page, the wsrv web server is successfully working.
+					<br><br>
+					You need to change the configuration file for working with your customer server.
+				</tt>
+			</font>
+		</p>
+		<br>
+		<h3 id="position">About:</h3>
+		<ui>
+			<font size="4px">
+				<tt>
+					<li id="position">Takes a configuration file as argument or use a default path
+					<li id="position">Never blocks the client
+					<li id="position">Supports protocols' vertions:
+						<br>
+						<code id="position">HTTP_0_9, HTTP_1_0, HTTP_1_1, HTTP_1_1v2, HTTP_AUTH, MIME, MD5H, CDH</code>
+					<li id="position">Supports methods:
+						<br>
+						<code id="position">GET, POST, DELETE</code>
+					<li id="position">Listens to multiple ports
+				</tt>
+			</font>
+		</ui>
+		<br><br><br>
+		<h3 id="position">You can use the following resources to test the methods:</h3>
+		<form id="position" action="content/introduce.html" method="get">
+			<button>
+				<font size="4px">
+					<tt>
+						Introduce yourself
+					</tt>
+				</font>
+			</button>
+		</form>
+		<br>
+		<form id="position" action="content/comment.html" method="get">
+			<button>
+				<font size="4px">
+					<tt>
+						Enter comments
+					</tt>
+				</font>
+			</button>
+		</form>
+		<div style="position: absolute; bottom: 20px;"><font size="3px">© 2022-2023 wsrv developed by pmaryjo & msalena</font></div>
+	</body>
+</html>
+
+

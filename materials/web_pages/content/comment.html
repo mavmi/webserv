@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8"/>
+		<title>Comment</title>
+		<style>
+			body {
+				background-image: url("../imgs/back_comment.jpg");
+				background-repeat: no-repeat;
+				background-attachment: fixed;
+				background-size: 100% 100%
+			}
+			p, h1 {
+				padding-left: 40px;
+			}
+		</style>
+	</head>
+	<body>
+		<h1><font size="8px">Add the comment to website</font></h1>
+		<p><font size="5px"><tt>Please, enter your nickname and comment</tt></font></p>
+		<form action="scripts/comment.php" method="post">
+			<p><font size="4px"><tt>Your nickname:</tt></font></p>
+			<p><input type="text" name="nickname"/></p>
+			<p><font size="4px"><tt>Your comment:</tt></font></p>
+			<p><textarea name="comment"></textarea></p>
+			<p><input type="submit" value="Submit"/></p>
+		</form>
+	</body>
+</html>

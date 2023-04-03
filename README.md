@@ -40,7 +40,7 @@
 <details><summary>Info</summary>
 
 ### Классы
-- *Parser* - оболочка вокруг класса *Configuration* для получения доступа к данным конфигурационного файла. 
+- *Parser* - оболочка вокруг класса *Configuration* для получения доступа к данным конфигурационного файла.
 - *Configuration* - Основной класс парсера. Содержит в себе всю информацию из конфигурационного файла.
 - *ServerConfiguration* - Хранит информацию об очередном сервере, которая состоит из конфигов самого сервера и ряда роутов.
 - *RouteConfiguration* - Собственно, роут. Их может быть ноль или более в рамках одного сервера.
@@ -71,7 +71,7 @@
 
 &emsp;// Размер тела сообщения. Число > 0. По умолчанию 0.\
 &emsp;body_size:       10000000;           [1]
-    
+
 &emsp;// Начало роута.\
 &emsp;[
 &emsp;&emsp;// Массив методов роута.\
@@ -81,22 +81,22 @@
 &emsp;&emsp;redir:               path1;              [1]
 
 &emsp;&emsp;// Путь к корневой папке роута.\
-&emsp;&emsp;dir:                 path1;              [1] 
+&emsp;&emsp;dir:                 path1;              [1]
 
 &emsp;&emsp;// Обрабатываем или нет обращение к дериктории. По умолчанию false.\
-&emsp;&emsp;dir_listening:       true/false;         [0-1] 
+&emsp;&emsp;dir_listening:       true/false;         [0-1]
 
 &emsp;&emsp;// Путь к странице-ответу, если запрос был к дериктории.\
-&emsp;&emsp;def_if_dir:          path1;              [0-1] 
+&emsp;&emsp;def_if_dir:          path1;              [0-1]
 
 &emsp;&emsp;// Путь к CGI скрипту.\
-&emsp;&emsp;cgi_script:          path1;              [0-1] 
+&emsp;&emsp;cgi_script:          path1;              [0-1]
 
 &emsp;&emsp;// Путь к CGI бинарнику.\
-&emsp;&emsp;cgi_bin:             path;               [0-1] 
+&emsp;&emsp;cgi_bin:             path;               [0-1]
 
 &emsp;&emsp;// Имеет ли возможность роут сохранять загружаемые файлы. По умолчанию false.\
-&emsp;&emsp;save_files:          true/false;         [0-1] 
+&emsp;&emsp;save_files:          true/false;         [0-1]
 
 &emsp;&emsp;// Путь, куда роут будет сохранять загружаемые файлы.\
 &emsp;&emsp;save_to:             path1;              [0-1]
@@ -105,7 +105,7 @@
 &emsp;]
 
 // Конец сервера.\
-} 
+}
 
 ### Правила составления конфигурационного файла
 - Обязательные поля **сервера**:
@@ -181,3 +181,14 @@
 </details>
 
 ****
+
+
+Links to the examples:
+https://github.com/smdyan/webserv
+https://github.com/AYoungSn/webServ_42
+
+About http client/server comunication:
+https://developer.mozilla.org/ru/docs/Learn/Forms/Sending_and_retrieving_form_data
+
+Delete in php:
+https://www.php.net/manual/en/function.delete.php
