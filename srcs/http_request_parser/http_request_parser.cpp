@@ -40,7 +40,6 @@ HttpRequestParser& HttpRequestParser::operator=(const HttpRequestParser& other){
 
 const HttpRequest& HttpRequestParser::parseHttpRequest(const MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer& buffer){
     std::string versionKostyl = "";
-    
     try {
         const std::vector<std::string>& content = buffer.getLines();
         if (content.size() < 1) throw ExceptionType("HTTP request doesn't contain headers");
@@ -78,6 +77,17 @@ std::vector<std::string> HttpRequestParser::split_(const std::string& str, char 
         if (end == str.end()) break;
         begin = end + 1;
     }
+
+    return result;
+}
+std::vector<std::string> HttpRequestParser::split__(const std::string& str, char delimiter){
+    const size_t eqPos = str.find(delimiter);
+    std::vector<std::string> result;
+    
+    if (eqPos == std::string::npos) return result;
+
+    result.push_back(str.substr(0, eqPos));
+    result.push_back(str.substr(eqPos + 1, str.size() - eqPos - 1));   
 
     return result;
 }
@@ -134,12 +144,11 @@ void HttpRequestParser::parseStatusLine_(const std::string &line)
     httpRequest_.getStatusLine().done();
 }
 void HttpRequestParser::parseHeader_(const std::string& line){
-    const std::vector<std::string> splittedLine = split_(line, ':');
+    const std::vector<std::string> splittedLine = split__(line, ':');
     if (splittedLine.size() != 2) throw ExceptionType("Invalid header line");
 
     const std::string& key = splittedLine.at(0);
     const std::string& value = splittedLine.at(1);
-
     // General headers
     if (key == "Cache-Control"){
         httpRequest_.getGeneralHeaders().setCacheControl(value);

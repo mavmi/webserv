@@ -151,7 +151,6 @@ int Server::MessageFormationToReceiveSend_(Server::fd_iter it_current_fd,
 				std::cout << lines.at(i) << std::endl;
 			}
 		}
-
 		response_generator(it_current_fd);
 	}
 	return is_req_end;

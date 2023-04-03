@@ -136,24 +136,36 @@ void execute_method(wsrv::Fds::fd_array_iter it_current_fd, HttpResponse& respon
 }
 
 void response_generator(wsrv::Fds::fd_array_iter it_current_fd){
+	const utils::HTTP_VERSION testHttpVersion = utils::HTTP_1_0;
+	
 	HttpResponse	response;
 
 	try {
+		response.setStatusLine( // This method call must be actualized: get info from request
+			testHttpVersion,
+			"200",
+			"OK"
+		);
 		response.setDate();
 		response.setRetryAfter();
 	} catch (utils::Exception&) { }
+
+	{
+		std::cout << "\t// Response test output //" << std::endl;
+		std::cout << response.toBytes().toBytes();
+	}
+
 	http_request::HttpRequestParser request;
 	try {
 		request.parseHttpRequest((*it_current_fd).GetRequestMessageReference());
 	} catch (utils::Exception& e) {
 		invalid_request(it_current_fd, response, e);
-	//
-	char* aaa;
-
-	aaa = it_current_fd->GetResponseMessageReference().toBytes();
-	// std::cout << aaa << std::endl;
-	free(aaa);
-	//
+		{
+			std::cout << " >> CATCH" << std::endl;
+			char* aaa;
+			aaa = it_current_fd->GetResponseMessageReference().toBytes();
+			free(aaa);
+		}
 		return ;
 	}
 	execute_method(it_current_fd, response, request);

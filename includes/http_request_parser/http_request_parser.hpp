@@ -44,6 +44,7 @@ private:
     HttpRequest httpRequest_;
 
     std::vector<std::string> split_(const std::string& str, char delimiter);
+    std::vector<std::string> split__(const std::string& str, char delimiter);
     int find_(char* arr, int startPoint, int size, char c);
     bool isLineEmpty_(const std::string& line);
 
