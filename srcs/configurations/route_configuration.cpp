@@ -84,6 +84,14 @@ size_t RouteConfiguration::getMethodsCount() const{
         return methods_.get().size();
     HANDLE_EXC_END
 }
+bool RouteConfiguration::isMethodPresent(UTILS_NAMESPACE::METHOD method) const {
+    HANDLE_EXC_BEGIN
+        for (MethodsContainerType::SizeType i = 0; i < methods_.get().size(); i++){
+            if (methods_.get().at(i) == method) return true;
+        }
+        return false;
+    HANDLE_EXC_END
+}
 
 void RouteConfiguration::setRedirection(const std::string& redirection){
     throwOnDone_();

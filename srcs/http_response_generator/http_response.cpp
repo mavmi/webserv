@@ -285,6 +285,7 @@ bool HttpResponse::setupFile(const std::string& filePath, const std::string& err
     std::fstream inputStream;
     const std::string* workingFile = NULL;
 
+
     // Get info about file
     inputStream.open(filePath.c_str(), std::ios::in | std::ios::binary);
     if (!inputStream.is_open() || stat(filePath.c_str(), &buf) != 0){
@@ -308,7 +309,7 @@ bool HttpResponse::setupFile(const std::string& filePath, const std::string& err
         #endif
         // Content length
         responseHeaders_.setContentLength(MAIN_NAMESPACE::UTILS_NAMESPACE::utilsNumToString(buf.st_size));
-    } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::Exception&){
+    } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::Exception& e){
         return setupFileOnError();
     }
     // Save file's data
@@ -329,7 +330,8 @@ bool HttpResponse::setupFile(const std::string& filePath, const std::string& err
     try {
         // Content type
         responseHeaders_.setContentType(parseFileSignature_(*workingFile));
-    } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::Exception&){
+    } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::Exception& e){
+        std::cout << e.what() << std::endl;
         return setupFileOnError();
     }
 
@@ -452,8 +454,12 @@ std::string HttpResponse::parseFileExtension_(const std::string& fileName) const
     if (dotPos == std::string::npos) return "";
 
     const std::string ext = fileName.substr(dotPos + 1, fileName.size() - dotPos - 1);
-    if (ext == ".js"){
+    if (ext == "js"){
         return "text/javascript";
+    } else if (ext == "html") {
+        return "text/html";
+    } else if (ext == "php") {
+        return "text/php";
     }
 
     throw ExceptionType("Unknown file extension");

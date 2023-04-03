@@ -29,7 +29,7 @@ protected:
 
 class HttpRequestParser{
 public:
-    typedef HttpRequestParserException  ExceptionType;
+    typedef HttpRequestParserException                  ExceptionType;
 
     HttpRequestParser();
     HttpRequestParser(const HttpRequestParser& other);

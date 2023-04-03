@@ -45,6 +45,7 @@ public:
     const MethodType& getMethod(size_t position) const;
     void addMethod(const MethodType& method);
     size_t getMethodsCount() const;
+    bool isMethodPresent(UTILS_NAMESPACE::METHOD method) const;
 
     void setRedirection(const std::string& redirection);
     std::string& getRedirection();

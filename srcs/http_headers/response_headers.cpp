@@ -169,7 +169,7 @@ const std::string& HttpResponseHeaders::getPublic() const{
 
 void HttpResponseHeaders::setRetryAfter(){
     throwOnDone_();
-    checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
+    // checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
 
     std::time_t t = std::time(NULL);
     std::tm* time = std::localtime(&t);
@@ -179,7 +179,7 @@ void HttpResponseHeaders::setRetryAfter(){
 }
 void HttpResponseHeaders::setRetryAfter(const std::string& retryAfter){
     throwOnDone_();
-    checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
+    // checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
     retryAfter_.set(retryAfter);
 }
 std::string& HttpResponseHeaders::getRetryAfter(){

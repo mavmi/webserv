@@ -70,6 +70,8 @@ public:
     void setRoute(const RouteConfiguration& route, size_t position);
     RouteConfiguration& getRoute(size_t position);
     const RouteConfiguration& getRoute(size_t position) const;
+    RouteConfiguration& getRoute(const std::string& url);
+    const RouteConfiguration& getRoute(const std::string& url) const;
     void addRoute(const RouteConfiguration& route);
     size_t getRoutesCount() const;
 

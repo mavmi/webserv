@@ -163,6 +163,24 @@ const RouteConfiguration& ServerConfiguration::getRoute(size_t position) const{
         return routes_.get().at(position);
     HANDLE_EXC_END
 }
+RouteConfiguration& ServerConfiguration::getRoute(const std::string& url){
+    HANDLE_EXC_BEGIN
+    for (RoutesContainerType::SizeType i = 0; i < routes_.get().size(); i++){
+        RouteConfiguration& route = routes_.get().at(i);
+        if (route.getRedirection() == url) return route;
+    }
+    throw ExceptionType("Route with such url not found: " + url);
+    HANDLE_EXC_END
+}
+const RouteConfiguration& ServerConfiguration::getRoute(const std::string& url) const{
+    HANDLE_EXC_BEGIN
+    for (RoutesContainerType::SizeType i = 0; i < routes_.get().size(); i++){
+        const RouteConfiguration& route = routes_.get().at(i);
+        if (route.getRedirection() == url) return route;
+    }
+    throw ExceptionType("Route with such url not found: " + url);
+    HANDLE_EXC_END
+}
 void ServerConfiguration::addRoute(const RouteConfiguration& route){
     throwOnDone_();
     if (!routes_.isSet()) routes_.set(RoutesContainerType());

@@ -6,8 +6,8 @@
     body_size:       4096;
     [
         methods:             GET;
-        redir:               /Users/msalena/Desktop/webserv/materials/config_files/web_pages/test.html;
-        dir:                 /Users/msalena/Desktop/webserv/materials/config_files/valid;
+        redir:               /Users/pmaryjo/Desktop/webserv/materials/web_pages/index.html;
+        dir:                 /Users/pmaryjo/Desktop/webserv/materials/web_pages/;
     ]
 }
 {

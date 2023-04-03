@@ -66,7 +66,6 @@ const HttpRequest& HttpRequestParser::parseHttpRequest(const MAIN_NAMESPACE::UTI
 const HttpRequest& HttpRequestParser::getHttpRequest() const{
     return httpRequest_;
 }
-
 std::vector<std::string> HttpRequestParser::split_(const std::string& str, char delimiter){
     std::string::const_iterator begin = str.begin(), end = str.begin();
     std::vector<std::string> result;
