@@ -151,7 +151,7 @@ void response_generator(wsrv::Fds::fd_array_iter it_current_fd){
 	char* aaa;
 
 	aaa = it_current_fd->GetResponseMessageReference().toBytes();
-	std::cout << aaa << std::endl;
+	// std::cout << aaa << std::endl;
 	free(aaa);
 	//
 		return ;

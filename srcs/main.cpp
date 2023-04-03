@@ -8,6 +8,8 @@ const wsrv::Configuration& parseConfig(int argc, char** argv, wsrv::Parser& pars
 }
 
 int main(int argc, char** argv){
+    std::cout << " << Server is running >> " << std::endl;
+
     wsrv::utils::utilsCheckArgsCount(argc);
     try {
         wsrv::Parser parser;

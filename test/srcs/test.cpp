@@ -474,13 +474,13 @@ void test::CONFIGURATION_FILES_TESTS(){
 
 void test::HTTP_REQUEST_FILE_TEST(){
     ___HEADER___
+    const int bufferSize = 2;
 
-    wsrv::utils::BytesContainer content;
-    
-    // read http request file
+    // read http request file without content
     {
+        wsrv::utils::BytesContainer content;
 
-        int fileFd = open("/Users/pmaryjo/Desktop/webserv/test/httpRequest.txt", O_RDONLY);
+        int fileFd = open("/Users/pmaryjo/Desktop/webserv/test/httpRequest_noContent.txt", O_RDONLY);
         if (fileFd == -1){
             std::cerr << "Cannot open file" << std::endl;
             exit(1);
@@ -489,13 +489,14 @@ void test::HTTP_REQUEST_FILE_TEST(){
         srand(time(NULL));
         int lastReturn = 1, curReturn;
         while(true){
-            const int bufferSize = rand() % 400 + 1;
+            // const int bufferSize = rand() % 400 + 1;
             char* buffer = new char[bufferSize];
             size_t readCount = static_cast<size_t>(read(fileFd, buffer, bufferSize));
             if (readCount <= 0) break;
             curReturn = content.pushBack(buffer, readCount);
             assert(lastReturn == 1);
             lastReturn = curReturn;
+            if (!lastReturn) break;
         }
         assert(lastReturn == 0);
 
@@ -510,33 +511,95 @@ void test::HTTP_REQUEST_FILE_TEST(){
             std::cout << '|' << std::endl;
         }
         std::cout << "\n\t==========================\n" << test_utils::getColor(test_utils::DEFAULT) << std::endl;
+    
+        try{
+            wsrv::http_request::HttpRequestParser httpRequestParser;
+            const wsrv::http_request::HttpRequest& httpRequest = httpRequestParser.parseHttpRequest(content);
+
+            const wsrv::http_headers::HttpRequestStatusLine& statusLine = httpRequest.getStatusLine();
+            assert(statusLine.getHttpVersion() == wsrv::utils::HTTP_1_1);
+            assert(statusLine.getMethod() == wsrv::utils::POST);
+            assert(statusLine.getUrl() == "/cgi-bin/process.cgi");
+            const wsrv::http_headers::HttpGeneralHeaders& generalHeaders = httpRequest.getGeneralHeaders();
+            assert(generalHeaders.getConnection() == " Keep-Alive");
+
+            const wsrv::http_headers::HttpRequestHeaders& requestHeaders = httpRequest.getRequestHeaders();
+            assert(requestHeaders.getHost() == " www.tutorialspoint.com");
+            assert(requestHeaders.getContentType() == " text/xml; charset=utf-8");
+            assert(requestHeaders.getAcceptLanguage() == " en-us");
+            assert(requestHeaders.getAcceptEncoding() == " gzip, deflate");
+
+            const std::vector<std::string>& httpRequestContent = httpRequest.getRequestContent();
+            assert(httpRequestContent.size() == 0);
+        } catch (wsrv::utils::Exception& e){
+            std::cout << e.what() << std::endl;
+            assert(false);
+        }
     }
+    
 
-    try{
-        wsrv::http_request::HttpRequestParser httpRequestParser;
-        const wsrv::http_request::HttpRequest& httpRequest = httpRequestParser.parseHttpRequest(content);
+    // read http request file with content
+    {
+        wsrv::utils::BytesContainer content;
 
-        const wsrv::http_headers::HttpRequestStatusLine& statusLine = httpRequest.getStatusLine();
-        assert(statusLine.getHttpVersion() == wsrv::utils::HTTP_1_1);
-        assert(statusLine.getMethod() == wsrv::utils::POST);
-        assert(statusLine.getUrl() == "/cgi-bin/process.cgi");
-        const wsrv::http_headers::HttpGeneralHeaders& generalHeaders = httpRequest.getGeneralHeaders();
-        assert(generalHeaders.getConnection() == " Keep-Alive");
+        int fileFd = open("/Users/pmaryjo/Desktop/webserv/test/httpRequest.txt", O_RDONLY);
+        if (fileFd == -1){
+            std::cerr << "Cannot open file" << std::endl;
+            exit(1);
+        }
 
-        const wsrv::http_headers::HttpRequestHeaders& requestHeaders = httpRequest.getRequestHeaders();
-        assert(requestHeaders.getHost() == " www.tutorialspoint.com");
-        assert(requestHeaders.getContentType() == " text/xml; charset=utf-8");
-        assert(requestHeaders.getContentLength() == " 93");
-        assert(requestHeaders.getAcceptLanguage() == " en-us");
-        assert(requestHeaders.getAcceptEncoding() == " gzip, deflate");
+        srand(time(NULL));
+        int lastReturn = 1, curReturn;
+        while(true){
+            // const int bufferSize = rand() % 400 + 1;
+            char* buffer = new char[bufferSize];
+            size_t readCount = static_cast<size_t>(read(fileFd, buffer, bufferSize));
+            if (readCount <= 0) break;
+            curReturn = content.pushBack(buffer, readCount);
+            assert(lastReturn == 1);
+            lastReturn = curReturn;
+            if (!lastReturn) break;
+        }
+        assert(lastReturn == 0);
 
-        const std::vector<std::string>& httpRequestContent = httpRequest.getRequestContent();
-        assert(httpRequestContent.size() == 2);
-        assert(httpRequestContent[0] == "<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-        assert(httpRequestContent[1] == "<string xmlns=\"http://clearforest.com/\">string</string>");
-    } catch (wsrv::utils::Exception& e){
-        std::cout << e.what() << std::endl;
-        assert(false);
+        std::cout << test_utils::getColor(test_utils::CYAN) << "\n\tHTTP request file content:" << std::endl;
+        std::cout << "\t==========================" << std::endl;
+        const std::vector<std::string>& strings = content.getLines();
+        for (size_t i = 0; i < strings.size(); i++){
+            const std::string& line = strings.at(i);
+            for (size_t i = 0; i < line.size(); i++){
+                std::cout << line.at(i);
+            }
+            std::cout << '|' << std::endl;
+        }
+        std::cout << "\n\t==========================\n" << test_utils::getColor(test_utils::DEFAULT) << std::endl;
+    
+        try{
+            wsrv::http_request::HttpRequestParser httpRequestParser;
+            const wsrv::http_request::HttpRequest& httpRequest = httpRequestParser.parseHttpRequest(content);
+
+            const wsrv::http_headers::HttpRequestStatusLine& statusLine = httpRequest.getStatusLine();
+            assert(statusLine.getHttpVersion() == wsrv::utils::HTTP_1_1);
+            assert(statusLine.getMethod() == wsrv::utils::POST);
+            assert(statusLine.getUrl() == "/cgi-bin/process.cgi");
+            const wsrv::http_headers::HttpGeneralHeaders& generalHeaders = httpRequest.getGeneralHeaders();
+            assert(generalHeaders.getConnection() == " Keep-Alive");
+
+            const wsrv::http_headers::HttpRequestHeaders& requestHeaders = httpRequest.getRequestHeaders();
+            assert(requestHeaders.getHost() == " www.tutorialspoint.com");
+            assert(requestHeaders.getContentType() == " text/xml; charset=utf-8");
+            assert(requestHeaders.getContentLength() == " 93");
+            assert(requestHeaders.getAcceptLanguage() == " en-us");
+            assert(requestHeaders.getAcceptEncoding() == " gzip, deflate");
+
+            const std::vector<std::string>& httpRequestContent = httpRequest.getRequestContent();
+            assert(httpRequestContent.size() == 2);
+            assert(httpRequestContent[0] == "<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+            assert(httpRequestContent[1] == "<string xmlns=\"http://clearforest.com/\">string</string>");
+        } catch (wsrv::utils::Exception& e){
+            std::cout << e.what() << std::endl;
+            assert(false);
+        }
     }
 }
 

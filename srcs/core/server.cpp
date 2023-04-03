@@ -132,8 +132,26 @@ int Server::MessageFormationToReceiveSend_(Server::fd_iter it_current_fd,
 	int is_req_end;
 	bytes_container_reference request_container = (*it_current_fd).GetRequestMessageReference();
 	
+	{	// TEST OUTPUT OF INCOMING PURE DATA //
+		std::cout << "*** char buffer ***\n" << buf << std::endl;
+		std::cout << "*******************" << std::endl;
+	}
+
 	is_req_end = request_container.pushBack(buf, nbytes);
+
+	{	// JSUT TO BE SURE THERE IS ONLY ZERO AND NOTHING MORE //
+		std::cout << is_req_end << std::endl;
+	}
+
 	if (!is_req_end){
+		
+		{	// JUST TO BE SURE IF WORKS FINE //
+			std::vector<std::string> lines = request_container.getLines();
+			for (size_t i = 0; i < lines.size(); i++){
+				std::cout << lines.at(i) << std::endl;
+			}
+		}
+
 		response_generator(it_current_fd);
 	}
 	return is_req_end;
