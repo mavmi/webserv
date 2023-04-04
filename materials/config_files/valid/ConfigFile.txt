@@ -2,23 +2,23 @@
     port: 1025; 
     host: 127.0.0.1;
     server_name:     DEFAULT_SERVER;
-    error_pages:    /Users/msalena/Desktop/webserv/materials/config_files/web_pages/test.html;
+    error_pages:     /home/username/Desktop/webserv/materials/config_files/web_pages/test.html;
     body_size:       4096;
     [
         methods:             GET;
-        redir:               /Users/pmaryjo/Desktop/webserv/materials/web_pages/index.html;
-        dir:                 /Users/pmaryjo/Desktop/webserv/materials/web_pages/;
+        redir:               /home/username/Desktop/webserv/materials/web_pages/index.html;
+        dir:                 /home/username/Desktop/webserv/materials/web_pages/;
     ]
 }
 {
     port: 1026; 
     host: 127.0.0.1;
     server_name:     DEFAULT_SERVER;
-    error_pages:    /Users/msalena/Desktop/webserv/materials/config_files/web_pages/test.html;
+    error_pages:     /home/username/Desktop/webserv/materials/config_files/web_pages/test.html;
     body_size:       4096;
     [
         methods:             GET;
-        redir:               /Users/msalena/Desktop/webserv/materials/config_files/web_pages/test.html;
-        dir:                 /Users/msalena/Desktop/webserv/materials/config_files/valid;
+        redir:               /home/username/Desktop/webserv/materials/config_files/web_pages/test.html;
+        dir:                 /home/username/Desktop/webserv/materials/config_files/valid;
     ]
 }

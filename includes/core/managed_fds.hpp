@@ -75,7 +75,7 @@ public:
 	typedef Fds									fds;
 	typedef fds&								fds_reference;
 	typedef fds::fd_array_iter					fd_iter;
-	typedef std::pair<fds_reference, fd_iter>	refer_iter_pair;
+	typedef std::pair<fds, fd_iter>				refer_iter_pair;
 	typedef refer_iter_pair&					pair_reference;
 
 	FdReferencePair(fds_reference fds_array, fd_iter fd_iter);

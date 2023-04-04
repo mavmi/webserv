@@ -97,6 +97,14 @@ void Server::SendResponse_(Server::managed_fds_reference masterwrite,
 
 	response_bytes_container = fd_pair.GetResponseMessageReference().toBytes();
 	is_fd_in_set = fd_pair.GetFdIter() != fd_pair.FdPairReference().first.End();
+	
+	{	// OUTPUT DATA
+		const std::vector<std::string>& v = fd_pair.GetResponseMessageReference().getLines();
+		for (size_t i = 0; i < v.size(); i++){
+			std::cout << v[i] << std::endl;
+		}
+		exit(0);
+	}
 
 	// if fd in opended fds for clients-connection
 	if (is_fd_in_set){
@@ -115,7 +123,7 @@ void Server::SendResponse_(Server::managed_fds_reference masterwrite,
 			return ;
 		}
 	}
-	if (!is_fd_in_set || send_nbytes < 0) {
+	if (!is_fd_in_set) {
 		masterwrite.DeleteFd(current_fd);
 		fd_pair.DeleteFd();
 		server_throws(

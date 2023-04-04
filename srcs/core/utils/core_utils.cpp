@@ -104,7 +104,7 @@ void invalid_request(wsrv::Fds::fd_array_iter it_current_fd, HttpResponse& respo
 	(*it_current_fd).GetResponseMessageReference() = response.toBytes();
 }
 
-void method_get(utils::HTTP_VERSION version, std::string& path,
+void method_get(utils::HTTP_VERSION version, const std::string& path,
 			HttpResponse& response, wsrv::Fds::fd_array_iter it_current_fd){
 	bool is_file;
 
@@ -125,12 +125,12 @@ void method_post(){
 
 }
 
-void method_delete(utils::HTTP_VERSION version, std::string& path,
+void method_delete(utils::HTTP_VERSION version, const std::string& path,
 			HttpResponse& response, wsrv::Fds::fd_array_iter it_current_fd){
-	FILE *is_file = fopen(path, "r");
+	FILE *is_file = fopen(path.c_str(), "r");
 
 	if (is_file) {
-		std::remove(full_path.c_str());
+		// std::remove(full_path.c_str());
 		response.setStatusLine(version, "200", "OK");
 		//???WHICH PAGE TO RETURN???
 	} else {
