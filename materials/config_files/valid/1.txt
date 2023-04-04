@@ -3,6 +3,7 @@
     server_name:     SERVER_NAME;
     error_pages:     path1,path2;
     body_size:       123456789;
+    root:            /path/to/root/folder;
 
     [
         methods:             GET,POST,DELETE;

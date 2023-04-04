@@ -257,6 +257,9 @@ void Parser::parseValueString_(const std::string& str){
         } else if (key == "body_size"){
             lastServer.setBodySize(stringToNumber_<size_t>(value));
             return;
+        } else if (key == "root"){
+            lastServer.setRoot(value);
+            return;
         }
     }
     

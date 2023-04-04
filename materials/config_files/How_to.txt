@@ -4,6 +4,7 @@
     server_name:     SERVER_NAME;        [0-1]
     error_pages:     path1,path2;        [1-n](пути к файлам)
     body_size:       10000000;           [1](число > 0; по умолчанию 0)
+    root:            /root/path          [0-1](путь к руту текущего сервера)
     
     [
         methods:             GET,POST,DELETE;    [1-n](GET POST DELETE)

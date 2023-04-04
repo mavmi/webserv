@@ -4,6 +4,8 @@
     server_name:     DEFAULT_SERVER;
     error_pages:     /home/username/webserv/materials/config_files/web_pages/test.html;
     body_size:       4096;
+    root:            /home/username;
+
     [
         methods:             GET;
         redir:               /home/username/webserv/materials/web_pages/index.html;

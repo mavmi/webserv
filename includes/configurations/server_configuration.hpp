@@ -64,6 +64,10 @@ public:
     void setBodySize(size_t bodySize);
     size_t getBodySize() const;
 
+    void setRoot(const std::string& root);
+    std::string& getRoot();
+    const std::string& getRoot() const;
+
     void setRoutes(const RoutesContainerType& routes);
     RoutesContainerType& getRoutes();
     const RoutesContainerType& getRoutes() const;
@@ -81,6 +85,7 @@ private:
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> serverName_;
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ErrorPagesContainerType> errorPages_;
     size_t bodySize_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> root_;
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<RoutesContainerType> routes_;
     
     void deleteData_();

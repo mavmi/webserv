@@ -28,6 +28,7 @@ ServerConfiguration::ServerConfiguration(){
     serverName_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
     errorPages_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ErrorPagesContainerType>();
     bodySize_ = 0;
+    root_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
     routes_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<RoutesContainerType>();
 }
 ServerConfiguration::ServerConfiguration(const ServerConfiguration& other){
@@ -135,6 +136,21 @@ size_t ServerConfiguration::getBodySize() const{
     return bodySize_;
 }
 
+void ServerConfiguration::setRoot(const std::string& root){
+    throwOnDone_();
+    root_.set(root);
+}
+std::string& ServerConfiguration::getRoot(){
+    HANDLE_EXC_BEGIN
+        return root_.get();
+    HANDLE_EXC_END
+}
+const std::string& ServerConfiguration::getRoot() const{
+    HANDLE_EXC_BEGIN
+        return root_.get();
+    HANDLE_EXC_END
+}
+
 void ServerConfiguration::setRoutes(const RoutesContainerType& routes){
     throwOnDone_();
     routes_.set(routes);
@@ -199,6 +215,7 @@ void ServerConfiguration::deleteData_(){
     serverName_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
     errorPages_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ErrorPagesContainerType>();
     bodySize_ = 0;
+    root_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
     routes_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<RoutesContainerType>();
 }
 void ServerConfiguration::copyData_(const MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent& o){
@@ -210,6 +227,7 @@ void ServerConfiguration::copyData_(const MAIN_NAMESPACE::UTILS_NAMESPACE::Parse
     serverName_ = other.serverName_;
     errorPages_ = other.errorPages_;
     bodySize_ = other.bodySize_;
+    root_ = other.root_;
     routes_ = other.routes_;
 }
 void ServerConfiguration::checkValidity_() const{
