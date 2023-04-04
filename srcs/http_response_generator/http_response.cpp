@@ -75,7 +75,6 @@ MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer HttpResponse::toBytes(){
     responseStatusLine_.done();
     responseHeaders_.done();
     
-    const std::string newLine = "\n";
     MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer result;
 
     // Status line
@@ -97,7 +96,6 @@ MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer HttpResponse::toBytes(){
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseStatusLineException&){}
 
         result.pushBack(statusLineStr);
-        result.pushBack(newLine);
     }
 
     // Headers
@@ -105,161 +103,122 @@ MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer HttpResponse::toBytes(){
         // General headers
         try{
             result.pushBack("Cache-Control: " + generalHeaders_.getCacheControl());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeadersException&){}
         try{
             result.pushBack("Connection: " + generalHeaders_.getConnection());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeadersException&){}
         try{
             result.pushBack("Date: " + generalHeaders_.getDate());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeadersException&){}
         try{
             result.pushBack("MIME-Version: " + generalHeaders_.getMimeVersion());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeadersException&){}
         try{
             result.pushBack("Pragma: " + generalHeaders_.getPragma());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeadersException&){}
         try{
             result.pushBack("Trailer: " + generalHeaders_.getTrailer());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeadersException&){}
         try{
             result.pushBack("Transfer-Encoding: " + generalHeaders_.getTransferEncoding());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeadersException&){}
         try{
             result.pushBack("Upgrade: " + generalHeaders_.getUpgrade());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeadersException&){}
         try{
             result.pushBack("Via: " + generalHeaders_.getVia());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeadersException&){}
         try{
             result.pushBack("Warning: " + generalHeaders_.getWarning());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpGeneralHeadersException&){}
 
         // Common headers
         try{
             result.pushBack("Content-Disposition: " + responseHeaders_.getContentDisposition());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
         try{
             result.pushBack("Content-Encoding: " + responseHeaders_.getContentEncoding());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
         try{
             result.pushBack("Content-Language: " + responseHeaders_.getContentLanguage());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
         try{
             result.pushBack("Content-Length: " + responseHeaders_.getContentLength());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
         try{
             result.pushBack("Content-Location: " + responseHeaders_.getContentLocation());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
         try{
             result.pushBack("Content-MD5: " + responseHeaders_.getContentMD5());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
         try{
             result.pushBack("Content-Range: " + responseHeaders_.getContentRange());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
         try{
             result.pushBack("Content-Type: " + responseHeaders_.getContentType());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
         try{
             result.pushBack("Content-Version: " + responseHeaders_.getContentVersion());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
         try{
             result.pushBack("Derived-From: " + responseHeaders_.getDerivedFrom());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
         try{
             result.pushBack("Expires: " + responseHeaders_.getExpires());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
         try{
             result.pushBack("Last-Modified: " + responseHeaders_.getLastModified());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
         try{
             result.pushBack("Link: " + responseHeaders_.getLink());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
         try{
             result.pushBack("Title: " + responseHeaders_.getTitle());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpCommonHeadersException&){}
 
         // Response headers
         try{
             result.pushBack("Accept-Ranges: " + responseHeaders_.getAcceptRanges());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeadersException&){}
         try{
             result.pushBack("Age: " + responseHeaders_.getAge());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeadersException&){}
         try{
             result.pushBack("Allow: " + responseHeaders_.getAllow());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeadersException&){}
         try{
             result.pushBack("Alternates: " + responseHeaders_.getAlternates());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeadersException&){}
         try{
             result.pushBack("ETag: " + responseHeaders_.getETag());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeadersException&){}
         try{
             result.pushBack("Location: " + responseHeaders_.getLocation());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeadersException&){}
         try{
             result.pushBack("Proxy-Authenticate: " + responseHeaders_.getProxyAuthenticate());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeadersException&){}
         try{
             result.pushBack("Public: "  + responseHeaders_.getPublic());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeadersException&){}
         try{
             result.pushBack("Retry-After: " + responseHeaders_.getRetryAfter());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeadersException&){}
         try{
             result.pushBack("Server: " + responseHeaders_.getServer());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeadersException&){}
         try{
             result.pushBack("Vary: " + responseHeaders_.getVary());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeadersException&){}
         try{
             result.pushBack("WWW-Authenticate: " + responseHeaders_.getWWWAuthenticate());
-            result.pushBack(newLine);
         } catch (MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseHeadersException&){}
     }
 
     // Message
     {
-        result.pushBack(newLine);
-        for (size_t i = 0; i < message_.size(); i++){
-            result.pushBack(message_[i]);
-            if (i + 1 != message_.size()) result.pushBack(newLine);
-        }
+        result.pushBack("");
+        result.pushBack(std::string(message_.begin(), message_.end()));
     }
 
     return result;
@@ -314,17 +273,13 @@ bool HttpResponse::setupFile(const std::string& filePath, const std::string& err
     }
     // Save file's data
     {
-        const size_t bufferSize = 256;
-        char *buffer = new char[bufferSize];
-
-        message_.clear();
-        while (inputStream.read(buffer, bufferSize)){
-            for (int i = 0; i < inputStream.gcount(); i++){
-                message_.push_back(buffer[i]);
+        std::string line;
+        while (std::getline(inputStream, line)){
+            if (message_.size()) message_.push_back('\n');
+            for (size_t i = 0; i < line.size(); i++){
+                message_.push_back(line[i]);
             }
         }
-
-        delete[] buffer;
     }
 
     try {
