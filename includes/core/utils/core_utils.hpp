@@ -36,16 +36,41 @@ int sockets_to_masterread(Sockets& sockets, ManagedFds& masterread);
 void create_sockets(const wsrv::Configuration& servers, Sockets& sockets_array);
 
 /*
- * Return:	a path to the error file with 'statusCode' name 
+ * Return:	a path to the error file with 'statusCode' name
  */
-std::string getErrorFile(const std::string& statusCode,
+std::string get_error_file(const std::string& statusCode,
 	const wsrv::configuration::ServerConfiguration::ErrorPagesContainerType& errorFiles);
+
+/*
+ * Set path of error page to response by 'status_sode'
+ */
+void error_setup_file(wsrv::Fds::fd_array_iter it_current_fd,
+				HttpResponse& response, const std::string& status_sode);
 
 /*
  * Generate the response when the request is invalid
  */
 void invalid_request(wsrv::Fds::fd_array_iter it_current_fd, HttpResponse& response,
 				utils::Exception& e);
+
+//ADD METHODS
+
+/*
+ * Checks that the method is supported by the target resource
+ *
+ * Return:	True if supported or otherwise False
+ */
+bool is_method_allowed(wsrv::Fds::fd_array_iter it_current_fd,
+					HttpResponse& response,
+					const std::string& path,
+					utils::METHOD method,
+					utils::HTTP_VERSION	version);
+
+/*
+ * Execute coming method
+ */
+void execute_method(wsrv::Fds::fd_array_iter it_current_fd, HttpResponse& response,
+				const http_request::HttpRequest& request);
 
 /*
  * Generate the response for current fd
