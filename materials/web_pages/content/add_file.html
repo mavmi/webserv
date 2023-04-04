@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8"/>
+		<title>Add file</title>
+		<style>
+			body {
+				background-image: url("../imgs/back_introduce.jpg");
+				background-repeat: no-repeat;
+				background-attachment: fixed;
+				background-size: 100% 100%
+			}
+			p, h1 {
+				padding-left: 40px;
+			}
+		</style>
+	</head>
+	<body>
+		<h1><font size="8px">Add your file</font></h1>
+		<p><font size="5px"><tt>Please, choos the file which should be uploaded</tt></font></p>
+		<form action="scripts/introduce.php" method="post">
+			<p><font size="4px"><tt>Choos your file: <input type="file" name="filename" /></tt></font></p>
+			<p><button type="submit" disabled>File not selected</p>
+		</form>
+	</body>
+	<script>
+		(() => {
+		  const fileInput = document.querySelector('input[name="filename"]');
+		  const button = document.querySelector('button[type="submit"]');
+		  fileInput.addEventListener("change", () => {
+			button.disabled = fileInput.files.length === 0;
+			button.innerText = fileInput.files.length === 0 ? 'File not selected' : 'Submit';
+		  });
+		})()
+	  </script>
+</html>

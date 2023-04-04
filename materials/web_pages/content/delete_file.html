@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8"/>
+		<title>Delete file</title>
+		<style>
+			body {
+				background-image: url("../imgs/back_comment.jpg");
+				background-repeat: no-repeat;
+				background-attachment: fixed;
+				background-size: 100% 100%
+			}
+			p, h1 {
+				padding-left: 40px;
+			}
+		</style>
+	</head>
+	<body>
+		<h1><font size="8px">Delete file from server</font></h1>
+		<p><font size="5px"><tt>Please, enter the full path to deleted file</tt></font></p>
+		<a data-confirm="Are you sure?" data-method="delete" href="/link-to-resource" rel="nofollow">Delete</a>
+		<form action="scripts/delete_file.php" method="delete">
+			<p><font size="4px"><tt>Name of the file:</tt></font></p>
+			<p><textarea name="filename"></textarea></p>
+			<p><input type="submit" value="Submit"/></p>
+		</form>
+	</body>
+</html>
