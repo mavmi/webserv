@@ -39,6 +39,18 @@ HttpCommonHeaders& HttpCommonHeaders::operator=(const HttpCommonHeaders& other){
     return *this;
 }
 
+std::string HttpCommonHeaders::getFilename() const{
+    HANDLE_EXC_BEGIN
+        const std::string& disposition = contentDisposition_.get();
+        const std::string key = "filename=\"";
+        size_t pos = disposition.find(key, 0);
+        if (pos == std::string::npos) throw ExceptionType("Couldn't find filename");
+        std::string filename = disposition.substr(pos + key.size(), disposition.size() - pos - key.size());
+        pos = filename.find('\"');
+        if (pos == std::string::npos) throw ExceptionType("Invalid Content-Disposition format");
+        return filename.substr(0, pos);
+    HANDLE_EXC_END
+}
 void HttpCommonHeaders::setContentDisposition(const std::string& contentDisposition){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::CDH);

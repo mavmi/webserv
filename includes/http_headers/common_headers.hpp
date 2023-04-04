@@ -33,6 +33,7 @@ public:
 
     HttpCommonHeaders& operator=(const HttpCommonHeaders& other);
 
+    std::string getFilename() const;
     void setContentDisposition(const std::string& contentDisposition);
     std::string& getContentDisposition();
     const std::string& getContentDisposition() const;
