@@ -16,5 +16,7 @@ int main(int argc, char** argv){
         start_server(parseConfig(argc, argv, parser));
     } catch (wsrv::utils::Exception& e){
         std::cout << e.what() << std::endl;
+    } catch (wsrv::utils::UtilsException& e){
+        std::cout << e.what() << std::endl;
     }
 } 

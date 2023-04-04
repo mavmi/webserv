@@ -43,7 +43,7 @@ const HttpRequest& HttpRequestParser::parseHttpRequest(const MAIN_NAMESPACE::UTI
     try {
         const std::vector<std::string>& content = buffer.getLines();
         if (content.size() < 1) throw ExceptionType("HTTP request doesn't contain headers");
-        parseStatusLine_(content.at(0));
+        parseStatusLine_(content.at(0), versionKostyl);
         versionKostyl = UTILS_NAMESPACE::httpVersionToString(httpRequest_.getStatusLine().getHttpVersion());
 
         size_t i = 1;
@@ -103,30 +103,17 @@ bool HttpRequestParser::isLineEmpty_(const std::string& line){
     return true;
 }
 
-void HttpRequestParser::parseStatusLine_(const std::string &line)
+void HttpRequestParser::parseStatusLine_(const std::string &line, std::string& versionKostyl)
 {
     std::vector<std::string> splitedLine = split_(line, ' ');
     size_t splitedLineSize = splitedLine.size();
     if (splitedLineSize < 2 || splitedLineSize > 3) throw ExceptionType("Status line got invalid number of arguments", EXC_ARGS);
     
-    // Method
-    {
-        const std::string& method = splitedLine.at(0);
-        
-        if (method == "GET") httpRequest_.getStatusLine().setMethod(MAIN_NAMESPACE::UTILS_NAMESPACE::GET);
-        else if (method == "POST") httpRequest_.getStatusLine().setMethod(MAIN_NAMESPACE::UTILS_NAMESPACE::POST);
-        else if (method == "DELETE") httpRequest_.getStatusLine().setMethod(MAIN_NAMESPACE::UTILS_NAMESPACE::DELETE);
-        else throw ExceptionType("Invalid method", EXC_ARGS);
-    }
-    // URL
-    {
-        const std::string& url = splitedLine.at(1);
-        httpRequest_.getStatusLine().setUrl(url);
-    }
     // HTTP version
     {
         if (splitedLineSize == 2) {
             httpRequest_.getStatusLine().setHttpVersion(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_0_9);
+            versionKostyl = UTILS_NAMESPACE::httpVersionToString(httpRequest_.getStatusLine().getHttpVersion());
             return;
         }
 
@@ -135,9 +122,24 @@ void HttpRequestParser::parseStatusLine_(const std::string &line)
 
         try {
             httpRequest_.getStatusLine().setHttpVersion(MAIN_NAMESPACE::UTILS_NAMESPACE::httpVersionFromString(verLine));
+            versionKostyl = UTILS_NAMESPACE::httpVersionToString(httpRequest_.getStatusLine().getHttpVersion());
         } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::UtilsException& e){
             throw ExceptionType(e.what(), EXC_ARGS);
         }
+    }
+    // URL
+    {
+        const std::string& url = splitedLine.at(1);
+        httpRequest_.getStatusLine().setUrl(url);
+    }
+    // Method
+    {
+        const std::string& method = splitedLine.at(0);
+        
+        if (method == "GET") httpRequest_.getStatusLine().setMethod(MAIN_NAMESPACE::UTILS_NAMESPACE::GET);
+        else if (method == "POST") httpRequest_.getStatusLine().setMethod(MAIN_NAMESPACE::UTILS_NAMESPACE::POST);
+        else if (method == "DELETE") httpRequest_.getStatusLine().setMethod(MAIN_NAMESPACE::UTILS_NAMESPACE::DELETE);
+        else throw ExceptionType("Invalid method", EXC_ARGS);
     }
 
     httpRequest_.getStatusLine().done();

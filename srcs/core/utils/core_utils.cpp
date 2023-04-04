@@ -94,7 +94,7 @@ void invalid_request(wsrv::Fds::fd_array_iter it_current_fd, HttpResponse& respo
 	std::string substr = e.what().substr(s, e.what().size() - s);
 
 	version = utils::httpVersionFromString(substr);
-	if (e.what() == "Invalid method") {
+	if (e.what().find("Invalid method") != std::string::npos) {
 		response.setStatusLine(version, "501", "Not Implemented");
 		error_setup_file(it_current_fd, response, "501");
 	} else {
