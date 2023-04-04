@@ -188,7 +188,6 @@ void execute_method(wsrv::Fds::fd_array_iter it_current_fd, HttpResponse& respon
 
 void response_generator(wsrv::Fds::fd_array_iter it_current_fd){
 	HttpResponse	response;
-
 	try {
 		// {
 		// 	response.getStatusLine().setHttpVersion(utils::HTTP_1_0);
@@ -207,11 +206,10 @@ void response_generator(wsrv::Fds::fd_array_iter it_current_fd){
 	http_request::HttpRequestParser request;
 	try {
 		request.parseHttpRequest((*it_current_fd).GetRequestMessageReference());
+		execute_method(it_current_fd, response, request.getHttpRequest());
 	} catch (utils::Exception& e) {
 		invalid_request(it_current_fd, response, e);
-		return ;
 	}
-	execute_method(it_current_fd, response, request.getHttpRequest());
 	// {
 	// 	const std::vector<std::string>& v = it_current_fd->GetResponseMessageReference().getLines();
 	// 	for (size_t i = 0; i < v.size(); i++){
