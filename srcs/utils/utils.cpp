@@ -61,6 +61,17 @@ HTTP_VERSION    httpVersionFromString(const std::string& httpVersionStr){
         throw UtilsException("Invalid HTTP version");
     }
 }
+std::string methodToString(METHOD method){
+    if (method == GET){
+        return "GET";
+    } else if (method == POST){
+        return "POST";
+    } else if (method == DELETE){
+        return "DELETE";
+    } else {
+        throw UtilsException("Invalid method");
+    }
+}
 
 // Print message with specified message type
 void utilsPrintMsg(const std::string& msg, MSG_TYPE msgType = INFO){

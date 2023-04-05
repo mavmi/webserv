@@ -60,6 +60,7 @@ public:
                 std::string message
             );
     bool setupFile(const std::string& filePath, const std::string& errFilePath);
+    void fillBody(const std::string& body);
 
 private:
     MAIN_NAMESPACE::HTTP_HEADERS_NAMESPACE::HttpResponseStatusLine responseStatusLine_;

@@ -136,8 +136,18 @@ void method_get(utils::HTTP_VERSION version, const std::string& path,
 	}
 }
 
-void method_post(){
+void method_post(utils::HTTP_VERSION version, const http_request::HttpRequest& request,
+			HttpResponse& response, wsrv::Fds::fd_array_iter it_current_fd){
+	Cgi cgi((*it_current_fd).GetParentSocketConfigReference(), request);
+	std::vector<std::string> req_cgi(cgi.Exec());
 
+	response.setStatusLine(version, req_cgi[0], req_cgi[1]);
+	if (req_cgi[0] != "200") {
+		error_setup_file(it_current_fd, response, req_cgi[0]);
+	} else {
+		// NEED TO PARS REQ_CGI BODY
+		response.fillBody(req_cgi[3]);
+	}
 }
 
 void method_delete(utils::HTTP_VERSION version, const std::string& path,
@@ -145,7 +155,7 @@ void method_delete(utils::HTTP_VERSION version, const std::string& path,
 	FILE *is_file = fopen(path.c_str(), "r");
 
 	if (is_file) {
-		// std::remove(full_path.c_str());
+		std::remove(path.c_str());
 		response.setStatusLine(version, "200", "OK");
 		//???WHICH PAGE TO RETURN???
 	} else {
@@ -197,7 +207,7 @@ bool execute_method(wsrv::Fds::fd_array_iter it_current_fd, HttpResponse& respon
 				it_current_fd
 			);
 		} else if (method == utils::POST) {
-
+			method_post(version, request, response, it_current_fd);
 		} else {
 			method_delete(
 				version, 

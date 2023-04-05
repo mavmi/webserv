@@ -16,6 +16,7 @@
 #include "../sockets.hpp"
 #include "../server.hpp"
 #include "../managed_fds.hpp"
+#include "../cgi.hpp"
 #include "../../utils/utils.hpp"
 #include "../../http_request_parser/http_request_parser.hpp"
 #include "../../http_response_generator/http_response.hpp"

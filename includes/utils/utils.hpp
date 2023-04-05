@@ -61,6 +61,7 @@ protected:
 
 std::string     httpVersionToString(HTTP_VERSION httpVersion);
 HTTP_VERSION    httpVersionFromString(const std::string& httpVersionStr);
+std::string     methodToString(METHOD method);
 
 void        utilsPrintMsg(const std::string& msg, MSG_TYPE msgType);
 void        utilsCheckArgsCount(int argc);

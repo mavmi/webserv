@@ -282,7 +282,6 @@ bool HttpResponse::setupFile(const std::string& filePath, const std::string& err
     std::fstream inputStream;
     const std::string* workingFile = NULL;
 
-
     // Get info about file
     inputStream.open(filePath.c_str(), std::ios::in | std::ios::binary);
     if (!inputStream.is_open() || stat(filePath.c_str(), &buf) != 0){
@@ -320,10 +319,6 @@ bool HttpResponse::setupFile(const std::string& filePath, const std::string& err
                 message_.push_back(line[i]);
             }
         }
-
-        // std::cout << "\t *** INPUT FILE ***" << std::endl;
-        // std::cout << std::string(message_.begin(), message_.end());
-        // std::cout << std::endl << "\t *********" << std::endl;
     }
 
     try {
@@ -335,6 +330,13 @@ bool HttpResponse::setupFile(const std::string& filePath, const std::string& err
     }
 
     return true;
+}
+void HttpResponse::fillBody(const std::string& body){
+    message_.clear();
+
+    for (size_t i = 0; i < body.size(); i++){
+        message_.push_back(body[i]);
+    }
 }
 
 bool HttpResponse::setupFileOnError(){
