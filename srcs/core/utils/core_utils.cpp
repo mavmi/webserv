@@ -54,9 +54,10 @@ void create_sockets(const wsrv::Configuration& servers, Sockets& sockets_array) 
 }
 
 std::string get_error_file(const std::string& statusCode,
-	const wsrv::configuration::ServerConfiguration::ErrorPagesContainerType& errorFiles){
+	const wsrv::configuration::ServerConfiguration& serverConf){
 
 	const std::string invalid = "invalid";
+	const wsrv::configuration::ServerConfiguration::ErrorPagesContainerType& errorFiles = serverConf.getErrorPages();
 
 	for (size_t i = 0; i < errorFiles.size(); i++){
 		const std::string& filePath = errorFiles.at(i);
@@ -70,10 +71,23 @@ std::string get_error_file(const std::string& statusCode,
 			fileName = fileName.substr(0, dotPos);
 		}
 		if (fileName == statusCode){
-			return filePath;
+			try {
+				return serverConf.getRoot() + filePath;
+			} catch (wsrv::utils::Exception&){
+				return invalid;
+			}
 		}
 	}
 	return invalid;
+}
+
+std::string get_file(const std::string& path,
+	const wsrv::configuration::ServerConfiguration& serverConf){
+	try {
+		return serverConf.getRoot() + path;
+	} catch (wsrv::utils::Exception&){
+		return "invalid";
+	}
 }
 
 void error_setup_file(wsrv::Fds::fd_array_iter it_current_fd,
@@ -82,7 +96,7 @@ void error_setup_file(wsrv::Fds::fd_array_iter it_current_fd,
 		"invalid",
 		get_error_file(
 			status_sode,
-			(*it_current_fd).GetParentSocketConfigReference().getErrorPages()
+			(*it_current_fd).GetParentSocketConfigReference()
 		)
 	);
 }
@@ -109,11 +123,12 @@ void method_get(utils::HTTP_VERSION version, const std::string& path,
 	bool is_file;
 
 	response.setStatusLine(version, "200", "OK");
+			std::cout << path << std::endl;
 	is_file = response.setupFile(
 		path,
 		get_error_file(
 			"404",
-			(*it_current_fd).GetParentSocketConfigReference().getErrorPages()
+			(*it_current_fd).GetParentSocketConfigReference()
 		)
 	);
 	if (!is_file) {
@@ -163,7 +178,7 @@ bool is_method_allowed(wsrv::Fds::fd_array_iter it_current_fd,
 	return true;
 }
 
-void execute_method(wsrv::Fds::fd_array_iter it_current_fd, HttpResponse& response,
+bool execute_method(wsrv::Fds::fd_array_iter it_current_fd, HttpResponse& response,
 				const http_request::HttpRequest& request){
 	bool is_allowed;
 	utils::METHOD method;
@@ -175,14 +190,25 @@ void execute_method(wsrv::Fds::fd_array_iter it_current_fd, HttpResponse& respon
 	is_allowed = is_method_allowed(it_current_fd, response, path, method, version);
 	if (is_allowed){
 		if (method == utils::GET){
-			method_get(version, path, response, it_current_fd);
+			method_get(
+				version, 
+				get_file(path, (*it_current_fd).GetParentSocketConfigReference()), 
+				response, 
+				it_current_fd
+			);
 		} else if (method == utils::POST) {
 
 		} else {
-			method_delete(version, path, response, it_current_fd);
+			method_delete(
+				version, 
+				get_file(path, (*it_current_fd).GetParentSocketConfigReference()), 
+				response, 
+				it_current_fd
+			);
 		}
 	}
 	(*it_current_fd).GetResponseMessageReference() = response.toBytes();
+	return is_allowed;
 }
 
 
@@ -204,11 +230,16 @@ void response_generator(wsrv::Fds::fd_array_iter it_current_fd){
 	// }
 
 	http_request::HttpRequestParser request;
+	bool is_allowed;
+
+	is_allowed = true;
 	try {
 		request.parseHttpRequest((*it_current_fd).GetRequestMessageReference());
-		execute_method(it_current_fd, response, request.getHttpRequest());
+		is_allowed = execute_method(it_current_fd, response, request.getHttpRequest());
 	} catch (utils::Exception& e) {
-		invalid_request(it_current_fd, response, e);
+		if (is_allowed){
+			invalid_request(it_current_fd, response, e);
+		}
 	}
 	// {
 	// 	const std::vector<std::string>& v = it_current_fd->GetResponseMessageReference().getLines();

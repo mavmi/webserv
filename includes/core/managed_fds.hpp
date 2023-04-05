@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:22:49 by msalena           #+#    #+#             */
-/*   Updated: 2023/04/02 12:17:49 by msalena          ###   ########.fr       */
+/*   Updated: 2023/04/05 18:20:33 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,12 @@ public:
 
 	// Return:	enum type of object - FD
 	OBJECT_TYPE	ObjectType(void);
+
+	// Return:	pointer to FD war_bytes 
+	char*	GetPointRawBytes(void);
+
+	// Set raw bytes
+	void	SetPointRawBytes(char* r);
 private:
 	refer_iter_pair fd_pair;
 	OBJECT_TYPE		type;

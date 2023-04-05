@@ -54,8 +54,10 @@ const MAIN_NAMESPACE::UTILS_NAMESPACE::METHOD& HttpRequestStatusLine::getMethod(
 }
 
 void HttpRequestStatusLine::setUrl(const std::string& url){
+    std::string url1 = url;
+    if (url.back() == '?') url1 = url1.substr(0, url1.size() - 1);
     throwOnDone_();
-    url_.set(url);
+    url_.set(url1);
 }
 std::string& HttpRequestStatusLine::getUrl(){
     HANDLE_EXC_BEGIN

@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:22:57 by msalena           #+#    #+#             */
-/*   Updated: 2023/04/02 18:42:11 by msalena          ###   ########.fr       */
+/*   Updated: 2023/04/05 18:40:38 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ public:
 	typedef parent_socket*						parent_socket_pointer;
 	typedef const Configuration::ServerType&	const_parent_socket_config_reference;
 
+	ssize_t	total_sent_bytes;
+
 	FdObj(parent_socket_pointer parent);
 	FdObj(const FdObj& another);
 	FdObj(int fd, parent_socket_pointer parent);
@@ -83,8 +85,15 @@ public:
 
 	// Return:	const reference to the Config class of socket-parent
 	const_parent_socket_config_reference GetParentSocketConfigReference(void);
+
+	// Return:	pointer to war_bytes
+	char*	GetPointRawBytes(void);
+
+	// Set raw bytes
+	void	SetPointRawBytes(char* r);
 private:
 	int						fd;
+	char*					raw_bytes;
 	parent_socket_pointer	parent;
 	clientaddr_inform		client_information;
 	clientaddr_struct_len	client_inform_len;

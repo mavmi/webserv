@@ -210,11 +210,7 @@ const std::vector<std::string>& BytesContainer::getLines() const{
     return bytesContainer_;
 }
 char* BytesContainer::toBytes() const{
-    size_t size = 0;
-    for (size_t i = 0; i < bytesContainer_.size(); i++){
-        size += bytesContainer_[i].size();
-    }
-
+    size_t size = charsCount();
     char* arr = new char[size];
     size_t i = 0;
     for (size_t iter = 0; iter < bytesContainer_.size(); iter++){

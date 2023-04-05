@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:23:34 by msalena           #+#    #+#             */
-/*   Updated: 2023/04/02 16:52:52 by msalena          ###   ########.fr       */
+/*   Updated: 2023/04/05 18:41:02 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,13 @@ namespace CORE{
 
 //FD_OBJ IMPLEMENTATION
 
-FdObj::FdObj(FdObj::parent_socket_pointer parent) : fd(-1), parent(parent) {
+FdObj::FdObj(FdObj::parent_socket_pointer parent) : fd(-1), raw_bytes(NULL), parent(parent) {
+	total_sent_bytes = 0;
 	client_inform_len = sizeof(client_information);
 }
 
-FdObj::FdObj(int fd, FdObj::parent_socket_pointer parent) : fd(fd), parent(parent) {
+FdObj::FdObj(int fd, FdObj::parent_socket_pointer parent) : fd(fd), raw_bytes(NULL), parent(parent) {
+	total_sent_bytes = 0;
 	client_inform_len = sizeof(client_information);
 }
 
@@ -32,7 +34,9 @@ FdObj::FdObj(const FdObj& another) {
 FdObj::~FdObj(void) { }
 
 FdObj& FdObj::operator=(const FdObj& another) {
+	total_sent_bytes = 0;
 	fd = another.fd;
+	raw_bytes = another.raw_bytes; 
 	parent = another.parent;
 	client_information = another.client_information;
 	client_inform_len = sizeof(client_information);
@@ -66,6 +70,14 @@ FdObj::bytes_container_reference FdObj::GetResponseMessageReference(void){
 
 FdObj::const_parent_socket_config_reference FdObj::GetParentSocketConfigReference(void){
 	return parent->GetServerInfo();
+}
+
+char*	FdObj::GetPointRawBytes(void){
+	return(raw_bytes);
+}
+
+void	FdObj::SetPointRawBytes(char* r){
+	raw_bytes = r;
 }
 
 

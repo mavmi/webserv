@@ -39,7 +39,7 @@ void create_sockets(const wsrv::Configuration& servers, Sockets& sockets_array);
  * Return:	a path to the error file with 'statusCode' name
  */
 std::string get_error_file(const std::string& statusCode,
-	const wsrv::configuration::ServerConfiguration::ErrorPagesContainerType& errorFiles);
+	const wsrv::configuration::ServerConfiguration& serverConf);
 
 /*
  * Set path of error page to response by 'status_sode'
@@ -68,8 +68,10 @@ bool is_method_allowed(wsrv::Fds::fd_array_iter it_current_fd,
 
 /*
  * Execute coming method
+ *
+ * Return:	True if method allowed or otherwise False
  */
-void execute_method(wsrv::Fds::fd_array_iter it_current_fd, HttpResponse& response,
+bool execute_method(wsrv::Fds::fd_array_iter it_current_fd, HttpResponse& response,
 				const http_request::HttpRequest& request);
 
 /*

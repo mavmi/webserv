@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:23:44 by msalena           #+#    #+#             */
-/*   Updated: 2023/04/02 12:17:49 by msalena          ###   ########.fr       */
+/*   Updated: 2023/04/05 18:24:09 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,13 @@ FdReferencePair::OBJECT_TYPE FdReferencePair::ObjectType(void) {
 	return (type);
 }
 
+char*	FdReferencePair::GetPointRawBytes(void){
+	return(fd_pair.second->GetPointRawBytes());
+}
+
+void	FdReferencePair::SetPointRawBytes(char* r){
+	fd_pair.second->SetPointRawBytes(r);
+}
 
 // MANAGED_FDS INITIALIZATION
 

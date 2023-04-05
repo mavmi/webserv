@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:22:02 by msalena           #+#    #+#             */
-/*   Updated: 2023/04/02 21:14:18 by msalena          ###   ########.fr       */
+/*   Updated: 2023/04/05 18:58:08 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ void Server::RecvRequest_(Server::managed_fds_reference masterread,
 		if (nbytes >= 0) {
 			nbytes = MessageFormationToReceiveSend_(fd_pair.GetFdIter(), buf, nbytes);
 			if (!nbytes) {
+				fd_pair.SetPointRawBytes(fd_pair.GetResponseMessageReference().toBytes());
 				masterwrite.AddFd((*it_set_curretn_fd));
 				masterread.DeleteFd(current_fd);
 			}
@@ -89,41 +90,42 @@ void Server::RecvRequest_(Server::managed_fds_reference masterread,
 
 void Server::SendResponse_(Server::managed_fds_reference masterwrite,
 						int current_fd) {
-	size_t send_nbytes;
+	ssize_t send_nbytes;
+	ssize_t arr_size;
 	bool is_fd_in_set;
-	char* response_bytes_container; //NEED BE FREED;
-	fds_set_iter it_set_curretn_fd = masterwrite.FindFdInArray(current_fd);
-	managed_fd_pair_class_reference fd_pair = (*it_set_curretn_fd).second;
+	managed_fd_pair_class_reference fd_pair = (*masterwrite.FindFdInArray(current_fd)).second;
 
-	response_bytes_container = fd_pair.GetResponseMessageReference().toBytes();
-	is_fd_in_set = fd_pair.GetFdIter() != fd_pair.FdPairReference().first.End();
+	arr_size = static_cast<ssize_t>(fd_pair.GetResponseMessageReference().charsCount());
+	is_fd_in_set = (fd_pair.GetFdIter() != fd_pair.FdPairReference().first.End());
 	
-	{	// OUTPUT DATA
-		const std::vector<std::string>& v = fd_pair.GetResponseMessageReference().getLines();
-		for (size_t i = 0; i < v.size(); i++){
-			std::cout << v[i] << std::endl;
-		}
-		exit(0);
-	}
-
+	// {	// OUTPUT DATA
+	// 	const std::vector<std::string>& v = fd_pair.GetResponseMessageReference().getLines();
+	// 	for (size_t i = 0; i < v.size(); i++){
+	// 		std::cout << v[i] << std::endl;
+	// 	}
+	// 	// exit(0);
+	// }
 	// if fd in opended fds for clients-connection
 	if (is_fd_in_set){
 		send_nbytes = send(
-				current_fd,
-				response_bytes_container,
-				sizeof(response_bytes_container),
-				0
-			);
-		if (send_nbytes == fd_pair.GetResponseMessageReference().charsCount()) {
+			current_fd, 
+			fd_pair.GetPointRawBytes()+fd_pair.GetFdIter()->total_sent_bytes, 
+			arr_size, 
+			0
+		);
+		if(send_nbytes) fd_pair.GetFdIter()->total_sent_bytes += send_nbytes;
+		
+		if (fd_pair.GetFdIter()->total_sent_bytes == arr_size) {
+			delete[] fd_pair.GetPointRawBytes();
+			fd_pair.SetPointRawBytes(NULL);
 			masterwrite.DeleteFd(current_fd);
 			fd_pair.DeleteFd();
 			return ;
-		} else if (!send_nbytes || send_nbytes > 0) {
-			// What will we do
-			return ;
 		}
 	}
-	if (!is_fd_in_set) {
+	if (!is_fd_in_set || send_nbytes <= 0) {
+		delete[] fd_pair.GetPointRawBytes();
+		fd_pair.SetPointRawBytes(NULL);
 		masterwrite.DeleteFd(current_fd);
 		fd_pair.DeleteFd();
 		server_throws(
@@ -132,7 +134,6 @@ void Server::SendResponse_(Server::managed_fds_reference masterwrite,
 			"SEND_FAILD: wrong answer from send()"
 		);
 	}
-
 }
 
 int Server::MessageFormationToReceiveSend_(Server::fd_iter it_current_fd,
@@ -140,25 +141,25 @@ int Server::MessageFormationToReceiveSend_(Server::fd_iter it_current_fd,
 	int is_req_end;
 	bytes_container_reference request_container = (*it_current_fd).GetRequestMessageReference();
 	
-	{	// TEST OUTPUT OF INCOMING PURE DATA //
-		std::cout << "*** char buffer ***\n" << buf << std::endl;
-		std::cout << "*******************" << std::endl;
-	}
+	// {	// TEST OUTPUT OF INCOMING PURE DATA //
+	// 	std::cout << "*** char buffer ***\n" << buf << std::endl;
+	// 	std::cout << "*******************" << std::endl;
+	// }
 
 	is_req_end = request_container.pushBack(buf, nbytes);
 
-	{	// JSUT TO BE SURE THERE IS ONLY ZERO AND NOTHING MORE //
-		std::cout << is_req_end << std::endl;
-	}
+	// {	// JSUT TO BE SURE THERE IS ONLY ZERO AND NOTHING MORE //
+	// 	std::cout << is_req_end << std::endl;
+	// }
 
 	if (!is_req_end){
 		
-		{	// JUST TO BE SURE IF WORKS FINE //
-			std::vector<std::string> lines = request_container.getLines();
-			for (size_t i = 0; i < lines.size(); i++){
-				std::cout << lines.at(i) << std::endl;
-			}
-		}
+		// {	// JUST TO BE SURE IF WORKS FINE //
+		// 	std::vector<std::string> lines = request_container.getLines();
+		// 	for (size_t i = 0; i < lines.size(); i++){
+		// 		std::cout << lines.at(i) << std::endl;
+		// 	}
+		// }
 		response_generator(it_current_fd);
 	}
 	return is_req_end;
