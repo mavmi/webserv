@@ -136,7 +136,7 @@ void method_get(utils::HTTP_VERSION version, const std::string& path,
 }
 
 void method_post(utils::HTTP_VERSION version, const http_request::HttpRequest& request,
-			HttpResponse& response, wsrv::Fds::fd_array_iter it_current_fd){
+			HttpResponse& response, wsrv::Fds::fd_array_iter it_current_fd){	
 	Cgi cgi((*it_current_fd).GetParentSocketConfigReference(), request);
 	std::vector<std::string> req_cgi(cgi.Exec());
 
@@ -144,7 +144,6 @@ void method_post(utils::HTTP_VERSION version, const http_request::HttpRequest& r
 	if (req_cgi[0] != "200") {
 		error_setup_file(it_current_fd, response, req_cgi[0]);
 	} else {
-		// NEED TO PARS REQ_CGI BODY
 		response.fillBody(req_cgi[2]);
 		for (std::vector<char>::iterator it = response.getMessage().begin();
 			it != response.getMessage().end();
@@ -179,8 +178,6 @@ bool is_method_allowed(wsrv::Fds::fd_array_iter it_current_fd,
 		is_allowed = (*it_current_fd).GetParentSocketConfigReference().
 					getRoute(path).isMethodPresent(method);
 	} catch (utils::Exception& e) {
-		
-		// std::cout << e.what() << std::endl;
 		response.setStatusLine(version, "404", "Not Found");
 		error_setup_file(it_current_fd, response, "404");
 		return false;
@@ -221,7 +218,7 @@ bool execute_method(wsrv::Fds::fd_array_iter it_current_fd, HttpResponse& respon
 				it_current_fd
 			);
 		}
-	}
+	} 
 	(*it_current_fd).GetResponseMessageReference() = response.toBytes();
 	return is_allowed;
 }
@@ -232,19 +229,9 @@ void response_generator(wsrv::Fds::fd_array_iter it_current_fd){
 	
 
 	try {
-		// {
-		// 	response.getStatusLine().setHttpVersion(utils::HTTP_1_0);
-		// 	response.getStatusLine().setStatusCode("123");
-		// 	response.getStatusLine().setMessage("msg");
-		// }
 		response.setDate();
 		response.setRetryAfter();
 	} catch (utils::Exception&) {}
-
-	// {
-	// 	std::cout << "\t// Response test output //" << std::endl;
-	// 	std::cout << response.toBytes().toBytes();
-	// }
 
 	http_request::HttpRequestParser request;
 	bool is_allowed;
@@ -253,18 +240,14 @@ void response_generator(wsrv::Fds::fd_array_iter it_current_fd){
 	try {
 		request.parseHttpRequest((*it_current_fd).GetRequestMessageReference());
 		print_request_info(request.getHttpRequest());
+	
+	
 		is_allowed = execute_method(it_current_fd, response, request.getHttpRequest());
 	} catch (utils::Exception& e) {
 		if (is_allowed){
 			invalid_request(it_current_fd, response, e);
 		}
 	}
-	// {
-	// 	const std::vector<std::string>& v = it_current_fd->GetResponseMessageReference().getLines();
-	// 	for (size_t i = 0; i < v.size(); i++){
-	// 		std::cout << v[i] << std::endl;
-	// 	}
-	// }
 }
 
 void print_request_info(const http_request::HttpRequest& request){

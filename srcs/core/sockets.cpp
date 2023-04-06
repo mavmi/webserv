@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:23:34 by msalena           #+#    #+#             */
-/*   Updated: 2023/04/05 18:41:02 by msalena          ###   ########.fr       */
+/*   Updated: 2023/04/06 21:23:18 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,11 +110,6 @@ Fds::fd_type Fds::GetFd(int fd){
 Fds::fd_array_reference Fds::GetFdsReference(void) {
 	return (fds);
 }
-
-// Fds::fd_array_iter Fds::AddFd(int fd) {
-// 	fd_type a(fd);
-// 	return (fds.insert(fds.end(), a));
-// }
 
 Fds::fd_array_iter Fds::AddFd(Fds::fd_type_reference fd) {
 	return (fds.insert(fds.end(), fd));

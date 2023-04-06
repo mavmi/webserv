@@ -1,15 +1,15 @@
 <?php
-	echo var_dump($_POST) . "\n\n";
-	echo var_dump($_SERVER) . "\n\n";
-	echo var_dump($_REQUEST) . "\n\n";
-
+	$a = explode('&', $_SERVER["QUERY_STRING"]);
+	$n = substr($a[0], strpos($a[0], '=') + 1);
+	$c = substr($a[1], strpos($a[1], '=') + 1);
 	$nickname = "Undefine";
 	$comment = "Undefine";
-	if (isset($_POST["nickname"])){
-		$nickname = $_POST["nickname"];
+
+	if (strlen($n)){
+		$nickname = $n;
 	}
-	if (isset($_POST["comment"])){
-		$comment = $_POST["comment"];
+	if (strlen($c)){
+		$comment =$c;
 	}
 
 	echo "\"" 
