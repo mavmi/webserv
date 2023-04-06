@@ -145,11 +145,6 @@ void method_post(utils::HTTP_VERSION version, const http_request::HttpRequest& r
 		error_setup_file(it_current_fd, response, req_cgi[0]);
 	} else {
 		response.fillBody(req_cgi[2]);
-		// for (std::vector<char>::iterator it = response.getMessage().begin();
-		// 	it != response.getMessage().end();
-		// 	++it)
-		// 	std::cout << *it;
-		// std::cout << std::endl;
 	}
 }
 
@@ -158,13 +153,14 @@ void method_delete(utils::HTTP_VERSION version, const std::string& path,
 	FILE *is_file = fopen(path.c_str(), "r");
 
 	if (is_file) {
+		fclose(is_file);
 		std::remove(path.c_str());
 		response.setStatusLine(version, "200", "OK");
 	} else {
+		fclose(is_file);
 		response.setStatusLine(version, "404", "Not Found");
 		error_setup_file(it_current_fd, response, "404");
 	}
-	fclose(is_file);
 }
 
 bool is_method_allowed(wsrv::Fds::fd_array_iter it_current_fd,

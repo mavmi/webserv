@@ -55,35 +55,6 @@
 				})
 			}
 		</script>
-		<!-- <script>
-			window.onload = () => {
-				const input = document.querySelector('input[name="delete"]');
-				const button = document.querySelector('button');
-
-				input.addEventListener('input', () => {
-					if (input.value) {
-					button.classList.remove('hidden');
-					} else {
-					button.classList.add('hidden');
-					}
-				})
-				button.addEventListener('click', () => {
-					let resp = fetch(`../../uploaded/${input.value}`, {
-						method: 'DELETE',
-					})
-					.then((res) => {
-						if (!res.ok){
-							return res.text();
-						} 
-						throw ("Success... File was deleted!");
-					})
-					.then(c => document.body.innerHTML = c)
-					.catch (msg => {
-						alert(msg);
-					})
-				})
-			}
-		</script> -->
 		<h1>Delete file from server</h1>
 		<p>Please, enter the name of the deleted file</p>
 		<p>Name of the file:</p>
