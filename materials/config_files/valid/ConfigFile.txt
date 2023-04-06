@@ -1,24 +1,150 @@
 {
     port: 1025; 
     host: 127.0.0.1;
-    server_name:     DEFAULT_SERVER;
-    error_pages:    /Users/msalena/Desktop/webserv/materials/config_files/web_pages/test.html;
+    root:            materials;
+    server_name:     wsrv_by_pmalena_&_msaryjo;
+    error_pages:     /web_pages/errors/400.html, /web_pages/errors/404.html, /web_pages/errors/405.html, /web_pages/errors/500.html, /web_pages/errors/501.html;
     body_size:       4096;
+
     [
         methods:             GET;
-        redir:               /Users/msalena/Desktop/webserv/materials/config_files/web_pages/test.html;
-        dir:                 /Users/msalena/Desktop/webserv/materials/config_files/valid;
+        redir:               /web_pages/index.html;
+        dir:                 /web_pages/;
+    ]
+
+
+    [
+        methods:             GET;
+        redir:               /web_pages/imgs/back_index.jpg;
+        dir:                 /web_pages/imgs/;
+    ]
+    [
+        methods:             GET;
+        redir:               /web_pages/imgs/back_comment.jpg;
+        dir:                 /web_pages/imgs/;
+    ]
+    [
+        methods:             GET;
+        redir:               /web_pages/imgs/back_errors.jpg;
+        dir:                 /web_pages/imgs/;
+    ]
+    [
+        methods:             GET;
+        redir:               /web_pages/imgs/back_introduce.jpg;
+        dir:                 /web_pages/imgs/;
+    ]
+
+
+    [
+        methods:             DELETE;
+        redir:               /uploaded/;
+        dir:                 /uploaded/;
+    ]
+
+
+    [
+        methods:             GET;
+        redir:               /web_pages/content/add_file.html;
+        dir:                 /web_pages/content/;
+    ]
+    [
+        methods:             GET;
+        redir:               /web_pages/content/delete_file.html;
+        dir:                 /web_pages/content/;
+    ]
+    [
+        methods:             GET;
+        redir:               /web_pages/content/comment.html;
+        dir:                 /web_pages/content/;
+    ]
+    [
+        methods:             GET;
+        redir:               /web_pages/content/success_upload.html;
+        dir:                 /web_pages/content/;
+    ]
+    [
+        methods:             GET;
+        redir:               /web_pages/content/unsuccess_upload.html;
+        dir:                 /web_pages/content/;
+    ]
+
+
+    [
+        methods:             POST;
+        redir:               /web_pages/content/scripts/add_file.php;
+        dir:                 /web_pages/content/scripts/;
+    ]
+    [
+        methods:             POST;
+        redir:               /web_pages/content/scripts/comment.php;
+        dir:                 /web_pages/content/scripts/;
     ]
 }
 {
-    port: 1026; 
-    host: 127.0.0.1;
-    server_name:     DEFAULT_SERVER;
-    error_pages:    /Users/msalena/Desktop/webserv/materials/config_files/web_pages/test.html;
+    port: 1058; 
+    host: 0.0.0.0;
+    root:            materials;
+    server_name:     wsrv_by_pmalena_&_msaryjo;
+    error_pages:     /web_pages/errors/400.html, /web_pages/errors/404.html, /web_pages/errors/405.html, /web_pages/errors/500.html, /web_pages/errors/501.html;
     body_size:       4096;
+
     [
         methods:             GET;
-        redir:               /Users/msalena/Desktop/webserv/materials/config_files/web_pages/test.html;
-        dir:                 /Users/msalena/Desktop/webserv/materials/config_files/valid;
+        redir:               /web_pages/index.html;
+        dir:                 /web_pages/;
+    ]
+
+
+    [
+        methods:             GET;
+        redir:               /web_pages/imgs/back_index.jpg;
+        dir:                 /web_pages/imgs/;
+    ]
+    [
+        methods:             GET;
+        redir:               /web_pages/imgs/back_comment.jpg;
+        dir:                 /web_pages/imgs/;
+    ]
+    [
+        methods:             GET;
+        redir:               /web_pages/imgs/back_errors.jpg;
+        dir:                 /web_pages/imgs/;
+    ]
+    [
+        methods:             GET;
+        redir:               /web_pages/imgs/back_introduce.jpg;
+        dir:                 /web_pages/imgs/;
+    ]
+
+
+    [
+        methods:             DELETE;
+        redir:               /uploaded/;
+        dir:                 /uploaded/;
+    ]
+
+
+    [
+        methods:             GET;
+        redir:               /web_pages/content/add_file.html;
+        dir:                 /web_pages/content/;
+    ]
+    [
+        methods:             GET;
+        redir:               /web_pages/content/delete_file.html;
+        dir:                 /web_pages/content/;
+    ]
+    [
+        methods:             GET;
+        redir:               /web_pages/content/comment.html;
+        dir:                 /web_pages/content/;
+    ]
+
+
+    [
+        methods:             POST;
+        redir:               /web_pages/content/scripts/comment.php;
+        dir:                 /web_pages/content/scripts/;
     ]
 }
+

@@ -3,7 +3,6 @@
 #include "request_status_line.hpp"
 
 #include "../utils/utils.hpp"
-#include "../utils/exceptions.hpp"
 
 namespace MAIN_NAMESPACE{
 namespace HTTP_HEADERS_NAMESPACE{
@@ -27,9 +26,7 @@ protected:
 
 class HttpHeadersAbstractParent{
 public:
-    typedef MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_VERSION   HttpVersionType;
     typedef HttpHeadersAbstractParentException              ExceptionType;
-    typedef std::string                                     DateType;
 
 protected:
     const StatusLineAbstractParent& statusLine_;
@@ -40,10 +37,10 @@ protected:
 
     HttpHeadersAbstractParent& operator=(const HttpHeadersAbstractParent&);
 
-    virtual HttpVersionType getHttpVersion_() const;
-    virtual void checkVersion_(HttpVersionType version);
+    virtual MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_VERSION getHttpVersion_() const;
+    virtual void checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_VERSION version);
 
-    DateType generateDate_(std::tm* time) const;
+    std::string generateDate_(std::tm* time) const;
 
 };
 

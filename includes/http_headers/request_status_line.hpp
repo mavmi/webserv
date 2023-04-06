@@ -25,8 +25,6 @@ protected:
 
 class HttpRequestStatusLine : public StatusLineAbstractParent{
 public:
-    typedef std::string                                     UrlType;
-    typedef MAIN_NAMESPACE::UTILS_NAMESPACE::METHOD         MethodType;
     typedef HttpRequestStatusLineException                  ExceptionType;
 
     HttpRequestStatusLine();
@@ -35,17 +33,17 @@ public:
 
     HttpRequestStatusLine& operator=(const HttpRequestStatusLine& other);
 
-    void setMethod(MethodType method);
-    MethodType& getMethod();
-    const MethodType& getMethod() const;
+    void setMethod(MAIN_NAMESPACE::UTILS_NAMESPACE::METHOD method);
+    MAIN_NAMESPACE::UTILS_NAMESPACE::METHOD& getMethod();
+    const MAIN_NAMESPACE::UTILS_NAMESPACE::METHOD& getMethod() const;
 
-    void setUrl(const UrlType& url);
-    UrlType& getUrl();
-    const UrlType& getUrl() const;
+    void setUrl(const std::string& url);
+    std::string& getUrl();
+    const std::string& getUrl() const;
 
 private:
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<MethodType> method_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<UrlType> url_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<MAIN_NAMESPACE::UTILS_NAMESPACE::METHOD> method_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> url_;
 
     void deleteData_();
     void copyData_(const MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent& other);

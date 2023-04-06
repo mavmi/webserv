@@ -35,10 +35,10 @@ HttpHeadersAbstractParent& HttpHeadersAbstractParent::operator=(const HttpHeader
     return *this;
 }
 
-HttpHeadersAbstractParent::HttpVersionType HttpHeadersAbstractParent::getHttpVersion_() const{
+MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_VERSION HttpHeadersAbstractParent::getHttpVersion_() const{
     return statusLine_.getHttpVersion();
 }
-void HttpHeadersAbstractParent::checkVersion_(HttpVersionType version){
+void HttpHeadersAbstractParent::checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_VERSION version){
     const std::string excMsg = "Invalid HTTP ver for current header";
     
     if ((version == MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_AUTH || version == MAIN_NAMESPACE::UTILS_NAMESPACE::MIME ||
@@ -53,7 +53,7 @@ void HttpHeadersAbstractParent::checkVersion_(HttpVersionType version){
     }
 }
 
-HttpHeadersAbstractParent::DateType HttpHeadersAbstractParent::generateDate_(std::tm* time) const {
+std::string HttpHeadersAbstractParent::generateDate_(std::tm* time) const {
     std::string result;
 
     switch (time->tm_wday){

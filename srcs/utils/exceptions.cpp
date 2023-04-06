@@ -1,4 +1,4 @@
-#include "../../includes/utils/exceptions.hpp"
+#include "../../includes/utils/utils.hpp"
 
 namespace MAIN_NAMESPACE{
 namespace UTILS_NAMESPACE{

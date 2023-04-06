@@ -26,20 +26,6 @@ protected:
 class HttpCommonHeaders : public MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent, public HttpHeadersAbstractParent{
 public:
     typedef HttpCommonHeadersException      ExceptionType;
-    typedef std::string                     ContentDispositionType;
-    typedef std::string                     ContentEncodingType;
-    typedef std::string                     ContentLanguageType;
-    typedef std::string                     ContentLengthType;
-    typedef std::string                     ContentLocationType;
-    typedef std::string                     ContentMD5Type;
-    typedef std::string                     ContentRangeType;
-    typedef std::string                     ContentType;
-    typedef std::string                     ContentVersionType;
-    typedef std::string                     DerivedFromType;
-    typedef std::string                     ExpiresType;
-    typedef DateType                        LastModifiedType;
-    typedef std::string                     LinkType;
-    typedef std::string                     TitleType;
 
     HttpCommonHeaders(const StatusLineAbstractParent& statusLine);
     HttpCommonHeaders(const HttpCommonHeaders& other);
@@ -47,78 +33,79 @@ public:
 
     HttpCommonHeaders& operator=(const HttpCommonHeaders& other);
 
-    void setContentDisposition(const ContentDispositionType& contentDisposition);
-    ContentDispositionType& getContentDisposition();
-    const ContentDispositionType& getContentDisposition() const;
+    std::string getFilename() const;
+    void setContentDisposition(const std::string& contentDisposition);
+    std::string& getContentDisposition();
+    const std::string& getContentDisposition() const;
 
-    void setContentEncoding(const ContentEncodingType& contentEncoding);
-    ContentEncodingType& getContentEncoding();
-    const ContentEncodingType& getContentEncoding() const;
+    void setContentEncoding(const std::string& contentEncoding);
+    std::string& getContentEncoding();
+    const std::string& getContentEncoding() const;
 
-    void setContentLanguage(const ContentLanguageType& contentLanguage);
-    ContentLanguageType& getContentLanguage();
-    const ContentLanguageType& getContentLanguage() const;
+    void setContentLanguage(const std::string& contentLanguage);
+    std::string& getContentLanguage();
+    const std::string& getContentLanguage() const;
 
-    void setContentLength(const ContentLengthType& contentLength);
-    ContentLengthType& getContentLength();
-    const ContentLengthType& getContentLength() const;
+    void setContentLength(const std::string& contentLength);
+    std::string& getContentLength();
+    const std::string& getContentLength() const;
 
-    void setContentLocation(const ContentLocationType& contentLocation);
-    ContentLocationType& getContentLocation();
-    const ContentLocationType& getContentLocation() const;
+    void setContentLocation(const std::string& contentLocation);
+    std::string& getContentLocation();
+    const std::string& getContentLocation() const;
 
-    void setContentMD5(const ContentMD5Type& contentMD5);
-    ContentMD5Type& getContentMD5();
-    const ContentMD5Type& getContentMD5() const;
+    void setContentMD5(const std::string& contentMD5);
+    std::string& getContentMD5();
+    const std::string& getContentMD5() const;
 
-    void setContentRange(const ContentRangeType& contentRange);
-    ContentRangeType& getContentRange();
-    const ContentRangeType& getContentRange() const;
+    void setContentRange(const std::string& contentRange);
+    std::string& getContentRange();
+    const std::string& getContentRange() const;
 
-    void setContentType(const ContentType& contentType);
-    ContentType& getContentType();
-    const ContentType& getContentType() const;
+    void setContentType(const std::string& contentType);
+    std::string& getContentType();
+    const std::string& getContentType() const;
 
-    void setContentVersion(const ContentVersionType& contentVersion);
-    ContentVersionType& getContentVersion();
-    const ContentVersionType& getContentVersion() const;
+    void setContentVersion(const std::string& contentVersion);
+    std::string& getContentVersion();
+    const std::string& getContentVersion() const;
 
-    void setDerivedFrom(const DerivedFromType& derivedFrom);
-    DerivedFromType& getDerivedFrom();
-    const DerivedFromType& getDerivedFrom() const;
+    void setDerivedFrom(const std::string& derivedFrom);
+    std::string& getDerivedFrom();
+    const std::string& getDerivedFrom() const;
 
-    void setExpires(const ExpiresType& expires);
-    ExpiresType& getExpires();
-    const ExpiresType& getExpires() const;
+    void setExpires(const std::string& expires);
+    std::string& getExpires();
+    const std::string& getExpires() const;
 
     void setLastModified(std::tm* time);
-    void setLastModified(const LastModifiedType& lastModified);
-    LastModifiedType& getLastModified();
-    const LastModifiedType& getLastModified() const;
+    void setLastModified(const std::string& lastModified);
+    std::string& getLastModified();
+    const std::string& getLastModified() const;
 
-    void setLink(const LinkType& link);
-    LinkType& getLink();
-    const LinkType& getLink() const;
+    void setLink(const std::string& link);
+    std::string& getLink();
+    const std::string& getLink() const;
 
-    void setTitle(const TitleType& title);
-    TitleType& getTitle();
-    const TitleType& getTitle() const;
+    void setTitle(const std::string& title);
+    std::string& getTitle();
+    const std::string& getTitle() const;
 
 private:
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ContentDispositionType> contentDisposition_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ContentEncodingType> contentEncoding_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ContentLanguageType> contentLanguage_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ContentLengthType> contentLength_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ContentLocationType> contentLocation_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ContentMD5Type> contentMD5_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ContentRangeType> contentRange_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ContentType> contentType_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ContentVersionType> contentVersion_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<DerivedFromType> derivedFrom_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ExpiresType> expires_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<LastModifiedType> lastModified_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<LinkType> link_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<TitleType> title_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> contentDisposition_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> contentEncoding_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> contentLanguage_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> contentLength_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> contentLocation_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> contentMD5_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> contentRange_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> contentType_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> contentVersion_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> derivedFrom_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> expires_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> lastModified_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> link_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> title_;
 
     void deleteData_();
     void copyData_(const ParserAbstractParent& o);

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8"/>
+		<title>Success upload</title>
+		<style>
+			body, input, button {
+				font-family: 'monospace' ;
+				font-size: 24px;
+			}
+			body {
+				background-image: url("../../imgs/back_introduce.jpg");
+				background-repeat: no-repeat;
+				background-attachment: fixed;
+				background-size: 100% 100%
+			}
+			p, h1, h3, form {
+				padding-left: 40px;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>The file was successfully uploaded</h1>
+		<p>You can check it in path 'materials/uploaded' in webserv folder</p>
+		<h3 id="position">Now it's possible to back to the uploaded form:</h3>
+		<form id="position" action="add_file.html" method="GET">
+			<button>
+				
+					
+						Add your file
+					
+				
+			</button>
+		</form>
+		<br>
+		<h3 id="position">... or to go to form for deleting files:</h3>
+		<form id="position" action="delete_file.html" method="GET">
+			<button>
+				
+					
+						Delete file on server
+					
+				
+			</button>
+		</form>
+	</body>
+</html>

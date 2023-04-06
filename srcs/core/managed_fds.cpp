@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:23:44 by msalena           #+#    #+#             */
-/*   Updated: 2023/02/25 22:32:07 by msalena          ###   ########.fr       */
+/*   Updated: 2023/04/05 18:24:09 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,19 +45,23 @@ SocketReferencePair::OBJECT_TYPE SocketReferencePair::ObjectType(void) {
 // FD_REFERENCE_PAIR IMPLEMENTATION
 
 FdReferencePair::FdReferencePair(FdReferencePair::fds_reference fds_array,
-							FdReferencePair::fds_iter fd_iter)
+							FdReferencePair::fd_iter fd_iter)
 							: fd_pair(fds_array, fd_iter),
 							type(FD) { }
 
 FdReferencePair::~FdReferencePair(void) { }
 
-FdReferencePair::fd_bytes_container_reference FdReferencePair::GetRequestMessageReference(void) {
+FdReferencePair::bytes_container_reference FdReferencePair::GetRequestMessageReference(void) {
 	return ((*(fd_pair.second)).GetRequestMessageReference());
+}
+
+FdReferencePair::bytes_container_reference FdReferencePair::GetResponseMessageReference(void) {
+	return((*(fd_pair.second)).GetResponseMessageReference());
 }
 
 void FdReferencePair::DeleteFd(void) {
 	fds_reference	array_reference = fd_pair.first;
-	fds_iter		fd_it = fd_pair.second;
+	fd_iter		fd_it = fd_pair.second;
 
 	if (fd_it != array_reference.End()){
 		array_reference.DeleteFd(fd_it);
@@ -70,7 +74,7 @@ FdReferencePair::pair_reference FdReferencePair::FdPairReference(void){
 }
 
 
-FdReferencePair::fds_iter FdReferencePair::GetFdIter(void){
+FdReferencePair::fd_iter FdReferencePair::GetFdIter(void){
 	return (fd_pair.second);
 }
 
@@ -78,6 +82,13 @@ FdReferencePair::OBJECT_TYPE FdReferencePair::ObjectType(void) {
 	return (type);
 }
 
+char*	FdReferencePair::GetPointRawBytes(void){
+	return(fd_pair.second->GetPointRawBytes());
+}
+
+void	FdReferencePair::SetPointRawBytes(char* r){
+	fd_pair.second->SetPointRawBytes(r);
+}
 
 // MANAGED_FDS INITIALIZATION
 
@@ -175,7 +186,7 @@ void ManagedFds::AddElemToArray_(int fd, ManagedFds::sockets_reference array_ref
 }
 
 void ManagedFds::AddElemToArray_(int fd, ManagedFds::fds_reference array_ref,
-							ManagedFds::fds_iter obj_it) {
+							ManagedFds::fd_iter obj_it) {
 	fd_pair	elem_pair(fd, fd_pair_class(array_ref, obj_it));
 
 	managed_fds_array.push_back(elem_pair);

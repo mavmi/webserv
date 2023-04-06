@@ -23,11 +23,12 @@ namespace MAIN_NAMESPACE{
 namespace CONFIG_NAMESPACE{
 ServerConfiguration::ServerConfiguration(){
     isDone_ = false;
-    port_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PortType>();
-    host_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<HostType>();
-    serverName_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ServerNameType>();
+    port_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ConfigurationPort>();
+    host_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ConfigurationHost>();
+    serverName_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
     errorPages_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ErrorPagesContainerType>();
     bodySize_ = 0;
+    root_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
     routes_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<RoutesContainerType>();
 }
 ServerConfiguration::ServerConfiguration(const ServerConfiguration& other){
@@ -43,46 +44,46 @@ ServerConfiguration& ServerConfiguration::operator=(const ServerConfiguration& o
     return *this;
 }
 
-void ServerConfiguration::setPort(PortType port){
+void ServerConfiguration::setPort(ConfigurationPort port){
     throwOnDone_();
     port_.set(port);
 }
-ServerConfiguration::PortType& ServerConfiguration::getPort(){
+ConfigurationPort& ServerConfiguration::getPort(){
     HANDLE_EXC_BEGIN
         return port_.get();
     HANDLE_EXC_END
 }
-const ServerConfiguration::PortType& ServerConfiguration::getPort() const{
+const ConfigurationPort& ServerConfiguration::getPort() const{
     HANDLE_EXC_BEGIN
         return port_.get();
     HANDLE_EXC_END
 }
 
-void ServerConfiguration::setHost(const HostType& host){
+void ServerConfiguration::setHost(const ConfigurationHost& host){
     throwOnDone_();
     host_.set(host);
 }
-ServerConfiguration::HostType& ServerConfiguration::getHost(){
+ConfigurationHost& ServerConfiguration::getHost(){
     HANDLE_EXC_BEGIN
         return host_.get();
     HANDLE_EXC_END
 }
-const ServerConfiguration::HostType& ServerConfiguration::getHost() const{
+const ConfigurationHost& ServerConfiguration::getHost() const{
     HANDLE_EXC_BEGIN
         return host_.get();
     HANDLE_EXC_END
 }
 
-void ServerConfiguration::setServerName(const ServerNameType& serverName){
+void ServerConfiguration::setServerName(const std::string& serverName){
     throwOnDone_();
     serverName_.set(serverName);
 }
-ServerConfiguration::ServerNameType& ServerConfiguration::getServerName(){
+std::string& ServerConfiguration::getServerName(){
     HANDLE_EXC_BEGIN
         return serverName_.get();
     HANDLE_EXC_END
 }
-const ServerConfiguration::ServerNameType& ServerConfiguration::getServerName() const{
+const std::string& ServerConfiguration::getServerName() const{
     HANDLE_EXC_BEGIN
         return serverName_.get();
     HANDLE_EXC_END
@@ -102,37 +103,52 @@ const ServerConfiguration::ErrorPagesContainerType& ServerConfiguration::getErro
         return errorPages_.get();
     HANDLE_EXC_END
 }
-void ServerConfiguration::setErrorPage(const ErrorPageType& errorPage, SizeType position){
+void ServerConfiguration::setErrorPage(const std::string& errorPage, size_t position){
     throwOnDone_();
     errorPages_.get().at(position) = errorPage;
 }
-ServerConfiguration::ErrorPageType& ServerConfiguration::getErrorPage(SizeType position){
+std::string& ServerConfiguration::getErrorPage(size_t position){
     HANDLE_EXC_BEGIN
         return errorPages_.get().at(position);
     HANDLE_EXC_END
 }
-const ServerConfiguration::ErrorPageType& ServerConfiguration::getErrorPage(SizeType position) const{
+const std::string& ServerConfiguration::getErrorPage(size_t position) const{
     HANDLE_EXC_BEGIN
         return errorPages_.get().at(position);
     HANDLE_EXC_END
 }
-void ServerConfiguration::addErrorPage(const ErrorPageType& errorPage){
+void ServerConfiguration::addErrorPage(const std::string& errorPage){
     throwOnDone_();
     if (!errorPages_.isSet()) errorPages_.set(ErrorPagesContainerType());
     errorPages_.get().push_back(errorPage);
 }
-ServerConfiguration::SizeType ServerConfiguration::getErrorPagesCount() const{
+size_t ServerConfiguration::getErrorPagesCount() const{
     HANDLE_EXC_BEGIN
         return errorPages_.get().size();
     HANDLE_EXC_END
 }
 
-void ServerConfiguration::setBodySize(BodySizeType bodySize){
+void ServerConfiguration::setBodySize(size_t bodySize){
     throwOnDone_();
     bodySize_ = bodySize;
 }
-ServerConfiguration::BodySizeType ServerConfiguration::getBodySize() const{
+size_t ServerConfiguration::getBodySize() const{
     return bodySize_;
+}
+
+void ServerConfiguration::setRoot(const std::string& root){
+    throwOnDone_();
+    root_.set(root);
+}
+std::string& ServerConfiguration::getRoot(){
+    HANDLE_EXC_BEGIN
+        return root_.get();
+    HANDLE_EXC_END
+}
+const std::string& ServerConfiguration::getRoot() const{
+    HANDLE_EXC_BEGIN
+        return root_.get();
+    HANDLE_EXC_END
 }
 
 void ServerConfiguration::setRoutes(const RoutesContainerType& routes){
@@ -149,26 +165,94 @@ const ServerConfiguration::RoutesContainerType& ServerConfiguration::getRoutes()
         return routes_.get();
     HANDLE_EXC_END
 }
-void ServerConfiguration::setRoute(const RouteType& route, SizeType position){
+void ServerConfiguration::setRoute(const RouteConfiguration& route, size_t position){
     throwOnDone_();
     routes_.get().at(position) = route;
 }
-ServerConfiguration::RouteType& ServerConfiguration::getRoute(SizeType position){
+RouteConfiguration& ServerConfiguration::getRoute(size_t position){
     HANDLE_EXC_BEGIN
         return routes_.get().at(position);
     HANDLE_EXC_END
 }
-const ServerConfiguration::RouteType& ServerConfiguration::getRoute(SizeType position) const{
+const RouteConfiguration& ServerConfiguration::getRoute(size_t position) const{
     HANDLE_EXC_BEGIN
         return routes_.get().at(position);
     HANDLE_EXC_END
 }
-void ServerConfiguration::addRoute(const RouteType& route){
+RouteConfiguration& ServerConfiguration::getRoute(const std::string& url){
+    size_t slashPos = url.rfind('/');
+    if (slashPos == std::string::npos) throw ExceptionType("Cannot parse url");
+    const std::string dir = url.substr(0, url.size() - (url.size() - slashPos) + 1);
+    const std::string file = url;
+    
+    HANDLE_EXC_BEGIN
+    for (RoutesContainerType::SizeType i = 0; i < routes_.get().size(); i++){
+        RouteConfiguration& route = routes_.get().at(i);
+
+        if (route.getRedirection() == "*" && route.getDirectory() == dir) {
+            std::vector<std::string> dir_files(UTILS_NAMESPACE::lsFromPath(getRoot() + dir));
+            for (std::vector<std::string>::iterator it = dir_files.begin();
+                    it != dir_files.end();
+                    ++it){
+                std::string filename = file;
+                slashPos = filename.rfind('/');
+                if (slashPos != std::string::npos){
+                    filename = filename.substr(slashPos + 1, filename.size() - slashPos - 1);
+                }
+                if ((*it) == filename) {
+                    return route;
+                }
+            }
+            throw ExceptionType("Route with such url not found: " + url);
+        } else if (route.getRedirection() == file && route.getDirectory() == dir) {
+            return route;
+        }
+    }
+    throw ExceptionType("Route with such url not found: " + url);
+    HANDLE_EXC_END
+}
+const RouteConfiguration& ServerConfiguration::getRoute(const std::string& url) const{
+    size_t slashPos = url.rfind('/');
+    if (slashPos == std::string::npos) throw ExceptionType("Cannot parse url");
+    const std::string dir = url.substr(0, url.size() - (url.size() - slashPos) + 1);
+    const std::string file = url;
+    // std::cout << dir << " " << file << std::endl;
+    
+    HANDLE_EXC_BEGIN
+    for (RoutesContainerType::SizeType i = 0; i < routes_.get().size(); i++){
+        const RouteConfiguration& route = routes_.get().at(i);
+
+// std::cout << "FILE: " << route.getRedirection()
+//                 << "   ->   DIR: " << route.getDirectory() << "  (" << dir << ")"
+//                 << std::endl;
+        if (route.getRedirection() == "*" && route.getDirectory() == dir) {
+            std::vector<std::string> dir_files(UTILS_NAMESPACE::lsFromPath(getRoot() + dir));
+            for (std::vector<std::string>::iterator it = dir_files.begin();
+                    it != dir_files.end();
+                    ++it){
+                std::string filename = file;
+                slashPos = filename.rfind('/');
+                if (slashPos != std::string::npos){
+                    filename = filename.substr(slashPos + 1, filename.size() - slashPos - 1);
+                }
+                if ((*it) == filename) {
+                    return route;
+                }
+            }
+            throw ExceptionType("Route with such url not found: " + url);
+        } else if (route.getRedirection() == file && route.getDirectory() == dir) {
+            return route;
+        }
+    }
+    throw ExceptionType("Route with such url not found: " + url);
+    HANDLE_EXC_END
+}
+void ServerConfiguration::addRoute(const RouteConfiguration& route){
     throwOnDone_();
     if (!routes_.isSet()) routes_.set(RoutesContainerType());
     routes_.get().push_back(route);
 }
-ServerConfiguration::SizeType ServerConfiguration::getRoutesCount() const{
+size_t ServerConfiguration::getRoutesCount() const{
     HANDLE_EXC_BEGIN
         return routes_.get().size();
     HANDLE_EXC_END
@@ -176,11 +260,12 @@ ServerConfiguration::SizeType ServerConfiguration::getRoutesCount() const{
 
 void ServerConfiguration::deleteData_(){
     isDone_ = false;
-    port_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PortType>();
-    host_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<HostType>();
-    serverName_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ServerNameType>();
+    port_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ConfigurationPort>();
+    host_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ConfigurationHost>();
+    serverName_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
     errorPages_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ErrorPagesContainerType>();
     bodySize_ = 0;
+    root_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
     routes_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<RoutesContainerType>();
 }
 void ServerConfiguration::copyData_(const MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent& o){
@@ -192,6 +277,7 @@ void ServerConfiguration::copyData_(const MAIN_NAMESPACE::UTILS_NAMESPACE::Parse
     serverName_ = other.serverName_;
     errorPages_ = other.errorPages_;
     bodySize_ = other.bodySize_;
+    root_ = other.root_;
     routes_ = other.routes_;
 }
 void ServerConfiguration::checkValidity_() const{

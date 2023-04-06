@@ -2,10 +2,43 @@
 
 namespace MAIN_NAMESPACE{
 namespace UTILS_NAMESPACE{
+
+    
+Exception::Exception(const char* msg) 
+    : msg_(std::string(msg)), _file_(""), _function_(""), _line_(0), code_(0){}
+Exception::Exception(const std::string& msg)
+    : msg_(msg), _file_(""), _function_(""), _line_(0), code_(0){}
+Exception::Exception(const char* msg, const std::string& _file_, const std::string& _function_, int _line_)
+    : msg_(std::string(msg)), _file_(_file_), _function_(_function_), _line_(_line_), code_(0) {}
+Exception::Exception(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_)
+    : msg_(msg), _file_(_file_), _function_(_function_), _line_(_line_), code_(0) {}
+Exception::Exception(const char* msg, const std::string& _file_, const std::string& _function_, int _line_, int code)
+    : msg_(std::string(msg)), _file_(_file_), _function_(_function_), _line_(_line_), code_(code) {}
+Exception::Exception(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_, int code)
+    : msg_(msg), _file_(_file_), _function_(_function_), _line_(_line_), code_(code) {}
+Exception::~Exception() throw(){}
+const std::string Exception::what() const throw(){
+    return
+        "(" +
+        _file_ +
+        ", " +
+        _function_ +
+        ", " +
+        utilsNumToString<int>(_line_) +
+        ") " + 
+        output_();
+}
+int Exception::getCode(){
+    return code_;
+}
+std::string Exception::output_() const {
+    return "EXCEPTION: " + msg_;
+}
+
 UtilsException::UtilsException(const char* msg) 
-    : msg_(std::string(msg)){}
+    : Exception(msg){}
 UtilsException::UtilsException(const std::string& msg)
-    : msg_(msg){}
+    : Exception(msg){}
 UtilsException::~UtilsException() throw(){}
 const std::string UtilsException::what() const throw(){
     return output_();
@@ -16,9 +49,20 @@ std::string UtilsException::output_() const {
 }
 }
 
-
 namespace MAIN_NAMESPACE{
 namespace UTILS_NAMESPACE{
+int countOpenedFds(){
+    int count = 0;
+
+    for (int i = 0; i < 256; i++){
+        if (fcntl(i, F_GETFD) != -1){
+            count++;
+        }
+    }
+
+    return count;
+}
+
 std::string     httpVersionToString(HTTP_VERSION httpVersion){
     if (httpVersion == MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_0_9){
         return "HTTP/0.9";
@@ -60,6 +104,34 @@ HTTP_VERSION    httpVersionFromString(const std::string& httpVersionStr){
     } else {
         throw UtilsException("Invalid HTTP version");
     }
+}
+std::string methodToString(METHOD method){
+    if (method == GET){
+        return "GET";
+    } else if (method == POST){
+        return "POST";
+    } else if (method == DELETE){
+        return "DELETE";
+    } else {
+        throw UtilsException("Invalid method");
+    }
+}
+
+std::vector<std::string> lsFromPath(const std::string& dir_path){
+    struct dirent *entry;
+    DIR *dir = opendir(strdup(dir_path.c_str()));
+    std::vector<std::string> ret;
+
+    if (dir == NULL) {
+        return (ret);
+    }
+    entry = readdir(dir);
+    while (entry != NULL) {
+        ret.push_back(std::string(entry->d_name));
+        entry = readdir(dir);
+    }
+    closedir(dir);
+    return (ret);
 }
 
 // Print message with specified message type
@@ -118,7 +190,7 @@ BytesContainer::BytesContainer()
     : r_(false), n_(false),
         content_(-1),
         contentLength_(0),
-        bytesContainer_(BytesContainerType()){
+        bytesContainer_(std::vector<std::string>()){
     
 }
 BytesContainer::BytesContainer(const BytesContainer& other)
@@ -155,8 +227,8 @@ int BytesContainer::pushBack(char* buffer, int bufferSize){
 
     const std::string clLine = "Content-Length: ";
     const size_t clLineSize = clLine.size();
-    for (int i = 0; i < bufferSize; i++){
-        char curChar = buffer[i];
+    for (int i = 0; i <= bufferSize; i++){
+        char curChar = (i != bufferSize) ? buffer[i] : 0;
 
         if (r_ && n_) {
             if (!tmpLine_.size()){
@@ -174,7 +246,8 @@ int BytesContainer::pushBack(char* buffer, int bufferSize){
             r_ = n_ = false;
         }
 
-        if (curChar == '\r') r_ = true;
+        if (i == bufferSize);
+        else if (curChar == '\r') r_ = true;
         else if (curChar == '\n') n_ = true;
         else {
             if (content_ == 1) {
@@ -195,8 +268,31 @@ int BytesContainer::pushBack(char* buffer, int bufferSize){
     return (content_) ? continue_ : end_;
 }
 
-const BytesContainer::BytesContainerType& BytesContainer::getLines() const{
+size_t BytesContainer::charsCount() const{
+    size_t size = 0;
+
+    for (size_t i = 0; i < bytesContainer_.size(); i++){
+        size += bytesContainer_[i].size();
+    }
+
+    return size;
+}
+
+const std::vector<std::string>& BytesContainer::getLines() const{
     return bytesContainer_;
+}
+char* BytesContainer::toBytes() const{
+    size_t size = charsCount();
+    char* arr = new char[size];
+    size_t i = 0;
+    for (size_t iter = 0; iter < bytesContainer_.size(); iter++){
+        const std::string& curLine = bytesContainer_[iter];
+        for (size_t j = 0; j < curLine.size();){
+            arr[i++] = curLine.at(j++);
+        }
+    }
+
+    return arr;
 }
 }
 }

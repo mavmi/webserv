@@ -29,10 +29,7 @@ protected:
 
 class HttpRequestParser{
 public:
-    typedef size_t                      SizeType;
-    typedef char*                       BufferType;
-    typedef std::vector<BufferType>     BufferContainerType;
-    typedef HttpRequestParserException  ExceptionType;
+    typedef HttpRequestParserException                  ExceptionType;
 
     HttpRequestParser();
     HttpRequestParser(const HttpRequestParser& other);
@@ -47,11 +44,11 @@ private:
     HttpRequest httpRequest_;
 
     std::vector<std::string> split_(const std::string& str, char delimiter);
+    std::vector<std::string> split__(const std::string& str, char delimiter);
     int find_(char* arr, int startPoint, int size, char c);
     bool isLineEmpty_(const std::string& line);
 
-    // std::vector<std::string> parseBuffer_(const MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer& buffer);
-    void parseStatusLine_(const std::string& line);
+    void parseStatusLine_(const std::string& line, std::string& versionKostyl);
     void parseHeader_(const std::string& line);
 };
 

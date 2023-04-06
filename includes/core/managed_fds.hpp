@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:22:49 by msalena           #+#    #+#             */
-/*   Updated: 2023/02/25 22:32:07 by msalena          ###   ########.fr       */
+/*   Updated: 2023/04/05 18:20:33 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ public:
 	typedef Sockets										sockets;
 	typedef sockets&									sockets_reference;
 	typedef sockets::sock_array_iter					sockets_iter;
-	typedef std::pair<sockets_reference, sockets_iter>	refer_iter_pair;
+	typedef std::pair<sockets, sockets_iter>			refer_iter_pair;
 
 	SocketReferencePair(sockets_reference sockets_array, sockets_iter socket_iter);
 	~SocketReferencePair(void);
@@ -71,19 +71,21 @@ private:
 class FdReferencePair : public ObjectReferencePair {
 public:
 	typedef FdObj								fd_obj;
-	typedef fd_obj::bytes_container_reference	fd_bytes_container_reference;
+	typedef fd_obj::bytes_container_reference	bytes_container_reference;
 	typedef Fds									fds;
 	typedef fds&								fds_reference;
-	typedef fds::fd_array_iter					fds_iter;
-	typedef std::pair<fds_reference, fds_iter>	refer_iter_pair;
+	typedef fds::fd_array_iter					fd_iter;
+	typedef std::pair<fds, fd_iter>				refer_iter_pair;
 	typedef refer_iter_pair&					pair_reference;
 
-	FdReferencePair(fds_reference fds_array, fds_iter fd_iter);
+	FdReferencePair(fds_reference fds_array, fd_iter fd_iter);
 	~FdReferencePair(void);
 
-	fd_bytes_container_reference GetRequestMessageReference(void);
+	bytes_container_reference GetRequestMessageReference(void);
 
-	fds_iter GetFdIter(void);
+	bytes_container_reference GetResponseMessageReference(void);
+
+	fd_iter GetFdIter(void);
 
 	// After deleting fd_pair.second keeps iterator to the end() or fds_array
 	void DeleteFd(void);
@@ -92,6 +94,12 @@ public:
 
 	// Return:	enum type of object - FD
 	OBJECT_TYPE	ObjectType(void);
+
+	// Return:	pointer to FD war_bytes 
+	char*	GetPointRawBytes(void);
+
+	// Set raw bytes
+	void	SetPointRawBytes(char* r);
 private:
 	refer_iter_pair fd_pair;
 	OBJECT_TYPE		type;
@@ -107,7 +115,7 @@ public:
 	typedef socket_pair_class::sockets_reference	sockets_reference;
 	typedef fd_pair_class::fds_reference			fds_reference;
 	typedef socket_pair_class::sockets_iter			sockets_iter;
-	typedef fd_pair_class::fds_iter					fds_iter;
+	typedef fd_pair_class::fd_iter					fd_iter;
 	typedef std::pair<int, socket_pair_class>		socket_pair;
 	typedef std::pair<int, fd_pair_class>			fd_pair;
 	typedef std::vector<socket_pair>				sockets_set;
@@ -193,7 +201,7 @@ protected:
 					sockets_iter obj_it);
 
 	// Creates and adds elem to fds array
-	void AddElemToArray_(int fd, fds_reference array_ref, fds_iter obj_it);
+	void AddElemToArray_(int fd, fds_reference array_ref, fd_iter obj_it);
 
 	/*
 	 * Deletes fd from fd_array

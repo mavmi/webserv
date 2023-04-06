@@ -27,10 +27,8 @@ protected:
 // Method [done()] marks the route as finished. May throw an exception.
 class RouteConfiguration : public MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent{
 public:
-    typedef size_t                                                      SizeType;
     typedef int                                                         MethodType;
     typedef MAIN_NAMESPACE::UTILS_NAMESPACE::Container<MethodType>      MethodsContainerType;
-    typedef std::string                                                 PathType;
     typedef RouteException                                              ExceptionType;
 
     explicit RouteConfiguration();
@@ -42,52 +40,53 @@ public:
     void setMethods(const MethodsContainerType& methods);
     MethodsContainerType& getMethods();
     const MethodsContainerType& getMethods() const;
-    void setMethod(const MethodType& method, SizeType position);
-    MethodType& getMethod(SizeType position);
-    const MethodType& getMethod(SizeType position) const;
+    void setMethod(const MethodType& method, size_t position);
+    MethodType& getMethod(size_t position);
+    const MethodType& getMethod(size_t position) const;
     void addMethod(const MethodType& method);
-    SizeType getMethodsCount() const;
+    size_t getMethodsCount() const;
+    bool isMethodPresent(UTILS_NAMESPACE::METHOD method) const;
 
-    void setRedirection(const PathType& redirection);
-    PathType& getRedirection();
-    const PathType& getRedirection() const;
+    void setRedirection(const std::string& redirection);
+    std::string& getRedirection();
+    const std::string& getRedirection() const;
 
-    void setDirectory(const PathType& directory);
-    PathType& getDirectory();
-    const PathType& getDirectory() const;
+    void setDirectory(const std::string& directory);
+    std::string& getDirectory();
+    const std::string& getDirectory() const;
 
     void setDirectoryListening(bool directoryListening);
     bool getDirectoryListening() const;
 
-    void setDefaultIfDirectoryResponse(const PathType& default_if_directory_response_path);
-    PathType& getDefaultIfDirectoryResponse();
-    const PathType& getDefaultIfDirectoryResponse() const;
+    void setDefaultIfDirectoryResponse(const std::string& default_if_directory_response_path);
+    std::string& getDefaultIfDirectoryResponse();
+    const std::string& getDefaultIfDirectoryResponse() const;
 
-    void setCgiScriptPath(const PathType& cgi_script_path);
-    PathType& getCgiScriptPath();
-    const PathType& getCgiScriptPath() const;
+    void setCgiScriptPath(const std::string& cgi_script_path);
+    std::string& getCgiScriptPath();
+    const std::string& getCgiScriptPath() const;
 
-    void setCgiBinPath(const PathType& cgi_bin_path);
-    PathType& getCgiBinPath();
-    const PathType& getCgiBinPath() const;
+    void setCgiBinPath(const std::string& cgi_bin_path);
+    std::string& getCgiBinPath();
+    const std::string& getCgiBinPath() const;
 
     void setSaveFiles(bool saveFiles);
     bool getSaveFiles() const;
 
-    void setSaveTo(const PathType& saveTo);
-    PathType& getSaveTo();
-    const PathType& getSaveTo() const;
+    void setSaveTo(const std::string& saveTo);
+    std::string& getSaveTo();
+    const std::string& getSaveTo() const;
 
 private:
     MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<MethodsContainerType> methods_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType> redirection_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType> directory_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> redirection_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> directory_;
     bool directory_listening_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType> default_if_directory_response_path_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType> cgi_script_path_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType> cgi_bin_path_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> default_if_directory_response_path_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> cgi_script_path_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> cgi_bin_path_;
     bool saveFiles_;
-    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<PathType> saveTo_;
+    MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string> saveTo_;
 
     void deleteData_();
     void copyData_(const MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent& o);

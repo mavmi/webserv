@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:22:57 by msalena           #+#    #+#             */
-/*   Updated: 2023/02/25 21:43:46 by msalena          ###   ########.fr       */
+/*   Updated: 2023/04/05 18:40:38 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,21 +38,30 @@
 namespace CORE{
 
 class SocketFdCreator;
+class FdObj;
+class Fds;
+class SocketObj;
+class Sockets;
 
 
 // Manager of fd object
 class FdObj {
 public:
-	typedef utils::BytesContainer		bytes_container;
-	typedef bytes_container&			bytes_container_reference;
-	typedef struct sockaddr_storage		clientaddr_inform;
-	typedef clientaddr_inform*			clientaddr_inform_pointer;
-	typedef socklen_t					clientaddr_struct_len;
-	typedef clientaddr_struct_len*		clientaddr_struct_len_pointer;
+	typedef utils::BytesContainer				bytes_container;
+	typedef bytes_container&					bytes_container_reference;
+	typedef struct sockaddr_storage				clientaddr_inform;
+	typedef clientaddr_inform*					clientaddr_inform_pointer;
+	typedef socklen_t							clientaddr_struct_len;
+	typedef clientaddr_struct_len*				clientaddr_struct_len_pointer;
+	typedef SocketObj							parent_socket;
+	typedef parent_socket*						parent_socket_pointer;
+	typedef const Configuration::ServerType&	const_parent_socket_config_reference;
 
-	FdObj(void);
+	ssize_t	total_sent_bytes;
+
+	FdObj(parent_socket_pointer parent);
 	FdObj(const FdObj& another);
-	FdObj(int fd);
+	FdObj(int fd, parent_socket_pointer parent);
 	~FdObj(void);
 
 	FdObj& operator=(const FdObj& another);
@@ -68,12 +77,28 @@ public:
 	// Return:	pointer to socklen_t variable with sizeof(client_information)
 	clientaddr_struct_len_pointer ClientInformStructLen(void);
 
+	// Return:	reference to the Request BytesContainer class
 	bytes_container_reference GetRequestMessageReference(void);
+
+	// Return:	reference to the Response BytesContainer class
+	bytes_container_reference GetResponseMessageReference(void);
+
+	// Return:	const reference to the Config class of socket-parent
+	const_parent_socket_config_reference GetParentSocketConfigReference(void);
+
+	// Return:	pointer to war_bytes
+	char*	GetPointRawBytes(void);
+
+	// Set raw bytes
+	void	SetPointRawBytes(char* r);
 private:
 	int						fd;
+	char*					raw_bytes;
+	parent_socket_pointer	parent;
 	clientaddr_inform		client_information;
 	clientaddr_struct_len	client_inform_len;
 	bytes_container			request_message;
+	bytes_container			response_message;
 	// HTTP send
 };
 
@@ -111,7 +136,7 @@ public:
 	fd_array_reference GetFdsReference(void);
 
 	// Return:	iterator to the inserted fd
-	fd_array_iter AddFd(int fd);
+	//fd_array_iter AddFd(int fd);
 
 	// Return:	iterator to the inserted fd
 	fd_array_iter AddFd(fd_type_reference fd);

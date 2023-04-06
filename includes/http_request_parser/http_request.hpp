@@ -29,9 +29,7 @@ public:
     typedef HttpRequestException  ExceptionType;
 
     HttpRequest();
-    HttpRequest(const MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer& buffer);
     HttpRequest(const HttpRequest& other);
-
     ~HttpRequest();
 
     HttpRequest& operator=(const HttpRequest& other);

@@ -39,330 +39,330 @@ HttpRequestHeaders& HttpRequestHeaders::operator=(const HttpRequestHeaders& othe
     return *this;
 }
 
-void HttpRequestHeaders::setAccept(const AcceptType& accept){
+void HttpRequestHeaders::setAccept(const std::string& accept){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
     accept_.set(accept);
 }
-HttpRequestHeaders::AcceptType& HttpRequestHeaders::getAccept(){
+std::string& HttpRequestHeaders::getAccept(){
     HANDLE_EXC_BEGIN
         return accept_.get();
     HANDLE_EXC_END
 }
-const HttpRequestHeaders::AcceptType& HttpRequestHeaders::getAccept() const{
+const std::string& HttpRequestHeaders::getAccept() const{
     HANDLE_EXC_BEGIN
         return accept_.get();
     HANDLE_EXC_END
 }
 
-void HttpRequestHeaders::setAcceptCharset(const AcceptCharsetType& acceptCharset){
+void HttpRequestHeaders::setAcceptCharset(const std::string& acceptCharset){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
     acceptCharset_.set(acceptCharset);
 }
-HttpRequestHeaders::AcceptCharsetType& HttpRequestHeaders::getAcceptCharset(){
+std::string& HttpRequestHeaders::getAcceptCharset(){
     HANDLE_EXC_BEGIN
         return acceptCharset_.get();
     HANDLE_EXC_END
 }
-const HttpRequestHeaders::AcceptCharsetType& HttpRequestHeaders::getAcceptCharset() const{
+const std::string& HttpRequestHeaders::getAcceptCharset() const{
     HANDLE_EXC_BEGIN
         return acceptCharset_.get();
     HANDLE_EXC_END
 }
 
-void HttpRequestHeaders::setAcceptEncoding(const AcceptEncodingType& acceptEncoding){
+void HttpRequestHeaders::setAcceptEncoding(const std::string& acceptEncoding){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
     acceptEncoding_.set(acceptEncoding);
 }
-HttpRequestHeaders::AcceptEncodingType& HttpRequestHeaders::getAcceptEncoding(){
+std::string& HttpRequestHeaders::getAcceptEncoding(){
     HANDLE_EXC_BEGIN
         return acceptEncoding_.get();
     HANDLE_EXC_END
 }
-const HttpRequestHeaders::AcceptEncodingType& HttpRequestHeaders::getAcceptEncoding() const{
+const std::string& HttpRequestHeaders::getAcceptEncoding() const{
     HANDLE_EXC_BEGIN
         return acceptEncoding_.get();
     HANDLE_EXC_END
 }
 
-void HttpRequestHeaders::setAcceptLanguage(const AcceptLanguageType& acceptLanguage){
+void HttpRequestHeaders::setAcceptLanguage(const std::string& acceptLanguage){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
     acceptLanguage_.set(acceptLanguage);
 }
-HttpRequestHeaders::AcceptLanguageType& HttpRequestHeaders::getAcceptLanguage(){
+std::string& HttpRequestHeaders::getAcceptLanguage(){
     HANDLE_EXC_BEGIN
         return acceptLanguage_.get();
     HANDLE_EXC_END
 }
-const HttpRequestHeaders::AcceptLanguageType& HttpRequestHeaders::getAcceptLanguage() const{
+const std::string& HttpRequestHeaders::getAcceptLanguage() const{
     HANDLE_EXC_BEGIN
         return acceptLanguage_.get();
     HANDLE_EXC_END
 }
 
-void HttpRequestHeaders::setAuthorization(const AuthorizationType& authorization){
+void HttpRequestHeaders::setAuthorization(const std::string& authorization){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_AUTH);
     authorization_.set(authorization);
 }
-HttpRequestHeaders::AuthorizationType& HttpRequestHeaders::getAuthorization(){
+std::string& HttpRequestHeaders::getAuthorization(){
     HANDLE_EXC_BEGIN
         return authorization_.get();
     HANDLE_EXC_END
 }
-const HttpRequestHeaders::AuthorizationType& HttpRequestHeaders::getAuthorization() const{
+const std::string& HttpRequestHeaders::getAuthorization() const{
     HANDLE_EXC_BEGIN
         return authorization_.get();
     HANDLE_EXC_END
 }
 
-void HttpRequestHeaders::setExpect(const ExpectType& expect){
+void HttpRequestHeaders::setExpect(const std::string& expect){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1v2);
     expect_.set(expect);
 }
-HttpRequestHeaders::ExpectType& HttpRequestHeaders::getExpect(){
+std::string& HttpRequestHeaders::getExpect(){
     HANDLE_EXC_BEGIN
         return expect_.get();
     HANDLE_EXC_END
 }
-const HttpRequestHeaders::ExpectType& HttpRequestHeaders::getExpect() const{
+const std::string& HttpRequestHeaders::getExpect() const{
     HANDLE_EXC_BEGIN
         return expect_.get();
     HANDLE_EXC_END
 }
 
-void HttpRequestHeaders::setFrom(const FromType& from){
+void HttpRequestHeaders::setFrom(const std::string& from){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
     from_.set(from);
 }
-HttpRequestHeaders::FromType& HttpRequestHeaders::getFrom(){
+std::string& HttpRequestHeaders::getFrom(){
     HANDLE_EXC_BEGIN
         return from_.get();
     HANDLE_EXC_END
 }
-const HttpRequestHeaders::FromType& HttpRequestHeaders::getFrom() const{
+const std::string& HttpRequestHeaders::getFrom() const{
     HANDLE_EXC_BEGIN
         return from_.get();
     HANDLE_EXC_END
 }
 
-void HttpRequestHeaders::setHost(const HostType& host){
+void HttpRequestHeaders::setHost(const std::string& host){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
     host_.set(host);
 }
-HttpRequestHeaders::HostType& HttpRequestHeaders::getHost(){
+std::string& HttpRequestHeaders::getHost(){
     HANDLE_EXC_BEGIN
         return host_.get();
     HANDLE_EXC_END
 }
-const HttpRequestHeaders::HostType& HttpRequestHeaders::getHost() const{
+const std::string& HttpRequestHeaders::getHost() const{
     HANDLE_EXC_BEGIN
         return host_.get();
     HANDLE_EXC_END
 }
 
-void HttpRequestHeaders::setIfMatch(const IfMatchType& ifMatch){
+void HttpRequestHeaders::setIfMatch(const std::string& ifMatch){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
     ifMatch_.set(ifMatch);
 }
-HttpRequestHeaders::IfMatchType& HttpRequestHeaders::getIfMatch(){
+std::string& HttpRequestHeaders::getIfMatch(){
     HANDLE_EXC_BEGIN
         return ifMatch_.get();
     HANDLE_EXC_END
 }
-const HttpRequestHeaders::IfMatchType& HttpRequestHeaders::getIfMatch() const{
+const std::string& HttpRequestHeaders::getIfMatch() const{
     HANDLE_EXC_BEGIN
         return host_.get();
     HANDLE_EXC_END
 }
 
-void HttpRequestHeaders::setIfModifiedSince(const IfModifiedSinceType& ifModifiedSince){
+void HttpRequestHeaders::setIfModifiedSince(const std::string& ifModifiedSince){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
     ifModifiedSince_.set(ifModifiedSince);
 }
-HttpRequestHeaders::IfModifiedSinceType& HttpRequestHeaders::getIfModifiedSince(){
+std::string& HttpRequestHeaders::getIfModifiedSince(){
     HANDLE_EXC_BEGIN
         return ifModifiedSince_.get();
     HANDLE_EXC_END
 }
-const HttpRequestHeaders::IfModifiedSinceType& HttpRequestHeaders::getIfModifiedSince() const{
+const std::string& HttpRequestHeaders::getIfModifiedSince() const{
     HANDLE_EXC_BEGIN
         return ifModifiedSince_.get();
     HANDLE_EXC_END
 }
 
-void HttpRequestHeaders::setIfNoneMatch(const IfNoneMatchType& ifNoneMatch){
+void HttpRequestHeaders::setIfNoneMatch(const std::string& ifNoneMatch){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
     ifNoneMatch_.set(ifNoneMatch);
 }
-HttpRequestHeaders::IfNoneMatchType& HttpRequestHeaders::getIfNoneMatch(){
+std::string& HttpRequestHeaders::getIfNoneMatch(){
     HANDLE_EXC_BEGIN
         return ifNoneMatch_.get();
     HANDLE_EXC_END
 }
-const HttpRequestHeaders::IfNoneMatchType& HttpRequestHeaders::getIfNoneMatch() const{
+const std::string& HttpRequestHeaders::getIfNoneMatch() const{
     HANDLE_EXC_BEGIN
         return ifNoneMatch_.get();
     HANDLE_EXC_END
 }
 
-void HttpRequestHeaders::setIfRange(const IfRangeType& ifRange){
+void HttpRequestHeaders::setIfRange(const std::string& ifRange){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
     ifRange_.set(ifRange);
 }
-HttpRequestHeaders::IfRangeType& HttpRequestHeaders::getIfRange(){
+std::string& HttpRequestHeaders::getIfRange(){
     HANDLE_EXC_BEGIN
         return ifRange_.get();
     HANDLE_EXC_END
 }
-const HttpRequestHeaders::IfRangeType& HttpRequestHeaders::getIfRange() const{
+const std::string& HttpRequestHeaders::getIfRange() const{
     HANDLE_EXC_BEGIN
         return ifRange_.get();
     HANDLE_EXC_END
 }
 
-void HttpRequestHeaders::setIfUnmodifiedSince(const IfUnmodifiedSinceType& ifUnmodifiedSince){
+void HttpRequestHeaders::setIfUnmodifiedSince(const std::string& ifUnmodifiedSince){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
     ifUnmodifiedSince_.set(ifUnmodifiedSince);
 }
-HttpRequestHeaders::IfUnmodifiedSinceType& HttpRequestHeaders::getIfUnmodifiedSince(){
+std::string& HttpRequestHeaders::getIfUnmodifiedSince(){
     HANDLE_EXC_BEGIN
         return ifUnmodifiedSince_.get();
     HANDLE_EXC_END
 }
-const HttpRequestHeaders::IfUnmodifiedSinceType& HttpRequestHeaders::getIfUnmodifiedSince() const{
+const std::string& HttpRequestHeaders::getIfUnmodifiedSince() const{
     HANDLE_EXC_BEGIN
         return ifUnmodifiedSince_.get();
     HANDLE_EXC_END
 }
 
-void HttpRequestHeaders::setMaxForwards(const MaxForwardsType& maxForwards){
+void HttpRequestHeaders::setMaxForwards(const std::string& maxForwards){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
     maxForwards_.set(maxForwards);
 }
-HttpRequestHeaders::MaxForwardsType& HttpRequestHeaders::getMaxForwards(){
+std::string& HttpRequestHeaders::getMaxForwards(){
     HANDLE_EXC_BEGIN
         return maxForwards_.get();
     HANDLE_EXC_END
 }
-const HttpRequestHeaders::MaxForwardsType& HttpRequestHeaders::getMaxForwards() const{
+const std::string& HttpRequestHeaders::getMaxForwards() const{
     HANDLE_EXC_BEGIN
         return maxForwards_.get();
     HANDLE_EXC_END
 }
 
-void HttpRequestHeaders::setProxyAuthorization(const ProxyAuthorizationType& proxyAuthorization){
+void HttpRequestHeaders::setProxyAuthorization(const std::string& proxyAuthorization){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_AUTH);
     proxyAuthorization_.set(proxyAuthorization);
 }
-HttpRequestHeaders::ProxyAuthorizationType& HttpRequestHeaders::getProxyAuthorization(){
+std::string& HttpRequestHeaders::getProxyAuthorization(){
     HANDLE_EXC_BEGIN
         return proxyAuthorization_.get();
     HANDLE_EXC_END
 }
-const HttpRequestHeaders::ProxyAuthorizationType& HttpRequestHeaders::getProxyAuthorization() const{
+const std::string& HttpRequestHeaders::getProxyAuthorization() const{
     HANDLE_EXC_BEGIN
         return proxyAuthorization_.get();
     HANDLE_EXC_END
 }
 
-void HttpRequestHeaders::setRange(const RangeType& range){
+void HttpRequestHeaders::setRange(const std::string& range){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
     range_.set(range);
 }
-HttpRequestHeaders::RangeType& HttpRequestHeaders::getRange(){
+std::string& HttpRequestHeaders::getRange(){
     HANDLE_EXC_BEGIN
         return range_.get();
     HANDLE_EXC_END
 }
-const HttpRequestHeaders::RangeType& HttpRequestHeaders::getRange() const{
+const std::string& HttpRequestHeaders::getRange() const{
     HANDLE_EXC_BEGIN
         return range_.get();
     HANDLE_EXC_END
 }
 
-void HttpRequestHeaders::setReferer(const RefererType& refer){
+void HttpRequestHeaders::setReferer(const std::string& refer){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
     referer_.set(refer);
 }
-HttpRequestHeaders::RefererType& HttpRequestHeaders::getReferer(){
+std::string& HttpRequestHeaders::getReferer(){
     HANDLE_EXC_BEGIN
         return referer_.get();
     HANDLE_EXC_END
 }
-const HttpRequestHeaders::RefererType& HttpRequestHeaders::getReferer() const{
+const std::string& HttpRequestHeaders::getReferer() const{
     HANDLE_EXC_BEGIN
         return referer_.get();
     HANDLE_EXC_END
 }
 
-void HttpRequestHeaders::setTE(const TEType& TE){
+void HttpRequestHeaders::setTE(const std::string& TE){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1v2);
     TE_.set(TE);
 }
-HttpRequestHeaders::TEType& HttpRequestHeaders::getTE(){
+std::string& HttpRequestHeaders::getTE(){
     HANDLE_EXC_BEGIN
         return TE_.get();
     HANDLE_EXC_END
 }
-const HttpRequestHeaders::TEType& HttpRequestHeaders::getTE() const{
+const std::string& HttpRequestHeaders::getTE() const{
     HANDLE_EXC_BEGIN
         return TE_.get();
     HANDLE_EXC_END
 }
 
-void HttpRequestHeaders::setUserAgent(const UserAgentType& userAgent){
+void HttpRequestHeaders::setUserAgent(const std::string& userAgent){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
     userAgent_.set(userAgent);
 }
-HttpRequestHeaders::UserAgentType& HttpRequestHeaders::getUserAgent(){
+std::string& HttpRequestHeaders::getUserAgent(){
     HANDLE_EXC_BEGIN
         return userAgent_.get();
     HANDLE_EXC_END
 }
-const HttpRequestHeaders::UserAgentType& HttpRequestHeaders::getUserAgent() const{
+const std::string& HttpRequestHeaders::getUserAgent() const{
     HANDLE_EXC_BEGIN
         return userAgent_.get();
     HANDLE_EXC_END
 }
 
 void HttpRequestHeaders::deleteData_(){
-    accept_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<AcceptType>();
-    acceptCharset_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<AcceptCharsetType>();
-    acceptEncoding_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<AcceptEncodingType>();
-    acceptLanguage_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<AcceptLanguageType>();
-    authorization_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<AuthorizationType>();
-    expect_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ExpectType>();
-    from_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<FromType>();
-    host_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<HostType>();
-    ifMatch_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<IfMatchType>();
-    ifModifiedSince_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<IfModifiedSinceType>();
-    ifNoneMatch_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<IfNoneMatchType>();
-    ifRange_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<IfRangeType>();
-    ifUnmodifiedSince_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<IfUnmodifiedSinceType>();
-    maxForwards_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<MaxForwardsType>();
-    proxyAuthorization_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ProxyAuthorizationType>();
-    range_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<RangeType>();
-    referer_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<RefererType>();
-    TE_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<TEType>();
-    userAgent_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<UserAgentType>();
+    accept_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    acceptCharset_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    acceptEncoding_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    acceptLanguage_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    authorization_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    expect_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    from_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    host_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    ifMatch_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    ifModifiedSince_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    ifNoneMatch_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    ifRange_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    ifUnmodifiedSince_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    maxForwards_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    proxyAuthorization_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    range_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    referer_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    TE_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    userAgent_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
 }
 void HttpRequestHeaders::copyData_(const ParserAbstractParent& o){
     const HttpRequestHeaders& other = dynamic_cast<const HttpRequestHeaders&>(o);

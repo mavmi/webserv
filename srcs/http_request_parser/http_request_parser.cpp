@@ -39,30 +39,33 @@ HttpRequestParser& HttpRequestParser::operator=(const HttpRequestParser& other){
 }
 
 const HttpRequest& HttpRequestParser::parseHttpRequest(const MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer& buffer){
-    // std::vector<std::string> content = parseBuffer_(buffer);
-    const std::vector<std::string>& content = buffer.getLines();
-    if (content.size() < 2) throw ExceptionType("HTTP request doesn't contain headers");
+    std::string versionKostyl = "";
+    try {
+        const std::vector<std::string>& content = buffer.getLines();
+        if (content.size() < 1) throw ExceptionType("HTTP request doesn't contain headers");
+        parseStatusLine_(content.at(0), versionKostyl);
+        versionKostyl = UTILS_NAMESPACE::httpVersionToString(httpRequest_.getStatusLine().getHttpVersion());
 
-    parseStatusLine_(content.at(0));
+        size_t i = 1;
+        while (i < content.size() && !isLineEmpty_(content[i])){
+            parseHeader_(content[i++]);
+        }
+        httpRequest_.getGeneralHeaders().done();
+        httpRequest_.getRequestHeaders().done();
 
-    size_t i = 1;
-    while (i < content.size() && !isLineEmpty_(content[i])){
-        parseHeader_(content[i++]);
+        i++;
+        while (i < content.size()){
+            httpRequest_.getRequestContent().push_back(content[i++]);
+        }
+
+        return httpRequest_;
+    } catch (UTILS_NAMESPACE::Exception& e){
+        throw UTILS_NAMESPACE::Exception(e.what() + ":" + versionKostyl);
     }
-    httpRequest_.getGeneralHeaders().done();
-    httpRequest_.getRequestHeaders().done();
-
-    i++;
-    while (i < content.size()){
-        httpRequest_.getRequestContent().push_back(content[i++]);
-    }
-
-    return httpRequest_;
 }
 const HttpRequest& HttpRequestParser::getHttpRequest() const{
     return httpRequest_;
 }
-
 std::vector<std::string> HttpRequestParser::split_(const std::string& str, char delimiter){
     std::string::const_iterator begin = str.begin(), end = str.begin();
     std::vector<std::string> result;
@@ -72,6 +75,20 @@ std::vector<std::string> HttpRequestParser::split_(const std::string& str, char 
         if (substr.size()) result.push_back(substr);
         if (end == str.end()) break;
         begin = end + 1;
+    }
+
+    return result;
+}
+std::vector<std::string> HttpRequestParser::split__(const std::string& str, char delimiter){
+    const size_t eqPos = str.find(delimiter);
+    std::vector<std::string> result;
+    
+    if (eqPos == std::string::npos) return result;
+
+    result.push_back(str.substr(0, eqPos));
+    result.push_back(str.substr(eqPos + 1, str.size() - eqPos - 1));
+    if (result.back()[0] == ' '){
+        result[1] = result[1].substr(1, result[1].size() - 1);
     }
 
     return result;
@@ -89,54 +106,35 @@ bool HttpRequestParser::isLineEmpty_(const std::string& line){
     return true;
 }
 
-/*std::vector<std::string> HttpRequestParser::parseBuffer_(const MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer& buffer){
-    int startPoint;
-    bool isLastFinished = true;
-    const char newLine = '\n';
-    std::vector<std::string> result;
-
-    for (size_t i = 0; i < buffer.bytesContainer.size(); i++){
-        startPoint = 0;
-        while (true){
-            int newLinePos = find_(
-                buffer.bytesContainer[i],
-                startPoint,
-                i + 1 == buffer.bytesContainer.size() ? buffer.lastSize : buffer.bufferSize,
-                newLine
-            );
-            
-            int endPoint = newLinePos == -1 ? (i + 1 == buffer.bytesContainer.size() ? buffer.lastSize : buffer.bufferSize) : newLinePos;
-            std::string substr(
-                buffer.bytesContainer[i] + startPoint,
-                endPoint - startPoint
-            );
-
-            if (isLastFinished) result.push_back(substr);
-            else result.back().append(substr);
-
-            if (newLinePos == -1) {
-                isLastFinished = false;
-                break;
-            } else {
-                isLastFinished = true;
-            }
-            startPoint = endPoint + 1;
-        }
-    }
-
-    return result;
-}*/
-
-/*std::vector<std::string> HttpRequestParser::parseBuffer_(const MAIN_NAMESPACE::UTILS_NAMESPACE::BytesContainer &buffer)
-{
-    return std::vector<std::string>();
-}*/
-void HttpRequestParser::parseStatusLine_(const std::string &line)
+void HttpRequestParser::parseStatusLine_(const std::string &line, std::string& versionKostyl)
 {
     std::vector<std::string> splitedLine = split_(line, ' ');
     size_t splitedLineSize = splitedLine.size();
     if (splitedLineSize < 2 || splitedLineSize > 3) throw ExceptionType("Status line got invalid number of arguments", EXC_ARGS);
     
+    // HTTP version
+    {
+        if (splitedLineSize == 2) {
+            httpRequest_.getStatusLine().setHttpVersion(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_0_9);
+            versionKostyl = UTILS_NAMESPACE::httpVersionToString(httpRequest_.getStatusLine().getHttpVersion());
+            return;
+        }
+
+        const std::string excMsg = "Invalid HTTP version";
+        const std::string& verLine = splitedLine.at(2);
+
+        try {
+            httpRequest_.getStatusLine().setHttpVersion(MAIN_NAMESPACE::UTILS_NAMESPACE::httpVersionFromString(verLine));
+            versionKostyl = UTILS_NAMESPACE::httpVersionToString(httpRequest_.getStatusLine().getHttpVersion());
+        } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::UtilsException& e){
+            throw ExceptionType(e.what(), EXC_ARGS);
+        }
+    }
+    // URL
+    {
+        const std::string& url = splitedLine.at(1);
+        httpRequest_.getStatusLine().setUrl(url);
+    }
     // Method
     {
         const std::string& method = splitedLine.at(0);
@@ -146,37 +144,16 @@ void HttpRequestParser::parseStatusLine_(const std::string &line)
         else if (method == "DELETE") httpRequest_.getStatusLine().setMethod(MAIN_NAMESPACE::UTILS_NAMESPACE::DELETE);
         else throw ExceptionType("Invalid method", EXC_ARGS);
     }
-    // URL
-    {
-        const std::string& url = splitedLine.at(1);
-        httpRequest_.getStatusLine().setUrl(url);
-    }
-    // HTTP version
-    {
-        if (splitedLineSize == 2) {
-            httpRequest_.getStatusLine().setHttpVersion(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_0_9);
-            return;
-        }
-
-        const std::string excMsg = "Invalid HTTP version";
-        const std::string& verLine = splitedLine.at(2);
-
-        try {
-            httpRequest_.getStatusLine().setHttpVersion(MAIN_NAMESPACE::UTILS_NAMESPACE::httpVersionFromString(verLine));
-        } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::UtilsException& e){
-            throw ExceptionType(e.what(), EXC_ARGS);
-        }
-    }
 
     httpRequest_.getStatusLine().done();
 }
 void HttpRequestParser::parseHeader_(const std::string& line){
-    const std::vector<std::string> splittedLine = split_(line, ':');
+    const std::vector<std::string> splittedLine = split__(line, ':');
     if (splittedLine.size() != 2) throw ExceptionType("Invalid header line");
 
     const std::string& key = splittedLine.at(0);
     const std::string& value = splittedLine.at(1);
-
+    
     // General headers
     if (key == "Cache-Control"){
         httpRequest_.getGeneralHeaders().setCacheControl(value);

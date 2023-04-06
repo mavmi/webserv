@@ -1,7 +1,6 @@
 #pragma once
 
 #include "utils.hpp"
-#include "exceptions.hpp"
 
 namespace MAIN_NAMESPACE{
 namespace UTILS_NAMESPACE{

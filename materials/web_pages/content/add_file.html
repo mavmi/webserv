@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8"/>
+		<title>Add file</title>
+		<style>
+			body, input, button {
+				font-family: 'monospace' ;
+				font-size: 24px;
+			}
+			body {
+				background-image: url("../imgs/back_introduce.jpg");
+				background-repeat: no-repeat;
+				background-attachment: fixed;
+				background-size: 100% 100%
+			}
+			p, h1 {
+				padding-left: 40px;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Add your file</h1>
+		<p>Please, choos the file which should be uploaded</p>
+		<form action="scripts/add_file.php" method="POST">
+			<p>Choos your file: <input type="file" name="filename" /></p>
+			<p><button type="submit" disabled>File not selected</button></p>
+		</form>
+	</body>
+	<script>
+		(() => {
+		  const fileInput = document.querySelector('input[name="filename"]');
+		  const button = document.querySelector('button[type="submit"]');
+		  fileInput.addEventListener("change", () => {
+			button.disabled = fileInput.files.length === 0;
+			button.innerText = fileInput.files.length === 0 ? 'File not selected' : 'Submit';
+		  });
+		})()
+	  </script>
+</html>

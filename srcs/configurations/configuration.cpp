@@ -53,7 +53,7 @@ const Configuration::HostPortPairsContainerType& Configuration::getHostPortPairs
     return hostPortPairs_;
 }
 
-const Configuration::ServerType& Configuration::getServer(ServerType::PortType port) const{
+const Configuration::ServerType& Configuration::getServer(CONFIG_NAMESPACE::ConfigurationPort port) const{
     for (ServersContainerType::SizeType i = 0; i < servers_.size(); i++){
         try {
             const ServerType& server = servers_.at(i);
@@ -62,7 +62,7 @@ const Configuration::ServerType& Configuration::getServer(ServerType::PortType p
     }
     throw ExceptionType("No server with such port", EXC_ARGS);
 }
-const Configuration::ServerType& Configuration::getServer(const ServerType::HostType& host) const{
+const Configuration::ServerType& Configuration::getServer(const CONFIG_NAMESPACE::ConfigurationHost& host) const{
     for (ServersContainerType::SizeType i = 0; i < servers_.size(); i++){
         try {
             const ServerType& server = servers_.at(i);
@@ -71,7 +71,7 @@ const Configuration::ServerType& Configuration::getServer(const ServerType::Host
     }
     throw ExceptionType("No server with such port", EXC_ARGS);
 }
-const Configuration::ServerType& Configuration::getServer(ServerType::PortType port, const ServerType::HostType& host) const{
+const Configuration::ServerType& Configuration::getServer(CONFIG_NAMESPACE::ConfigurationPort port, const CONFIG_NAMESPACE::ConfigurationHost& host) const{
     for (ServersContainerType::SizeType i = 0; i < servers_.size(); i++){
         try {
             const ServerType& server = servers_.at(i);

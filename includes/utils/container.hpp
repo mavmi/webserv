@@ -5,7 +5,6 @@
 
 #include "utils.hpp"
 #include "wrapper.hpp"
-#include "exceptions.hpp"
 
 namespace MAIN_NAMESPACE{
 namespace CONFIG_NAMESPACE{

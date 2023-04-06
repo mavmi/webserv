@@ -24,10 +24,7 @@ protected:
 
 class Parser{
 public:
-    typedef ParserException                                           ExceptionType;
-    typedef MAIN_NAMESPACE::Configuration::MethodType                 MethodType;
-    typedef MAIN_NAMESPACE::Configuration::ServerType                 ServerType;
-    typedef MAIN_NAMESPACE::Configuration::ServerType::RouteType      RouteType;
+    typedef ParserException ExceptionType;
 
     Parser();
     Parser(const std::string& inputFile);
@@ -48,16 +45,16 @@ private:
 
     // Return reference to the last server in the list of servers.
     // Throw an exception if there are no servers.
-    ServerType& getLastServer_();
+    CONFIG_NAMESPACE::ServerConfiguration& getLastServer_();
     // Return reference to the last route of last server.
     // May throw exception too.
-    RouteType& getLastRoute_();
+    CONFIG_NAMESPACE::RouteConfiguration& getLastRoute_();
 
     /*
         All these methods below are about parsing different types
         of strings from an input file.
     */
-    MethodType stringToHttpMethod_(const std::string& str);
+    MAIN_NAMESPACE::UTILS_NAMESPACE::METHOD stringToHttpMethod_(const std::string& str);
     std::set<std::string> stringToArray_(const std::string& str);
     bool stringToBool_(const std::string& str) const;
     template <typename ReturnType>

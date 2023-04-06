@@ -39,177 +39,189 @@ HttpCommonHeaders& HttpCommonHeaders::operator=(const HttpCommonHeaders& other){
     return *this;
 }
 
-void HttpCommonHeaders::setContentDisposition(const ContentDispositionType& contentDisposition){
+std::string HttpCommonHeaders::getFilename() const{
+    HANDLE_EXC_BEGIN
+        const std::string& disposition = contentDisposition_.get();
+        const std::string key = "filename=\"";
+        size_t pos = disposition.find(key, 0);
+        if (pos == std::string::npos) throw ExceptionType("Couldn't find filename");
+        std::string filename = disposition.substr(pos + key.size(), disposition.size() - pos - key.size());
+        pos = filename.find('\"');
+        if (pos == std::string::npos) throw ExceptionType("Invalid Content-Disposition format");
+        return filename.substr(0, pos);
+    HANDLE_EXC_END
+}
+void HttpCommonHeaders::setContentDisposition(const std::string& contentDisposition){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::CDH);
     contentDisposition_.set(contentDisposition);
 }
-HttpCommonHeaders::ContentDispositionType& HttpCommonHeaders::getContentDisposition(){
+std::string& HttpCommonHeaders::getContentDisposition(){
     HANDLE_EXC_BEGIN
         return contentDisposition_.get();
     HANDLE_EXC_END
 }
-const HttpCommonHeaders::ContentDispositionType& HttpCommonHeaders::getContentDisposition() const{
+const std::string& HttpCommonHeaders::getContentDisposition() const{
     HANDLE_EXC_BEGIN
         return contentDisposition_.get();
     HANDLE_EXC_END
 }
 
-void HttpCommonHeaders::setContentEncoding(const ContentEncodingType& contentEncoding){
+void HttpCommonHeaders::setContentEncoding(const std::string& contentEncoding){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
     contentEncoding_.set(contentEncoding);
 }
-HttpCommonHeaders::ContentEncodingType& HttpCommonHeaders::getContentEncoding(){
+std::string& HttpCommonHeaders::getContentEncoding(){
     HANDLE_EXC_BEGIN
         return contentEncoding_.get();
     HANDLE_EXC_END
 }
-const HttpCommonHeaders::ContentEncodingType& HttpCommonHeaders::getContentEncoding() const{
+const std::string& HttpCommonHeaders::getContentEncoding() const{
     HANDLE_EXC_BEGIN
         return contentEncoding_.get();
     HANDLE_EXC_END
 }
 
-void HttpCommonHeaders::setContentLanguage(const ContentLanguageType& contentLanguage){
+void HttpCommonHeaders::setContentLanguage(const std::string& contentLanguage){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
     contentLanguage_.set(contentLanguage);
 }
-HttpCommonHeaders::ContentLanguageType& HttpCommonHeaders::getContentLanguage(){
+std::string& HttpCommonHeaders::getContentLanguage(){
     HANDLE_EXC_BEGIN
         return contentLanguage_.get();
     HANDLE_EXC_END
 }
-const HttpCommonHeaders::ContentLanguageType& HttpCommonHeaders::getContentLanguage() const{
+const std::string& HttpCommonHeaders::getContentLanguage() const{
     HANDLE_EXC_BEGIN
         return contentLanguage_.get();
     HANDLE_EXC_END
 }
 
-void HttpCommonHeaders::setContentLength(const ContentLengthType& contentLength){
+void HttpCommonHeaders::setContentLength(const std::string& contentLength){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
     contentLength_.set(contentLength);
 }
-HttpCommonHeaders::ContentLengthType& HttpCommonHeaders::getContentLength(){
+std::string& HttpCommonHeaders::getContentLength(){
     HANDLE_EXC_BEGIN
         return contentLength_.get();
     HANDLE_EXC_END
 }
-const HttpCommonHeaders::ContentLengthType& HttpCommonHeaders::getContentLength() const{
+const std::string& HttpCommonHeaders::getContentLength() const{
     HANDLE_EXC_BEGIN
         return contentLength_.get();
     HANDLE_EXC_END
 }
 
-void HttpCommonHeaders::setContentLocation(const ContentLocationType& contentLocation){
+void HttpCommonHeaders::setContentLocation(const std::string& contentLocation){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
     contentLocation_.set(contentLocation);
 }
-HttpCommonHeaders::ContentLocationType& HttpCommonHeaders::getContentLocation(){
+std::string& HttpCommonHeaders::getContentLocation(){
     HANDLE_EXC_BEGIN
         return contentLocation_.get();
     HANDLE_EXC_END
 }
-const HttpCommonHeaders::ContentLocationType& HttpCommonHeaders::getContentLocation() const{
+const std::string& HttpCommonHeaders::getContentLocation() const{
     HANDLE_EXC_BEGIN
         return contentLocation_.get();
     HANDLE_EXC_END
 }
 
-void HttpCommonHeaders::setContentMD5(const ContentMD5Type& contentMD5){
+void HttpCommonHeaders::setContentMD5(const std::string& contentMD5){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::MD5H);
     contentMD5_.set(contentMD5);
 }
-HttpCommonHeaders::ContentMD5Type& HttpCommonHeaders::getContentMD5(){
+std::string& HttpCommonHeaders::getContentMD5(){
     HANDLE_EXC_BEGIN
         return contentMD5_.get();
     HANDLE_EXC_END
 }
-const HttpCommonHeaders::ContentMD5Type& HttpCommonHeaders::getContentMD5() const{
+const std::string& HttpCommonHeaders::getContentMD5() const{
     HANDLE_EXC_BEGIN
         return contentMD5_.get();
     HANDLE_EXC_END
 }
 
-void HttpCommonHeaders::setContentRange(const ContentRangeType& contentRange){
+void HttpCommonHeaders::setContentRange(const std::string& contentRange){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
     contentRange_.set(contentRange);
 }
-HttpCommonHeaders::ContentRangeType& HttpCommonHeaders::getContentRange(){
+std::string& HttpCommonHeaders::getContentRange(){
     HANDLE_EXC_BEGIN
         return contentRange_.get();
     HANDLE_EXC_END
 }
-const HttpCommonHeaders::ContentRangeType& HttpCommonHeaders::getContentRange() const{
+const std::string& HttpCommonHeaders::getContentRange() const{
     HANDLE_EXC_BEGIN
         return contentRange_.get();
     HANDLE_EXC_END
 }
 
-void HttpCommonHeaders::setContentType(const ContentType& contentType){
+void HttpCommonHeaders::setContentType(const std::string& contentType){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
     contentType_.set(contentType);
 }
-HttpCommonHeaders::ContentType& HttpCommonHeaders::getContentType(){
+std::string& HttpCommonHeaders::getContentType(){
     HANDLE_EXC_BEGIN
         return contentType_.get();
     HANDLE_EXC_END
 }
-const HttpCommonHeaders::ContentType& HttpCommonHeaders::getContentType() const{
+const std::string& HttpCommonHeaders::getContentType() const{
     HANDLE_EXC_BEGIN
         return contentType_.get();
     HANDLE_EXC_END
 }
 
-void HttpCommonHeaders::setContentVersion(const ContentVersionType& contentVersion){
+void HttpCommonHeaders::setContentVersion(const std::string& contentVersion){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
     contentVersion_.set(contentVersion);
 }
-HttpCommonHeaders::ContentVersionType& HttpCommonHeaders::getContentVersion(){
+std::string& HttpCommonHeaders::getContentVersion(){
     HANDLE_EXC_BEGIN
         return contentVersion_.get();
     HANDLE_EXC_END
 }
-const HttpCommonHeaders::ContentVersionType& HttpCommonHeaders::getContentVersion() const{
+const std::string& HttpCommonHeaders::getContentVersion() const{
     HANDLE_EXC_BEGIN
         return contentVersion_.get();
     HANDLE_EXC_END
 }
 
-void HttpCommonHeaders::setDerivedFrom(const DerivedFromType& derivedFrom){
+void HttpCommonHeaders::setDerivedFrom(const std::string& derivedFrom){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_1);
     derivedFrom_.set(derivedFrom);
 }
-HttpCommonHeaders::DerivedFromType& HttpCommonHeaders::getDerivedFrom(){
+std::string& HttpCommonHeaders::getDerivedFrom(){
     HANDLE_EXC_BEGIN
         return derivedFrom_.get();
     HANDLE_EXC_END
 }
-const HttpCommonHeaders::DerivedFromType& HttpCommonHeaders::getDerivedFrom() const{
+const std::string& HttpCommonHeaders::getDerivedFrom() const{
     HANDLE_EXC_BEGIN
         return derivedFrom_.get();
     HANDLE_EXC_END
 }
 
-void HttpCommonHeaders::setExpires(const ExpiresType& expires){
+void HttpCommonHeaders::setExpires(const std::string& expires){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
     expires_.set(expires);
 }
-HttpCommonHeaders::ExpiresType& HttpCommonHeaders::getExpires(){
+std::string& HttpCommonHeaders::getExpires(){
     HANDLE_EXC_BEGIN
         return expires_.get();
     HANDLE_EXC_END
 }
-const HttpCommonHeaders::ExpiresType& HttpCommonHeaders::getExpires() const{
+const std::string& HttpCommonHeaders::getExpires() const{
     HANDLE_EXC_BEGIN
         return expires_.get();
     HANDLE_EXC_END
@@ -220,69 +232,69 @@ void HttpCommonHeaders::setLastModified(std::tm* time){
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
     lastModified_.set(generateDate_(time));
 }
-void HttpCommonHeaders::setLastModified(const LastModifiedType& lastModified){
+void HttpCommonHeaders::setLastModified(const std::string& lastModified){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
     lastModified_.set(lastModified);
 }
-HttpCommonHeaders::LastModifiedType& HttpCommonHeaders::getLastModified(){
+std::string& HttpCommonHeaders::getLastModified(){
     HANDLE_EXC_BEGIN
         return lastModified_.get();
     HANDLE_EXC_END
 }
-const HttpCommonHeaders::LastModifiedType& HttpCommonHeaders::getLastModified() const{
+const std::string& HttpCommonHeaders::getLastModified() const{
     HANDLE_EXC_BEGIN
         return lastModified_.get();
     HANDLE_EXC_END
 }
 
-void HttpCommonHeaders::setLink(const LinkType& link){
+void HttpCommonHeaders::setLink(const std::string& link){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
     link_.set(link);
 }
-HttpCommonHeaders::LinkType& HttpCommonHeaders::getLink(){
+std::string& HttpCommonHeaders::getLink(){
     HANDLE_EXC_BEGIN
         return link_.get();
     HANDLE_EXC_END
 }
-const HttpCommonHeaders::LinkType& HttpCommonHeaders::getLink() const{
+const std::string& HttpCommonHeaders::getLink() const{
     HANDLE_EXC_BEGIN
         return link_.get();
     HANDLE_EXC_END
 }
 
-void HttpCommonHeaders::setTitle(const TitleType& title){
+void HttpCommonHeaders::setTitle(const std::string& title){
     throwOnDone_();
     checkVersion_(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_1_0);
     title_.set(title);
 }
-HttpCommonHeaders::TitleType& HttpCommonHeaders::getTitle(){
+std::string& HttpCommonHeaders::getTitle(){
     HANDLE_EXC_BEGIN
         return title_.get();
     HANDLE_EXC_END
 }
-const HttpCommonHeaders::TitleType& HttpCommonHeaders::getTitle() const{
+const std::string& HttpCommonHeaders::getTitle() const{
     HANDLE_EXC_BEGIN
         return title_.get();
     HANDLE_EXC_END
 }
 
 void HttpCommonHeaders::deleteData_(){
-    contentDisposition_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ContentDispositionType>();
-    contentEncoding_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ContentEncodingType>();
-    contentLanguage_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ContentLanguageType>();
-    contentLength_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ContentLengthType>();
-    contentLocation_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ContentLocationType>();
-    contentMD5_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ContentMD5Type>();
-    contentRange_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ContentRangeType>();
-    contentType_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ContentType>();
-    contentVersion_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ContentVersionType>();
-    derivedFrom_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<DerivedFromType>();
-    expires_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<ExpiresType>();
-    lastModified_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<LastModifiedType>();
-    link_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<LinkType>();
-    title_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<TitleType>();
+    contentDisposition_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    contentEncoding_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    contentLanguage_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    contentLength_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    contentLocation_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    contentMD5_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    contentRange_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    contentType_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    contentVersion_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    derivedFrom_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    expires_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    lastModified_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    link_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    title_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
 }
 void HttpCommonHeaders::copyData_(const ParserAbstractParent& o){
     const HttpCommonHeaders& other = dynamic_cast<const HttpCommonHeaders&>(o);

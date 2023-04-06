@@ -37,23 +37,23 @@ StatusLineAbstractParent& StatusLineAbstractParent::operator=(const StatusLineAb
     return *this;    
 }
 
-void StatusLineAbstractParent::setHttpVersion(HttpVersionType httpVersion){
+void StatusLineAbstractParent::setHttpVersion(MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_VERSION httpVersion){
     throwOnDone_();
     httpVersion_.set(httpVersion);
 }
-StatusLineAbstractParent::HttpVersionType& StatusLineAbstractParent::getHttpVersion(){
+MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_VERSION& StatusLineAbstractParent::getHttpVersion(){
     HANDLE_EXC_BEGIN
         return httpVersion_.get();
     HANDLE_EXC_END
 }
-const StatusLineAbstractParent::HttpVersionType& StatusLineAbstractParent::getHttpVersion() const{
+const MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_VERSION& StatusLineAbstractParent::getHttpVersion() const{
     HANDLE_EXC_BEGIN
         return httpVersion_.get();
     HANDLE_EXC_END
 }
 
 void StatusLineAbstractParent::deleteData_(){
-    httpVersion_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<HttpVersionType>();
+    httpVersion_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_VERSION>();
 }
 void StatusLineAbstractParent::copyData_(const MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent& o){
     const StatusLineAbstractParent& other = dynamic_cast<const StatusLineAbstractParent&>(o);

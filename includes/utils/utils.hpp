@@ -3,15 +3,23 @@
 #include <string>
 #include <vector>
 #include <cstdlib>
+#include <fcntl.h>
+#include <dirent.h>
 #include <iostream>
 #include <algorithm>
+#include <typeinfo>
+
+#define EXC_ARGS    __FILE__, __FUNCTION__, __LINE__
+#define HANDLE_EXC_BEGIN    try {
+#define HANDLE_EXC_END      } catch (MAIN_NAMESPACE::UTILS_NAMESPACE::WrapperException& e){ \
+                                throw ExceptionType(e.what());                              \
+                            }
 
 #define MAIN_NAMESPACE                  wsrv
 #define CORE                            wsrv
 #define CONFIG_NAMESPACE                configuration
 #define HTTP_HEADERS_NAMESPACE          http_headers
 #define HTTP_REQUEST_PARS_NAMESPACE     http_request
-#define HTTP_RESPONSE_GENER_NAMESPACE   http_response
 #define UTILS_NAMESPACE                 utils
 
 namespace MAIN_NAMESPACE{
@@ -45,7 +53,34 @@ enum HTTP_VERSION{
     CDH
 };
 
-class UtilsException {
+class Exception {
+public:
+    Exception(const char* msg);
+    Exception(const std::string& msg);
+
+    Exception(const char* msg, const std::string& _file_, const std::string& _function_, int _line_);
+    Exception(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_);
+
+    Exception(const char* msg, const std::string& _file_, const std::string& _function_, int _line_, int code);
+    Exception(const std::string& msg, const std::string& _file_, const std::string& _function_, int _line_, int code);
+
+    ~Exception() throw();
+
+    virtual const std::string what() const throw();
+    int getCode();
+
+protected:
+    const std::string msg_;
+    const std::string _file_;
+    const std::string _function_;
+    const int _line_;
+    const int code_;
+
+    virtual std::string output_() const;
+};
+
+
+class UtilsException : public Exception{
 public:
     UtilsException(const char* msg);
     UtilsException(const std::string& msg);
@@ -60,8 +95,13 @@ protected:
     
 };
 
+int             countOpenedFds();
+
 std::string     httpVersionToString(HTTP_VERSION httpVersion);
 HTTP_VERSION    httpVersionFromString(const std::string& httpVersionStr);
+std::string     methodToString(METHOD method);
+
+std::vector<std::string> lsFromPath(const std::string& file_path);
 
 void        utilsPrintMsg(const std::string& msg, MSG_TYPE msgType);
 void        utilsCheckArgsCount(int argc);
@@ -109,8 +149,6 @@ Type        utilsStringToNum(const std::string& str){
 
 class BytesContainer{
 public:
-    typedef std::vector<std::string> BytesContainerType;
-
     const static int continue_ = 1;
     const static int end_ = 0;
 
@@ -124,7 +162,10 @@ public:
     void pushBack(const std::string& line);
     int pushBack(char* buffer, int bufferSize);
 
-    const BytesContainerType& getLines() const;
+    size_t charsCount() const;
+
+    const std::vector<std::string>& getLines() const;
+    char* toBytes() const;
 
 private:
     bool r_;
@@ -132,7 +173,7 @@ private:
     int content_;
     size_t contentLength_;
     std::string tmpLine_;
-    BytesContainerType bytesContainer_;
+    std::vector<std::string> bytesContainer_;
 
 };
 

@@ -38,40 +38,40 @@ HttpResponseStatusLine& HttpResponseStatusLine::operator=(const HttpResponseStat
     return *this;
 }
 
-void HttpResponseStatusLine::setStatusCode(StatusCodeType statusCode){
+void HttpResponseStatusLine::setStatusCode(std::string statusCode){
     throwOnDone_();
     statusCode_.set(statusCode);
 }
-HttpResponseStatusLine::StatusCodeType& HttpResponseStatusLine::getStatusCode(){
+std::string& HttpResponseStatusLine::getStatusCode(){
     HANDLE_EXC_BEGIN
         return statusCode_.get();
     HANDLE_EXC_END
 }
-const HttpResponseStatusLine::StatusCodeType& HttpResponseStatusLine::getStatusCode() const{
+const std::string& HttpResponseStatusLine::getStatusCode() const{
     HANDLE_EXC_BEGIN
         return statusCode_.get();
     HANDLE_EXC_END
 }
 
-void HttpResponseStatusLine::setMessage(MessageType message){
+void HttpResponseStatusLine::setMessage(std::string message){
     throwOnDone_();
     message_.set(message);
 }
-HttpResponseStatusLine::MessageType& HttpResponseStatusLine::getMessage(){
+std::string& HttpResponseStatusLine::getMessage(){
     HANDLE_EXC_BEGIN
         return message_.get();
     HANDLE_EXC_END
 }
-const HttpResponseStatusLine::MessageType& HttpResponseStatusLine::getMessage() const{
+const std::string& HttpResponseStatusLine::getMessage() const{
     HANDLE_EXC_BEGIN
         return message_.get();
     HANDLE_EXC_END
 }
 
 void HttpResponseStatusLine::deleteData_(){
-    httpVersion_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<HttpVersionType>();
-    statusCode_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<StatusCodeType>();
-    message_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<MessageType>();
+    httpVersion_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_VERSION>();
+    statusCode_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
+    message_ = MAIN_NAMESPACE::UTILS_NAMESPACE::Wrapper<std::string>();
 }
 void HttpResponseStatusLine::copyData_(const MAIN_NAMESPACE::UTILS_NAMESPACE::ParserAbstractParent& o){
     const HttpResponseStatusLine& other = dynamic_cast<const HttpResponseStatusLine&>(o);
