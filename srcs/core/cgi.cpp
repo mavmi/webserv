@@ -49,13 +49,13 @@ namespace CORE {
 		env["CONTENT_LENGTH"] = env["CONTENT_LENGTH"] = request.getRequestHeaders().getContentLength();
 		php_script = env["SCRIPT_FILENAME"];
 
-		std::cout << "\tREQUEST LINE: " << env["QUERY_STRING"] << std::endl;
+		// std::cout << "\tREQUEST LINE: " << env["QUERY_STRING"] << std::endl;
 
-		char** bruh = SetEnv();
-		while (*bruh){
-			std::cout << *bruh << std::endl;
-			bruh++;
-		}
+		// char** bruh = SetEnv();
+		// while (*bruh){
+		// 	std::cout << *bruh << std::endl;
+		// 	bruh++;
+		// }
 	}
 
 	Cgi::~Cgi(void){}
