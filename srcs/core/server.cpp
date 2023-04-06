@@ -100,8 +100,8 @@ void Server::SendResponse_(Server::managed_fds_reference masterwrite,
 	if (is_fd_in_set){
 		send_nbytes = send(
 			current_fd, 
-			fd_pair.GetPointRawBytes()+fd_pair.GetFdIter()->total_sent_bytes, 
-			arr_size, 
+			fd_pair.GetPointRawBytes() + fd_pair.GetFdIter()->total_sent_bytes,
+			(arr_size >= fd_pair.GetFdIter()->total_sent_bytes) ? arr_size - fd_pair.GetFdIter()->total_sent_bytes : 0,
 			0
 		);
 		if(send_nbytes) fd_pair.GetFdIter()->total_sent_bytes += send_nbytes;

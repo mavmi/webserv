@@ -162,7 +162,7 @@ namespace CORE {
 		readbyten = 1;
 		while (readbyten > 0) {
 			readbyten = read(read_fd, buf, utils::BUFFER_SIZE);
-			if (readbyten < 0) return NULL;
+			if (readbyten < 0) return "";
 			ret += buf;
 			memset(buf, 0, utils::BUFFER_SIZE + 1);
 		}

@@ -145,11 +145,11 @@ void method_post(utils::HTTP_VERSION version, const http_request::HttpRequest& r
 		error_setup_file(it_current_fd, response, req_cgi[0]);
 	} else {
 		response.fillBody(req_cgi[2]);
-		for (std::vector<char>::iterator it = response.getMessage().begin();
-			it != response.getMessage().end();
-			++it)
-			std::cout << *it;
-		std::cout << std::endl;
+		// for (std::vector<char>::iterator it = response.getMessage().begin();
+		// 	it != response.getMessage().end();
+		// 	++it)
+		// 	std::cout << *it;
+		// std::cout << std::endl;
 	}
 }
 
