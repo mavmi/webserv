@@ -43,6 +43,7 @@ private:
 	int child_pid;
 
 	std::string ParseName_(const std::string& url) const;
+	std::string GetQueryString_(const http_request& request) const;
 
 	int StartPHPProc_(void);
 	std::string ReadFromCgiProc_(void);

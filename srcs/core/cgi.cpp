@@ -20,7 +20,7 @@ namespace CORE {
 		env["GATEWAY_INTERFACE"] = "CGI/1.1";
 		env["PATH_INFO"] = server_conf.getRoot();
 		env["PATH_TRANSLATED"] = server_conf.getRoot() + request.getStatusLine().getUrl();
-		env["QUERY_STRING"] = "";
+		env["QUERY_STRING"] = GetQueryString_(request);
 		env["REMOTE_HOST"] = request.getRequestHeaders().getHost();
 		env["REMOTE_ADDR"] = request.getRequestHeaders().getHost();
 		env["REMOTE_USER"] = "";
@@ -59,6 +59,13 @@ namespace CORE {
 		
 		if (slashPos == std::string::npos) return url;
 		return url.substr(slashPos + 1, url.size() - slashPos - 1);
+	}
+	std::string Cgi::GetQueryString_(const http_request& request) const{
+		std::cout << "\tREQUEST BODY SIZE: " << request.getRequestContent().size() << std::endl;
+		std::cout << "\tREQUEST LINE: " << request.getRequestContent().front() << std::endl;
+		
+		const std::vector<std::string>& request_content = request.getRequestContent();
+		return (request_content.size()) ? request_content.front() : "";
 	}
 
 	std::vector<std::string> Cgi::Exec(void){
