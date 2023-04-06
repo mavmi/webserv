@@ -49,9 +49,20 @@ std::string UtilsException::output_() const {
 }
 }
 
-
 namespace MAIN_NAMESPACE{
 namespace UTILS_NAMESPACE{
+int countOpenedFds(){
+    int count = 0;
+
+    for (int i = 0; i < 256; i++){
+        if (fcntl(i, F_GETFD) != -1){
+            count++;
+        }
+    }
+
+    return count;
+}
+
 std::string     httpVersionToString(HTTP_VERSION httpVersion){
     if (httpVersion == MAIN_NAMESPACE::UTILS_NAMESPACE::HTTP_0_9){
         return "HTTP/0.9";

@@ -3,10 +3,11 @@
 #include <string>
 #include <vector>
 #include <cstdlib>
+#include <fcntl.h>
+#include <dirent.h>
 #include <iostream>
 #include <algorithm>
 #include <typeinfo>
-#include <dirent.h>
 
 #define EXC_ARGS    __FILE__, __FUNCTION__, __LINE__
 #define HANDLE_EXC_BEGIN    try {
@@ -93,6 +94,8 @@ protected:
     virtual std::string output_() const;
     
 };
+
+int             countOpenedFds();
 
 std::string     httpVersionToString(HTTP_VERSION httpVersion);
 HTTP_VERSION    httpVersionFromString(const std::string& httpVersionStr);
