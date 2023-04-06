@@ -187,14 +187,32 @@ RouteConfiguration& ServerConfiguration::getRoute(const std::string& url){
     
     HANDLE_EXC_BEGIN
     for (RoutesContainerType::SizeType i = 0; i < routes_.get().size(); i++){
-        RouteConfiguration& route = routes_.get().at(i);
-        if (route.getRedirection() == file && route.getDirectory() == dir) return route;
+            RouteConfiguration& route = routes_.get().at(i);
+
+        // std::cout << "FILE: " << route.getRedirection()
+        //         << "   ->   DIR: " << route.getDirectory() << "  (" << dir << ")"
+        //         << std::endl;
+        if (route.getRedirection() == "*" && route.getDirectory() == dir) {
+            std::vector<std::string> dir_files(UTILS_NAMESPACE::lsFromPath(dir));
+
+            for (std::vector<std::string>::iterator it = dir_files.begin();
+                    it != dir_files.end();
+                    ++it){
+                // std::cout << "\tFILE_IN_DIR: " << (*it) 
+                //         << "   -> FINDED: " << file
+                //         << std::endl;
+                if ((*it) == file) return route;
+            }
+            throw ExceptionType("Route with such url not found: " + url);
+        } else if (route.getRedirection() == file && route.getDirectory() == dir) {
+            return route;
+        }
     }
     throw ExceptionType("Route with such url not found: " + url);
     HANDLE_EXC_END
 }
 const RouteConfiguration& ServerConfiguration::getRoute(const std::string& url) const{
-    const size_t slashPos = url.rfind('/');
+    size_t slashPos = url.rfind('/');
     if (slashPos == std::string::npos) throw ExceptionType("Cannot parse url");
     const std::string dir = url.substr(0, url.size() - (url.size() - slashPos) + 1);
     const std::string file = url;
@@ -203,11 +221,24 @@ const RouteConfiguration& ServerConfiguration::getRoute(const std::string& url) 
     for (RoutesContainerType::SizeType i = 0; i < routes_.get().size(); i++){
         const RouteConfiguration& route = routes_.get().at(i);
 
-        // std::cout << "redirection -> " << route.getRedirection()
-        //          << "   url -> " << url << std::endl;
-        // std::cout << "FILE: "<< file << "     -> " << route.getRedirection() << std::endl;
-        // std::cout << "DIE: "<< dir << "     -> " << route.getDirectory() << std::endl;
-        if (route.getRedirection() == file && route.getDirectory() == dir) return route;
+        if (route.getRedirection() == "*" && route.getDirectory() == dir) {
+            std::vector<std::string> dir_files(UTILS_NAMESPACE::lsFromPath(getRoot() + dir));
+            for (std::vector<std::string>::iterator it = dir_files.begin();
+                    it != dir_files.end();
+                    ++it){
+                std::string filename = file;
+                slashPos = filename.rfind('/');
+                if (slashPos != std::string::npos){
+                    filename = filename.substr(slashPos + 1, filename.size() - slashPos - 1);
+                }
+                if ((*it) == filename) {
+                    return route;
+                }
+            }
+            throw ExceptionType("Route with such url not found: " + url);
+        } else if (route.getRedirection() == file && route.getDirectory() == dir) {
+            return route;
+        }
     }
     throw ExceptionType("Route with such url not found: " + url);
     HANDLE_EXC_END

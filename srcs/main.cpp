@@ -7,7 +7,7 @@ const wsrv::Configuration& parseConfig(int argc, char** argv, wsrv::Parser& pars
             parser.parseFile(wsrv::utils::DEFAULT_SERVER_CONFIG_FILE_PATH);
 }
 
-int main(int argc, char** argv){    
+int main(int argc, char** argv){
     std::cout << " << Server is running >> " << std::endl;
 
     wsrv::utils::utilsCheckArgsCount(argc);

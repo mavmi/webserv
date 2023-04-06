@@ -161,7 +161,6 @@ void method_delete(utils::HTTP_VERSION version, const std::string& path,
 	if (is_file) {
 		std::remove(path.c_str());
 		response.setStatusLine(version, "200", "OK");
-		//???WHICH PAGE TO RETURN???
 	} else {
 		response.setStatusLine(version, "404", "Not Found");
 		error_setup_file(it_current_fd, response, "404");
@@ -177,13 +176,6 @@ bool is_method_allowed(wsrv::Fds::fd_array_iter it_current_fd,
 	bool is_allowed;
 
 	try {
-		// std::cout << "LOOK AT THIS: " << std::endl;
-		// std::cout << path << std::endl;
-		// std::cout << (*it_current_fd).GetParentSocketConfigReference().
-		// 			getRoute(path).getRedirection() << std::endl;
-		// std::cout << (*it_current_fd).GetParentSocketConfigReference().
-		// 			getRoute(path).isMethodPresent(method) << std::endl;
-		// std::cout << std::endl;
 		is_allowed = (*it_current_fd).GetParentSocketConfigReference().
 					getRoute(path).isMethodPresent(method);
 	} catch (utils::Exception& e) {

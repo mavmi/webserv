@@ -73,9 +73,9 @@ std::string methodToString(METHOD method){
     }
 }
 
-std::vector<std::string> lsFromPath(const std::string& file_path){
+std::vector<std::string> lsFromPath(const std::string& dir_path){
     struct dirent *entry;
-    DIR *dir = opendir(strdup(file_path.c_str()));
+    DIR *dir = opendir(strdup(dir_path.c_str()));
     std::vector<std::string> ret;
 
     if (dir == NULL) {
@@ -83,8 +83,8 @@ std::vector<std::string> lsFromPath(const std::string& file_path){
     }
     entry = readdir(dir);
     while (entry != NULL) {
+        ret.push_back(std::string(entry->d_name));
         entry = readdir(dir);
-        ret.push_back(entry->d_name);
     }
     closedir(dir);
     return (ret);

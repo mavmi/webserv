@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:22:02 by msalena           #+#    #+#             */
-/*   Updated: 2023/04/06 13:05:27 by msalena          ###   ########.fr       */
+/*   Updated: 2023/04/06 14:41:18 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,12 +154,12 @@ int Server::MessageFormationToReceiveSend_(Server::fd_iter it_current_fd,
 
 	if (!is_req_end){
 		
-		{	// JUST TO BE SURE IF WORKS FINE //
-			std::vector<std::string> lines = request_container.getLines();
-			for (size_t i = 0; i < lines.size(); i++){
-				std::cout << lines.at(i) << std::endl;
-			}
-		}
+		// {	// JUST TO BE SURE IF WORKS FINE //
+		// 	std::vector<std::string> lines = request_container.getLines();
+		// 	for (size_t i = 0; i < lines.size(); i++){
+		// 		std::cout << lines.at(i) << std::endl;
+		// 	}
+		// }
 		response_generator(it_current_fd);
 	}
 	return is_req_end;

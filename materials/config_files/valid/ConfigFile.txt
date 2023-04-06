@@ -1,37 +1,37 @@
 {
     port: 1025; 
     host: 127.0.0.1;
-    root:            materials/web_pages;
+    root:            materials;
     server_name:     DEFAULT_SERVER;
-    error_pages:     /errors/400.html, /errors/404.html, /errors/405.html, /errors/500.html, /errors/501.html;
+    error_pages:     /web_pages/errors/400.html, /web_pages/errors/404.html, /web_pages/errors/405.html, /web_pages/errors/500.html, /web_pages/errors/501.html;
     body_size:       4096;
 
     [
         methods:             GET;
-        redir:               /index.html;
-        dir:                 /;
+        redir:               /web_pages/index.html;
+        dir:                 /web_pages/;
     ]
 
 
     [
         methods:             GET;
-        redir:               /imgs/back_index.jpg;
-        dir:                 /imgs/;
+        redir:               /web_pages/imgs/back_index.jpg;
+        dir:                 /web_pages/imgs/;
     ]
     [
         methods:             GET;
-        redir:               /imgs/back_comment.jpg;
-        dir:                 /imgs/;
+        redir:               /web_pages/imgs/back_comment.jpg;
+        dir:                 /web_pages/imgs/;
     ]
     [
         methods:             GET;
-        redir:               /imgs/back_errors.jpg;
-        dir:                 /imgs/;
+        redir:               /web_pages/imgs/back_errors.jpg;
+        dir:                 /web_pages/imgs/;
     ]
     [
         methods:             GET;
-        redir:               /imgs/back_introduce.jpg;
-        dir:                 /imgs/;
+        redir:               /web_pages/imgs/back_introduce.jpg;
+        dir:                 /web_pages/imgs/;
     ]
 
 
@@ -44,28 +44,28 @@
 
     [
         methods:             GET;
-        redir:               /content/add_file.html;
-        dir:                 /content/;
+        redir:               /web_pages/content/add_file.html;
+        dir:                 /web_pages/content/;
     ]
     [
         methods:             GET;
-        redir:               /content/delete_file.html;
-        dir:                 /content/;
+        redir:               /web_pages/content/delete_file.html;
+        dir:                 /web_pages/content/;
     ]
     [
         methods:             GET;
-        redir:               /content/comment.html;
-        dir:                 /content/;
+        redir:               /web_pages/content/comment.html;
+        dir:                 /web_pages/content/;
     ]
     [
         methods:             GET;
-        redir:               /content/success_upload.html;
-        dir:                 /content/;
+        redir:               /web_pages/content/success_upload.html;
+        dir:                 /web_pages/content/;
     ]
     [
         methods:             GET;
-        redir:               /content/unsuccess_upload.html;
-        dir:                 /content/;
+        redir:               /web_pages/content/unsuccess_upload.html;
+        dir:                 /web_pages/content/;
     ]
 
 
