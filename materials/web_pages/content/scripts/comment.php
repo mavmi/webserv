@@ -1,4 +1,6 @@
 <?php
+	echo $_POST . "\n";
+
 	$nickname = "Undefine";
 	$comment = "Undefine";
 	if (isset($_POST["nickname"])){

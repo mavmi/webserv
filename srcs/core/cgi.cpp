@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 21:19:53 by msalena           #+#    #+#             */
-/*   Updated: 2023/04/06 13:41:53 by msalena          ###   ########.fr       */
+/*   Updated: 2023/04/06 17:05:59 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,14 @@ namespace CORE {
 		env["SERVER_SOFTWARE"] = server_conf.getServerName();
 		env["CONTENT_LENGTH"] = "-1";
 		php_script = env["SCRIPT_FILENAME"];
+
+		std::cout << "\tREQUEST LINE: " << env["QUERY_STRING"] << std::endl;
+
+		char** bruh = SetEnv();
+		while (bruh){
+			std::cout << *bruh << std::endl;
+			bruh++;
+		}
 	}
 
 	Cgi::~Cgi(void){}
@@ -60,12 +68,9 @@ namespace CORE {
 		if (slashPos == std::string::npos) return url;
 		return url.substr(slashPos + 1, url.size() - slashPos - 1);
 	}
-	std::string Cgi::GetQueryString_(const http_request& request) const{
-		std::cout << "\tREQUEST BODY SIZE: " << request.getRequestContent().size() << std::endl;
-		std::cout << "\tREQUEST LINE: " << request.getRequestContent().front() << std::endl;
-		
+	std::string Cgi::GetQueryString_(const http_request& request) const{		
 		const std::vector<std::string>& request_content = request.getRequestContent();
-		return (request_content.size()) ? request_content.front() : "";
+		return (request_content.size()) ? (request_content.front()) : "";
 	}
 
 	std::vector<std::string> Cgi::Exec(void){
@@ -82,7 +87,7 @@ namespace CORE {
 		
 		readed_ret = ReadFromCgiProc_();
 		std::cout << "\t -> CGI: read result from the interpreter" << std::endl;
-		std::cout << "HERERE: " << readed_ret << std::endl;
+		// std::cout << "HERERE: " << readed_ret << std::endl;
 		KillClose_();
 		if (readed_ret.empty()) {
 			PushBackStatus_("500", "Internal Server Error", ret);

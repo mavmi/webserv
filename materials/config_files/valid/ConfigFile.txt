@@ -71,13 +71,13 @@
 
     [
         methods:             POST;
-        redir:               /content/scripts/add_file.php;
-        dir:                 /content/scripts/;
+        redir:               /web_pages/content/scripts/add_file.php;
+        dir:                 /web_pages/content/scripts/;
     ]
     [
         methods:             POST;
-        redir:               /content/scripts/comment.php;
-        dir:                 /content/scripts/;
+        redir:               /web_pages/content/scripts/comment.php;
+        dir:                 /web_pages/content/scripts/;
     ]
 }
 {

@@ -179,6 +179,8 @@ bool is_method_allowed(wsrv::Fds::fd_array_iter it_current_fd,
 		is_allowed = (*it_current_fd).GetParentSocketConfigReference().
 					getRoute(path).isMethodPresent(method);
 	} catch (utils::Exception& e) {
+		
+		// std::cout << e.what() << std::endl;
 		response.setStatusLine(version, "404", "Not Found");
 		error_setup_file(it_current_fd, response, "404");
 		return false;
