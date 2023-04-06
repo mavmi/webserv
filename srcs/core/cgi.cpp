@@ -86,7 +86,9 @@ namespace CORE {
 		return (request_content.size()) ? (request_content.front()) : "";
 	}
 	std::string Cgi::GetFullPath_(const std::string& path) const {
-		std::string pwd = std::string(getcwd(NULL, 0));
+		char* pwd_ptr = getcwd(NULL, 0);
+		std::string pwd = std::string(pwd_ptr);
+		free(pwd_ptr);
 		return pwd + "/" + path;
 	}
 
