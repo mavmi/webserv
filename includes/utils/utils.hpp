@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <algorithm>
+#include <dirent.h>
 
 #define MAIN_NAMESPACE                  wsrv
 #define CORE                            wsrv
@@ -62,6 +63,8 @@ protected:
 std::string     httpVersionToString(HTTP_VERSION httpVersion);
 HTTP_VERSION    httpVersionFromString(const std::string& httpVersionStr);
 std::string     methodToString(METHOD method);
+
+std::vector<std::string> lsFromPath(const std::string& file_path);
 
 void        utilsPrintMsg(const std::string& msg, MSG_TYPE msgType);
 void        utilsCheckArgsCount(int argc);

@@ -73,6 +73,23 @@ std::string methodToString(METHOD method){
     }
 }
 
+std::vector<std::string> lsFromPath(const std::string& file_path){
+    struct dirent *entry;
+    DIR *dir = opendir(strdup(file_path.c_str()));
+    std::vector<std::string> ret;
+
+    if (dir == NULL) {
+        return (ret);
+    }
+    entry = readdir(dir);
+    while (entry != NULL) {
+        entry = readdir(dir);
+        ret.push_back(entry->d_name);
+    }
+    closedir(dir);
+    return (ret);
+}
+
 // Print message with specified message type
 void utilsPrintMsg(const std::string& msg, MSG_TYPE msgType = INFO){
     std::string msgPrefix;

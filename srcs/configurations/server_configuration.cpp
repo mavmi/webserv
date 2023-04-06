@@ -182,13 +182,13 @@ const RouteConfiguration& ServerConfiguration::getRoute(size_t position) const{
 RouteConfiguration& ServerConfiguration::getRoute(const std::string& url){
     const size_t slashPos = url.rfind('/');
     if (slashPos == std::string::npos) throw ExceptionType("Cannot parse url");
-    const std::string die = url.substr(0, url.size() - (url.size() - slashPos) + 1);
+    const std::string dir = url.substr(0, url.size() - (url.size() - slashPos) + 1);
     const std::string file = url;
     
     HANDLE_EXC_BEGIN
     for (RoutesContainerType::SizeType i = 0; i < routes_.get().size(); i++){
         RouteConfiguration& route = routes_.get().at(i);
-        if (route.getRedirection() == file && route.getDirectory() == die) return route;
+        if (route.getRedirection() == file && route.getDirectory() == dir) return route;
     }
     throw ExceptionType("Route with such url not found: " + url);
     HANDLE_EXC_END
@@ -196,7 +196,7 @@ RouteConfiguration& ServerConfiguration::getRoute(const std::string& url){
 const RouteConfiguration& ServerConfiguration::getRoute(const std::string& url) const{
     const size_t slashPos = url.rfind('/');
     if (slashPos == std::string::npos) throw ExceptionType("Cannot parse url");
-    const std::string die = url.substr(0, url.size() - (url.size() - slashPos) + 1);
+    const std::string dir = url.substr(0, url.size() - (url.size() - slashPos) + 1);
     const std::string file = url;
     
     HANDLE_EXC_BEGIN
@@ -206,8 +206,8 @@ const RouteConfiguration& ServerConfiguration::getRoute(const std::string& url) 
         // std::cout << "redirection -> " << route.getRedirection()
         //          << "   url -> " << url << std::endl;
         // std::cout << "FILE: "<< file << "     -> " << route.getRedirection() << std::endl;
-        // std::cout << "DIE: "<< die << "     -> " << route.getDirectory() << std::endl;
-        if (route.getRedirection() == file && route.getDirectory() == die) return route;
+        // std::cout << "DIE: "<< dir << "     -> " << route.getDirectory() << std::endl;
+        if (route.getRedirection() == file && route.getDirectory() == dir) return route;
     }
     throw ExceptionType("Route with such url not found: " + url);
     HANDLE_EXC_END
