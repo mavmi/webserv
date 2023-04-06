@@ -95,7 +95,11 @@ bool RouteConfiguration::isMethodPresent(UTILS_NAMESPACE::METHOD method) const {
 
 void RouteConfiguration::setRedirection(const std::string& redirection){
     throwOnDone_();
-    redirection_.set(redirection);
+    if (directory_.isSet() && directory_.get() == redirection){
+        redirection_.set("*");
+    } else {
+        redirection_.set(redirection);
+    }
 }
 std::string& RouteConfiguration::getRedirection(){
     HANDLE_EXC_BEGIN
@@ -110,6 +114,9 @@ const std::string& RouteConfiguration::getRedirection() const{
 
 void RouteConfiguration::setDirectory(const std::string& directory){
     throwOnDone_();
+    if (redirection_.isSet() && redirection_.get() == directory){
+        redirection_.set("*");
+    }
     directory_.set(directory);
 }
 std::string& RouteConfiguration::getDirectory(){
