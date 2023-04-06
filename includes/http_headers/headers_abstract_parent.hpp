@@ -3,7 +3,6 @@
 #include "request_status_line.hpp"
 
 #include "../utils/utils.hpp"
-#include "../utils/exceptions.hpp"
 
 namespace MAIN_NAMESPACE{
 namespace HTTP_HEADERS_NAMESPACE{
