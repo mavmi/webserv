@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 19:31:16 by msalena           #+#    #+#             */
-/*   Updated: 2023/04/05 23:28:08 by msalena          ###   ########.fr       */
+/*   Updated: 2023/04/06 13:42:13 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,9 @@ private:
 	int write_fd;
 	int child_pid;
 
-	std::string ReadFile_(const std::string& filePath) const;
 	std::string ParseName_(const std::string& url) const;
 
 	int StartPHPProc_(void);
-	int WriteToCgiProc_(void);
 	std::string ReadFromCgiProc_(void);
 	void KillClose_(void);
 	void PushBackStatus_(const std::string& code, const std::string& msg, 

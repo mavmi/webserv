@@ -19,45 +19,74 @@
 			.hidden {
 				display: none;
 			}
-		</style>
+			</style>
 	</head>
 	<body>
+		<script type='text/javascript'>
+			function addScript() {
+				const input = document.querySelector('input[name="delete"]');
+				const button = document.querySelector('button');
+
+				input.addEventListener('input', () => {
+					if (input.value) {
+					button.classList.remove('hidden');
+					} else {
+					button.classList.add('hidden');
+					}
+				})
+				button.addEventListener('click', () => {
+					let resp = fetch(`../../uploaded/${input.value}`, {
+						method: 'DELETE',
+					})
+					.then((res) => {
+						if (!res.ok){
+							return res.text();
+						} 
+						throw ("Success... File was deleted!");
+					})
+					.then(c => document.body.innerHTML = c)
+					.catch (msg => {
+						alert(msg);
+					})
+				})
+			}
+		</script>
+		<!-- <script>
+			window.onload = () => {
+				const input = document.querySelector('input[name="delete"]');
+				const button = document.querySelector('button');
+
+				input.addEventListener('input', () => {
+					if (input.value) {
+					button.classList.remove('hidden');
+					} else {
+					button.classList.add('hidden');
+					}
+				})
+				button.addEventListener('click', () => {
+					let resp = fetch(`../../uploaded/${input.value}`, {
+						method: 'DELETE',
+					})
+					.then((res) => {
+						if (!res.ok){
+							return res.text();
+						} 
+						throw ("Success... File was deleted!");
+					})
+					.then(c => document.body.innerHTML = c)
+					.catch (msg => {
+						alert(msg);
+					})
+				})
+			}
+		</script> -->
 		<h1><font size="8px">Delete file from server</font></h1>
 		<p><font size="5px"><tt>Please, enter the name of the deleted file</tt></font></p>
 		<p><font size="4px"><tt>Name of the file:</tt></font></p>
 		<div class="padding">
-			<input name="delete" placeholder="The deleted file's name">
+			<input name="delete" placeholder="The deleted file's name" onclick="addScript()"/>
 			<br><br>
 			<button class="hidden" type="button">Delete</button>
 		</div>
 	</body>
-	<script>
-		window.onload = () => {
-			const input = document.querySelector('input[name="delete"]');
-			const button = document.querySelector('button');
-
-			input.addEventListener('input', () => {
-				if (input.value) {
-				button.classList.remove('hidden');
-				} else {
-				button.classList.add('hidden');
-				}
-			})
-			button.addEventListener('click', () => {
-				let resp = fetch(`../../uploaded/${input.value}`, {
-					method: 'DELETE',
-				})
-				.then((res) => {
-					if (!res.ok){
-						return res.text();
-					} 
-					throw ("Success... File was deleted!");
-				})
-				.then(c => document.body.innerHTML = c)
-				.catch (msg => {
-					alert(msg);
-				})
-			})
-		}
-	</script>
 </html>

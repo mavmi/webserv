@@ -54,7 +54,14 @@ void error_setup_file(wsrv::Fds::fd_array_iter it_current_fd,
 void invalid_request(wsrv::Fds::fd_array_iter it_current_fd, HttpResponse& response,
 				utils::Exception& e);
 
-//ADD METHODS
+void method_get(utils::HTTP_VERSION version, const std::string& path,
+			HttpResponse& response, wsrv::Fds::fd_array_iter it_current_fd);
+
+void method_post(utils::HTTP_VERSION version, const http_request::HttpRequest& request,
+			HttpResponse& response, wsrv::Fds::fd_array_iter it_current_fd);
+
+void method_delete(utils::HTTP_VERSION version, const std::string& path,
+			HttpResponse& response, wsrv::Fds::fd_array_iter it_current_fd);
 
 /*
  * Checks that the method is supported by the target resource
@@ -79,6 +86,11 @@ bool execute_method(wsrv::Fds::fd_array_iter it_current_fd, HttpResponse& respon
  * Generate the response for current fd
  */
 void response_generator(wsrv::Fds::fd_array_iter current_fd_pair);
+
+/*
+ * Print info "[METHOD] request to [PATH]"
+ */
+void print_request_info(const http_request::HttpRequest& request);
 
 /*
  * Throw exceptions if there is some problem in Server

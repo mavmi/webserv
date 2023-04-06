@@ -1,6 +1,16 @@
 <?php
-	echo htmlspecialchars($_POST['nickname']);
-	echo ": \"";
-	echo htmlspecialchars($_POST['comment']);
-	echo "\"";
+	$nickname = "Undefine";
+	$comment = "Undefine";
+	if (isset($_POST["nickname"])){
+		$nickname = $_POST["nickname"];
+	}
+	if (isset($_POST["comment"])){
+		$comment = $_POST["comment"];
+	}
+
+	echo "\"" 
+		. $nickname
+		. ": \""
+		. $comment
+		. "\"";
 ?>

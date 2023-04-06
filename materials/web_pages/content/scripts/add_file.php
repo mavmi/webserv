@@ -3,8 +3,8 @@
 	$uploadfile = $uploaddir . basename($_FILES['filename']['name']);
 
 	if (move_uploaded_file($_FILES['filename']['tmp_name'], $uploadfile)) {
-		header('Location: ../success_upload.html', 200);
+		include (dirname(__DIR__).'/success_upload.html');
 	} else {
-		header('Location: ../unsuccess_upload.html', 200);
+		include (dirname(__DIR__).'/unsuccess_upload.html');
 	}
 ?>

@@ -18,12 +18,12 @@
 	<body>
 		<h1><font size="8px">Add the comment to website</font></h1>
 		<p><font size="5px"><tt>Please, enter your nickname and comment</tt></font></p>
-		<form action="scripts/comment.php" method="post">
+		<form method="POST" action="scripts/comment.php">
 			<p><font size="4px"><tt>Your nickname:</tt></font></p>
-			<p><input type="text" name="nickname"/></p>
+			<input type="text" name="nickname"/>
 			<p><font size="4px"><tt>Your comment:</tt></font></p>
-			<p><textarea name="comment"></textarea></p>
-			<p><input type="submit" value="Submit"/></p>
+			<textarea name="comment"></textarea>
+			<input type="submit" value="Submit"/>
 		</form>
 	</body>
 </html>

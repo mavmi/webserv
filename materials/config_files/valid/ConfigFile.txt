@@ -37,7 +37,7 @@
 
     [
         methods:             DELETE;
-        redir:               /uploaded;
+        redir:               /uploaded/;
         dir:                 /uploaded/;
     ]
 

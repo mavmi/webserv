@@ -123,7 +123,6 @@ void method_get(utils::HTTP_VERSION version, const std::string& path,
 	bool is_file;
 
 	response.setStatusLine(version, "200", "OK");
-			std::cout << path << std::endl;
 	is_file = response.setupFile(
 		path,
 		get_error_file(
@@ -146,7 +145,12 @@ void method_post(utils::HTTP_VERSION version, const http_request::HttpRequest& r
 		error_setup_file(it_current_fd, response, req_cgi[0]);
 	} else {
 		// NEED TO PARS REQ_CGI BODY
-		response.fillBody(req_cgi[3]);
+		response.fillBody(req_cgi[2]);
+		for (std::vector<char>::iterator it = response.getMessage().begin();
+			it != response.getMessage().end();
+			++it)
+			std::cout << *it;
+		std::cout << std::endl;
 	}
 }
 
@@ -173,6 +177,13 @@ bool is_method_allowed(wsrv::Fds::fd_array_iter it_current_fd,
 	bool is_allowed;
 
 	try {
+		// std::cout << "LOOK AT THIS: " << std::endl;
+		// std::cout << path << std::endl;
+		// std::cout << (*it_current_fd).GetParentSocketConfigReference().
+		// 			getRoute(path).getRedirection() << std::endl;
+		// std::cout << (*it_current_fd).GetParentSocketConfigReference().
+		// 			getRoute(path).isMethodPresent(method) << std::endl;
+		// std::cout << std::endl;
 		is_allowed = (*it_current_fd).GetParentSocketConfigReference().
 					getRoute(path).isMethodPresent(method);
 	} catch (utils::Exception& e) {
@@ -224,6 +235,8 @@ bool execute_method(wsrv::Fds::fd_array_iter it_current_fd, HttpResponse& respon
 
 void response_generator(wsrv::Fds::fd_array_iter it_current_fd){
 	HttpResponse	response;
+	
+
 	try {
 		// {
 		// 	response.getStatusLine().setHttpVersion(utils::HTTP_1_0);
@@ -245,6 +258,7 @@ void response_generator(wsrv::Fds::fd_array_iter it_current_fd){
 	is_allowed = true;
 	try {
 		request.parseHttpRequest((*it_current_fd).GetRequestMessageReference());
+		print_request_info(request.getHttpRequest());
 		is_allowed = execute_method(it_current_fd, response, request.getHttpRequest());
 	} catch (utils::Exception& e) {
 		if (is_allowed){
@@ -257,6 +271,15 @@ void response_generator(wsrv::Fds::fd_array_iter it_current_fd){
 	// 		std::cout << v[i] << std::endl;
 	// 	}
 	// }
+}
+
+void print_request_info(const http_request::HttpRequest& request){
+	std::cout << ">>> "
+			<< methodToString(request.getStatusLine().getMethod())
+			<< " request to \t'" 
+			<< request.getStatusLine().getUrl() 
+			<< "'" 
+			<< std::endl;
 }
 
 void server_throws(int is_fd_in_set, std::string invalid_fd_msg,

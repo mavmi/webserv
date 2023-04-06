@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 21:19:53 by msalena           #+#    #+#             */
-/*   Updated: 2023/04/05 23:29:23 by msalena          ###   ########.fr       */
+/*   Updated: 2023/04/06 13:41:53 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ namespace CORE {
 		env["SERVER_PORT"] = server_conf.getPort().toString();
 		env["SERVER_SOFTWARE"] = server_conf.getServerName();
 		env["CONTENT_LENGTH"] = "-1";
-		php_script = ReadFile_(env["SCRIPT_FILENAME"]);
+		php_script = env["SCRIPT_FILENAME"];
 	}
 
 	Cgi::~Cgi(void){}
@@ -53,19 +53,6 @@ namespace CORE {
 		arr[i] = NULL;
 		return arr;
 	}
-	
-	std::string Cgi::ReadFile_(const std::string& filePath) const{
-		std::string res;
-		std::string line;
-		std::fstream inputStream(filePath, std::ios::in);
-		
-		if (!inputStream.is_open()) return NULL;
-		while (std::getline(inputStream, line)){
-			res += line;
-		}
-		inputStream.close();
-		return res;
-	}
 
 	std::string Cgi::ParseName_(const std::string& url) const {
 		size_t slashPos = url.rfind('/');
@@ -79,30 +66,22 @@ namespace CORE {
 		std::string readed_ret;
 		std::vector<std::string> ret;
 		
+		std::cout << "\t -> CGI: PHP interpreter was started" << std::endl;
 		ret_status = StartPHPProc_();
 		if (ret_status < 0) {
 			PushBackStatus_("500", "Internal Server Error", ret);
 			return (ret);
 		}
-		ret_status = WriteToCgiProc_();
-		if (ret_status == -1){
-			KillClose_();
-			PushBackStatus_("500", "Internal Server Error", ret);
-			return (ret);
-		} else if (ret_status == -2) {
-			KillClose_();
-			PushBackStatus_("404", "Not Found", ret);
-			return (ret);
-		}
+		
 		readed_ret = ReadFromCgiProc_();
+		std::cout << "\t -> CGI: read result from the interpreter" << std::endl;
+		std::cout << "HERERE: " << readed_ret << std::endl;
+		KillClose_();
 		if (readed_ret.empty()) {
-			KillClose_();
 			PushBackStatus_("500", "Internal Server Error", ret);
 		} else if (!readed_ret.compare("cgi: failed")) {
-			KillClose_();
 			PushBackStatus_("400", "Bad Request", ret);
 		} else {
-			KillClose_();
 			PushBackStatus_("200", "OK", ret);
 			ret.push_back(readed_ret);
 		}
@@ -123,7 +102,7 @@ namespace CORE {
 
 		if (ret_status == 0) {
 			char** env;
-			char* php_cmd[2];
+			char* php_cmd[3];
 			
 			env = SetEnv();
 			dup2(write_php_fds[0], STDIN_FILENO);
@@ -131,7 +110,8 @@ namespace CORE {
 			close(write_php_fds[1]);
 			close(read_php_fds[0]);
 			php_cmd[0] = strdup(std::string("/usr/bin/php").c_str());
-			php_cmd[1] = NULL;
+			php_cmd[1] = strdup(php_script.c_str());
+			php_cmd[2] = NULL;
 			execve(php_cmd[0], php_cmd, env);
 			exit(1);
 		} else {
@@ -142,14 +122,6 @@ namespace CORE {
 			read_fd = read_php_fds[0];
 			return (0);
 		}
-	}
-	
-	int Cgi::WriteToCgiProc_(void){
-		int writebyten;
-
-		if (php_script.empty()) return (-2);
-		writebyten = write(write_fd, php_script.c_str(), php_script.size());
-		return (writebyten);
 	}
 	
 	std::string Cgi::ReadFromCgiProc_(void){
