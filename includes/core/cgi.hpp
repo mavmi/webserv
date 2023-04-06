@@ -44,6 +44,7 @@ private:
 
 	std::string ParseName_(const std::string& url) const;
 	std::string GetQueryString_(const http_request& request) const;
+	std::string GetFullPath_(const std::string& path) const;
 
 	int StartPHPProc_(void);
 	std::string ReadFromCgiProc_(void);

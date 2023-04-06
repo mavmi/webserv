@@ -86,7 +86,10 @@ std::vector<std::string> HttpRequestParser::split__(const std::string& str, char
     if (eqPos == std::string::npos) return result;
 
     result.push_back(str.substr(0, eqPos));
-    result.push_back(str.substr(eqPos + 1, str.size() - eqPos - 1));   
+    result.push_back(str.substr(eqPos + 1, str.size() - eqPos - 1));
+    if (result.back()[0] == ' '){
+        result[1] = result[1].substr(1, result[1].size() - 1);
+    }
 
     return result;
 }
@@ -150,6 +153,7 @@ void HttpRequestParser::parseHeader_(const std::string& line){
 
     const std::string& key = splittedLine.at(0);
     const std::string& value = splittedLine.at(1);
+    
     // General headers
     if (key == "Cache-Control"){
         httpRequest_.getGeneralHeaders().setCacheControl(value);

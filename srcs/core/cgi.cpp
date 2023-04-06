@@ -18,28 +18,41 @@ namespace CORE {
 		env["AUTH_TYPE"] = "";
 		env["CONTENT_TYPE"] = request.getRequestHeaders().getContentType();
 		env["GATEWAY_INTERFACE"] = "CGI/1.1";
-		env["PATH_INFO"] = server_conf.getRoot();
-		env["PATH_TRANSLATED"] = server_conf.getRoot() + request.getStatusLine().getUrl();
+
+		// env["PATH_INFO"] = server_conf.getRoot();
+		// env["PATH_TRANSLATED"] = server_conf.getRoot() + request.getStatusLine().getUrl();
+		env["PATH_INFO"] = server_conf.getRoot() + request.getStatusLine().getUrl();
+		env["PATH_TRANSLATED"] = GetFullPath_(env["PATH_INFO"]);
+
 		env["QUERY_STRING"] = GetQueryString_(request);
+
+		// env["REMOTE_ADDR"] = request.getRequestHeaders().getHost();
+		// env["REMOTE_HOST"] = request.getRequestHeaders().getHost();
+		env["REMOTE_ADDR"] = server_conf.getHost().toString();
 		env["REMOTE_HOST"] = request.getRequestHeaders().getHost();
-		env["REMOTE_ADDR"] = request.getRequestHeaders().getHost();
+
 		env["REMOTE_USER"] = "";
 		env["REMOTE_IDENT"] = "";
 		env["REQUEST_METHOD"] = wsrv::utils::methodToString(request.getStatusLine().getMethod());
 		env["REQUEST_URI"] = request.getStatusLine().getUrl();
-		env["SCRIPT_NAME"] = ParseName_(request.getStatusLine().getUrl());
-		env["SCRIPT_FILENAME"] = server_conf.getRoot() + request.getStatusLine().getUrl();
+
+		// env["SCRIPT_FILENAME"] = server_conf.getRoot() + request.getStatusLine().getUrl();
+		// env["SCRIPT_NAME"] = ParseName_(request.getStatusLine().getUrl());
+		
+		env["SCRIPT_FILENAME"] = env["PATH_TRANSLATED"];
+		env["SCRIPT_NAME"] = env["PATH_INFO"];
+
 		env["SERVER_NAME"] = server_conf.getServerName();
 		env["SERVER_PROTOCOL"] = wsrv::utils::httpVersionToString(request.getStatusLine().getHttpVersion());
 		env["SERVER_PORT"] = server_conf.getPort().toString();
 		env["SERVER_SOFTWARE"] = server_conf.getServerName();
-		env["CONTENT_LENGTH"] = "-1";
+		env["CONTENT_LENGTH"] = env["CONTENT_LENGTH"] = request.getRequestHeaders().getContentLength();
 		php_script = env["SCRIPT_FILENAME"];
 
 		std::cout << "\tREQUEST LINE: " << env["QUERY_STRING"] << std::endl;
 
 		char** bruh = SetEnv();
-		while (bruh){
+		while (*bruh){
 			std::cout << *bruh << std::endl;
 			bruh++;
 		}
@@ -71,6 +84,10 @@ namespace CORE {
 	std::string Cgi::GetQueryString_(const http_request& request) const{		
 		const std::vector<std::string>& request_content = request.getRequestContent();
 		return (request_content.size()) ? (request_content.front()) : "";
+	}
+	std::string Cgi::GetFullPath_(const std::string& path) const {
+		std::string pwd = std::string(getcwd(NULL, 0));
+		return pwd + "/" + path;
 	}
 
 	std::vector<std::string> Cgi::Exec(void){

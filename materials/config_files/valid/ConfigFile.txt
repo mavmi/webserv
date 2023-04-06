@@ -2,7 +2,7 @@
     port: 1025; 
     host: 127.0.0.1;
     root:            materials;
-    server_name:     DEFAULT_SERVER;
+    server_name:     wsrv_by_pmalena_&_msaryjo;
     error_pages:     /web_pages/errors/400.html, /web_pages/errors/404.html, /web_pages/errors/405.html, /web_pages/errors/500.html, /web_pages/errors/501.html;
     body_size:       4096;
 
