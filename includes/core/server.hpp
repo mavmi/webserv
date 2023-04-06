@@ -6,7 +6,7 @@
 /*   By: msalena <msalena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 16:22:43 by msalena           #+#    #+#             */
-/*   Updated: 2023/04/02 12:17:49 by msalena          ###   ########.fr       */
+/*   Updated: 2023/04/06 18:03:56 by msalena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ public:
 	typedef ManagedFds&							managed_fds_reference;
 	typedef managed_fds::fd_pair_class&			managed_fd_pair_class_reference;
 	typedef managed_fds::fds_set_iter			fds_set_iter;
-	typedef CoreException						except;
+	typedef utils::Exception					except;
 
 	/*
 	* Realization of server which works using 'select'.

@@ -4,6 +4,10 @@
 		<meta charset="UTF-8"/>
 		<title>Comment</title>
 		<style>
+			body, input, button {
+				font-family: 'monospace' ;
+				font-size: 24px;
+			}
 			body {
 				background-image: url("../imgs/back_comment.jpg");
 				background-repeat: no-repeat;
@@ -16,14 +20,14 @@
 		</style>
 	</head>
 	<body>
-		<h1><font size="8px">Add the comment to website</font></h1>
-		<p><font size="5px"><tt>Please, enter your nickname and comment</tt></font></p>
+		<h1>Add the comment to website</h1>
+		<p>Please, enter your nickname and comment</p>
 		<form method="POST" action="scripts/comment.php">
-			<p><font size="4px"><tt>Your nickname:</tt></font></p>
-			<input type="text" name="nickname"/>
-			<p><font size="4px"><tt>Your comment:</tt></font></p>
-			<textarea name="comment"></textarea>
-			<input type="submit" value="Submit"/>
+			<p>Your nickname:</p>
+			<p><input type="text" name="nickname"/></p>
+			<p>Your comment:</p>
+			<p><textarea name="comment"></textarea></p>
+			<p><input type="submit" value="Submit"/></p>
 		</form>
 	</body>
 </html>

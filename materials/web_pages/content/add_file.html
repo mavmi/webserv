@@ -4,6 +4,10 @@
 		<meta charset="UTF-8"/>
 		<title>Add file</title>
 		<style>
+			body, input, button {
+				font-family: 'monospace' ;
+				font-size: 24px;
+			}
 			body {
 				background-image: url("../imgs/back_introduce.jpg");
 				background-repeat: no-repeat;
@@ -16,11 +20,11 @@
 		</style>
 	</head>
 	<body>
-		<h1><font size="8px">Add your file</font></h1>
-		<p><font size="5px"><tt>Please, choos the file which should be uploaded</tt></font></p>
+		<h1>Add your file</h1>
+		<p>Please, choos the file which should be uploaded</p>
 		<form action="scripts/add_file.php" method="POST">
-			<p><font size="4px"><tt>Choos your file: <input type="file" name="filename" /></tt></font></p>
-			<p><button type="submit" disabled>File not selected</p>
+			<p>Choos your file: <input type="file" name="filename" /></p>
+			<p><button type="submit" disabled>File not selected</button></p>
 		</form>
 	</body>
 	<script>

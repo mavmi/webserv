@@ -1,5 +1,7 @@
 <?php
-	echo $_POST . "\n";
+	echo var_dump($_POST) . "\n\n";
+	echo var_dump($_SERVER) . "\n\n";
+	echo var_dump($_REQUEST) . "\n\n";
 
 	$nickname = "Undefine";
 	$comment = "Undefine";

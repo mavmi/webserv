@@ -4,6 +4,10 @@
 		<meta charset="UTF-8"/>
 		<title>Success upload</title>
 		<style>
+			body, input, button {
+				font-family: 'monospace' ;
+				font-size: 24px;
+			}
 			body {
 				background-image: url("../../imgs/back_introduce.jpg");
 				background-repeat: no-repeat;
@@ -16,27 +20,27 @@
 		</style>
 	</head>
 	<body>
-		<h1><font size="8px">The file was successfully uploaded</font></h1>
-		<p><font size="5px"><tt>You can check it in path 'materials/uploaded' in webserv folder</tt></font></p>
+		<h1>The file was successfully uploaded</h1>
+		<p>You can check it in path 'materials/uploaded' in webserv folder</p>
 		<h3 id="position">Now it's possible to back to the uploaded form:</h3>
 		<form id="position" action="../add_file.html" method="GET">
 			<button>
-				<font size="4px">
-					<tt>
+				
+					
 						Add your file
-					</tt>
-				</font>
+					
+				
 			</button>
 		</form>
 		<br>
 		<h3 id="position">... or to go to form for deleting files:</h3>
 		<form id="position" action="../delete_file.html" method="GET">
 			<button>
-				<font size="4px">
-					<tt>
+				
+					
 						Delete file on server
-					</tt>
-				</font>
+					
+				
 			</button>
 		</form>
 	</body>
